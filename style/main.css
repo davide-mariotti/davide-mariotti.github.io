@@ -21,6 +21,12 @@ html * {
     .DM .border-bottom {
         border-bottom: 1px solid #ffe633 !important;
     }
+.DM .border-top {
+    border-top: 1px solid #ffff33 !important;
+}
+    .DM .border-top {
+        border-top: 1px solid #ffe633 !important;
+    }
 .DM .nav-pills .nav-link.active,
 .DM .nav-pills .show>.nav-link {
     color: #1F2933;
