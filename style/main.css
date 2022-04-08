@@ -43,3 +43,8 @@ html * {
     .DM .nav-link:hover {
         color: #ffe633;
     }
+.DM footer img,
+.DM header img {
+    max-width: 50px;
+    max-height: 50px;
+}
