@@ -330,7 +330,9 @@
 	});
 
 	
-
+	jQuery(document).ready(function() {
+		jQuery('#loading').fadeOut(2000);
+	});
 
 })();
 
