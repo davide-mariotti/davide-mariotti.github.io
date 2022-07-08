@@ -1,15 +1,37 @@
-<h1 id="year"></h1>
+<h1>Verrai sbloccata il giorno:<br>
+	<span id="gg"></span>/<span id="mm"></span>/<span id="yyyy"></span><br>
+	alle ore:<br>
+	<span id="ora"></span>:<span id="min"></span></h1>
 
 <style type="text/css">
-	#year {
+	h1 {
+		text-align: center;
+		text-transform: uppercase;
 		font-size: 60px;
 		position: absolute;
 		left: 50%;
 		top: 50%;
 		-webkit-transform: translate(-50%, -50%);
-		transform: translate(0%, -50%);
+		transform: translate(-50%, -50%);
+		width: 70%;
+		padding: 50px;
+		background-color: lightcyan;
+		border-radius: 150px;
 	}
 </style>
 <script>
-	document.getElementById("year").innerHTML = new Date().getFullYear();
+	document.getElementById("gg").innerHTML = new Date().getDate();
+	document.getElementById("mm").innerHTML = new Date().getMonth() +1;
+	document.getElementById("yyyy").innerHTML = new Date().getFullYear() + 1;
+	document.getElementById("ora").innerHTML = new Date().getHours();
+	document.getElementById("min").innerHTML = new Date().getMinutes() +1;
+
+	window.setInterval('refresh()', 5000); 	
+    // Call a function every 10000 milliseconds 
+    // (OR 10 seconds).
+
+    // Refresh or reload page.
+    function refresh() {
+        window .location.reload();
+    }
 </script>
