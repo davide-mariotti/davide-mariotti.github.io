@@ -137,9 +137,26 @@
 
                 ".\n");
 
-
+    window.setInterval('refresh()', 60000);//1000= 1secondo
+    function refresh() {
+        window .location.reload();
+    }
 
         </script>
     </span>
+    <button onclick="refresh()"
+    style="color: #ffffff;
+        font-size: 15px;
+        padding: 5px 20px;
+        position: absolute;
+        left: 50%;
+        top: 80%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background-color: #296582;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 2px 4px #42424299;
+        text-transform: uppercase;">Click me</button>
     </body>
 </html>
