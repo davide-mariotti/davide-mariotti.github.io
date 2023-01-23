@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Accordion Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <script>
+      $(document).ready(function() {
+        // Sample data
+        var data = [
+          {
+            name: "Item 1",
+            details: "Details for item 1",
+            country: "US",
+            category: "Category A"
+          },
+          {
+            name: "Item 2",
+            details: "Details for item 2",
+            country: "India",
+            category: "Category B"
+          },
+          {
+            name: "Item 3",
+            details: "Details for item 3",
+            country: "US",
+            category: "Category A"
+          }
+        ];
+
+        // Extract unique countries
+        const uniqueCountries = _.uniqBy(data, "country");
+        // Create select element for country filter
+        const countrySelect = $("<select>")
+          .attr("id", "country-filter")
+          .append($("<option>").val("").text("Select Country"));
+        // Add options to select element
+        uniqueCountries.forEach(function(country) {
+          countrySelect.append(
+            $("<option>").val(country.country).text(country.country)
+          );
+        });
+
+        // Extract unique categories
+        const uniqueCategories = _.uniqBy(data, "category");
+        // Create select element for category filter
+        const categorySelect = $("<select>")
+          .attr("id", "category-filter")
+          .append($("<option>").val("").text("Select Category"));
+        // Add options to select element
+        uniqueCategories.forEach(function(category) {
+          categorySelect.append(
+            $("<option>").val(category.category).text(category.category)
+          );
+        });
+
+        // Append filters to the DOM
+        $("#filters").append(countrySelect);
+        $("#filters").append(categorySelect);
+
+        // Add change event to filters
+        $("#filters select").on("change", function() {
+          // Get selected options
+          const country = $("#country-filter").val();
+          const category = $("#category-filter").val();
+
+        // Use lodash filter method to filter data
+        const filteredData = _.filter(data, function(item) {
+        return (
+            (!country || item.country === country) &&
+            (!category || item.category === category)
+        );
+        });
+
+        // Clear the existing accordion
+        $("#accordion").empty();
+          
+          // Iterate through filtered data and create accordion items
+          $.each(filteredData, function(index, item) {
+            $("#accordion").append(
+              "<h3>" + item.name + "</h3><div>" + item.details + "</div>"
+            );
+          });
+
+          // Initialize accordion
+          $("#accordion").accordion();
+        });
+        
+        // Iterate through data and create accordion items
+        $.each(data, function(index, item) {
+          $("#accordion").append(
+            "<h3>" + item.name + "</h3><div>" + item.details + "</div>"
+          );
+        });
+
+        // Initialize accordion
+        $("#accordion").accordion();
+      });
+    </script>
+  </head>
+  <body>
+    <div id="filters"></div>
+    <div id="accordion"></div>
+  </body>
+</html>
