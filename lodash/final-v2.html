@@ -13,10 +13,11 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-4">
+                <h3>Search by:</h3>
                 <div class="cardFilters">
                     <div class="card">
                         <div class="card-header" id="heading-topic">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-topic" aria-expanded="true" aria-controls="collapse-topic">
                                 <label for="topic-filter">Topic</label>
                             </button>
@@ -31,7 +32,7 @@
 
                       <div class="card">
                         <div class="card-header" id="heading-author">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-author" aria-expanded="true" aria-controls="collapse-author">
                                 <label for="author-filter">Author</label>
                             </button>
@@ -46,7 +47,7 @@
 
                       <div class="card">
                         <div class="card-header" id="heading-source">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-source" aria-expanded="true" aria-controls="collapse-source">
                                 <label for="source-filter">Source</label>
                             </button>
@@ -61,7 +62,7 @@
 
                       <div class="card">
                         <div class="card-header" id="heading-year">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-year" aria-expanded="true" aria-controls="collapse-year">
                                 <label for="year-filter">Year</label>
                             </button>
@@ -76,7 +77,7 @@
 
                       <div class="card">
                         <div class="card-header" id="heading-typology">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-typology" aria-expanded="true" aria-controls="collapse-typology">
                                 <label for="typology-filter">Typology</label>
                             </button>
@@ -91,7 +92,7 @@
 
                       <div class="card">
                         <div class="card-header" id="heading-tag">
-                          <h2 class="mb-0">
+                          <h2>
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-tag" aria-expanded="true" aria-controls="collapse-tag">
                                 <label for="tag-filter">Tag</label>
                             </button>
@@ -112,7 +113,130 @@
             </div>
         </div>
     </div>
-    <script src="./main.js"></script>
+
+    <script src="./data.js"></script>
+
+    <script>
+
+const filters = {
+    topic: [],
+    author: [],
+    source: [],
+    year: [],
+    typology: [],
+    tag: []
+};
+
+const filterData = () => _.filter(data, item => {
+    return (
+        (_.isEmpty(filters.topic) || _.includes(filters.topic, item.topic)) &&
+        (_.isEmpty(filters.author) || _.includes(filters.author, item.author)) &&
+        (_.isEmpty(filters.source) || _.includes(filters.source, item.source)) &&
+        (_.isEmpty(filters.year) || _.includes(filters.year, item.year)) &&
+        (_.isEmpty(filters.typology) || _.includes(filters.typology, item.typology)) &&
+        (_.isEmpty(filters.tag) || _.includes(filters.tag, item.tag))
+    );
+});
+
+const displayData = (data) => {
+    let html = "";
+    data.forEach(item => {
+        html += `
+    <div class="card">
+      <div class="card-header" id="heading-${item.typology}">
+        <h2 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}-${item.date}" aria-expanded="true" aria-controls="collapse-${item.typology}-${item.date}">
+            ${item.typology}
+          </button>
+        </h2>
+      </div>
+      <div id="collapse-${item.typology}-${item.date}" class="collapse" aria-labelledby="heading-${item.typology}-${item.date}" data-parent="#results">
+        <div class="card-body">
+          <div class="meta-data">
+            <div class="meta-data-item">Date: ${item.date}</div>
+            <div class="meta-data-item">Typology: ${item.typology}</div>
+            <div class="meta-data-item">Topic: ${item.topic}</div>
+            <div class="meta-data-item">Author: ${item.author}</div>
+            <div class="meta-data-item">Source: ${item.source}</div>
+            <div class="meta-data-item">Year: ${item.year}</div>
+            <div class="meta-data-item">Tag: ${item.tag}</div>
+          </div>
+          <div class="description">
+            ${item.description}
+          </div>
+          <div class="link">
+            <a href="${item.link}" target="_blank">Read more</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+    });
+    document.getElementById("results").innerHTML = html;
+};
+
+// function to update filters and display filtered data
+const search = () => {
+    document.querySelectorAll('.filter-selected').forEach(el => el.classList.remove('filter-selected'));
+    [...document.querySelectorAll("input[type='checkbox']:checked")].forEach(el => el.parentNode.classList.add('filter-selected'));
+
+    filters.topic = [...document.querySelectorAll("#topic-filter input[type='checkbox']:checked")].map(x => x.value);
+    filters.author = [...document.querySelectorAll("#author-filter input[type='checkbox']:checked")].map(x => x.value);
+    filters.source = [...document.querySelectorAll("#source-filter input[type='checkbox']:checked")].map(x => x.value);
+    filters.year = [...document.querySelectorAll("#year-filter input[type='checkbox']:checked")].map(x => x.value);
+    filters.typology = [...document.querySelectorAll("#typology-filter input[type='checkbox']:checked")].map(x => x.value);
+    filters.tag = [...document.querySelectorAll("#tag-filter input[type='checkbox']:checked")].map(x => x.value);
+    const filteredData = filterData();
+    displayData(filteredData);
+};
+
+
+// create checkboxes for each filter options
+const uniqueTopics = _.uniqBy(data, 'topic');
+let options = '';
+uniqueTopics.forEach(topic => {
+    options += `<label><input type="checkbox" value="${topic.topic}" onchange="search()">${topic.topic}</label>`;
+});
+document.getElementById("topic-filter").innerHTML = options;
+
+const uniqueAuthors = _.uniqBy(data, 'author');
+options = '';
+uniqueAuthors.forEach(author => {
+    options += `<label><input type="checkbox" value="${author.author}" onchange="search()">${author.author}</label>`;
+});
+document.getElementById("author-filter").innerHTML = options;
+
+const uniqueSources = _.uniqBy(data, 'source');
+options = '';
+uniqueSources.forEach(source => {
+    options += `<label><input type="checkbox" value="${source.source}" onchange="search()">${source.source}</label>`;
+});
+document.getElementById("source-filter").innerHTML = options;
+
+const uniqueYears = _.uniqBy(data, 'year');
+options = '';
+uniqueYears.forEach(year => {
+    options += `<label><input type="checkbox" value="${year.year}" onchange="search()">${year.year}</label>`;
+});
+document.getElementById("year-filter").innerHTML = options;
+
+const uniqueTypologys = _.uniqBy(data, 'typology');
+options = '';
+uniqueTypologys.forEach(typology => {
+    options += `<label><input type="checkbox" value="${typology.typology}" onchange="search()">${typology.typology}</label>`;
+});
+document.getElementById("typology-filter").innerHTML = options;
+
+const uniqueTags = _.uniqBy(data, 'tag');
+options = '';
+uniqueTags.forEach(tag => {
+    options += `<label><input type="checkbox" value="${tag.tag}" onchange="search()">${tag.tag}</label>`;
+});
+document.getElementById("tag-filter").innerHTML = options;
+
+// display all data when page loads
+displayData(data);
+    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

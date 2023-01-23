@@ -86,6 +86,19 @@ const search = () => {
     displayData(filteredData);
 };
 
+$("#searchBtn").click(function() {
+  // Retrieve the input field's value
+  var searchQuery = $("#searchInput").val();
+
+  // Use Lodash's filter function to search through your data
+  var searchResults = _.filter(data, function(item) {
+      return item.name.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  // Use jQuery to display the results in the #results div
+  $("#results").html(searchResults);
+});
+
 // create checkboxes for each filter options
 const uniqueTopics = _.uniqBy(data, 'topic');
 let options = '';
