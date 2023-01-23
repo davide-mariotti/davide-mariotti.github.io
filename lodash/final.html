@@ -9,114 +9,93 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container mt-5">
         <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="topic-filter">Topic</label>
-              <select class="form-control" id="topic-filter"></select>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="topic-filter">Topic</label>
+                    <select class="form-control" id="topic-filter"></select>
+                </div>
+                <div class="form-group">
+                    <label for="author-filter">Author</label>
+                    <select class="form-control" id="author-filter"></select>
+                </div>
+                <div class="form-group">
+                    <label for="source-filter">Source</label>
+                    <select class="form-control" id="source-filter"></select>
+                </div>
+                <div class="form-group">
+                    <label for="year-filter">Year</label>
+                    <select class="form-control" id="year-filter"></select>
+                </div>
+                <div class="form-group">
+                    <label for="typology-filter">Typology</label>
+                    <select class="form-control" id="typology-filter"></select>
+                </div>
+                <div class="form-group">
+                    <label for="tag-filter">Tag</label>
+                    <select class="form-control" id="tag-filter"></select>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="author-filter">Author</label>
-              <select class="form-control" id="author-filter"></select>
+
+            <div class="col-md-8">
+                <div id="results"></div>
             </div>
-            <div class="form-group">
-              <label for="source-filter">Source</label>
-              <input type="text" class="form-control" id="source-filter">
-            </div>
-            <div class="form-group">
-              <label for="year-filter">Year</label>
-              <input type="text" class="form-control" id="year-filter">
-            </div>
-            <div class="form-group">
-              <label for="typology-filter">Typology</label>
-              <input type="text" class="form-control" id="typology-filter">
-            </div>
-            <div class="form-group">
-              <label for="tag-filter">Tag</label>
-              <input type="text" class="form-control" id="tag-filter">
-            </div>
-            <button type="button" class="btn btn-primary" id="search-button">Search</button>
-          </div>
+
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div id="results"></div>
-          </div>
-        </div>
-      </div>
-      
+    </div>
+
     <script>
         const data = [
-        {
-    topic: "topic1",
-    author: "Author 1",
-    source: "Source 1",
-    year: "2021",
-    typology: "Typology 1",
-    tag: "Tag 1",
-    description: "Description 1",
-    link: "Link 1",
-    date: "01-01-2021"
-  },
-  {
-    topic: "topic2",
-    author: "Author 2",
-    source: "Source 2",
-    year: "2022",
-    typology: "Typology 2",
-    tag: "Tag 2",
-    description: "Description 2",
-    link: "Link 2",
-    date: "01-01-2022"
-  },
-  {
-    topic: "topic3",
-    author: "Author 3",
-    source: "Source 3",
-    year: "2023",
-    typology: "Typology 3",
-    tag: "Tag 3",
-    description: "Description 3",
-    link: "Link 3",
-    date: "02-01-2023"
-  },
-  // more data here
-];
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "pippo", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "paperino", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "pluto", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic4", author: "Author 4", source: "Source 4", year: "2024", typology: "batman", tag: "Tag 4", description: "Description 4", link: "Link 4", date: "04-04-2024" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "punisher", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "flash", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "iron-man", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "hulk", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "marvel", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "cpt- america", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "arrow", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "sampei", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            // more data here
+        ];
 
-const filters = {
-  topic: "",
-  author: "",
-  source: "",
-  year: "",
-  typology: "",
-  tag: ""
-};
+        const filters = {
+            topic: "",
+            author: "",
+            source: "",
+            year: "",
+            typology: "",
+            tag: ""
+        };
 
-// function to filter data based on filters
-const filterData = () => {
-  return _.filter(data, item => {
-    return (
-      (filters.topic === "" || item.topic === filters.topic) &&
-      (filters.author === "" || item.author.toLowerCase().includes(filters.author.toLowerCase())) &&
-      (filters.source === "" || item.source.toLowerCase().includes(filters.source.toLowerCase())) &&
-      (filters.year === "" || item.year === filters.year) &&
-      (filters.typology === "" || item.typology.toLowerCase().includes(filters.typology.toLowerCase())) &&
-      (filters.tag === "" || item.tag.toLowerCase().includes(filters.tag.toLowerCase()))
-    );
-  });
-};
+        // function to filter data based on filters
+        const filterData = () => {
+            return _.filter(data, item => {
+                return (
+                    (filters.topic === "" || item.topic === filters.topic) &&
+                    (filters.author === "" || item.author.toLowerCase().includes(filters.author.toLowerCase())) &&
+                    (filters.source === "" || item.source.toLowerCase().includes(filters.source.toLowerCase())) &&
+                    (filters.year === "" || item.year === filters.year) &&
+                    (filters.typology === "" || item.typology.toLowerCase().includes(filters.typology.toLowerCase())) &&
+                    (filters.tag === "" || item.tag.toLowerCase().includes(filters.tag.toLowerCase()))
+                );
+            });
+        };
 
-// function to display filtered data in accordion
-const displayData = (data) => {
-  let html = "";
-  data.forEach(item => {
-    html += `
+        // function to display filtered data in accordion
+        const displayData = (data) => {
+            let html = "";
+            data.forEach(item => {
+                html += `
       <div class="card">
         <div class="card-header" id="heading-${item.typology}">
           <h2 class="mb-0">
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}" aria-expanded="true" aria-controls="collapse-${item.typology}">
-              ${item.typology}
+              ${item.typology}<br>${item.description}
             </button>
           </h2>
         </div>
@@ -137,81 +116,86 @@ const displayData = (data) => {
         </div>
       </div>
     `;
-  });
-  document.getElementById("results").innerHTML = html;
-};
+            });
+            document.getElementById("results").innerHTML = html;
+        };
 
-// function to update filters and display filtered data
-const search = () => {
-  filters.topic = document.getElementById("topic-filter").value;
-  filters.author = document.getElementById("author-filter").value;
-  filters.source = document.getElementById("source-filter").value;
-  filters.year = document.getElementById("year-filter").value;
-  filters.typology = document.getElementById("typology-filter").value;
-  filters.tag = document.getElementById("tag-filter").value;
-  const filteredData = filterData();
-  displayData(filteredData);
-};
+        // function to update filters and display filtered data
+        const search = () => {
+            filters.topic = document.getElementById("topic-filter").value;
+            filters.author = document.getElementById("author-filter").value;
+            filters.source = document.getElementById("source-filter").value;
+            filters.year = document.getElementById("year-filter").value;
+            filters.typology = document.getElementById("typology-filter").value;
+            filters.tag = document.getElementById("tag-filter").value;
+            const filteredData = filterData();
+            displayData(filteredData);
+        };
 
-document.getElementById("search-button").addEventListener("click", search);
+        document.getElementById("topic-filter").addEventListener("change", search);
+        document.getElementById("author-filter").addEventListener("change", search);
+        document.getElementById("source-filter").addEventListener("change", search);
+        document.getElementById("year-filter").addEventListener("change", search);
+        document.getElementById("typology-filter").addEventListener("change", search);
+        document.getElementById("tag-filter").addEventListener("change", search);
 
-// populate all filter options based on data
-const uniqueTopics = _.uniqBy(data, 'topic');
-let optionsTopic = '<option value="">All</option>';
-uniqueTopics.forEach(topic => {
-    optionsTopic += `<option value="${topic.topic}">${topic.topic}</option>`
-});
-document.getElementById("topic-filter").innerHTML = optionsTopic;
+        // populate all filter options based on data
 
-const uniqueAuthors = _.uniqBy(data, 'author');
-let optionsAuthor = '<option value="">All</option>';
-uniqueAuthors.forEach(author => {
-    optionsAuthor += `<option value="${author.author}">${author.author}</option>`
-});
-document.getElementById("author-filter").innerHTML = optionsAuthor;
-/*
-const uniqueAuthors = _.uniqBy(data, 'author');
-let authorOptions = '';
-uniqueAuthors.forEach(author => {
-    authorOptions += `${author.author},`
-});
-document.getElementById("author-filter").placeholder = authorOptions.slice(0,-1);
-*/
-const uniqueSources = _.uniqBy(data, 'source');
-let sourceOptions = '';
-uniqueSources.forEach(source => {
-    sourceOptions += `${source.source},`
-});
-document.getElementById("source-filter").placeholder = sourceOptions.slice(0,-1);
+        const uniqueTopics = _.uniqBy(data, 'topic');
+        let optionsTopic = '<option value="">All</option>';
+        uniqueTopics.forEach(topic => {
+            optionsTopic += `<option value="${topic.topic}">${topic.topic}</option>`
+        });
+        document.getElementById("topic-filter").innerHTML = optionsTopic;
 
-const uniqueYears = _.uniqBy(data, 'year');
-let yearOptions = '';
-uniqueYears.forEach(year => {
-    yearOptions += `${year.year},`
-});
-document.getElementById("year-filter").placeholder = yearOptions.slice(0,-1);
+        const uniqueAuthors = _.uniqBy(data, 'author');
+        let optionsAuthor = '<option value="">All</option>';
+        uniqueAuthors.forEach(author => {
+            optionsAuthor += `<option value="${author.author}">${author.author}</option>`
+        });
+        document.getElementById("author-filter").innerHTML = optionsAuthor;
 
-const uniqueTypologies = _.uniqBy(data, 'typology');
-let typologyOptions = '';
-uniqueTypologies.forEach(typology => {
-    typologyOptions += `${typology.typology},`
-});
-document.getElementById("typology-filter").placeholder = typologyOptions.slice(0,-1);
+        const uniqueSources = _.uniqBy(data, 'source');
+        let optionsSource = '<option value="">All</option>';
+        uniqueSources.forEach(source => {
+            optionsSource += `<option value="${source.source}">${source.source}</option>`
+        });
+        document.getElementById("source-filter").innerHTML = optionsSource;
 
-const uniqueTags = _.uniqBy(data, 'tag');
-let tagOptions = '';
-uniqueTags.forEach(tag => {
-    tagOptions += `${tag.tag},`
-});
-document.getElementById("tag-filter").placeholder = tagOptions.slice(0,-1);
+        const uniqueYears = _.uniqBy(data, 'year');
+        let yearOptions = '';
+        uniqueYears.forEach(year => {
+            yearOptions += `${year.year},`
+        });
+        document.getElementById("year-filter").placeholder = yearOptions.slice(0, -1);
 
-// display all data on page load
-displayData(data);
+        const uniqueTypologies = _.uniqBy(data, 'typology');
+        let typologyOptions = '';
+        uniqueTypologies.forEach(typology => {
+            typologyOptions += `${typology.typology},`
+        });
+        document.getElementById("typology-filter").placeholder = typologyOptions.slice(0, -1);
+
+        const uniqueTags = _.uniqBy(data, 'tag');
+        let tagOptions = '';
+        uniqueTags.forEach(tag => {
+            tagOptions += `${tag.tag},`
+        });
+        document.getElementById("tag-filter").placeholder = tagOptions.slice(0, -1);
+
+        // display all data on page load
+        displayData(data);
 
     </script>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

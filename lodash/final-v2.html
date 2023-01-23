@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search with Lodash and Multi-Checkbox Filters</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="cardFilters">
+                    <div class="card">
+                        <div class="card-header" id="heading-topic">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-topic" aria-expanded="true" aria-controls="collapse-topic">
+                                <label for="topic-filter">Topic</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-topic" class="collapse" aria-labelledby="heading-topic" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="topic-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading-author">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-author" aria-expanded="true" aria-controls="collapse-author">
+                                <label for="author-filter">Author</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-author" class="collapse" aria-labelledby="heading-author" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="author-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading-source">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-source" aria-expanded="true" aria-controls="collapse-source">
+                                <label for="source-filter">Source</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-source" class="collapse" aria-labelledby="heading-source" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="source-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading-year">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-year" aria-expanded="true" aria-controls="collapse-year">
+                                <label for="year-filter">Year</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-year" class="collapse" aria-labelledby="heading-year" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="year-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading-typology">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-typology" aria-expanded="true" aria-controls="collapse-typology">
+                                <label for="typology-filter">Typology</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-typology" class="collapse" aria-labelledby="heading-typology" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="typology-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading-tag">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-tag" aria-expanded="true" aria-controls="collapse-tag">
+                                <label for="tag-filter">Tag</label>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapse-tag" class="collapse" aria-labelledby="heading-tag" data-parent=".cardFilters">
+                          <div class="card-body">
+                            <div id="tag-filter"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                </div>
+                
+            </div>
+            <div class="col-md-8">
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const data = [
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "pippo", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "paperino", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "pluto", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic4", author: "Author 4", source: "Source 4", year: "2024", typology: "batman", tag: "Tag 4", description: "Description 4", link: "Link 4", date: "04-04-2024" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "punisher", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "flash", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "iron-man", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "hulk", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "marvel", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            { topic: "topic1", author: "Author 1", source: "Source 1", year: "2021", typology: "cpt- america", tag: "Tag 1", description: "Description 1", link: "Link 1", date: "01-01-2021" },
+            { topic: "topic2", author: "Author 2", source: "Source 2", year: "2022", typology: "arrow", tag: "Tag 2", description: "Description 2", link: "Link 2", date: "01-01-2022" },
+            { topic: "topic3", author: "Author 3", source: "Source 3", year: "2023", typology: "sampei", tag: "Tag 3", description: "Description 3", link: "Link 3", date: "02-01-2023" },
+            // more data here
+        ];
+
+        const filters = {
+            topic: [],
+            author: [],
+            source: [],
+            year: [],
+            typology: [],
+            tag: []
+        };
+
+        const filterData = () => _.filter(data, item => {
+            return (
+                (_.isEmpty(filters.topic) || _.includes(filters.topic, item.topic)) &&
+                (_.isEmpty(filters.author) || _.includes(filters.author, item.author)) &&
+                (_.isEmpty(filters.source) || _.includes(filters.source, item.source)) &&
+                (_.isEmpty(filters.year) || _.includes(filters.year, item.year)) &&
+                (_.isEmpty(filters.typology) || _.includes(filters.typology, item.typology)) &&
+                (_.isEmpty(filters.tag) || _.includes(filters.tag, item.tag))
+            );
+        });
+
+        const displayData = (data) => {
+            let html = "";
+            data.forEach(item => {
+                html += `
+            <div class="card">
+              <div class="card-header" id="heading-${item.typology}">
+                <h2 class="mb-0">
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}" aria-expanded="true" aria-controls="collapse-${item.typology}">
+                    ${item.typology}
+                  </button>
+                </h2>
+              </div>
+              <div id="collapse-${item.typology}" class="collapse" aria-labelledby="heading-${item.typology}" data-parent="#results">
+                <div class="card-body">
+                  <div class="meta-data">
+                    <div class="meta-data-item">Date: ${item.date}</div>
+                    <div class="meta-data-item">Typology: ${item.typology}</div>
+                    <div class="meta-data-item">Topic: ${item.topic}</div>
+                    <div class="meta-data-item">Author: ${item.author}</div>
+                    <div class="meta-data-item">Source: ${item.source}</div>
+                    <div class="meta-data-item">Year: ${item.year}</div>
+                    <div class="meta-data-item">Tag: ${item.tag}</div>
+                  </div>
+                  <div class="description">
+                    ${item.description}
+                  </div>
+                  <div class="link">
+                    <a href="${item.link}" target="_blank">Read more</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+            });
+            document.getElementById("results").innerHTML = html;
+        };
+
+        // function to update filters and display filtered data
+        const search = () => {
+            document.querySelectorAll('.filter-selected').forEach(el => el.classList.remove('filter-selected'));
+            [...document.querySelectorAll("input[type='checkbox']:checked")].forEach(el => el.parentNode.classList.add('filter-selected'));
+
+            filters.topic = [...document.querySelectorAll("#topic-filter input[type='checkbox']:checked")].map(x => x.value);
+            filters.author = [...document.querySelectorAll("#author-filter input[type='checkbox']:checked")].map(x => x.value);
+            filters.source = [...document.querySelectorAll("#source-filter input[type='checkbox']:checked")].map(x => x.value);
+            filters.year = [...document.querySelectorAll("#year-filter input[type='checkbox']:checked")].map(x => x.value);
+            filters.typology = [...document.querySelectorAll("#typology-filter input[type='checkbox']:checked")].map(x => x.value);
+            filters.tag = [...document.querySelectorAll("#tag-filter input[type='checkbox']:checked")].map(x => x.value);
+            const filteredData = filterData();
+            displayData(filteredData);
+        };
+
+        // create checkboxes for each filter options
+        const uniqueTopics = _.uniqBy(data, 'topic');
+        let options = '';
+        uniqueTopics.forEach(topic => {
+            options += `<label><input type="checkbox" value="${topic.topic}" onchange="search()">${topic.topic}</label>`;
+        });
+        document.getElementById("topic-filter").innerHTML = options;
+
+        const uniqueAuthors = _.uniqBy(data, 'author');
+        options = '';
+        uniqueAuthors.forEach(author => {
+            options += `<label><input type="checkbox" value="${author.author}" onchange="search()">${author.author}</label>`;
+        });
+        document.getElementById("author-filter").innerHTML = options;
+
+        const uniqueSources = _.uniqBy(data, 'source');
+        options = '';
+        uniqueSources.forEach(source => {
+            options += `<label><input type="checkbox" value="${source.source}" onchange="search()">${source.source}</label>`;
+        });
+        document.getElementById("source-filter").innerHTML = options;
+
+        const uniqueYears = _.uniqBy(data, 'year');
+        options = '';
+        uniqueYears.forEach(year => {
+            options += `<label><input type="checkbox" value="${year.year}" onchange="search()">${year.year}</label>`;
+        });
+        document.getElementById("year-filter").innerHTML = options;
+
+        const uniqueTypologys = _.uniqBy(data, 'typology');
+        options = '';
+        uniqueTypologys.forEach(typology => {
+            options += `<label><input type="checkbox" value="${typology.typology}" onchange="search()">${typology.typology}</label>`;
+        });
+        document.getElementById("typology-filter").innerHTML = options;
+
+        const uniqueTags = _.uniqBy(data, 'tag');
+        options = '';
+        uniqueTags.forEach(tag => {
+            options += `<label><input type="checkbox" value="${tag.tag}" onchange="search()">${tag.tag}</label>`;
+        });
+        document.getElementById("tag-filter").innerHTML = options;
+
+        // display all data when page loads
+        displayData(data);
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <style>
+        .cardFilters div label {
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"]+label {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        input[type="checkbox"]+label:before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 0;
+            top: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        input[type="checkbox"]:checked+label:before {
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        input[type="checkbox"]:checked+label:after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 5px;
+            top: 5px;
+            left: 5px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .filter-selected {
+            border: 2px solid red;
+            border-radius: 3px;
+            background-color: rgb(255, 111, 111);
+        }
+    </style>
+</body>
+
+</html>
