@@ -1,3 +1,4 @@
+//grab data from json
 fetch('https://davide-mariotti.github.io/lodash/data.json')
     .then(response => response.json())
     .then(data => {
@@ -6,8 +7,10 @@ fetch('https://davide-mariotti.github.io/lodash/data.json')
     })
     .catch(error => console.error(error));
 
-    const data = JSON.parse(localStorage.getItem('myData'));
-    console.log(data)
+//collect data from storage
+const data = JSON.parse(localStorage.getItem('myData'));
+//console.log(data)
+
 
 
 const filters = {
@@ -185,18 +188,9 @@ function checkFilterEmpty() {
   for (var k = 0; k < links.length; k++) {
     if (links[k].href.length === 42) {
       links[k].remove();
-      console.log('rimosso');
+      //console.log('rimosso');
     } else {
-      console.log('ok');
+      //console.log('ok');
     }
   }
 }
-
-
-
-
-
-
-
-
-
