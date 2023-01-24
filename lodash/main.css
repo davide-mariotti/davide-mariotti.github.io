@@ -1,38 +1,110 @@
-.cardFilters div label {
-    cursor: pointer;
-    padding: 5px 10px;
-    margin: 0px;
-}
-.cardFilters .card-header {
+/*cardFilters*/
+.cardFilters {}
+.cardFilters .card {}
+.cardFilters .card .card-header {
     padding-top: 20px;
     padding-bottom: 20px;
 }
-.cardFilters .card-header button {
+
+.cardFilters .card .card-header h2 {
+    cursor: pointer;
+    position: relative;
+}
+.cardFilters .card .card-header h2::before,
+.cardFilters .card .card-header h2:has(button[aria-expanded="false"]):before {
+    display: flex;
+    content: " ";
+    background-image: url('./img/arrow-up.svg');
+    background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	right: 0px;
+	top: 10px;
+}
+.cardFilters .card .card-header h2:has(button[aria-expanded="true"]):before {
+    rotate: 180deg;
+}
+
+.cardFilters .card .card-header h2 button {
+    width: 100%;
     padding: 0px;
 }
-.cardFilters .card-header label {
+.cardFilters .card .card-header h2 button:focus,
+.cardFilters .card .card-header h2 button:hover {
+    box-shadow: unset;
+    text-decoration: unset;
+}
+.cardFilters .card .card-header h2 button label {
+    width: 100%;
+    display: flex;
+	justify-content: flex-start;
     color: #B62623;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
     font-size: 16px;
+    cursor: pointer;
 }
-.cardFilters .card-body {
+.cardFilters .card .card-body {
+    padding: 15px 0px;
     max-height: 300px;
 	scroll-behavior: auto;
 	overflow: auto;
 	overflow-x: hidden;
 }
-
-input[type="checkbox"] {
+    /* for webkit browsers */
+    .cardFilters .card .card-body::-webkit-scrollbar {
+        width: 15px;
+        background-color: #F5F5F5;
+    }
+    /* for firefox */
+    .cardFilters .card .card-body scrollbar {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+    /* for internet explorer */
+    .cardFilters .card .card-body::-ms-thumb {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+    /* for internet explorer */
+    .cardFilters .card .card-body::-ms-track {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+    /* for firefox */
+    .cardFilters .card .card-body scrollbar thumb {
+        background-color: #F5F5F5;
+    }
+    /* for webkit browsers */
+    .cardFilters .card .card-body::-webkit-scrollbar-thumb {
+        background: #B62623;
+        border-radius: 6px;
+        border: 1px solid #B62623;
+    }
+.cardFilters .card .card-body [id*='-filter'] {}
+.cardFilters .card .card-body [id*='-filter'] label {
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 0px;
+    width: 100%;
+	border-bottom: 1px solid rgb(128 128 128 / 50%);
+	padding: 15px;
+	font-size: 14px;
+}
+.cardFilters .card .card-body [id*='-filter'] label.filter-selected {
+    border: 2px solid #B62623;
+    background-color: rgb(182 38 35 / 80%);
+	color: #FFFFFF;
+}
+.cardFilters .card .card-body [id*='-filter'] label input[type="checkbox"] {
     display: none;
 }
-
-input[type="checkbox"]+label {
+.cardFilters .card .card-body [id*='-filter'] label input[type="checkbox"]+label {
     position: relative;
     padding-left: 25px;
 }
-
-input[type="checkbox"]+label:before {
+.cardFilters .card .card-body [id*='-filter'] label input[type="checkbox"]+label:before {
     content: "";
     position: absolute;
     width: 20px;
@@ -42,13 +114,11 @@ input[type="checkbox"]+label:before {
     background-color: #fff;
     border: 1px solid #ccc;
 }
-
-input[type="checkbox"]:checked+label:before {
+.cardFilters .card .card-body [id*='-filter'] label input[type="checkbox"]:checked+label:before {
     background-color: #337ab7;
     border-color: #337ab7;
 }
-
-input[type="checkbox"]:checked+label:after {
+.cardFilters .card .card-body [id*='-filter'] label input[type="checkbox"]:checked+label:after {
     content: "";
     position: absolute;
     width: 10px;
@@ -60,11 +130,8 @@ input[type="checkbox"]:checked+label:after {
     transform: rotate(45deg);
 }
 
-.filter-selected {
-    border: 2px solid red;
-    border-radius: 3px;
-    background-color: rgb(255, 111, 111);
-}
+
+
 
 #results .card {
     border: 0px;
