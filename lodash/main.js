@@ -9,43 +9,41 @@ const filters = {
 
 const filterData = () => _.filter(data, item => {
   return (
-      (_.isEmpty(filters.topic) || _.includes(filters.topic, item.topic)) &&
-      (_.isEmpty(filters.author) || _.includes(filters.author, item.author)) &&
-      (_.isEmpty(filters.source) || _.includes(filters.source, item.source)) &&
-      (_.isEmpty(filters.year) || _.includes(filters.year, item.year)) &&
-      (_.isEmpty(filters.typology) || _.includes(filters.typology, item.typology)) &&
-      (_.isEmpty(filters.tag) || _.includes(filters.tag, item.tag))
+    (_.isEmpty(filters.topic) || _.includes(filters.topic, item.topic)) &&
+    (_.isEmpty(filters.author) || _.includes(filters.author, item.author)) &&
+    (_.isEmpty(filters.source) || _.includes(filters.source, item.source)) &&
+    (_.isEmpty(filters.year) || _.includes(filters.year, item.year)) &&
+    (_.isEmpty(filters.typology) || _.includes(filters.typology, item.typology)) &&
+    (_.isEmpty(filters.tag) || _.includes(filters.tag, item.tag))
   );
 });
 
 const displayData = (data) => {
   let html = "";
   data.forEach(item => {
-      html += `
+    html += `
   <div class="card">
     <div class="card-header" id="heading-${item.typology}">
         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}-${item.date}" aria-expanded="true" aria-controls="collapse-${item.typology}-${item.date}">
           <span class="typology">${item.typology}</span>
           <span class="description">${item.description}</span>
         </button>
-        <span class="date">${item.date}</span>        
+        <span class="date">${item.date}</span>
     </div>
     <div id="collapse-${item.typology}-${item.date}" class="collapse" aria-labelledby="heading-${item.typology}-${item.date}" data-parent="#results">
       <div class="card-body">
         <div class="meta-data">
-          <div class="meta-data-item Date">${item.date}</div>
-          <div class="meta-data-item Typology">Typology: ${item.typology}</div>
-          <div class="meta-data-item Topic">Topic: ${item.topic}</div>
-          <div class="meta-data-item Author">Author: ${item.author}</div>
-          <div class="meta-data-item Source">Source: ${item.source}</div>
-          <div class="meta-data-item Year">Year: ${item.year}</div>
-          <div class="meta-data-item Tag">Tag: ${item.tag}</div>
+          <div class="meta-data-item Topic">TOPIC: ${item.topic}</div>
+          <div class="meta-data-item Author">AUTHORS: ${item.author}</div>
+          <div class="meta-data-item Source">SOURCE: ${item.source}</div>
+          <div class="meta-data-item Tag">${item.tag}</div>
         </div>
         <div class="description">
+        ABSTRACT:<br>
           ${item.description}
         </div>
-        <div class="link">
-          <a href="${item.link}" target="_blank">Read more</a>
+        <div class="containerLink">
+          <a class="Link" href="${item.link}" target="_blank">Read more</a>
         </div>
       </div>
     </div>
@@ -68,6 +66,8 @@ const search = () => {
   filters.tag = [...document.querySelectorAll("#tag-filter input[type='checkbox']:checked")].map(x => x.value);
   const filteredData = filterData();
   displayData(filteredData);
+  changeTypologyColor();
+  checkFilterEmpty();
 };
 
 
@@ -116,3 +116,69 @@ document.getElementById("tag-filter").innerHTML = options;
 
 // display all data when page loads
 displayData(data);
+
+// change BG-color to typology label results
+function changeTypologyColor() {
+  var elements = document.getElementsByClassName("typology");
+  for (var i = 0; i < elements.length; i++) {
+    if (elements[i].textContent === "Articles") {
+      elements[i].style.backgroundColor = "red";
+    } if (elements[i].textContent === "Report") {
+      elements[i].style.backgroundColor = "green";
+    } if (elements[i].textContent === "Perspective") {
+      elements[i].style.backgroundColor = "yellow";
+      elements[i].style.color = "black";
+    } if (elements[i].textContent === "Correspondence") {
+      elements[i].style.backgroundColor = "gray";
+    } if (elements[i].textContent === "News") {
+      elements[i].style.backgroundColor = "blue";
+    } if (elements[i].textContent === "Original Investigation") {
+      elements[i].style.backgroundColor = "black";
+    } if (elements[i].textContent === "New Result") {
+      elements[i].style.backgroundColor = "brown";
+    } if (elements[i].textContent === "Editorial") {
+      elements[i].style.backgroundColor = "orange";
+    } if (elements[i].textContent === "Comment") {
+      elements[i].style.backgroundColor = "purple";
+    } if (elements[i].textContent === "Viewpoint") {
+      elements[i].style.backgroundColor = "aqua";
+    } if (elements[i].textContent === "Case Report") {
+      elements[i].style.backgroundColor = "burlywood";
+    } else if (elements[i].textContent === "Letter") {
+      elements[i].style.backgroundColor = "cadetblue";
+    }
+  }
+};
+// run the function when the page is loaded
+window.addEventListener("load", changeTypologyColor);
+window.addEventListener("load", checkFilterEmpty);
+
+function checkFilterEmpty() {
+  var classes = ['.card-body .Topic', '.card-body .Author', '.card-body .Source', '.card-body .Year', '.card-body .Tag', '.card-body .description'];
+  for (var i = 0; i < classes.length; i++) {
+    var elements = document.querySelectorAll(classes[i]);
+    for (var j = 0; j < elements.length; j++) {
+      if (elements[j].textContent.trim().length <= 0) {
+        elements[j].remove();
+      }
+    }
+  }
+
+  var links = document.querySelectorAll('.card-body .Link');
+    for (var k = 0; k < links.length; k++) {
+        if (links[k].href.length === 42) {
+          links[k].remove();
+            console.log('rimosso');
+        } else {
+          console.log('ok');            
+        }
+    }
+}
+
+
+
+
+
+
+
+

@@ -6,8 +6,8 @@ const data = [
     year: "2020",
     typology: "Articles",
     tag: "Home Therapy",
-    description: "Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A ",
-    link: "https://www.gazzetta.it",
+    description: "TEST no link | Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A Lorem Ipsum A ",
+    link: "",
     date: "01/01/2020"
 },
 {
