@@ -131,14 +131,70 @@
 }
 
 
-
-
+#results {}
 #results .card {
     border: 0px;
     background-color: unset;
+    border-bottom: 1px solid rgb(128 128 128 / 50%);
+    border-radius: 0px;
 }
-#results .card-header {
-    border: 0px;
-    border-bottom: 1px solid;
-    background-color: unset;
+#results .card .card-header {
+    border-bottom: unset;
+    padding: 15px;
 }
+#results .card .card-header button {
+    display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+    text-decoration: unset;
+    padding: 0px;
+}
+#results .card .card-header button:focus {
+    box-shadow: unset;
+}
+#results .card .card-header button .typology {
+    background-color: #B62623;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    padding: 5px 15px;
+    margin: 0px;
+}
+#results .card .card-header button .description {
+    text-align: left;
+    color: black;
+    font-size: 24px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#results .card .card-header .date {
+    display: flex;
+    color: grey;
+    font-size: 16px;
+    margin-top: 10px;
+}
+#results .card [id*='collapse-']{}
+#results .card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+#results .card .card-body * {
+    display: flex;
+}
+#results .card .card-body .meta-data {
+    flex-direction: column;
+}
+#results .card .card-body .meta-data .meta-data-item{}
+#results .card .card-body .meta-data .meta-data-item.Typology {}
+#results .card .card-body .meta-data .meta-data-item.Date {}
+#results .card .card-body .meta-data .meta-data-item.Topic {}
+#results .card .card-body .meta-data .meta-data-item.Author {}
+#results .card .card-body .meta-data .meta-data-item.Source {}
+#results .card .card-body .meta-data .meta-data-item.Year {}
+#results .card .card-body .meta-data .meta-data-item.Tag {}
+#results .card .card-body .description {}
+#results .card .card-body .link {}
+
+
