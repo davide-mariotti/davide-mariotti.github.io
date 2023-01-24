@@ -1,10 +1,22 @@
+fetch('https://davide-mariotti.github.io/lodash/data.json')
+    .then(response => response.json())
+    .then(data => {
+        // Store the data in localStorage
+        localStorage.setItem('myData', JSON.stringify(data));
+    })
+    .catch(error => console.error(error));
+
+    const data = JSON.parse(localStorage.getItem('myData'));
+    console.log(data)
+
+
 const filters = {
   topic: [],
   author: [],
   source: [],
   year: [],
   typology: [],
-  tag: []
+  Tag: []
 };
 
 const filterData = () => _.filter(data, item => {
@@ -22,36 +34,41 @@ const displayData = (data) => {
   let html = "";
   data.forEach(item => {
     html += `
-  <div class="card">
-    <div class="card-header" id="heading-${item.typology}">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}-${item.date}" aria-expanded="true" aria-controls="collapse-${item.typology}-${item.date}">
-          <span class="typology">${item.typology}</span>
-          <span class="description">${item.description}</span>
-        </button>
-        <span class="date">${item.date}</span>
-    </div>
-    <div id="collapse-${item.typology}-${item.date}" class="collapse" aria-labelledby="heading-${item.typology}-${item.date}" data-parent="#results">
-      <div class="card-body">
-        <div class="meta-data">
-          <div class="meta-data-item Topic">TOPIC: ${item.topic}</div>
-          <div class="meta-data-item Author">AUTHORS: ${item.author}</div>
-          <div class="meta-data-item Source">SOURCE: ${item.source}</div>
-          <div class="meta-data-item Tag">${item.tag}</div>
-        </div>
-        <div class="description">
-        ABSTRACT:<br>
-          ${item.description}
-        </div>
-        <div class="containerLink">
-          <a class="Link" href="${item.link}" target="_blank">Read more</a>
-        </div>
-      </div>
-    </div>
-  </div>
-`;
+          <div class="card">
+            <div class="card-header" id="heading-${item.typology}">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${item.typology}-${item.date}" aria-expanded="true" aria-controls="collapse-${item.typology}-${item.date}">
+                  <span class="typology">${item.typology}</span>
+                  <span class="description">${item.description}</span>
+                </button>
+                <span class="date">${item.date}</span>
+            </div>
+            <div id="collapse-${item.typology}-${item.date}" class="collapse" aria-labelledby="heading-${item.typology}-${item.date}" data-parent="#results">
+              <div class="card-body">
+                <div class="meta-data">
+                  <div class="meta-data-item Topic">TOPIC: ${item.topic}</div>
+                  <div class="meta-data-item Author">AUTHORS: ${item.author}</div>
+                  <div class="meta-data-item Source">SOURCE: ${item.source}</div>
+                  <div class="meta-data-item Tag">${item.tag}</div>
+                </div>
+                <div class="description">
+                ABSTRACT:<br>
+                  ${item.description}
+                </div>
+                <div class="containerLink">
+                  <a class="Link" href="${item.link}" target="_blank">Read more</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
   });
   document.getElementById("results").innerHTML = html;
 };
+
+
+
+
+
 
 // function to update filters and display filtered data
 const search = () => {
@@ -165,15 +182,16 @@ function checkFilterEmpty() {
   }
 
   var links = document.querySelectorAll('.card-body .Link');
-    for (var k = 0; k < links.length; k++) {
-        if (links[k].href.length === 42) {
-          links[k].remove();
-            console.log('rimosso');
-        } else {
-          console.log('ok');            
-        }
+  for (var k = 0; k < links.length; k++) {
+    if (links[k].href.length === 42) {
+      links[k].remove();
+      console.log('rimosso');
+    } else {
+      console.log('ok');
     }
+  }
 }
+
 
 
 
