@@ -1,66 +1,64 @@
 {
     "results": [
         {
-            "path": "/pippo",
-            "description": "Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 ",
-            "title": "Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1",
-            "url": "/pippo.html"
+            "path": "/blog/post-1",
+            "description": "This is the first blog post.",
+            "title": "Blog Post 1",
+            "url": "/blog/post-1"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 Descrizione 2 ",
-            "title": "Titolo 2 Titolo 2 Titolo 2 Titolo 2 Titolo 2 Titolo 2 Titolo 2",
-            "url": "/pippo.html"
+            "path": "/blog/post-2",
+            "description": "This is the second blog post.",
+            "title": "Blog Post 2",
+            "url": "/blog/post-2"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 Descrizione 3 ",
-            "title": "Titolo 3 Titolo 3 Titolo 3 Titolo 3 Titolo 3 Titolo 3 Titolo 3",
-            "url": "/pippo.html"
+            "path": "/blog/post-3",
+            "description": "This is the third blog post.",
+            "title": "Blog Post 3",
+            "url": "/blog/post-3"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 Descrizione 4 ",
-            "title": "Titolo 4 Titolo 4 Titolo 4 Titolo 4 Titolo 4 Titolo 4 Titolo 4",
-            "url": "/pippo.html"
+            "path": "/product/item-1",
+            "description": "This is the first product in our store.",
+            "title": "Product 1",
+            "url": "/product/item-1"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 Descrizione 5 ",
-            "title": "Titolo 5 Titolo 5 Titolo 5 Titolo 5 Titolo 5 Titolo 5 Titolo 5",
-            "url": "/pippo.html"
+            "path": "/product/item-2",
+            "description": "This is the second product in our store.",
+            "title": "Product 2",
+            "url": "/product/item-2"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 Descrizione 6 ",
-            "title": "Titolo 6 Titolo 6 Titolo 6 Titolo 6 Titolo 6 Titolo 6 Titolo 6",
-            "url": "/pippo.html"
+            "path": "/product/item-3",
+            "description": "This is the third product in our store.",
+            "title": "Product 3",
+            "url": "/product/item-3"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 Descrizione 7 ",
-            "title": "Titolo 7 Titolo 7 Titolo 7 Titolo 7 Titolo 7 Titolo 7 Titolo 7",
-            "url": "/pippo.html"
+            "path": "/about-us",
+            "description": "Learn about our company and mission.",
+            "title": "About Us",
+            "url": "/about-us"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 Descrizione 8 ",
-            "title": "Titolo 8 Titolo 8 Titolo 8 Titolo 8 Titolo 8 Titolo 8 Titolo 8",
-            "url": "/pippo.html"
+            "path": "/contact",
+            "description": "Get in touch with our support team.",
+            "title": "Contact Us",
+            "url": "/contact"
         },
         {
-            "path": "/pippo",
-            "title": "Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1 Titolo 1",
-            "url": "/pippo.html"
+            "path": "/faq",
+            "description": "Answers to common questions.",
+            "title": "Frequently Asked Questions",
+            "url": "/faq"
         },
         {
-            "path": "/pippo",
-            "description": "Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 Descrizione 1 ",
-            "url": "/pippo.html"
-        },
-        {
-            "path": "/pippo",
-            "url": "/pippo.html"
+            "path": "/terms-of-service",
+            "description": "Our terms and conditions for using our site.",
+            "title": "Terms of Service",
+            "url": "/terms-of-service"
         }
     ]
 }
