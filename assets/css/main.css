@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    margin: 0;
+}
+img {
+    max-width: 100%;
+}
+
+#space {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111a22;
+    z-index: -1;
+}
+
+.navbar .navbar-brand {
+    color: #2c9f45;
+    font-family: "Raleway", sans-serif;
+    font-weight: 800;
+    font-size: 35px;
+    transition: all 0.3s ease-out 0s;
+}
+.navbar-brand::after {
+    content: "dm.";
+    display: inline;
+}
+.navbar-brand:hover::after {
+    content: "Davide Mariotti";
+    display: inline;
+}
+
+
+.navbar .nav-item {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.navbar .nav-item .nav-link {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+    transition: all 0.3s ease-out 0s;
+    position: relative;
+    z-index: 1;
+}
+
+.navbar .nav-item .nav-link::after {
+    content: "";
+    position: relative;
+    display: block;
+    height: 5px;
+    width: 0;
+    border-radius: 16px;
+    background: #2c9f45;
+    bottom: 1px;
+    left: 0;
+    z-index: -1;
+    transition: all 0.3s ease-out 0s;
+    margin-top: 5px;
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: white;
+    font-size: 28px;
+}
+
+.navbar .nav-item .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar .nav-item .nav-link img {
+    max-width: 25px;
+    margin-right: 5px;
+    transition: all 0.3s ease-out 0s;
+}
+.navbar .nav-item .nav-link:hover img {
+    max-width: 30px;
+}
+h1,h2,p {
+    color: white !important;
+}
+.name {
+    color: #2c9f45;
+}
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  } /* The following five values can be played with to make the waving more or less extreme */
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  } /* Reset for the last half to pause */
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+#imgHello {
+    animation: wave 2.1s infinite;
+    max-width: 30px;
+    margin-bottom: 0px;
+    transform-origin: 30% 70%;
+}
+
+
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #111a22;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #2c9f45;
+    border-radius: 12px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2c9f45;
+    border-radius: 12px;
+  }
