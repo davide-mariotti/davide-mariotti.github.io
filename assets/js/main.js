@@ -1,68 +1,42 @@
-(function ($) {
+var smallStarSize = 0.5;
+var mediumStarSize = 1;
+var largeStarSize = 1.5;
 
-  // Imposta le dimensioni delle stelle in pixel
-  var smallStarSize = 0.5;
-  var mediumStarSize = 1;
-  var largeStarSize = 1.5;
+function generateStar() {
+  var star = document.createElement('div');
+  star.classList.add('star');
+  star.style.width = getRandomStarSize() + 'px';
+  star.style.height = star.style.width;
+  star.style.left = Math.random() * window.innerWidth + 'px';
+  star.style.top = Math.random() * window.innerHeight + 'px';
+  document.body.appendChild(star);
+}
 
-  function generateStar(canvas, ctx, starRadius) {
-    ctx.beginPath();
-    ctx.arc(starRadius + (Math.random() * canvas.width), starRadius + (Math.random() * canvas.height), starRadius, 0, Math.PI * 2, false);
+var interval = setInterval(generateStar, 200);
 
-    // Imposta tutte le stelle come bianche
-    ctx.fillStyle = "rgba(255, 255, 255, 1)";
-    ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
-    ctx.shadowBlur = 3;
+setTimeout(function() {
+  clearInterval(interval);
+}, 15000);
 
-    ctx.fill();
-  }
+function getRandomStarSize() {
+  var sizes = [smallStarSize, mediumStarSize, largeStarSize];
+  var randomIndex = Math.floor(Math.random() * sizes.length);
+  return sizes[randomIndex] * 2;
+}
 
-  $(function () {
-
-    var canvas = document.getElementById("space");
-    var context = canvas.getContext("2d");
-
-    // Funzione per ridisegnare le stelle dopo il ridimensionamento della finestra
-    function redrawStars() {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
-      for (var i = 0; i < 30; i++) { // Puoi cambiare il numero di stelle da generare
-        generateStar(canvas, context, getRandomStarSize());
-      }
-    }
-
-    // Gestore per l'evento di ridimensionamento della finestra
-    window.onresize = redrawStars;
-
-    // Inizializza il canvas e genera le stelle
-    redrawStars();
-
-    interval = setInterval(
-      function (interval) {
-        generateStar(canvas, context, getRandomStarSize());
-      }
-      , 200);
-
-    setTimeout( // Stop creating stars after 10s
-      function () { clearInterval(interval); }
-      , 10000
-    );
-
-    function getRandomStarSize() {
-      var sizes = [smallStarSize, mediumStarSize, largeStarSize];
-      var randomIndex = Math.floor(Math.random() * sizes.length);
-      return sizes[randomIndex];
-    }
+window.onresize = function() {
+  var stars = document.querySelectorAll('.star');
+  stars.forEach(function(star) {
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    star.style.top = Math.random() * window.innerHeight + 'px';
   });
-})(jQuery);
+  };
 
+/*--------------------------*/
 
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('preloader').id = 'preloader-none';
 });
-
-
-
 
 const textContainer = document.getElementById('text-container');
 const words = ['Front-end Developer', 'Graphic Designer', 'Back-end Developer', 'DNN Specialist', 'AEM Developer', 'Video Maker'];
@@ -100,5 +74,11 @@ function simulateTyping() {
 
 simulateTyping();
 
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggler = document.querySelector(".navbar-toggler");
+    const animatedIcon = document.querySelector(".animated-icon2");
 
-
+    navbarToggler.addEventListener("click", function() {
+        animatedIcon.classList.toggle("open");
+    });
+});

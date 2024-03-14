@@ -16,38 +16,60 @@
 
 <body>
     <div id="preloader"></div>
-    <canvas id="space"></canvas>
     <!-- start nav -->
-        <nav class="navbar navbar-dark navbar-expand-lg pt-3">
-            <div class="container-lg">
-                <a class="navbar-brand" href="/"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/"><img src="/assets/icons/home.png" /> Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/user.png" /> About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/analysis.png" /> Projects</a>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-dark navbar-expand-lg pt-3">
+        <div class="container-lg">
+            <a class="navbar-brand" href="/"></a>
+            <button class="navbar-toggler second-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <div class="animated-icon2"><span></span><span></span><span></span><span></span></div>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/"><img src="/assets/icons/home.png" />
+                            Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/user.png" /> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/analysis.png" />
+                            Projects</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
     <!-- end nav -->
     <div class="container text-center py-5">
         <div class="row align-items-center justify-content-center">
             <div class="col-12 col-md-6 d-flex align-items-start flex-column">
-                <h2 class="pb-2">Hi there! <img id="imgHello" src="/assets/icons/hello.png"/></h2>
-                <h1 class="text-start">I'M <span class="name">DAVIDE MARIOTTI</span></h1>
+                <h2 class="pb-2">Hi there! <img id="imgHello" src="/assets/icons/hello.png" /></h2>
+                <h1 class="text-start pb-4">I'M <span class="green">DAVIDE MARIOTTI</span></h1>
                 <h2><span id="text-container"></span><span class="blink"></span></h2>
+            </div>
+            <div class="col-12 col-md-6">
+                <img class="p-4 oscillate" src="/assets/img/haker.png" />
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center py-5">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12 col-md-6 d-flex align-items-start flex-column">
+                <h1 class="text-start pb-4">LET ME <span class="green">INTRODUCE</span> MYSELF</h1>
+                <p>I fell in love with programming and I have at least learnt something, I think… 🤷‍♂️</p>
+                <p>With almost 10 years of experience managing website development projects, I have been committed to
+                    thoroughly gathering user requirements and implementing innovative technical solutions. My work
+                    spans from coding to template creation, consistently focusing on delivering high quality and secure
+                    end products.</p>
+
+                <p>I am dedicated to producing clean and reliable code, always aiming to meet the highest standards of
+                    compatibility and customer satisfaction. My approach is characterized by attention to detail and a
+                    commitment to exceeding client expectations through the delivery of robust and high-quality
+                    solutions.</p>>
             </div>
             <div class="col-12 col-md-6">
                 <img class="p-4 oscillate" src="/assets/img/haker.png" />
@@ -60,7 +82,8 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <!-- end bootstrap js -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
 
 </body>
