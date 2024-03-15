@@ -1,14 +1,77 @@
+/* - - - - - - - - - - */
+/* - - Custom Font - - */
+/* - - - - - - - - - - */
+
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* - - - - - - - - - - */
+/* - - Generic Style - */
+/* - - - - - - - - - - */
 
 body {
   margin: 0;
+  overflow: visible;
+  overflow-x: hidden;
+  background-color: black !important;
+  width: 100%;
+  height: 100%;
+}
+
+ul {
+  color: white;
 }
 
 img {
   max-width: 100%;
 }
+
 img.mw-50 {
   max-width: 50%;
+}
+
+h1,
+h2,
+p {
+  color: white !important;
+}
+
+.green {
+  color: #2c9f45;
+}
+
+/* - - - - - - - - - - */
+/* - - Scrollbar - - - */
+/* - - - - - - - - - - */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #111a22;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #2c9f45;
+  border-radius: 12px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #2c9f45;
+  border-radius: 12px;
+}
+
+/* - - - - - - - - - - */
+/* - - Menu Custom - - */
+/* - - - - - - - - - - */
+
+.navbar-toggler,
+.navbar-toggler:focus {
+  border: 0px !important;
+  box-shadow: unset !important;
 }
 
 .navbar .navbar-brand {
@@ -28,6 +91,7 @@ img.mw-50 {
   content: "Davide Mariotti";
   display: inline;
 }
+
 @media screen and (max-width: 400px) {
   .navbar-brand:hover::after {
     content: "DM";
@@ -85,14 +149,15 @@ img.mw-50 {
   max-width: 26px;
 }
 
-h1,
-h2,
-p {
-  color: white !important;
-}
+/* - - - - - - - - - - */
+/* - - Hello Hand - - */
+/* - - - - - - - - - - */
 
-.green {
-  color: #2c9f45;
+#imgHello {
+  animation: wave 2.1s infinite;
+  max-width: 30px;
+  margin-bottom: 0px;
+  transform-origin: 30% 70%;
 }
 
 @keyframes wave {
@@ -104,7 +169,6 @@ p {
     transform: rotate(14deg);
   }
 
-  /* The following five values can be played with to make the waving more or less extreme */
   20% {
     transform: rotate(-8deg);
   }
@@ -125,49 +189,29 @@ p {
     transform: rotate(0deg);
   }
 
-  /* Reset for the last half to pause */
   100% {
     transform: rotate(0deg);
   }
 }
 
-#imgHello {
-  animation: wave 2.1s infinite;
-  max-width: 30px;
-  margin-bottom: 0px;
-  transform-origin: 30% 70%;
-}
+/* - - - - - - - - - - */
+/* - Curson Animation - */
+/* - - - - - - - - - - */
 
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #111a22;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #2c9f45;
-  border-radius: 12px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #2c9f45;
-  border-radius: 12px;
-}
 .blink {
   border-left: 2px solid #2c9f45;
   animation: blink-animation 0.8s steps(2, start) infinite;
 }
+
 @keyframes blink-animation {
   to {
     visibility: hidden;
   }
 }
+
+/* - - - - - - - - - - */
+/* - - Img Animation - */
+/* - - - - - - - - - - */
 
 .oscillate {
   animation: oscillate 2s ease-in-out infinite alternate;
@@ -177,17 +221,19 @@ p {
 
 @keyframes oscillate {
   from {
-      transform: translateY(-5px);
+    transform: translateY(-5px);
   }
+
   to {
-      transform: translateY(5px);
+    transform: translateY(5px);
   }
 }
 
-/* - - - - -  */
-/*  Preloader */
-/* - - - - -  */
-#preloader {
+/* - - - - - - - - - - */
+/* - - - Loader - - - */
+/* - - - - - - - - - - */
+
+#loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -200,14 +246,13 @@ p {
   background-position: center;
 }
 
-#preloader-none {
+#loader-none {
   opacity: 0;
 }
 
-#no-scroll {
-  overflow: hidden;
-  height: 100vh;
-}
+/* - - - - - - - - - - */
+/* - Animation mobile - */
+/* - - - - - - - - - - */
 
 .animated-icon2 {
   width: 30px;
@@ -286,27 +331,96 @@ p {
   left: 50%;
 }
 
-
-.navbar-toggler,
-.navbar-toggler:focus {
-  border: 0px !important;
-  box-shadow: unset !important;
-}
-
-
-body {
-  overflow: visible; /* Mostra lo scorrimento orizzontale e verticale se necessario */
-  overflow-x: hidden;
-  background-color: black !important; /* Imposta lo sfondo nero */
-  width: 100%; /* Copre l'intera larghezza della finestra */
-  height: 100%; /* Copre l'intera altezza della finestra */
-}
+/* - - - - - - - - - - */
+/* - Stars Animation - */
+/* - - - - - - - - - - */
 
 .star {
   position: absolute;
   background-color: white;
-  border-radius: 50%; /* Rende le stelle circolari */
-  pointer-events: none; /* Evita che le stelle interferiscano con gli eventi del mouse */
+  border-radius: 50%;
+  pointer-events: none;
   opacity: 0.7;
   z-index: -1;
+}
+
+/* - - - - - - - - - - */
+/* - Matrix Animation - */
+/* - - - - - - - - - - */
+
+#matrix {
+  display: block;
+}
+
+/* - - - - - - - - - - */
+/* - social-links - */
+/* - - - - - - - - - - */
+ul.social-links {
+  list-style: unset;
+  list-style-type: none;
+  color: white;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+ul.social-links li {
+  list-style: unset;
+  list-style-type: none;
+}
+
+ul.social-links li .social-icons {
+  display: flex;
+  background-color: white;
+  border-radius: 50%;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  margin: 0px 10px;
+}
+
+/* - - - - - - - - - - */
+/* - Bug-list - */
+/* - - - - - - - - - - */
+
+ul.Bug-list {
+  list-style: none;
+}
+ul.Bug-list li {
+  display: flex;
+  flex-direction: row;
+}
+ul.Bug-list li::before {
+  content: "📌";
+  display: inline-block;
+  margin-right: 0.2rem;
+}
+
+/* - - - - - - - - - - */
+/* - skillsGallery - - */
+/* - - - - - - - - - - */
+
+.skillsGallery {
+  background-color: unset;
+  overflow-x:auto;
+}
+.skillsGallery .card.card-body.skill {
+  background-color: unset;
+  display: flex;
+  align-items: center;
+  border: 1px solid #2c9f45;
+  border-radius: 5px;
+  padding: 20px 30px;
+  margin: 0px 10px;
+  min-width: 250px;
+}
+.skillsGallery .card.card-body.skill img{
+  max-width: 60px;
+}
+
+.skillsGallery::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }

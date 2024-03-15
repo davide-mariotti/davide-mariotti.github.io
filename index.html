@@ -15,27 +15,30 @@
 </head>
 
 <body>
-    <div id="preloader"></div>
+    <div id="loader"></div>
     <!-- start nav -->
     <nav class="navbar navbar-dark navbar-expand-lg pt-3">
         <div class="container-lg">
-            <a class="navbar-brand" href="/"></a>
+            <a class="navbar-brand" href="/" aria-label="Link to Homepage"></a>
             <button class="navbar-toggler second-button" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <div class="animated-icon2"><span></span><span></span><span></span><span></span></div>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" aria-label="Main menu">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/"><img src="/assets/icons/home.png" />
+                        <a class="nav-link active" aria-current="page" href="/" aria-label="Link to Homepage"><img
+                                src="/assets/icons/home.png" alt="Icon of homepage" />
                             Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/user.png" /> About</a>
+                        <a class="nav-link" aria-current="page" href="/about.html" aria-label="Link to About Us page"><img
+                                src="/assets/icons/user.png" alt="Icon of About" /> About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#"><img src="/assets/icons/analysis.png" />
+                        <a class="nav-link" aria-current="page" href="#" aria-label="Link to Projects page"><img
+                                src="/assets/icons/analysis.png" alt="Icon of Projects" />
                             Projects</a>
                     </li>
                 </ul>
@@ -44,35 +47,91 @@
     </nav>
     <!-- end nav -->
     <div class="container text-center py-5">
-        <div class="row align-items-center justify-content-center">
+        <div class="row align-items-center justify-content-center" role="region" aria-label="Presentation">
             <div class="col-12 col-md-6 d-flex align-items-start flex-column">
-                <h2 class="pb-2">Hi there! <img id="imgHello" src="/assets/icons/hello.png" /></h2>
-                <h1 class="text-start pb-4">I'M <span class="green">DAVIDE MARIOTTI</span></h1>
-                <h2><span id="text-container"></span><span class="blink"></span></h2>
+                <h1 class="pb-2">Hi there! <img id="imgHello" src="/assets/icons/hello.png"
+                        alt="Icon of animate hand that say Hello" /></h1>
+                <h2 class="text-start pt-4">I'M <span class="green">DAVIDE MARIOTTI</span><br><br>
+                    <span id="text-container"></span><span class="blink"></span>
+                </h2>
             </div>
             <div class="col-12 col-md-6">
-                <img class="p-4 oscillate" src="/assets/img/haker.png" />
+                <img class="p-4 oscillate" src="/assets/img/haker.png" alt="Image of me working at pc" />
             </div>
         </div>
     </div>
 
     <div class="container text-center py-5">
-        <div class="row align-items-center justify-content-center">
-            <div class="col-12 col-md-6 d-flex align-items-start flex-column">
-                <h1 class="text-start pb-4">LET ME <span class="green">INTRODUCE</span> MYSELF</h1>
+        <div class="row align-items-center justify-content-center" role="region"
+            aria-label="Detailed Presentation on myself">
+            <div class="col-12 col-md-6 d-flex text-start align-items-start flex-column" id="introduction1">
+                <h1 class="pb-4">LET ME <span class="green">INTRODUCE</span> MYSELF</h1>
                 <p>I fell in love with programming and I have at least learnt something, I think… 🤷‍♂️</p>
-                <p>With almost 10 years of experience managing website development projects, I have been committed to
-                    thoroughly gathering user requirements and implementing innovative technical solutions. My work
-                    spans from coding to template creation, consistently focusing on delivering high quality and secure
-                    end products.</p>
+                <p>Well, folks, buckle up because you're about to dive into my world - the realm of Davide, the coding
+                    connoisseur with a sprinkle of humor! 🚀</p>
 
-                <p>I am dedicated to producing clean and reliable code, always aiming to meet the highest standards of
-                    compatibility and customer satisfaction. My approach is characterized by attention to detail and a
-                    commitment to exceeding client expectations through the delivery of robust and high-quality
-                    solutions.</p>>
+                <p>With almost a decade under my belt, I've been the mastermind behind website development projects,
+                    juggling user requirements like a pro and conjuring up technical solutions that would make even
+                    Sherlock Holmes raise an eyebrow.</p>
+
+                <p>From coding to crafting templates, I've waltzed through the digital landscape, always keeping one eye
+                    on quality and the other on security. Picture me as your friendly neighborhood code wizard, weaving
+                    spells of compatibility and customer satisfaction with every keystroke.</p>
+
+                <p>But hey, it's not all serious business! With attention to detail sharper than a ninja's sword and a
+                    commitment to blowing client expectations out of the water, I'm not just here to write code - I'm
+                    here to shake up your digital universe.</p>
+
+                <p>So grab your popcorn, strap in, and get ready for a rollercoaster ride through the pixels and lines
+                    of my coding escapades! 🎉</p>
             </div>
-            <div class="col-12 col-md-6">
-                <img class="p-4 oscillate" src="/assets/img/haker.png" />
+            <div class="col-12 col-md-6 d-flex flex-column" id="introduction2">
+                <canvas id="matrix"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center py-5">
+        <div class="row"  role="region"
+        aria-label="Social media contact">
+            <div class="col-md-12">
+                <h1>FIND <span class="green">ME</span> ON</h1>
+                <p>Feel free to connect with me</p>
+                <ul class="social-links">
+                    <li class="social-icons">
+                        <a href="https://github.com/davide-mariotti" target="_blank" rel="noreferrer"
+                            class="social-icons">
+                            <img src="/assets/icons/github.svg" alt="Icon of github" />
+                        </a>
+                    </li>
+                    <li class="social-icons">
+                        <a href="https://www.linkedin.com/in/davide-mariotti-f1991/" target="_blank" rel="noreferrer"
+                            class="social-icons">
+                            <img src="/assets/icons/linkedin.svg" alt="Icon of linkedin" />
+                        </a>
+                    </li>
+                    <li class="social-icons">
+                        <a href="https://www.instagram.com/guesly91/" target="_blank" rel="noreferrer"
+                            class="social-icons">
+                            <img src="/assets/icons/instagram.svg" alt="Icon of instagram" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer container ">
+        <div class="row"  role="region"
+        aria-label="footer section with links">
+            <div class="col-12 col-md-4 text-start">
+                <p>Designed and Developed by Davide Mariotti</p>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+                <p>Copyright ©<span id="CopyrightYear"></span> dm.</p>
+            </div>
+            <div class="col-12 col-md-4 text-end">
+                <p id="todayData"></p>
             </div>
         </div>
     </div>
@@ -85,7 +144,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-
 </body>
 
 </html>
