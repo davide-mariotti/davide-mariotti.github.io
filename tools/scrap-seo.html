@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dm.</title>
+    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
+    <!-- start bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- end bootstrap css -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+</head>
+
+<body>
+    <div id="loader"></div>
+    <!-- start nav -->
+    <nav class="navbar navbar-dark navbar-expand-lg pt-3">
+        <div class="container-lg">
+            <a class="navbar-brand" href="/" aria-label="Link to Homepage"></a>
+            <button class="navbar-toggler second-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <div class="animated-icon2"><span></span><span></span><span></span><span></span></div>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" aria-label="Main menu">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/" aria-label="Link to Homepage"><img
+                                src="/assets/icons/home.png" alt="Icon of homepage" />
+                            Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/about.html"
+                            aria-label="Link to About Us page"><img src="/assets/icons/user.png" alt="Icon of About" />
+                            About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/tools.html" aria-label="Link to Tools page"><img
+                                src="/assets/icons/analysis.png" alt="Icon of Tools" />
+                            Tools</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- end nav -->
+
+    <div class="container py-5 text-center">
+        <div class="row" role="region" aria-label="section case converter text">
+            <div class="col-12">
+                <h1>Risultati di ricerca</h1>
+
+<form id="searchForm">
+    <label for="domainInput">Inserisci il dominio:</label>
+    <input type="text" id="domainInput" name="domain" placeholder="Esempio: www.example.com">
+    <br>
+    <input type="checkbox" id="showSnippet" name="showSnippet" checked>
+    <label for="showSnippet">Mostra snippet</label>
+    <br>
+    <button type="button" onclick="search()">Cerca</button>
+</form>
+
+<div id="searchResults">
+    <!-- Qui verranno visualizzati i risultati di ricerca -->
+</div>
+
+<script>
+    function search() {
+        var domain = document.getElementById('domainInput').value;
+        var showSnippet = document.getElementById('showSnippet').checked;
+
+        var url = 'https://www.google.com/search?q=site:' + domain;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                displayResults(data, showSnippet);
+            })
+            .catch(error => {
+                console.error('Si è verificato un errore:', error);
+            });
+    }
+
+    function displayResults(html, showSnippet) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+
+        var searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
+
+        var organicResults = doc.querySelectorAll('.tF2Cxc');
+
+        if (organicResults.length === 0) {
+            searchResultsDiv.innerHTML = '<p>Nessun risultato trovato.</p>';
+            return;
+        }
+
+        organicResults.forEach(result => {
+            var title = result.querySelector('.DKV0Md').textContent;
+            var link = result.querySelector('a').getAttribute('href');
+            var snippet = result.querySelector('.aCOpRe') ? result.querySelector('.aCOpRe').textContent : "";
+
+            var resultDiv = document.createElement('div');
+            var titleElement = document.createElement('a');
+            titleElement.textContent = title;
+            titleElement.href = link;
+            resultDiv.appendChild(titleElement);
+            resultDiv.appendChild(document.createElement('br'));
+
+            if (showSnippet) {
+                var snippetElement = document.createElement('p');
+                snippetElement.textContent = snippet;
+                resultDiv.appendChild(snippetElement);
+            }
+
+            searchResultsDiv.appendChild(resultDiv);
+        });
+    }
+</script>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer container ">
+        <div class="row" role="region" aria-label="footer section with links">
+            <div class="col-12 col-md-4 text-start">
+                <p>Designed and Developed by Davide Mariotti</p>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+                <p>Copyright ©<span id="CopyrightYear"></span> dm.</p>
+            </div>
+            <div class="col-12 col-md-4 text-end">
+                <p id="todayData"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function convertToUppercase() {
+            var inputText = document.getElementById("inputText").value;
+            var outputText = inputText.toUpperCase();
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function convertToLowercase() {
+            var inputText = document.getElementById("inputText").value;
+            var outputText = inputText.toLowerCase();
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function convertToCamelcase() {
+            var inputText = document.getElementById("inputText").value;
+            var words = inputText.split(" ");
+            var camelCaseWords = words.map(function (word, index) {
+                if (index === 0) {
+                    return word.toLowerCase();
+                } else {
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }
+            });
+            var outputText = camelCaseWords.join("");
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function convertToSentenceCase() {
+            var inputText = document.getElementById("inputText").value;
+            var outputText = inputText.toLowerCase().replace(/(^|\. *)([a-z])/g, function (match, separator, char) {
+                return separator + char.toUpperCase();
+            });
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function convertToTitleCase() {
+            var inputText = document.getElementById("inputText").value;
+            var outputText = inputText.toLowerCase().replace(/\b\w/g, function (char) {
+                return char.toUpperCase();
+            });
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function convertToInverseCase() {
+            var inputText = document.getElementById("inputText").value;
+            var outputText = "";
+            for (var i = 0; i < inputText.length; i++) {
+                var char = inputText[i];
+                if (char === char.toUpperCase()) {
+                    outputText += char.toLowerCase();
+                } else {
+                    outputText += char.toUpperCase();
+                }
+            }
+            document.getElementById("outputText").value = outputText;
+        }
+
+        function copyToClipboard() {
+            var outputText = document.getElementById("outputText");
+            outputText.select();
+            document.execCommand("copy");
+            alert("Testo copiato negli appunti!");
+        }
+
+        function convertToTextForUpload() {
+            var inputText = document.getElementById("inputText").value;
+
+            // Converto in lowercase
+            inputText = inputText.toLowerCase();
+
+            // Sostituzione degli spazi con '-'
+            inputText = inputText.replace(/\s+/g, '-');
+
+            // Sostituzione di caratteri speciali
+            inputText = inputText.replace(/[èéêë]/g, 'e');
+            inputText = inputText.replace(/[àáâãäå]/g, 'a');
+            inputText = inputText.replace(/[ìíîï]/g, 'i');
+            inputText = inputText.replace(/[òóôõö]/g, 'o');
+            inputText = inputText.replace(/[ùúûü]/g, 'u');
+            inputText = inputText.replace(/&/g, 'e');
+
+            // Eliminazione dei caratteri specificati
+            inputText = inputText.replace(/[\/()#,\.;:<>\{\}\[\]\*\+\!\?\^|]/g, '');
+
+            // Aggiorno il textarea con il testo formattato
+            document.getElementById("outputText").value = inputText;
+        }
+
+        function resetText() {
+            // Reimposta il testo nell'input e nell'output
+            document.getElementById("inputText").value = "";
+            document.getElementById("outputText").value = "";
+        }
+
+        function updateCharacterCount() {
+            var inputText = document.getElementById("inputText").value;
+            var characterCount = inputText.length;
+            document.getElementById("characterCount").textContent = "Characters: " + characterCount;
+        }
+
+    </script>
+
+    <!-- start bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- end bootstrap js -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
