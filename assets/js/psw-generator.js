@@ -21,9 +21,9 @@ function generatePassword() {
 }
 function checkPasswordSecurity(password) {
     var securityLevel;
-    if (password.length >= 16 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && /[^a-zA-Z\d]/.test(password)) {
+    if (password.length >= 12 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && /[^a-zA-Z\d]/.test(password)) {
         securityLevel = "green";
-    } else if ((password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password)) || (password.length >= 12 && /[A-Z]/.test(password) && /[a-z]/.test(password))) {
+    } else if ((password.length >= 6 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password)) || (password.length >= 12 && /[A-Z]/.test(password) && /[a-z]/.test(password))) {
         securityLevel = "yellow";
     } else {
         securityLevel = "red";

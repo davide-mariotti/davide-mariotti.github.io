@@ -50,6 +50,12 @@ p {
 .green {
   color: #2c9f45;
 }
+.yellow {
+  color: yellow;
+}
+.red {
+  color: red;
+}
 
 /* - - - - - - - - - - */
 /* - - Scrollbar - - - */
@@ -530,8 +536,16 @@ ul.Bug-list li::before {
   display: flex;
   flex-direction: column;
 }
+#pswGenerator .form-check-input {
+  cursor: pointer;
+}
+#pswGenerator .form-check-input:focus {
+  border-color: #2c9f45;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 253, 93, 0.25);
+}
 #pswGenerator .form-check-input:checked {
-  background-color: #2c9f45;.pswUpperCase 
+  background-color: #2c9f45; 
   border-color: #217533;
 }
 
@@ -550,6 +564,6 @@ ul.Bug-list li::before {
   text-align: center;
   background-color: lightgrey;
 }
-#pswGenerator #password.green { background-color: #9eff9e; }
-#pswGenerator #password.yellow { background-color: #fff599; }
-#pswGenerator #password.red { background-color: #ff8a80; }
+#pswGenerator #password.green { background-color: #9eff9e; color: white;}
+#pswGenerator #password.yellow { background-color: #fff599; color: black;}
+#pswGenerator #password.red { background-color: #ff8a80; color: black;}
