@@ -11,20 +11,41 @@ function fetchPages() {
     }
 
     // Effettua la richiesta API a Google Custom Search
-    fetch(`https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=site:${domain}&num=${pageCount}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error API request');
-            }
-            return response.json();
-        })
-        .then(data => {
+    const pageSize = 10; // Numero di risultati per pagina
+    const totalPages = Math.ceil(pageCount / pageSize); // Calcola il numero totale di pagine
+
+    // Array per tenere traccia di tutte le promesse di richiesta
+    const fetchPromises = [];
+
+    for (let i = 0; i < totalPages; i++) {
+        const startIndex = i * pageSize + 1; // Calcola l'indice di partenza per la pagina corrente
+
+        const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=site:${domain}&start=${startIndex}&num=${pageSize}`;
+
+        // Effettua la richiesta per la pagina corrente
+        const promise = fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error API request');
+                }
+                return response.json();
+            })
+            .then(data => data.items || []);
+
+        // Aggiungi la promessa alla lista delle promesse di richiesta
+        fetchPromises.push(promise);
+    }
+
+    // Esegui tutte le promesse di richiesta in parallelo
+    Promise.all(fetchPromises)
+        .then(pagesArrays => {
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = ''; // Cancella risultati precedenti
 
-            if (data.items) {
-                const pages = data.items;
+            // Unisci tutti gli array di pagine in un unico array
+            const pages = pagesArrays.flat();
 
+            if (pages.length > 0) {
                 // Creazione del contenitore principale
                 const divContainer = document.createElement('div');
                 divContainer.classList.add('page-container'); // Aggiungi classe per stili CSS
