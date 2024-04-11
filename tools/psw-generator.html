@@ -33,8 +33,8 @@
                             Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/about"
-                            aria-label="Link to About Us page"><img src="/assets/icons/user.png" alt="Icon of About" />
+                        <a class="nav-link" aria-current="page" href="/about" aria-label="Link to About Us page"><img
+                                src="/assets/icons/user.png" alt="Icon of About" />
                             About</a>
                     </li>
                     <li class="nav-item">
@@ -52,6 +52,9 @@
         <div class="row" role="region" aria-label="section psw generator text">
             <div class="col-12">
                 <h1><span class="green">Password</span> Generator</h1>
+                <p>Password Generator creates secure passwords based on user preferences for length and character types
+                    (uppercase, lowercase, numbers, symbols). It assesses password security instantly, showing strength
+                    with color-coded feedback.</p>
                 <div id="pswGenerator">
                     <div class="pswLenght pb-3">
                         <label for="length">Lunghezza della Password:</label>
@@ -73,11 +76,18 @@
                         <input class="form-check-input" type="checkbox" id="symbols" name="symbols">
                         <label for="symbols">Use Sp&cìàl Ch@r</label>
                     </div>
-                    <button  class="btn btn-primary mb-3" role="button" onclick="generatePassword()">Generate Password</button>
-                    <input type="text" id="password" readonly style="width: 100%; box-sizing: border-box;"> 
-                    <p class="text-black pt-3"><span class="green border border-success rounded px-2 mb-2">Green</span> Background are secure psw<br> 
-                        <span class="yellow border border-warning rounded px-2 mb-2">Yellow</span> are mid secure psw<br>
-                        <span class="red border border-danger rounded px-2">Red</span> are very low secure psw</p>
+                    <button class="btn btn-primary mb-3" role="button" onclick="generatePassword()">Generate
+                        Password</button>
+                    <input type="text" id="password" readonly style="width: 100%; box-sizing: border-box;">
+                    <p class="text-black mt-3 mb-1">
+                        <span class="green-bg border border-success rounded px-2 mb-2">Green</span> Background are secure psw
+                    </p>
+                    <p class="text-black my-1">
+                        <span class="yellow-bg border border-warning rounded px-2 mb-2">Yellow</span> are mid secure psw
+                    </p>
+                    <p class="text-black my-1">
+                        <span class="red-bg border border-danger rounded px-2">Red</span> are very low secure psw
+                    </p>
                 </div>
             </div>
         </div>
@@ -104,12 +114,9 @@
     <!-- end bootstrap js -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-        <script src="/assets/js/psw-generator.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/psw-generator.js" crossorigin="anonymous"></script>
 
 </body>
 
 </html>
-
-
-
