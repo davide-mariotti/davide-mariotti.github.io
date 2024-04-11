@@ -487,7 +487,7 @@ ul.Bug-list li::before {
 }
 .toolsGallery .card.card-body.tool {
   margin: 20px;
-  flex:0 1 calc(33% - 40px);
+  flex:0 1 calc(25% - 40px);
 }
 @media screen and (max-width: 992px) {
   .toolsGallery .card.card-body.tool {
@@ -683,8 +683,10 @@ ul.Bug-list li::before {
   background-color: white;
   border-radius: 25px;
   margin-top: 20px;
-  padding: 15px;
   display: flex;
+}
+#results .page-container {
+  padding: 15px;
 }
 #results .title-row,
 #results .page {
@@ -829,4 +831,41 @@ ul.Bug-list li::before {
 }
 #infoModal ol li {
   margin-bottom: 15px;
+}
+
+/* - - - - - - - - - - */
+/* - -colorConverter- - */
+/* - - - - - - - - - - */
+
+#color-converter {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.field {
+  margin-bottom: 20px;
+  position: relative;
+}
+.field i {
+  position: absolute;
+  top: 45px;
+  right: 10px;
+  z-index: 2;
+  cursor: pointer;
+}
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.color-field {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #d3d3d3c7 !important;
 }

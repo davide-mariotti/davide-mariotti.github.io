@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,6 +12,8 @@
     <!-- end bootstrap css -->
     <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
@@ -28,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0" aria-label="Main menu">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/" aria-label="Link to Homepage"><img
+                        <a class="nav-link active" aria-current="page" href="/" aria-label="Link to Homepage"><img
                                 src="/assets/icons/home.png" alt="Icon of homepage" />
                             Home</a>
                     </li>
@@ -38,8 +40,8 @@
                             About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/tools"
-                            aria-label="Link to Tools page"><img src="/assets/icons/analysis.png" alt="Icon of Tools" />
+                        <a class="nav-link" aria-current="page" href="/tools" aria-label="Link to Tools page"><img
+                                src="/assets/icons/analysis.png" alt="Icon of Tools" />
                             Tools</a>
                     </li>
                 </ul>
@@ -47,39 +49,33 @@
         </div>
     </nav>
     <!-- end nav -->
-    <div class="container py-5">
-        <div class="row" role="region" aria-label="section Know Who I am">
-            <div class="col-12 text-start">
-                <h1 class="text-center pb-3">My Personal <span class="green">TOOLS</span></h1>
-            </div>
-            <div class="toolsGallery pb-3">
-                <div class="card card-body tool"><img src="/assets/icons/case-converter.svg" alt="" />
-                    <h3>Case <span class="green">Converter</span></h3>
-                    <p>Case Converter is a versatile web tool for transforming text to various case styles. It offers
-                        quick conversions and advanced formatting options for efficient text manipulation.</p>
-                    <a href="/tools/case-converter" class="btn btn-primary" role="button">Read More</a>
-                </div>
-                <div class="card card-body tool"><img src="/assets/icons/psw-generator.svg" alt="" />
-                    <h3>Psw <span class="green">Generator</span></h3>
-                    <p>Password Generator creates secure passwords based on user preferences for length and character
-                        types (uppercase, lowercase, numbers, symbols). It assesses password security instantly, showing
-                        strength with color-coded feedback.</p>
-                    <a href="/tools/psw-generator" class="btn btn-primary" role="button">Read More</a>
-                </div>
-                <div class="card card-body tool"><img src="/assets/icons/scrap-seo.svg" alt="" />
-                    <h3>Scrap <span class="green">Seo</span></h3>
-                    <p>This tool uses the Google Custom Search API to fetch and display search results from a specified
-                        domain, handling pagination to show all requested results.</p>
-                        <a href="/tools/scrap-seo" class="btn btn-primary" role="button">Read More</a>
-                </div>
-                <div class="card card-body tool"><img src="/assets/icons/color-vonverter.svg" alt="" />
-                    <h3>Color <span class="green">Converter</span></h3>
-                    <p>Color Converter is a tool that Converts color values between HEX, RGB, HSL, and CMYK formats. Includes copy icons for easy clipboard copying. Perfect for design and development tasks.</p>
-                    <a href="/tools/case-converter" class="btn btn-primary" role="button">Read More</a>
-                </div>
-                <div class="card card-body tool"><img src="/assets/img/tool-1.jpg" alt="" />
-                    <h3>Lorem ipsum</h3>
-                    <p>Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
+
+    <div class="container py-5 text-center">
+        <div class="row" role="region" aria-label="section psw generator text">
+            <div class="col-12">
+                <h1><span class="green">Color</span> Converter</h1>
+                <p>Color Converter is a tool that Converts color values between HEX, RGB, HSL, and CMYK formats. Includes copy icons for easy clipboard copying. Perfect for design and development tasks.</p>
+                <div id="color-converter">
+                    <div class="field">
+                        <label for="hex">HEX</label>
+                        <input type="text" id="hex" class="color-field" placeholder="#RRGGBB" maxlength="7">
+                        <i class="fas fa-copy copy-icon" onclick="copyText('hex')"></i>
+                    </div>
+                    <div class="field">
+                        <label for="rgb">RGB</label>
+                        <input type="text" id="rgb" class="color-field" placeholder="rgb(r, g, b)" DISABLED maxlength="19">
+                        <i class="fas fa-copy copy-icon" onclick="copyText('rgb')"></i>
+                    </div>
+                    <div class="field">
+                        <label for="cmyk">CMYK</label>
+                        <input type="text" id="cmyk" class="color-field" placeholder="cmyk(c, m, y, k)" DISABLED maxlength="19">
+                        <i class="fas fa-copy copy-icon" onclick="copyText('cmyk')"></i>
+                    </div>
+                    <div class="field">
+                        <label for="hsl">HSL</label>
+                        <input type="text" id="hsl" class="color-field" placeholder="hsl(h, s%, l%)" DISABLED maxlength="15">
+                        <i class="fas fa-copy copy-icon" onclick="copyText('hsl')"></i>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -107,6 +103,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.2/tinycolor.min.js"></script>
+    <script src="/assets/js/color-converter.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
