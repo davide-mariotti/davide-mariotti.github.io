@@ -625,11 +625,21 @@ ul.Bug-list li::before {
 #scrap-seo {
   background-color: white;
   border-radius: 30px;
-  width: max-content;
+  width: 50%;
   margin: 0px auto;
   padding: 25px 65px;
   display: flex;
   flex-direction: column;
+}
+@media screen and (max-width: 1200.666px) {
+  #scrap-seo {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 767.666px) {
+  #scrap-seo {
+    width: 100%;
+  }
 }
 #scrap-seo #apiKeyInput,
 #scrap-seo #cxInput {
@@ -662,8 +672,12 @@ ul.Bug-list li::before {
 #scrap-seo #pageCount option {
   cursor: pointer;
 }
-#scrap-seo #accordionAdvancedScrapOptions {
-  
+#scrap-seo #accordionAdvancedScrapOptions .accordion-item {
+  border: 0px;
+}
+#scrap-seo .accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
 }
 #results {
   background-color: white;
@@ -708,11 +722,44 @@ ul.Bug-list li::before {
   transition: height 2s linear;
   text-align: left;
 }
+#results .page .name:hover,
 #results .page .description:hover {
   -webkit-line-clamp: unset;
   height: auto;
 }
-
+@media screen and (max-width: 767.666px) {
+  #results .title-row {
+    display: none;
+  }
+  #results .page {
+    flex-direction: column;
+    border-left: 0px;
+    border-right: 0px;
+    padding: 10px 5px;
+  }
+  #results .name,
+  #results .description,
+  #results .url {
+    width: 100%;
+  }
+  #results .name:before {
+    content: "Name: ";
+    font-weight: 600;
+  }
+  #results .description:before {
+    content: "Description: ";
+    font-weight: 600;
+  }
+  #results .url:before {
+    content: "Url: ";
+    font-weight: 600;
+  }
+  #results .name,
+  #results .description {    
+  -webkit-line-clamp: unset;
+  height: auto;
+  }
+}
 
 /* - - - - - - - - - - */
 /* - - infoModal - - - */

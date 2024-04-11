@@ -52,8 +52,12 @@
         <div class="row" role="region" aria-label="section case converter text">
             <div class="col-12">
                 <h1><span class="green">Scrap</span> Seo</h1>
-                <div id="scrap-seo">               
-                      
+                <p>This tool utilizes the Google Custom Search API to fetch and display search results from a specified
+                    domain. Users can input their API key, custom search engine ID (cx), and domain of interest, along
+                    with the desired number of results. The tool handles pagination automatically to retrieve all
+                    requested results and presents them in a structured format within a web page.</p>
+                <div id="scrap-seo">
+
                     <label for="domainInput" class="mt-2">Domain to scrap:</label>
                     <input type="text" id="domainInput" placeholder="www.example.com" required>
 
@@ -68,29 +72,33 @@
 
                     <div class="accordion" id="accordionAdvancedScrapOptions">
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingScrap">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseScrap" aria-expanded="false" aria-controls="collapseScrap">
-                              Advanced Options
-                            </button>
-                          </h2>
-                          <div id="collapseScrap" class="accordion-collapse collapse" aria-labelledby="headingScrap" data-bs-parent="#accordionAdvancedScrapOptions">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-direction-horizontal align-items-center mt-2">
-                                    <label for="apiKeyInput">API KEY: </label>
-                                    <button class="btn info ms-1" onclick="showInfoModal('apiKey')">info</button>
+                            <h2 class="accordion-header" id="headingScrap">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseScrap" aria-expanded="false" aria-controls="collapseScrap">
+                                    Advanced Options
+                                </button>
+                            </h2>
+                            <div id="collapseScrap" class="accordion-collapse collapse" aria-labelledby="headingScrap"
+                                data-bs-parent="#accordionAdvancedScrapOptions">
+                                <div class="accordion-body">
+                                    <div class="d-flex flex-direction-horizontal align-items-center mt-2">
+                                        <label for="apiKeyInput">API KEY: </label>
+                                        <button class="btn info ms-1" onclick="showInfoModal('apiKey')">info</button>
+                                    </div>
+                                    <textarea id="apiKeyInput" placeholder="Add API KEY..."
+                                        required>AIzaSyBHU5tJYa4CSF2gKdq1lgPP_ekw70utcF8</textarea>
+
+
+                                    <div class="d-flex flex-direction-horizontal align-items-center mt-2">
+                                        <label for="cxInput">Programmable SearchEngine ID: </label>
+                                        <button class="btn info ms-1" onclick="showInfoModal('cx')">info</button>
+                                    </div>
+                                    <textarea id="cxInput" placeholder="Add SearchEngine ID..."
+                                        required>f1b99ee63292740e4</textarea>
                                 </div>
-                                <textarea id="apiKeyInput" placeholder="Add API KEY..." required>AIzaSyBHU5tJYa4CSF2gKdq1lgPP_ekw70utcF8</textarea>                    
-            
-                                
-                                <div class="d-flex flex-direction-horizontal align-items-center mt-2">  
-                                    <label for="cxInput">Programmable SearchEngine ID: </label>                      
-                                    <button class="btn info ms-1" onclick="showInfoModal('cx')">info</button>
-                                </div>         
-                                <textarea id="cxInput" placeholder="Add SearchEngine ID..." required>f1b99ee63292740e4</textarea>  
                             </div>
-                          </div>
                         </div>
-                      </div>
+                    </div>
 
                 </div>
                 <div id="results"></div>
@@ -122,16 +130,16 @@
 
     </style>
     <script>
-function showInfoModal(inputType) {
-    const modal = document.getElementById('infoModal');
-    const modalText = document.getElementById('modalText');
+        function showInfoModal(inputType) {
+            const modal = document.getElementById('infoModal');
+            const modalText = document.getElementById('modalText');
 
-    // Mostra il popup modale
-    modal.style.display = 'block';
+            // Mostra il popup modale
+            modal.style.display = 'block';
 
-    // Imposta il testo del popup modale in base al tipo di input
-    if (inputType === 'apiKey') {
-        modalText.innerHTML = `
+            // Imposta il testo del popup modale in base al tipo di input
+            if (inputType === 'apiKey') {
+                modalText.innerHTML = `
             <h3 class="mb-2">Getting an API Key from Google Cloud Console:</h3>
             <ol>
                 <li>Sign in to Google Cloud Console: Navigate to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> and sign in with your Google account.</li>
@@ -141,8 +149,8 @@ function showInfoModal(inputType) {
                 <li>Configure restrictions (optional): You can configure API key restrictions to limit usage only to the Custom Search API service and specific resources if needed, for added security.</li>
             </ol>
         `;
-    } else if (inputType === 'cx') {
-        modalText.innerHTML = `
+            } else if (inputType === 'cx') {
+                modalText.innerHTML = `
             <h3 class="mb-2">Getting the Custom Search Engine ID:</h3>
             <ol>
                 <li>Create a Custom Search Engine (CSE): Go to <a href="https://cse.google.com/cse/" target="_blank">Google Custom Search</a> and create a new custom search engine following the instructions provided.</li>
@@ -150,15 +158,15 @@ function showInfoModal(inputType) {
                 <li>Find the Search Engine ID: Once your custom search engine is created, navigate to the search engine's settings and locate the custom search engine ID (typically starts with "cse").</li>
             </ol>
         `;
-    }
-}
+            }
+        }
 
-function hideInfoModal() {
-    const modal = document.getElementById('infoModal');
+        function hideInfoModal() {
+            const modal = document.getElementById('infoModal');
 
-    // Nascondi il popup modale
-    modal.style.display = 'none';
-}
+            // Nascondi il popup modale
+            modal.style.display = 'none';
+        }
 
     </script>
 
