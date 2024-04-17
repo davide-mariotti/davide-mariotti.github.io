@@ -869,3 +869,89 @@ label {
   border-radius: 5px;
   background-color: #d3d3d3c7 !important;
 }
+#rgb,
+#cmyk,
+#hsl {
+  cursor: no-drop;
+}
+
+/* - - - - - - - - - - */
+/* - -WCAG Calculator- - */
+/* - - - - - - - - - - */
+
+#wcag-contrast-calculator {
+  background-color: white;
+  border-radius: 30px;
+  width: 50%;
+  margin: 0px auto;
+  padding: 25px 65px;
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (max-width: 1200.666px) {
+  #wcag-contrast-calculator {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 767.666px) {
+  #wcag-contrast-calculator {
+    width: 100%;
+  }
+}
+#colorInputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+#colorInputs1,
+#colorInputs2,
+#result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  width: 120px;
+}
+#result b {
+  font-size: 24px;
+}
+#colorExample {
+  border: 1px solid #2c9f45;
+  border-radius: 20px;
+  padding: 15px;
+  margin-top: 25px;
+}
+#color1,
+#color2 {
+  width: 70px;
+  height: 70px;
+  border: 1px #2c9f45;
+  cursor: pointer;
+}
+
+#color1Value,
+#color2Value {
+  width: 90px;
+  padding: 5px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+#colorExampleResult .red,
+#colorExampleResult .green {
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 2px 4px;
+  border: 1px solid;
+}
+#colorExampleResult .red {
+  color: red;
+  background-color: #ff8a80;
+  border-color: red;
+}
+#colorExampleResult .green {
+  color: green;
+  background-color: #9eff9e;
+  border-color: green;
+}
