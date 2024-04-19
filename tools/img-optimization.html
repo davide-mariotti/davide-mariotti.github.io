@@ -54,20 +54,27 @@
     <div class="row" role="region" aria-label="section psw generator text">
       <div class="col-12">
         <h1><span class="green">IMG</span> Optimizer</h1>
-        <p>Image Optimizer is a tool that allows you to upload images and automatically optimize them to reduce file size while preserving quality. It leverages TinyPNG's API for efficient image compression, enhancing website performance by delivering smaller image files.</p>
+        <p>Image Optimization Tool lets you compress and enhance images in your browser. Upload images, adjust
+          quality, and download optimized versions with custom filenames. It's user-friendly and secure, processing
+          images locally for privacy. Optimize your web images effortlessly!</p>
         <div id="img-optimization">
-            <form id="uploadForm" enctype="multipart/form-data">
-                <input class="btn btn-secondary mb-3" type="file" id="imageFile" accept="image/*" required>
-                <button class="btn btn-primary mb-3" role="button" type="submit">Optimize Image</button>
-            </form>
-        
-            <div id="result">
-                <h2>Optimized Image</h2>
-                <p>Original Size: <span id="originalSize"></span></p>
-                <p>Optimized Size: <span id="optimizedSize"></span></p>
-                <img id="optimizedImage">
-            </div>
+          <div class="uploadImg">
+            <label for="inputFile" class="custom-file-upload"> Choose File </label>
+            <input type="file" id="inputFile" accept="image/*" style="display: none;">
+            <span id="fileNameDisplay">Selected File: No File Uploaded</span>
+          </div>
+
+
+          <label for="qualityInput">Select Image Quality:</label>
+          <input type="range" id="qualityInput" min="0" max="1" step="0.1" value="0.9"
+            onchange="updateQualityDisplay()">
+          <span id="qualityDisplay">90%</span>
+          <button onclick="optimizeImage()" class="btn btn-primary mt-3" role="button" id="optimizeButton"
+            disabled>Optimize Image</button>
+          <canvas id="outputCanvasIMG"></canvas>
         </div>
+
+
 
       </div>
     </div>
@@ -95,12 +102,6 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-  <script src="/node_modules/tinify/lib/tinify.js"></script>
-  <script src="/node_modules/tinify/lib/tinify/Client.js"></script>
-  <script src="/node_modules/tinify/lib/tinify/Result.js"></script>
-  <script src="/node_modules/tinify/lib/tinify/ResultMeta.js"></script>
-  <script src="/node_modules/tinify/lib/tinify/Source.js"></script>
-  <script src="/node_modules/tinify/lib/tinify/Error.js"></script>
   <script src="/assets/js/img-optimization.js" crossorigin="anonymous"></script>
 
 </body>

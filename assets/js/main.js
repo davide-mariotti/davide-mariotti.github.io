@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Initialising the canvas
-  var canvas = document.querySelector('canvas');
+  var canvas = document.getElementById('matrix');
   if (!canvas) {
       return; // Exit if canvas element is not found
   }
