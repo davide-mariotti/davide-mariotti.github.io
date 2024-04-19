@@ -523,9 +523,10 @@ ul.Bug-list li::before {
   height: 88px;
   overflow: hidden;
 }
-.toolsGallery .card button {
+.toolsGallery .card a {
   padding: 10px 20px;
   text-transform: uppercase;
+  margin-top: 15px;
 }
 
 /* - - - - - - - - - - */
@@ -957,7 +958,7 @@ label {
 }
 
 /* - - - - - - - - - - */
-/* - -WCAG Calculator- - */
+/* - -img-optimization- - */
 /* - - - - - - - - - - */
 
 #img-optimization {

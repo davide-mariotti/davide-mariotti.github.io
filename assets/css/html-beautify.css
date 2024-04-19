@@ -1,0 +1,56 @@
+/* - - - - - - - - - - */
+/* - -#html-beautify- - */
+/* - - - - - - - - - - */
+
+#html-beautify {
+    background-color: white;
+    border-radius: 30px;
+    width: 100%;
+    margin: 0px auto;
+    padding: 25px 65px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .html-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  #html-beautify textarea {
+    width: 45%;
+    height: 500px;
+    padding: 10px;
+    border: 1px solid #2c9f45;
+    resize: none;
+    white-space: auto; /* Evita che il testo vada a capo */
+    overflow: auto;
+      
+}
+#html-beautify pre {
+    width: 45%;
+    height: 500px;
+    padding: 10px;
+    overflow: auto;
+    white-space: pre-wrap;
+    background-color: #f2f2f2;
+    border: 1px solid #2c9f45;
+    text-align: left;
+    overflow: auto;
+    position: relative;
+}
+#html-beautify button {
+    height: fit-content;
+    width: fit-content;
+}
+#html-beautify .copy-icon {
+    cursor: pointer;
+    width: 100%;
+}
+
