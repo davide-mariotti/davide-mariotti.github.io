@@ -1,3 +1,7 @@
+
+
+
+
 /* - - - - - - - - - - */
 /* - Simulating Star - */
 /* - - - - - - - - - - */
@@ -48,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
 /* - - Page Loader - - */
 /* - - - - - - - - - - */
 
-// Hide loader element when the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('loader').id = 'loader-none';
 });
@@ -109,9 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const navbarToggler = document.querySelector(".navbar-toggler");
   const animatedIcon = document.querySelector(".animated-icon2");
 
-  navbarToggler.addEventListener("click", function () {
-    animatedIcon.classList.toggle("open");
-  });
+  if(navbarToggler) {
+    navbarToggler.addEventListener("click", function () {
+      animatedIcon.classList.toggle("open");
+    });
+  }
 });
 
 /* - - - - - - - - - - */
@@ -148,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
       div2.setAttribute('height', div1Height + 'px');
   }
 });
-
 
 /* - - - - - - - - - - */
 /* - Matrix Animation - */
@@ -239,4 +243,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Call updateTime once to display the time immediately when the page loads
   updateTime();
+});
+
+/* - - - - - - - - - - */
+/* - - active menu - - */
+/* - - - - - - - - - - */
+document.addEventListener("DOMContentLoaded", function() {
+  // Ottieni l'URL della pagina corrente
+  const currentUrl = window.location.pathname;
+
+  // Seleziona tutti gli elementi del menu
+  const menuItems = document.querySelectorAll(".navbar-nav .nav-item");
+
+  // Itera su ogni elemento del menu
+  menuItems.forEach(item => {
+      // Ottieni l'URL dell'elemento del menu corrente
+      const menuItemUrl = item.querySelector("a").getAttribute("href");
+
+      // Confronta l'URL dell'elemento del menu con l'URL della pagina corrente
+      if (currentUrl === menuItemUrl) {
+          // Se corrispondono, aggiungi la classe "active" all'elemento del menu
+          item.classList.add("active");
+      }
+  });
 });

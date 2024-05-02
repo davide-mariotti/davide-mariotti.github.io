@@ -9,8 +9,7 @@
     <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
     <!-- start bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- end bootstrap css -->  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  
+    <!-- end bootstrap css -->    
 </head>
 
 <body>
@@ -18,49 +17,26 @@
     <!-- start nav -->
     <div id="menu"></div>
     <script>
-        fetch('/menu.html')
+        fetch('menu.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu').innerHTML = data;
         });
     </script>
     <!-- end nav -->
-
-  <div class="container py-5 text-center">
-    <div class="row" role="region" aria-label="section psw generator text">
-      <div class="col-12">
-        <h1><span class="green">WCAG</span> Contrast Calculator</h1>
-        <p>The WCAG Contrast Calculator evaluates color contrast between selected colors based on accessibility
-          standards. Users can pick colors or enter hexadecimal codes. The tool checks if color combinations meet
-          accessibility criteria for text, with visual examples provided.</p>
-        <div id="wcag-contrast-calculator">
-          <div id="colorInputs">
-            <div id="colorInputs1">
-              <label for="color1">Text:</label>
-              <input type="color" id="color1" value="#000000">
-              <input type="text" id="color1Value" value="#000000">
+    
+    <div class="container py-5">
+        <div class="row" role="region" aria-label="section Know Who I am">
+            <div class="col-12 text-start">
+                <h1 class="text-center pb-3">My Personal <span class="green">STRUCTURE</span></h1>
             </div>
-            <div id="result"></div>
-            <div id="colorInputs2">
-              <label for="color2">Background:</label>
-              <input type="color" id="color2" value="#ffffff">
-              <input type="text" id="color2Value" value="#ffffff">
-            </div>
-          </div>
-          <div id="colorExample"></div>
-          <div id="colorExampleResult"></div>
         </div>
-
-      </div>
     </div>
-  </div>
-
-  
 
     <!-- start footer -->
     <footer id="footer"></footer>
     <script>
-        fetch('/footer.html')
+        fetch('footer.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('footer').innerHTML = data;
@@ -74,7 +50,7 @@
     <!--end script utili-->
 
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/wcag-contrast-calculator.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
