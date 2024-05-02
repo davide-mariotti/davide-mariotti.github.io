@@ -57,7 +57,7 @@
                         <input type="hidden" name="_subject" value="Contact request from davide-mariotti.github.com" />
                         <input type="email" name="_replyto" placeholder="Your email" required class="my-3">
                         <textarea name="message" placeholder="Type your message" required class="my-3"></textarea>
-                        <button type="submit" class="btn btn-primary g-recaptcha my-3" role="button" id="submit-form" data-sitekey="6LeuEM4pAAAAAFH0x9GP2QEM9lZW27XFveauknLM" data-callback='onSubmit' data-action='submit'>Send</button>
+                        <button type="submit" class="btn btn-primary my-3" role="button" id="submit-form">Send</button>
                     </form>
                 </div>
                 
@@ -89,12 +89,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script>
-        function onSubmit(token) {
-          document.getElementById("submit-form").submit();
-        }
-      </script>
 
 </body>
 
