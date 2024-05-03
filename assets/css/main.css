@@ -437,12 +437,47 @@ ul.Bug-list li {
   display: flex;
   flex-direction: row;
 }
+ul.Bug-list li p {  
+  margin-left: 1%;
+  width: 90%;
+}
 ul.Bug-list li::before {
-  content: "📌";
-  display: inline-block;
-  margin-right: 0.2rem;
+  content: "";
+  display: flex;
+  width: 8%;
+  height: 50px;
+  background-image: url('/assets/icons/arrow.svg');
+  background-size: contain;
+  background-position: left;
+  background-repeat: no-repeat;
+  animation: arrowMovement 2s linear infinite;
+}
+@keyframes arrowMovement {
+  0% {
+    background-position: left;
+  }
+  50% {
+    background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+}
+ul.Bug-list li:nth-child(1)::before {
+  animation-duration: 1.5s;
 }
 
+ul.Bug-list li:nth-child(2)::before {
+  animation-duration: 2s;
+}
+
+ul.Bug-list li:nth-child(3)::before {
+  animation-duration: 2.5s;
+}
+
+ul.Bug-list li:nth-child(4)::before {
+  animation-duration: 1.9s;
+}
 /* - - - - - - - - - - */
 /* - skillsGallery - - */
 /* - - - - - - - - - - */
