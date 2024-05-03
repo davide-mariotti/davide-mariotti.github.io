@@ -471,14 +471,14 @@ ul.Bug-list li::before {
 }
 
 /* - - - - - - - - - - */
-/* - - toolsGallery- - */
+/* - - cardsGallery- - */
 /* - - - - - - - - - - */
 
-.toolsGallery {
+.cardsGallery {
   display: flex;  
 	flex-wrap: wrap;
 }
-.toolsGallery .card {
+.cardsGallery .card {
   background-color: unset;
   border: 1px solid #2c9f45;
   border-radius: 25px;
@@ -486,33 +486,33 @@ ul.Bug-list li::before {
   flex-direction: column;
   align-items: center;
 }
-.toolsGallery .card.card-body.tool {
+.cardsGallery .card.card-body {
   margin: 20px;
   flex:0 1 calc(25% - 40px);
 }
 @media screen and (max-width: 992px) {
-  .toolsGallery .card.card-body.tool {
+  .cardsGallery .card.card-body {
     margin: 10px;
     flex:0 1 calc(50% - 20px);
   }
 }
 @media screen and (max-width: 768px) {
-  .toolsGallery .card.card-body.tool {
+  .cardsGallery .card.card-body {
     margin: 10px;
     flex:0 1 calc(100% - 20px);
   }
 }
-.toolsGallery .card img {
+.cardsGallery .card img {
   padding: 10px 20px;
   border-radius: 50px;
 }
-.toolsGallery .card h3 {
+.cardsGallery .card h3 {
   color: white;
   padding: 10px 20px;
   display: flex;
   margin-bottom: 0px;
 }
-.toolsGallery .card p {
+.cardsGallery .card p {
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -524,7 +524,7 @@ ul.Bug-list li::before {
   height: 88px;
   overflow: hidden;
 }
-.toolsGallery .card a {
+.cardsGallery .card a {
   padding: 10px 20px;
   text-transform: uppercase;
   margin-top: 15px;
