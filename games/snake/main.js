@@ -5,8 +5,8 @@ let dom_canvas = document.createElement("canvas");
 document.querySelector("#canvas").appendChild(dom_canvas);
 let CTX = dom_canvas.getContext("2d");
 
-const W = (dom_canvas.width = 400);
-const H = (dom_canvas.height = 400);
+const W = (dom_canvas.width = 800);
+const H = (dom_canvas.height = 800);
 
 let snake,
   food,
@@ -57,7 +57,7 @@ let helpers = {
   },
   drawGrid() {
     CTX.lineWidth = 1.1;
-    CTX.strokeStyle = "#232332";
+    CTX.strokeStyle = "#2c9f4561";
     CTX.shadowBlur = 0;
     for (let i = 1; i < cells; i++) {
       let f = (W / cells) * i;
@@ -167,9 +167,9 @@ class Snake {
     this.dir = new helpers.Vec(0, 0);
     this.type = type;
     this.index = i;
-    this.delay = 5;
+    this.delay = 10; //speed
     this.size = W / cells;
-    this.color = "white";
+    this.color = "green"; //snake head color
     this.history = [];
     this.total = 1;
   }
@@ -184,7 +184,7 @@ class Snake {
       for (let i = 0; i < this.history.length - 1; i++) {
         let { x, y } = this.history[i];
         CTX.lineWidth = 1;
-        CTX.fillStyle = "rgba(225,225,225,1)";
+        CTX.fillStyle = "rgba(78,191,84,1)"; //snake body color
         CTX.fillRect(x, y, this.size, this.size);
       }
     }
@@ -243,7 +243,7 @@ class Snake {
         this.history[i] = this.history[i + 1];
       }
       this.pos.add(this.dir);
-      this.delay = 5;
+      this.delay = 10; //speed
       this.total > 3 ? this.selfCollision() : null;
     }
   }
