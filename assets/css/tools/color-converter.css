@@ -1,0 +1,42 @@
+/* - - - - - - - - - - */
+/* - -colorConverter- - */
+/* - - - - - - - - - - */
+
+#color-converter {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .field {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .field i {
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    z-index: 2;
+    cursor: pointer;
+  }
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .color-field {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #d3d3d3c7 !important;
+  }
+  #rgb,
+  #cmyk,
+  #hsl {
+    cursor: no-drop;
+  }
+  

@@ -1,0 +1,27 @@
+/* - - - - - - - - - - */
+/* - - CaseConverter- - */
+/* - - - - - - - - - - */
+
+#inputText {
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+    padding: 25px;
+    border-radius: 25px;
+  }
+  
+  #characterCount {
+    color: white;
+    font-size: 20px;
+    padding: 15px 0px;
+  }
+  
+  #outputText {
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+    padding: 25px;
+    border-radius: 25px;
+    margin-top: 40px;
+  }
+  

@@ -1,0 +1,213 @@
+/* - - - - - - - - - - */
+/* - - scrap-seo - - - */
+/* - - - - - - - - - - */
+#scrap-seo {
+    background-color: white;
+    border-radius: 30px;
+    width: 50%;
+    margin: 0px auto;
+    padding: 25px 65px;
+    display: flex;
+    flex-direction: column;
+  }
+  @media screen and (max-width: 1200.666px) {
+    #scrap-seo {
+      width: 70%;
+    }
+  }
+  @media screen and (max-width: 767.666px) {
+    #scrap-seo {
+      width: 100%;
+    }
+  }
+  #scrap-seo #apiKeyInput,
+  #scrap-seo #cxInput {
+    font-size: 12px;
+  }
+  #scrap-seo textarea {
+    padding: 10px;
+    border-radius: 25px;
+    resize: none;
+    height: 45px;
+    overflow: hidden;
+    width: 100%;
+  }
+  #domainInput {
+    padding: 10px;
+    border-radius: 25px;
+    resize: none;
+    height: 45px;
+    overflow: hidden;
+    border: 1px solid #217533;
+  }
+  #scrap-seo #pageCount {
+    width: fit-content;
+    margin: 0px auto;
+    padding: 5px 10px;
+    border-radius: 15px;
+    resize: none;
+    cursor: pointer;
+  }
+  #scrap-seo #pageCount option {
+    cursor: pointer;
+  }
+  #scrap-seo #accordionAdvancedScrapOptions .accordion-item {
+    border: 0px;
+  }
+  #scrap-seo .accordion-button:not(.collapsed) {
+    background-color: unset !important;
+    box-shadow: unset !important;
+  }
+  #results {
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 20px;
+    display: flex;
+  }
+  #results .page-container {
+    padding: 15px;
+  }
+  #results .title-row,
+  #results .page {
+    display: flex;
+    flex-direction: row;
+  }
+  #results .page {  
+    border: 1px solid lightgray;
+  }
+  #results .title-row {  
+    font-weight: 600;
+  }
+  #results .name {
+    display: flex;
+    width: 35%;
+  }
+  #results .description {
+    display: flex;
+    width: 25%;
+  }
+  #results .url {
+    display: flex;
+    width: 40%;
+  }
+  
+  #results .name,
+  #results .description,
+  #results .url {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    height: 30px;
+    overflow: hidden;
+    padding: 5px 10px;
+    transition: height 2s linear;
+    text-align: left;
+  }
+  #results .page .name:hover,
+  #results .page .description:hover {
+    -webkit-line-clamp: unset;
+    height: auto;
+  }
+  @media screen and (max-width: 767.666px) {
+    #results .title-row {
+      display: none;
+    }
+    #results .page {
+      flex-direction: column;
+      border-left: 0px;
+      border-right: 0px;
+      padding: 10px 5px;
+    }
+    #results .name,
+    #results .description,
+    #results .url {
+      width: 100%;
+    }
+    #results .name:before {
+      content: "Name: ";
+      font-weight: 600;
+    }
+    #results .description:before {
+      content: "Description: ";
+      font-weight: 600;
+    }
+    #results .url:before {
+      content: "Url: ";
+      font-weight: 600;
+    }
+    #results .name,
+    #results .description {    
+    -webkit-line-clamp: unset;
+    height: auto;
+    }
+  }
+
+  /* - - - - - - - - - - */
+/* - - infoModal - - - */
+/* - - - - - - - - - - */
+.btn.info {
+  background-color: #217533;
+  color: white;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding: 6px 8px;
+  margin: 0px;
+  line-height: normal;
+}
+.btn.info:hover {
+  background-color: #2c9f45;
+}
+
+#infoModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+#infoModal .modal-content {
+  background-color: #fefefe;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+}
+@media screen and (max-width: 767.666px) {
+  #infoModal .modal-content {
+    width: 90%;
+  }
+}
+#infoModal .modal-content p {
+  color: black !important;
+}
+
+#infoModal .close {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#infoModal .close:hover,
+#infoModal .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+#infoModal ol li {
+  margin-bottom: 15px;
+}

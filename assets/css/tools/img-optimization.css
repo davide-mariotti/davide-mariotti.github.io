@@ -1,0 +1,86 @@
+/* - - - - - - - - - - */
+/* - -img-optimization- - */
+/* - - - - - - - - - - */
+
+#img-optimization {
+    background-color: white;
+    border-radius: 30px;
+    width: 50%;
+    margin: 0px auto;
+    padding: 25px 65px;
+    display: flex;
+    flex-direction: column;
+  }
+  #img-optimization .uploadImg {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  #img-optimization .uploadImg .custom-file-upload {
+    display: flex;
+    margin-left: 10px;
+    margin-right: auto;
+    width: fit-content;
+    margin: 0px auto;
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #2c9f45;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #img-optimization .uploadImg .custom-file-upload:hover {
+    background-color: #217533;
+  }
+  #img-optimization .uploadImg #fileNameDisplay {
+    display: block;
+    text-align: center;
+    color: #333;
+    font-size: 16px;
+  }
+  #img-optimization #qualityInput {
+    width: 100%;
+    margin-top: 20px;
+    -webkit-appearance: none; /* Remove default styling on WebKit browsers */
+    appearance: none;
+    height: 8px;
+    border-radius: 4px;
+    background-color: #ccc;
+    outline: none;
+  }
+  
+  #img-optimization #qualityInput::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default styling on WebKit browsers */
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #2c9f45;
+    cursor: pointer;
+  }
+  #img-optimization #qualityDisplay {
+    font-size: 20px;
+    margin-top: 15px;
+  }
+  
+  #optimizeButton:disabled {
+    background-color: lightgrey;
+    color: black;
+    cursor: not-allowed;
+  }
+  
+  #img-optimization #outputCanvasIMG {
+    margin-top: 25px;
+    border: 1px solid #2c9f45;
+    background-color: lightgray;
+    z-index: 1;
+  }
+  #img-optimization #outputCanvasIMG:before{
+    content:"no image uploaded has been optimized";
+    display: block;
+    color: red;
+    z-index: 99999;
+  }

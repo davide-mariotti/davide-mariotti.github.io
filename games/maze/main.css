@@ -24,12 +24,13 @@ html, body {
     display: inline-block;
     margin: auto;
     border-radius: 10px;
+    background-color: white;
 }
 #mazeContainer #mazeCanvas {
     margin: 0;
     display: block;
     border: solid 2px #2c9f45;
-    height: 400px;
+    height: 800px;
 }
 input, select {
     cursor: pointer;

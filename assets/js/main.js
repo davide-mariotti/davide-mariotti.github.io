@@ -6,7 +6,7 @@
 /* - Simulating Star - */
 /* - - - - - - - - - - */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Generates and animates stars of varying sizes across the viewport
   var smallStarSize = 0.5;
   var mediumStarSize = 1;
@@ -14,37 +14,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Function to create a new star element with random size and position
   function generateStar() {
-      var star = document.createElement('div');
-      star.classList.add('star');
-      star.style.width = getRandomStarSize() + 'px';
-      star.style.height = star.style.width;
-      star.style.left = Math.random() * window.innerWidth + 'px';
-      star.style.top = Math.random() * window.innerHeight + 'px';
-      document.body.appendChild(star);
+    var star = document.createElement('div');
+    star.classList.add('star');
+    star.style.width = getRandomStarSize() + 'px';
+    star.style.height = star.style.width;
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    star.style.top = Math.random() * window.innerHeight + 'px';
+    document.body.appendChild(star);
   }
 
   // Generate stars every 100 milliseconds
   var interval = setInterval(generateStar, 100);
 
   // Stop generating stars after 15 seconds
-  setTimeout(function() {
-      clearInterval(interval);
+  setTimeout(function () {
+    clearInterval(interval);
   }, 15000);
 
   // Function to get a random star size from predefined values
   function getRandomStarSize() {
-      var sizes = [smallStarSize, mediumStarSize, largeStarSize];
-      var randomIndex = Math.floor(Math.random() * sizes.length);
-      return sizes[randomIndex] * 2; // Doubles the size for visual effect
+    var sizes = [smallStarSize, mediumStarSize, largeStarSize];
+    var randomIndex = Math.floor(Math.random() * sizes.length);
+    return sizes[randomIndex] * 2; // Doubles the size for visual effect
   }
 
   // Update star positions when the window is resized
-  window.onresize = function() {
-      var stars = document.querySelectorAll('.star');
-      stars.forEach(function(star) {
-          star.style.left = Math.random() * window.innerWidth + 'px';
-          star.style.top = Math.random() * window.innerHeight + 'px';
-      });
+  window.onresize = function () {
+    var stars = document.querySelectorAll('.star');
+    stars.forEach(function (star) {
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.top = Math.random() * window.innerHeight + 'px';
+    });
   };
 });
 
@@ -60,10 +60,10 @@ document.addEventListener("DOMContentLoaded", function () {
 /* - - Typing Jobs - - */
 /* - - - - - - - - - - */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Simulates typing effect by progressively displaying and deleting words in a loop
   const textContainer = document.getElementById('text-container');
-  const words = ['Front-end Developer', 'Graphic Designer', 'Back-end Developer', 'DNN Specialist', 'AEM Developer', 'Video Maker'];
+  const words = ['Front-end Developer', 'Graphic Designer', 'Back-end Developer', 'UI Designer', 'DNN Specialist', 'AEM Developer', 'Video Maker', 'UX Designer', 'E-commerce Developer'];
   let wordIndex = 0;
   let letterIndex = 0;
   let isDeleting = false;
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const navbarToggler = document.querySelector(".navbar-toggler");
   const animatedIcon = document.querySelector(".animated-icon2");
 
-  if(navbarToggler) {
+  if (navbarToggler) {
     navbarToggler.addEventListener("click", function () {
       animatedIcon.classList.toggle("open");
     });
@@ -122,35 +122,35 @@ document.addEventListener("DOMContentLoaded", function () {
 /* - - - - - - - - - - */
 /* - Adjust height - */
 /* - - - - - - - - - - */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Add event listeners after the DOM content is loaded
   window.addEventListener('load', adjustHeight);
   window.addEventListener('resize', adjustHeight);
 
   function adjustHeight() {
-      var div1 = document.getElementById('introduction1');
-      var div2 = document.getElementById('matrix');
+    var div1 = document.getElementById('introduction1');
+    var div2 = document.getElementById('matrix');
 
-      // Check if div1 and div2 exist
-      if (!div1 || !div2) {
-          return; // Exit function if either element is not found
-      }
+    // Check if div1 and div2 exist
+    if (!div1 || !div2) {
+      return; // Exit function if either element is not found
+    }
 
-      // Reset height to auto to measure the natural height
-      div1.style.height = 'auto';
-      div2.style.height = 'auto';
+    // Reset height to auto to measure the natural height
+    div1.style.height = 'auto';
+    div2.style.height = 'auto';
 
-      var maxHeight = Math.max(div1.clientHeight, div2.clientHeight);
+    var maxHeight = Math.max(div1.clientHeight, div2.clientHeight);
 
-      div1.style.height = maxHeight + 'px';
-      div2.style.height = maxHeight + 'px';
+    div1.style.height = maxHeight + 'px';
+    div2.style.height = maxHeight + 'px';
 
-      var div1Width = div1.clientWidth;
-      var div1Height = div1.clientHeight;
+    var div1Width = div1.clientWidth;
+    var div1Height = div1.clientHeight;
 
-      div2.style.width = div1Width + 'px';
-      div2.setAttribute('width', div1Width + 'px');
-      div2.setAttribute('height', div1Height + 'px');
+    div2.style.width = div1Width + 'px';
+    div2.setAttribute('width', div1Width + 'px');
+    div2.setAttribute('height', div1Height + 'px');
   }
 });
 
@@ -158,11 +158,11 @@ document.addEventListener('DOMContentLoaded', function() {
 /* - Matrix Animation - */
 /* - - - - - - - - - - */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Initialising the canvas
   var canvas = document.getElementById('matrix');
   if (!canvas) {
-      return; // Exit if canvas element is not found
+    return; // Exit if canvas element is not found
   }
   var ctx = canvas.getContext('2d');
 
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Setting up the columns
   var fontSize = 10,
-      columns = canvas.width / fontSize;
+    columns = canvas.width / fontSize;
 
   // Setting up the drops
   var drops = [];
@@ -205,37 +205,37 @@ document.addEventListener('DOMContentLoaded', function() {
 /* - CopyrightYear - - */
 /* - currentDate - - - */
 /* - - - - - - - - - - */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   var currentYear = new Date().getFullYear();
   var copyrightYearElement = document.getElementById("CopyrightYear");
   if (copyrightYearElement) {
-      copyrightYearElement.textContent = currentYear;
+    copyrightYearElement.textContent = currentYear;
   }
 
   // Function to add leading zero to single-digit numbers
   function addLeadingZero(number) {
-      return number < 10 ? "0" + number : number;
+    return number < 10 ? "0" + number : number;
   }
 
   // Function to update the time
   function updateTime() {
-      // Get the current date and time
-      var currentDate = new Date();
+    // Get the current date and time
+    var currentDate = new Date();
 
-      // Format the date as desired (e.g., "March 15, 2024")
-      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      var formattedDate = currentDate.toLocaleDateString('en-US', options);
+    // Format the date as desired (e.g., "March 15, 2024")
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var formattedDate = currentDate.toLocaleDateString('en-US', options);
 
-      // Format the time as "HH:mm:ss"
-      var formattedTime = addLeadingZero(currentDate.getHours()) + ":" +
-                          addLeadingZero(currentDate.getMinutes()) + ":" +
-                          addLeadingZero(currentDate.getSeconds());
+    // Format the time as "HH:mm:ss"
+    var formattedTime = addLeadingZero(currentDate.getHours()) + ":" +
+      addLeadingZero(currentDate.getMinutes()) + ":" +
+      addLeadingZero(currentDate.getSeconds());
 
-      // Set the formatted date and time as the text content of the todayData element
-      var todayDataElement = document.getElementById("todayData");
-      if (todayDataElement) {
-          todayDataElement.textContent = formattedDate + " " + formattedTime;
-      }
+    // Set the formatted date and time as the text content of the todayData element
+    var todayDataElement = document.getElementById("todayData");
+    if (todayDataElement) {
+      todayDataElement.textContent = formattedDate + " " + formattedTime;
+    }
   }
 
   // Update the time every second
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* - - - - - - - - - - */
 /* - - active menu - - */
 /* - - - - - - - - - - */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Ottieni l'URL della pagina corrente
   const currentUrl = window.location.pathname;
 
@@ -257,13 +257,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Itera su ogni elemento del menu
   menuItems.forEach(item => {
-      // Ottieni l'URL dell'elemento del menu corrente
-      const menuItemUrl = item.querySelector("a").getAttribute("href");
+    // Ottieni l'URL dell'elemento del menu corrente
+    const menuItemUrl = item.querySelector("a").getAttribute("href");
 
-      // Confronta l'URL dell'elemento del menu con l'URL della pagina corrente
-      if (currentUrl === menuItemUrl) {
-          // Se corrispondono, aggiungi la classe "active" all'elemento del menu
-          item.classList.add("active");
-      }
+    // Confronta l'URL dell'elemento del menu con l'URL della pagina corrente
+    if (currentUrl === menuItemUrl) {
+      // Se corrispondono, aggiungi la classe "active" all'elemento del menu
+      item.classList.add("active");
+    }
   });
 });

@@ -279,9 +279,9 @@ function DrawMaze(Maze, ctx, cellsize, endSprite = null) {
           fraction
         );
         if (colorSwap) {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+          ctx.fillStyle = "rgba(44, 159, 69)";
         } else {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+          ctx.fillStyle = "rgba(44, 159, 69)";
         }
         ctx.fill();
         colorSwap = !colorSwap;
@@ -526,7 +526,7 @@ window.onload = function() {
   };
   sprite = new Image();
   sprite.src =
-    "./img/key.png" +
+    "./img/alien.png" +
     "?" +
     new Date().getTime();
   sprite.setAttribute("crossOrigin", " ");
@@ -538,7 +538,7 @@ window.onload = function() {
   };
 
   finishSprite = new Image();
-  finishSprite.src = "./img/home.png"+
+  finishSprite.src = "./img/spaceship.png"+
   "?" +
   new Date().getTime();
   finishSprite.setAttribute("crossOrigin", " ");
