@@ -1,24 +1,57 @@
 [
     {
-        "name": "Museo Uffizi",
-        "description": "Museo d'arte di Firenze",
-        "url": "https://www.uffizi.it/",
-        "address": "Piazzale degli Uffizi, 6, 50122 Firenze FI, Italia",
-        "phone": "+39 055 294883",
-        "image": "https://example.com/uffizi.jpg",
-        "category": "museum",
-        "lat": 43.768732,
-        "lng": 11.255614
+        "name": "Piazza del Duomo",
+        "description": "Piazza principale di Firenze con la Cattedrale di Santa Maria del Fiore.",
+        "url": "https://www.duomofirenze.it/",
+        "address": "Piazza del Duomo, 50122 Firenze FI, Italia",
+        "phone": "+39 055 2302885",
+        "image": "/assets/img/duomo.jpg",
+        "category": "historical",
+        "lat": 43.773073,
+        "lng": 11.256902
     },
     {
-        "name": "Colosseo",
-        "description": "Antico anfiteatro romano",
-        "url": "https://www.coopculture.it/colosseo/",
-        "address": "Piazza del Colosseo, 1, 00184 Roma RM, Italia",
-        "phone": "+39 06 39967700",
-        "image": "https://example.com/colosseo.jpg",
+        "name": "Piazza San Marco",
+        "description": "Famosa piazza con la Basilica di San Marco a Venezia.",
+        "url": "https://www.basilicasanmarco.it/",
+        "address": "Piazza San Marco, 30124 Venezia VE, Italia",
+        "phone": "+39 041 2708311",
+        "image": "/assets/img/sanmarco.jpg",
         "category": "historical",
-        "lat": 41.890251,
-        "lng": 12.492373
+        "lat": 45.434336,
+        "lng": 12.339236
+    },
+    {
+        "name": "Galleria Borghese",
+        "description": "Museo d'arte e galleria di sculture a Roma.",
+        "url": "https://galleriaborghese.beniculturali.it/",
+        "address": "Piazzale Scipione Borghese, 5, 00197 Roma RM, Italia",
+        "phone": "+39 06 8413979",
+        "image": "/assets/img/borghese.jpg",
+        "category": "museum",
+        "lat": 41.914565,
+        "lng": 12.492251
+    },
+    {
+        "name": "Torre di Pisa",
+        "description": "Famosa torre pendente in Piazza dei Miracoli.",
+        "url": "https://www.opapisa.it/",
+        "address": "Piazza del Duomo, 56126 Pisa PI, Italia",
+        "phone": "+39 050 835011",
+        "image": "/assets/img/pisa.jpg",
+        "category": "historical",
+        "lat": 43.722952,
+        "lng": 10.396597
+    },
+    {
+        "name": "Castello Sforzesco",
+        "description": "Storico castello nel centro di Milano.",
+        "url": "https://www.milanocastello.it/",
+        "address": "Piazza Castello, 20121 Milano MI, Italia",
+        "phone": "+39 02 88463700",
+        "image": "/assets/img/castello.jpg",
+        "category": "historical",
+        "lat": 45.470990,
+        "lng": 9.179386
     }
 ]
