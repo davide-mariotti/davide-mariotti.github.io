@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Google Maps</h1>
-    <div id="google-map" style="width: 100%; height: 500px;"></div>
+    <div id="google-map"></div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_t-peVxiT8kLGydwl9f1wovUyIvLZNnU"></script>
 
@@ -20,8 +20,8 @@
     
         // Categorie personalizzate con icone diverse
         let categoryIcons = {
-            "museum": "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-            "historical": "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            "museum": "/assets/img/blue-dot.svg",
+            "historical": "/assets/img/red-dot.svg"
         };
     
         // Funzione per aggiungere marker
@@ -40,7 +40,7 @@
                         <p><strong>Descrizione:</strong> ${location.description}</p>
                         <p><strong>Indirizzo:</strong> ${location.address}</p>
                         <p><strong>Telefono:</strong> ${location.phone}</p>
-                        <p><a href="${location.url}" target="_blank">Sito web</a></p>
+                        <p><a href="${location.url}" target="_blank">Website</a></p>
                         <img src="${location.image}" alt="${location.name}" style="width: 100px;">
                     </div>
                 `;
@@ -57,7 +57,7 @@
     
         // Funzione per caricare le posizioni dal file JSON
         function loadLocations() {
-            fetch('C:/repos/davide-mariotti.github.io/assets/data/locations.json')
+            fetch('/assets/data/locations.json')
                 .then(response => response.json())
                 .then(data => {
                     addMarkers(data);
@@ -70,5 +70,19 @@
         // Carica le posizioni sulla mappa
         loadLocations();
     </script>
+    <style>
+        #google-map {
+            width: 100%;
+            height: 700px;
+        }
+        .gm-style-iw-ch {
+            display: none;
+        }
+        .gm-style-iw-chr {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+    </style>
 </body>
 </html>
