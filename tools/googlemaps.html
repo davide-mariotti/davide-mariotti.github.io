@@ -6,12 +6,40 @@
     <title>Google Maps</title>
 </head>
 <body>
-    <h1>Google Maps</h1>
-    <div id="google-map"></div>
+    <h1 style="text-align: center;">Google Maps TEST</h1>
+    <div class="row-100">
+        <div class="container-50">
+            <input type="text" id="search-box" placeholder="Cerca per nome, categoria o descrizione" style="width: 300px; padding: 10px;">
+            <div id="autocomplete-suggestions" style="border: 1px solid #ccc; width: 300px; display: none;"></div>
+    
+            <!-- Mappa -->
+            <div id="google-map"></div>
+    
+            <!-- Filtri per categoria -->
+            <div id="filters">
+                <button onclick="filterByCategory('all'); setActiveButton(this)" class="active">Mostra Tutti</button>
+                <button onclick="filterByCategory('museum'); setActiveButton(this)">Musei</button>
+                <button onclick="filterByCategory('historical'); setActiveButton(this)">Luoghi Storici</button>
+            </div>
+        </div>
+        <div class="container-50">
+            <!-- Risultati dei marker sotto la mappa -->
+            <div id="showResults">
+                <!-- Qui verranno mostrati i risultati filtrati -->
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_t-peVxiT8kLGydwl9f1wovUyIvLZNnU"></script>
 
     <script>
+        let markers = []; // Per salvare tutti i marker e gestire la ricerca
+        let infoWindows = []; // Per gestire le finestre popup (infoWindow)
         let googleMap = new google.maps.Map(document.getElementById('google-map'), {
             center: { lat: 41.87194, lng: 12.56738 },
             zoom: 5.5,
@@ -30,7 +58,7 @@
                 let marker = new google.maps.Marker({
                     position: { lat: location.lat, lng: location.lng },
                     map: googleMap,
-                    icon: categoryIcons[location.category] || "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                    icon: categoryIcons[location.category] || "/assets/img/green-dot.svg",
                     title: location.name
                 });
     
@@ -40,7 +68,7 @@
                         <p><strong>Descrizione:</strong> ${location.description}</p>
                         <p><strong>Indirizzo:</strong> ${location.address}</p>
                         <p><strong>Telefono:</strong> ${location.phone}</p>
-                        <p><a href="${location.url}" target="_blank">Website</a></p>
+                        <p><a href="${location.url}" target="_blank">Sito web</a></p>
                         <img src="${location.image}" alt="${location.name}" style="width: 100px;">
                     </div>
                 `;
@@ -49,10 +77,20 @@
                     content: contentString
                 });
     
+                // Memorizza l'infoWindow e il marker
+                infoWindows.push(infoWindow);
+    
                 marker.addListener('click', function() {
+                    closeAllInfoWindows(); // Chiudi tutte le infoWindow aperte
                     infoWindow.open(googleMap, marker);
                 });
+    
+                // Aggiungi il marker e l'infoWindow alla lista dei marker
+                markers.push({ marker, location, infoWindow });
             });
+            
+            // Mostra tutti i marker inizialmente
+            updateShowResults(locations);
         }
     
         // Funzione per caricare le posizioni dal file JSON
@@ -61,20 +99,212 @@
                 .then(response => response.json())
                 .then(data => {
                     addMarkers(data);
+                    initializeSearch(data);
                 })
                 .catch(error => {
                     console.error('Errore nel caricamento delle posizioni:', error);
                 });
         }
     
+        // Funzione per chiudere tutte le finestre infoWindow
+        function closeAllInfoWindows() {
+            infoWindows.forEach(infoWindow => infoWindow.close());
+        }
+    
+        // Funzione per filtrare i marker in base alla categoria
+        function filterByCategory(category) {
+            markers.forEach(({ marker, location }) => {
+                if (category === 'all' || location.category === category) {
+                    marker.setVisible(true);
+                } else {
+                    marker.setVisible(false);
+                }
+            });
+            // Filtra anche i risultati mostrati sotto la mappa
+            const filteredLocations = category === 'all'
+                ? markers.map(m => m.location)
+                : markers.filter(({ location }) => location.category === category).map(m => m.location);
+            updateShowResults(filteredLocations);
+        }
+        
+        // Funzione per impostare il pulsante attivo
+        function setActiveButton(button) {
+            const buttons = document.querySelectorAll('#filters button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        // Funzione per aggiornare i risultati sotto la mappa
+        function updateShowResults(locations) {
+            const showResultsDiv = document.getElementById('showResults');
+            showResultsDiv.innerHTML = locations.map(location => `
+                <div class="result">
+                    <h2>${location.name}</h2>
+                    <p><strong>Descrizione:</strong> ${location.description}</p>
+                    <p><strong>Categoria:</strong> ${location.category}</p>
+                    <p><strong>Indirizzo:</strong> ${location.address}</p>
+                    <p><strong>Telefono:</strong> ${location.phone}</p>
+                    <p><a href="${location.url}" target="_blank">Sito web</a></p>
+                    <img src="${location.image}" alt="${location.name}" style="width: 100px;">
+                </div>
+            `).join('');
+        }
+    
+        // Funzione per gestire l'autocompletamento
+        function filterMarkers(query) {
+            markers.forEach(({ marker, location }) => {
+                const isVisible = 
+                    location.name.toLowerCase().includes(query) || 
+                    location.description.toLowerCase().includes(query) || 
+                    location.category.toLowerCase().includes(query);
+                
+                marker.setVisible(isVisible); // Mostra o nasconde il marker
+            });
+
+            // Aggiorna i risultati mostrati sotto la mappa
+            const filteredLocations = markers
+                .filter(({ location }) => 
+                    location.name.toLowerCase().includes(query) || 
+                    location.description.toLowerCase().includes(query) || 
+                    location.category.toLowerCase().includes(query)
+                )
+                .map(({ location }) => location);
+
+            updateShowResults(filteredLocations); // Aggiorna i risultati
+        }
+        function initializeSearch(locations) {
+            const searchBox = document.getElementById('search-box');
+            const suggestionsBox = document.getElementById('autocomplete-suggestions');
+
+            searchBox.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+
+                if (query === '') {
+                    suggestionsBox.style.display = 'none'; // Nascondi le suggestioni se la ricerca è vuota
+                    filterMarkers(query); // Aggiorna i marker visibili
+                    return;
+                }
+
+                filterMarkers(query);
+
+                // Autocompletamento
+                const suggestions = locations.filter(location => 
+                    location.name.toLowerCase().includes(query) ||
+                    location.description.toLowerCase().includes(query) ||
+                    location.category.toLowerCase().includes(query)
+                ).slice(0, 5); // Mostra fino a 5 suggerimenti
+
+                if (suggestions.length > 0) {
+                    suggestionsBox.style.display = 'block';
+                    suggestionsBox.innerHTML = suggestions.map(suggestion => `
+                        <div style="padding: 5px; cursor: pointer;" onclick="selectSuggestion('${suggestion.name}')">
+                            ${suggestion.name} (${suggestion.category})
+                        </div>
+                    `).join('');
+                } else {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+        }
+    
+        // Funzione per selezionare un suggerimento dall'autocompletamento
+        function selectSuggestion(name) {
+            document.getElementById('search-box').value = name;
+            const selectedMarker = markers.find(({ location }) => location.name === name);
+    
+            if (selectedMarker) {
+                googleMap.setCenter(selectedMarker.marker.getPosition()); // Centra sulla posizione
+                googleMap.setZoom(12); // Aumenta lo zoom
+    
+                // Chiudi tutte le altre infoWindow e apri quella del marker selezionato
+                closeAllInfoWindows();
+                selectedMarker.infoWindow.open(googleMap, selectedMarker.marker);
+            }
+    
+            document.getElementById('autocomplete-suggestions').style.display = 'none';
+        }
+    
         // Carica le posizioni sulla mappa
         loadLocations();
     </script>
+
     <style>
+        body {
+            margin: 0;
+        }
+        .row-100 {
+            display: flex;
+            flex-direction: row;
+        }
+        .container-50 {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            overflow: hidden;
+            padding: 10px;
+        }
+        #search-box {
+            width: 90% !important;
+            padding: 10px 0 10px 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            outline: none;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #autocomplete-suggestions {
+            position: absolute;
+            z-index: 50;
+            background-color: white;
+            margin-top: 45px;
+            left: 55px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        
         #google-map {
             width: 100%;
             height: 700px;
         }
+        #filters {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        #filters button {
+            margin: 0 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        #filters button.active {
+            background-color: darkblue;
+            color: white;
+        }
+        #showResults {
+            margin-top: 0px;
+            padding: 0px;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-wrap: wrap; /* Permette di andare a capo */
+            width: 100%;
+        }
+
+        #showResults .result {
+            flex: 1 1 calc(33.333% - 20px); /* 3 colonne con margine */
+            margin: 10px; /* Margine tra i box */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+        }
+
         .gm-style-iw-ch {
             display: none;
         }
