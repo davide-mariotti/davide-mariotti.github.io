@@ -8,6 +8,67 @@
 <body>
     <h1>Google Maps</h1>
     <div id="google-map" style="width: 100%; height: 500px;"></div>
-    <script src=""></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_t-peVxiT8kLGydwl9f1wovUyIvLZNnU"></script>
+
+    <script>
+        let googleMap = new google.maps.Map(document.getElementById('google-map'), {
+            center: { lat: 41.87194, lng: 12.56738 },
+            zoom: 5.5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    
+        // Categorie personalizzate con icone diverse
+        let categoryIcons = {
+            "museum": "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            "historical": "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+        };
+    
+        // Funzione per aggiungere marker
+        function addMarkers(locations) {
+            locations.forEach(location => {
+                let marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: googleMap,
+                    icon: categoryIcons[location.category] || "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                    title: location.name
+                });
+    
+                let contentString = `
+                    <div>
+                        <h2>${location.name}</h2>
+                        <p><strong>Descrizione:</strong> ${location.description}</p>
+                        <p><strong>Indirizzo:</strong> ${location.address}</p>
+                        <p><strong>Telefono:</strong> ${location.phone}</p>
+                        <p><a href="${location.url}" target="_blank">Sito web</a></p>
+                        <img src="${location.image}" alt="${location.name}" style="width: 100px;">
+                    </div>
+                `;
+    
+                let infoWindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+    
+                marker.addListener('click', function() {
+                    infoWindow.open(googleMap, marker);
+                });
+            });
+        }
+    
+        // Funzione per caricare le posizioni dal file JSON
+        function loadLocations() {
+            fetch('C:/repos/davide-mariotti.github.io/assets/data/locations.json')
+                .then(response => response.json())
+                .then(data => {
+                    addMarkers(data);
+                })
+                .catch(error => {
+                    console.error('Errore nel caricamento delle posizioni:', error);
+                });
+        }
+    
+        // Carica le posizioni sulla mappa
+        loadLocations();
+    </script>
 </body>
 </html>

@@ -1,0 +1,24 @@
+[
+    {
+        "name": "Museo Uffizi",
+        "description": "Museo d'arte di Firenze",
+        "url": "https://www.uffizi.it/",
+        "address": "Piazzale degli Uffizi, 6, 50122 Firenze FI, Italia",
+        "phone": "+39 055 294883",
+        "image": "https://example.com/uffizi.jpg",
+        "category": "museum",
+        "lat": 43.768732,
+        "lng": 11.255614
+    },
+    {
+        "name": "Colosseo",
+        "description": "Antico anfiteatro romano",
+        "url": "https://www.coopculture.it/colosseo/",
+        "address": "Piazza del Colosseo, 1, 00184 Roma RM, Italia",
+        "phone": "+39 06 39967700",
+        "image": "https://example.com/colosseo.jpg",
+        "category": "historical",
+        "lat": 41.890251,
+        "lng": 12.492373
+    }
+]
