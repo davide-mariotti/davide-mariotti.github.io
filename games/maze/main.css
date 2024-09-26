@@ -1,134 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+    --primary-color: #2c9f45;
+    --primary-color-dark: #217533;
+    --background-color: #000;
+    --text-color: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 html, body {
     width: 100vw;
     height: 100vh;
-    position: fixed;
-    padding: 0;
-    margin: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: black;
+    overflow: hidden;
+    background-color: var(--background-color);
+    color: var(--text-color);
     font-family: 'Poppins', sans-serif;
 }
 
-#view {
-    margin-top: 30px;
+#page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    text-align: center;
+}
+
+header {
+    padding: 20px;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+#menu {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button, select {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, select:hover {
+    background-color: var(--primary-color-dark);
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #mazeContainer {
-    top: 15px;
-    opacity: 0;
-    display: inline-block;
-    margin: auto;
-    border-radius: 10px;
     background-color: white;
-}
-#mazeContainer #mazeCanvas {
-    margin: 0;
-    display: block;
-    border: solid 2px #2c9f45;
-    height: 800px;
-}
-input, select {
-    cursor: pointer;
-    background-color: #2c9f45;;
-    height: 45px;
-    width: 150px;
+    border-radius: 10px;
     padding: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    display: inline-block;
-    font-size: 15px;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    appearance: none;
 }
-input:hover, select:hover {
-	background-color: #217533 !important;
+
+#mazeCanvas {
+    border: solid 2px var(--primary-color);
+    max-width: 100%;
+    max-height: 80vh;
 }
-input:active, select:active {
-	background-color: #217533;
+
+footer {
+    padding: 20px;
 }
-input:focus, select:focus {
-	outline: none;
-}
-.custom-select {
-	display: inline-block;
-}
-.custom-select select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-repeat: no-repeat;
-    background-position: 125px center;
-}
+
 #Message-Container {
-    visibility: hidden;
-    color: #2c9f45;
-    display: block;
-    width: 100vw;
-    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.90);
-    z-index: 1;
-}
-#Message-Container #message {
-    width: 300px;
-    height: 300px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -150px;
-    margin-top: -150px;
-}
-#page {
-	text-align: center;
-	height: auto;
-	width: auto;
-	margin: auto;
-}
-#page #menu {
-    margin: auto;
-    padding: 10px;
-    height: 65px;
-    box-sizing: border-box;
-}
-#page #menu h1 {
-    margin: 0;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 3.2rem;
-}
-#page #view {
-    position: absolute;
-    top: 65px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: auto;
-}
-.border {
-    border: 10px black solid;
-    border-radius: 10px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
 }
 
-#instructions {
-    margin-top: 425px;
+#message {
+    background-color: var(--text-color);
+    color: var(--background-color);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
 }
- 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 400px) {
-	input, select {
-	    width: 120px;
-	}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    button, select {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
 }
