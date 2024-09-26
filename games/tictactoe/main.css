@@ -15,9 +15,10 @@ body{
   background-color: black;
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   text-align: center;
   padding-top: 5vh;
+  overflow-x: hidden;
 }
 
 .turn-container{
@@ -92,4 +93,97 @@ body{
   padding: 10px 40px;
   background-color: #217533;
   color: #FFF;
+}
+
+.game-info ol {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.game-info li {
+    margin-bottom: 10px;
+}
+
+.game-info li::before {
+    content: "•";
+    color: #333; /* Adjust color as needed */
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
+        gap: 10px;
+        margin: 20px auto;
+        width: 300px;
+        height: 300px;
+    }
+
+    .box {
+        font-size: 2.5rem;
+    }
+
+    
+
+    h2#results {
+        font-size: 1.5rem;
+    }
+
+    #play-again {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+
+    .game-info {
+        width: 90%;
+        margin: 20px auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main-grid {
+        grid-template-columns: repeat(3, 70px);
+        grid-template-rows: repeat(3, 70px);
+        gap: 5px;
+    }
+
+    .box {
+        font-size: 2rem;
+    }
+
+    .turn-container {
+        width: 200px;
+    }
+
+    .turn-box {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    h2#results {
+        font-size: 1.2rem;
+    }
+
+    #play-again {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    .game-info {
+        width: 95%;
+        font-size: 0.9rem;
+    }
+
+    .game-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .game-info h4 {
+        font-size: 1rem;
+    }
 }
