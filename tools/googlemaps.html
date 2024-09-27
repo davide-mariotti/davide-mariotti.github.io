@@ -9,8 +9,11 @@
     <h1 style="text-align: center;">Google Maps TEST</h1>
     <div class="row-100">
         <div class="container-50">
-            <input type="text" id="search-box" placeholder="Search by name, category or description" style="width: 300px; padding: 10px;">
-            <div id="autocomplete-suggestions" style="border: 1px solid #ccc; width: 300px; display: none;"></div>
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search by name, category or description">
+                <button onclick="findNearestPlace()" id="nearest-place-btn">Find Nearest Place</button>
+            </div>
+            <div id="autocomplete-suggestions"></div>
     
             <!-- Mappa -->
             <div id="google-map"></div>
@@ -38,7 +41,7 @@
 
     
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_t-peVxiT8kLGydwl9f1wovUyIvLZNnU"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_t-peVxiT8kLGydwl9f1wovUyIvLZNnU&libraries=geometry,places"></script>
 
     <script>
         let markers = []; // Per salvare tutti i marker e gestire la ricerca
@@ -76,6 +79,7 @@
                         <p><strong>Telephone:</strong> ${location.phone}</p>
                         <p><a href="${location.url}" target="_blank">Website</a></p>
                         <img src="${location.image}" alt="${location.name}" style="width: 100px;">
+                        <p><a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}" target="_blank">Get Directions</a></p>
                     </div>
                 `;
     
@@ -152,10 +156,75 @@
                     <p><strong>Telephone:</strong> ${location.phone}</p>
                     <p><a href="${location.url}" target="_blank">Website</a></p>
                     <img src="${location.image}" alt="${location.name}" style="width: 100px;">
+                    <p><a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}" target="_blank" class="directions-btn">Get Directions</a></p>
                 </div>
             `).join('');
         }
     
+        let geocoder;
+
+        function initializeSearch(locations) {
+            const searchBox = document.getElementById('search-box');
+            const suggestionsBox = document.getElementById('autocomplete-suggestions');
+            geocoder = new google.maps.Geocoder();
+
+            searchBox.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+
+                if (query === '') {
+                    suggestionsBox.style.display = 'none';
+                    filterMarkers(query);
+                    return;
+                }
+
+                geocoder.geocode({ address: query }, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        const cityLocation = results[0].geometry.location;
+                        const nearestPlaces = findNearestPlaces(cityLocation, locations, 5);
+                        
+                        suggestionsBox.style.display = 'block';
+                        suggestionsBox.innerHTML = nearestPlaces.map(place => `
+                            <div style="padding: 5px; cursor: pointer;" onclick="selectSuggestion('${place.name}')">
+                                ${place.name} (${place.category}) - Near ${query}
+                            </div>
+                        `).join('');
+                    } else {
+                        // If geocoding fails, fall back to the original filtering
+                        filterMarkers(query);
+                        
+                        const suggestions = locations.filter(location => 
+                            location.name.toLowerCase().includes(query) ||
+                            location.description.toLowerCase().includes(query) ||
+                            location.category.toLowerCase().includes(query)
+                        ).slice(0, 5);
+
+                        if (suggestions.length > 0) {
+                            suggestionsBox.style.display = 'block';
+                            suggestionsBox.innerHTML = suggestions.map(suggestion => `
+                                <div style="padding: 5px; cursor: pointer;" onclick="selectSuggestion('${suggestion.name}')">
+                                    ${suggestion.name} (${suggestion.category})
+                                </div>
+                            `).join('');
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        }
+
+        function findNearestPlaces(location, places, limit) {
+            return places.map(place => ({
+                ...place,
+                distance: google.maps.geometry.spherical.computeDistanceBetween(
+                    location,
+                    new google.maps.LatLng(place.lat, place.lng)
+                )
+            }))
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, limit);
+        }
+
         // Funzione per gestire l'autocompletamento
         function filterMarkers(query) {
             markers.forEach(({ marker, location }) => {
@@ -178,42 +247,7 @@
 
             updateShowResults(filteredLocations); // Aggiorna i risultati
         }
-        function initializeSearch(locations) {
-            const searchBox = document.getElementById('search-box');
-            const suggestionsBox = document.getElementById('autocomplete-suggestions');
 
-            searchBox.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-
-                if (query === '') {
-                    suggestionsBox.style.display = 'none'; // Nascondi le suggestioni se la ricerca è vuota
-                    filterMarkers(query); // Aggiorna i marker visibili
-                    return;
-                }
-
-                filterMarkers(query);
-
-                // Autocompletamento
-                const suggestions = locations.filter(location => 
-                    location.name.toLowerCase().includes(query) ||
-                    location.description.toLowerCase().includes(query) ||
-                    location.category.toLowerCase().includes(query)
-                ).slice(0, 5); // Mostra fino a 5 suggerimenti
-
-                if (suggestions.length > 0) {
-                    suggestionsBox.style.display = 'block';
-                    suggestionsBox.innerHTML = suggestions.map(suggestion => `
-                        <div style="padding: 5px; cursor: pointer;" onclick="selectSuggestion('${suggestion.name}')">
-                            ${suggestion.name} (${suggestion.category})
-                        </div>
-                    `).join('');
-                } else {
-                    suggestionsBox.style.display = 'none';
-                }
-            });
-        }
-    
-        // Funzione per selezionare un suggerimento dall'autocompletamento
         function selectSuggestion(name) {
             document.getElementById('search-box').value = name;
             const selectedMarker = markers.find(({ location }) => location.name === name);
@@ -228,6 +262,54 @@
             }
     
             document.getElementById('autocomplete-suggestions').style.display = 'none';
+            
+            // Update the results to show only the selected place
+            updateShowResults([selectedMarker.location]);
+        }
+    
+        // Funzione per trovare il luogo più vicino
+        function findNearestPlace() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        let nearestPlace = null;
+                        let shortestDistance = Infinity;
+
+                        markers.forEach(({ marker, location }) => {
+                            const distance = google.maps.geometry.spherical.computeDistanceBetween(
+                                new google.maps.LatLng(userLocation),
+                                marker.getPosition()
+                            );
+
+                            if (distance < shortestDistance) {
+                                shortestDistance = distance;
+                                nearestPlace = { marker, location };
+                            }
+                        });
+
+                        if (nearestPlace) {
+                            googleMap.setCenter(nearestPlace.marker.getPosition());
+                            googleMap.setZoom(12);
+                            closeAllInfoWindows();
+                            nearestPlace.infoWindow.open(googleMap, nearestPlace.marker);
+                            
+                            // Highlight the nearest place in the results
+                            updateShowResults([nearestPlace.location]);
+                        }
+                    },
+                    (error) => {
+                        console.error("Error getting user location:", error);
+                        alert("Unable to get your location. Please make sure location services are enabled.");
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
         }
     
         // Carica le posizioni sulla mappa
@@ -249,15 +331,31 @@
             overflow: hidden;
             padding: 10px;
         }
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
         #search-box {
-            width: 90% !important;
-            padding: 10px 0 10px 10px;
+            flex-grow: 1;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 15px;
             outline: none;
-            margin-bottom: 20px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-right: 10px;
+        }
+        #nearest-place-btn {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #nearest-place-btn:hover {
+            background-color: darkblue;
+            color: white;
         }
         #autocomplete-suggestions {
             position: absolute;
@@ -283,8 +381,8 @@
             justify-content: center;
             margin-top: 10px;
         }
-        #filters button {
-            margin: 0 10px;
+        #filters button, #nearest-place-btn {
+            margin: 0 5px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 15px;
@@ -293,6 +391,11 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #filters button:hover, #nearest-place-btn:hover {
+            background-color: darkblue;
+            color: white;
         }
         #filters button.active {
             background-color: darkblue;
@@ -326,6 +429,20 @@
             position: absolute;
             top: 0px;
             right: 0px;
+        }
+
+        .directions-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #4285F4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .directions-btn:hover {
+            background-color: #3367D6;
         }
     </style>
 </body>
