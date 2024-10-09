@@ -33,6 +33,8 @@ let gameOver = false;
 let highestPlatform;
 let gameOverText;
 let restartButton;
+let highestPlatformReached; // Aggiungi questa variabile globale
+let difficultyLevel = 0;
 
 function preload() {
     this.load.image('sky', 'img/sky.png');
@@ -60,7 +62,7 @@ function create() {
     // Rimuoviamo setCollideWorldBounds per permettere al giocatore di salire
     // player.setCollideWorldBounds(true);
 
-    this.physics.add.collider(player, platforms);
+    this.physics.add.collider(player, platforms, platformCollision, null, this);
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -85,6 +87,9 @@ function create() {
     this.scale.on('resize', resize, this);
     this.endGame = endGame;
     this.restartGame = restartGame;
+
+    // Inizializza highestPlatformReached al livello di partenza del giocatore
+    highestPlatformReached = Math.floor(-player.y / 100) - 1; // Sottraiamo 1 per assicurarci che il primo salto conti
 }
 
 function update() {
@@ -106,11 +111,22 @@ function update() {
         player.setVelocityY(-400);
     }
 
-    // Aggiorna il punteggio e il record
-    score = Math.max(score, Math.floor(-player.y / 10));
-    highScore = Math.max(highScore, score);
-    scoreText.setText('Score: ' + score);
-    highScoreText.setText('Record: ' + highScore);
+    // Aggiorna il punteggio basato sulla piattaforma più alta raggiunta
+    const currentPlatformLevel = Math.floor(-player.y / 100); // Assumiamo che ogni 100 pixel sia un nuovo livello
+    if (currentPlatformLevel > highestPlatformReached) {
+        score += currentPlatformLevel - highestPlatformReached; // Incrementa il punteggio per ogni nuovo livello raggiunto
+        highestPlatformReached = currentPlatformLevel;
+        highScore = Math.max(highScore, score);
+        scoreText.setText('Score: ' + score);
+        highScoreText.setText('Record: ' + highScore);
+    }
+
+    // Aggiorna il livello di difficoltà
+    const newDifficultyLevel = Math.floor(score / 10);
+    if (newDifficultyLevel > difficultyLevel) {
+        difficultyLevel = newDifficultyLevel;
+        console.log('Difficulty increased to level', difficultyLevel);
+    }
 
     // Genera una nuova piattaforma quando il giocatore si avvicina alla più alta
     if (player.y < highestPlatform.y + this.scale.height / 2) {
@@ -130,11 +146,19 @@ function update() {
     // Muovi le piattaforme mobili
     platforms.children.entries.forEach(platform => {
         if (platform.movable) {
-            platform.x += platform.direction;
+            platform.x += platform.direction * platform.speed;
             if (platform.x > this.scale.width - platform.displayWidth / 2 || platform.x < platform.displayWidth / 2) {
                 platform.direction *= -1;
             }
             platform.body.position.x = platform.x - platform.displayWidth / 2;
+        }
+
+        // Gestisci le piattaforme che scompaiono
+        if (platform.vanishing && platform.startVanishing) {
+            platform.alpha -= 0.005;
+            if (platform.alpha <= 0) {
+                platform.destroy();
+            }
         }
     });
 
@@ -171,14 +195,20 @@ function generatePlatforms(isFirst = false) {
     const { width } = this.scale;
     let y;
     if (isFirst) {
-        y = player.y - 100; // Prima piattaforma più vicina al giocatore
+        y = player.y - 100;
     } else {
-        y = highestPlatform.y - Phaser.Math.Between(100, 150); // Range più accessibile
+        // Aumenta la distanza tra le piattaforme con la difficoltà
+        const minDistance = 100 + difficultyLevel * 5;
+        const maxDistance = 150 + difficultyLevel * 5;
+        y = highestPlatform.y - Phaser.Math.Between(minDistance, maxDistance);
     }
     const x = Phaser.Math.Between(50, width - 50);
     
     const platform = platforms.create(x, y, 'ground');
-    platform.setScale(0.5, 0.5);
+    
+    // Riduci la dimensione delle piattaforme con la difficoltà
+    const scale = Math.max(0.3, 0.5 - difficultyLevel * 0.02);
+    platform.setScale(scale, scale);
     platform.refreshBody();
     
     // Rimuoviamo la tolleranza dei bordi
@@ -186,14 +216,26 @@ function generatePlatforms(isFirst = false) {
     platform.body.allowGravity = false;
     platform.body.immovable = true;
     
-    highestPlatform = platform;
-    
-    console.log('New platform created at:', x, y);
+    platform.level = Math.floor(-y / 100);
 
-    if (Phaser.Math.Between(0, 1) > 0.5) {
+    // Aumenta la probabilità di piattaforme mobili con la difficoltà
+    if (Phaser.Math.Between(0, 100) < 50 + difficultyLevel * 5) {
         platform.movable = true;
         platform.direction = 1;
+        // Aumenta la velocità delle piattaforme mobili con la difficoltà
+        platform.speed = 1 + difficultyLevel * 0.5;
     }
+
+    // Aggiungi piattaforme che scompaiono a livelli di difficoltà più alti
+    if (difficultyLevel >= 2 && Phaser.Math.Between(0, 100) < 20 + difficultyLevel * 2) {
+        platform.vanishing = true;
+        platform.alpha = 1; // Mantieni la piattaforma completamente opaca all'inizio
+        platform.touched = false; // Aggiungi una flag per tracciare se la piattaforma è stata toccata
+    }
+
+    highestPlatform = platform;
+    
+    console.log('New platform created at:', x, y, 'with scale:', scale);
 }
 
 function endGame() {
@@ -235,11 +277,23 @@ function endGame() {
 function restartGame() {
     gameOver = false;
     score = 0;
-    // Non resettare highScore qui, così il record viene mantenuto tra le partite
+    // Inizializza highestPlatformReached al livello di partenza del giocatore
+    highestPlatformReached = Math.floor((-this.scale.height + 150) / 100) - 1;
+    difficultyLevel = 0;
     
     // Rimuovi gli elementi del game over
     if (gameOverText) gameOverText.destroy();
     if (restartButton) restartButton.destroy();
     
     this.scene.restart();
+}
+
+function platformCollision(player, platform) {
+    if (platform.vanishing && !platform.touched) {
+        platform.touched = true;
+        // Inizia la scomparsa della piattaforma dopo un breve ritardo
+        this.time.delayedCall(500, () => {
+            platform.startVanishing = true;
+        });
+    }
 }
