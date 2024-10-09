@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Scroll Test Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .parallax-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .parallax-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: auto;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .parallax-image.visible {
+            opacity: 1;
+        }
+        .content {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Parallax Scroll Test Page</h1>
+        <p>Scroll down to see the parallax effect with images appearing as you scroll.</p>
+    </div>
+
+    <div class="parallax-section">
+        <img src="https://picsum.photos/1200/800?random=1" alt="Parallax Image 1" class="parallax-image">
+        <div class="container">
+            <div class="content">
+                <h2>Section 1: Introduction to Parallax</h2>
+                <p>Parallax scrolling is a web design technique where foreground and background content move at different speeds, creating an illusion of depth.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="parallax-section">
+        <img src="https://picsum.photos/1200/800?random=2" alt="Parallax Image 2" class="parallax-image">
+        <div class="container">
+            <div class="content">
+                <h2>Section 2: Benefits of Parallax Design</h2>
+                <p>Parallax effects can enhance user engagement, create visual interest, and guide visitors through your content in a more interactive way.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="parallax-section">
+        <img src="https://picsum.photos/1200/800?random=3" alt="Parallax Image 3" class="parallax-image">
+        <div class="container">
+            <div class="content">
+                <h2>Section 3: Implementing Parallax</h2>
+                <p>To implement a parallax effect, you'll typically use a combination of CSS and JavaScript. The key is to manipulate the position or transform properties as the user scrolls.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="parallax-section">
+        <img src="https://picsum.photos/1200/800?random=4" alt="Parallax Image 4" class="parallax-image">
+        <div class="container">
+            <div class="content">
+                <h2>Section 4: Considerations</h2>
+                <p>While parallax effects can be visually appealing, it's important to consider performance implications and ensure your design remains accessible and responsive across different devices.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const parallaxSections = document.querySelectorAll('.parallax-section');
+            const appearDirections = ['bottom', 'top', 'left', 'right'];
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        const image = entry.target.querySelector('.parallax-image');
+                        const direction = appearDirections[index % appearDirections.length];
+                        animateImage(image, direction);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            parallaxSections.forEach(section => observer.observe(section));
+
+            function animateImage(image, direction) {
+                let start, end;
+                switch (direction) {
+                    case 'bottom':
+                        start = 'translate(-50%, 100%)';
+                        end = 'translate(-50%, -50%)';
+                        break;
+                    case 'top':
+                        start = 'translate(-50%, -100%)';
+                        end = 'translate(-50%, -50%)';
+                        break;
+                    case 'left':
+                        start = 'translate(-100%, -50%)';
+                        end = 'translate(-50%, -50%)';
+                        break;
+                    case 'right':
+                        start = 'translate(0%, -50%)';
+                        end = 'translate(-50%, -50%)';
+                        break;
+                }
+                
+                image.style.transform = start;
+                image.offsetHeight; // Trigger reflow
+                image.classList.add('visible');
+                image.style.transform = end;
+            }
+
+            window.addEventListener('scroll', () => {
+                parallaxSections.forEach(section => {
+                    const image = section.querySelector('.parallax-image');
+                    const scrollPosition = window.pageYOffset;
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (scrollPosition > sectionTop - window.innerHeight && scrollPosition < sectionTop + sectionHeight) {
+                        const parallaxSpeed = 0.5;
+                        const yOffset = (scrollPosition - sectionTop) * parallaxSpeed;
+                        image.style.transform = `translate(-50%, calc(-50% + ${yOffset}px))`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
