@@ -258,15 +258,15 @@ function endGame() {
     restartButton = this.add.text(width / 2, height / 2 + 50, 'Restart', { 
         fontSize: '32px', 
         fill: '#ffffff', 
-        backgroundColor: '#ff0000', 
+        backgroundColor: '#228b22', 
         padding: { x: 20, y: 10 } 
     });
     restartButton.setOrigin(0.5);
     restartButton.setScrollFactor(0);
     restartButton.setInteractive({ useHandCursor: true });
     restartButton.on('pointerdown', () => this.restartGame());
-    restartButton.on('pointerover', () => restartButton.setStyle({ fill: '#ff0000', backgroundColor: '#ffffff' }));
-    restartButton.on('pointerout', () => restartButton.setStyle({ fill: '#ffffff', backgroundColor: '#ff0000' }));
+    restartButton.on('pointerover', () => restartButton.setStyle({ fill: '#ffffff', backgroundColor: '#006400' }));
+    restartButton.on('pointerout', () => restartButton.setStyle({ fill: '#ffffff', backgroundColor: '#228b22' }));
 
     // Assicurati che questi elementi siano sopra tutto il resto
     gameOverBg.setDepth(100);
