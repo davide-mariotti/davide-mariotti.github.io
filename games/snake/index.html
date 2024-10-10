@@ -1,19 +1,35 @@
-<link href="main.css" rel="stylesheet" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
-<div class="container noselect">
-    <div class="wrapper">
-        <button id="replay"><i class="fas fa-play"></i> RESTART</button>
-        <div id="canvas"></div>
-        <div id="ui">
-            <h2>SCORE</h2>
-            <span id="score">00</span>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link href="main.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+</head>
+<body>
+    <div class="container noselect">
+        <header>
+            <h1>SNAKE</h1>
+        </header>
+        <main class="wrapper">
+            <div id="canvas"></div>
+            <div id="ui">
+                <button id="replay" aria-label="Restart game">
+                    <i class="fas fa-play" aria-hidden="true"></i> RESTART
+                </button>
+                <div>
+                    <h2>SCORE</h2>
+                    <span id="score">00</span>
+                </div>
+            </div>
+        </main>
+        <footer id="author">
+            <p>Press <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> to start the game</p>
+        </footer>
     </div>
-    <div id="author">
-        <p>Press   ← ↑ → ↓   to start the game</p><br>
-        <h1>SNAKE</h1>
-    </div>
-</div>
-
-<script src="main.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

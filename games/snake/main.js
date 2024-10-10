@@ -1,18 +1,18 @@
-
 let dom_replay = document.querySelector("#replay");
 let dom_score = document.querySelector("#score");
 let dom_canvas = document.createElement("canvas");
-document.querySelector("#canvas").appendChild(dom_canvas);
+let canvas_container = document.querySelector("#canvas");
+canvas_container.appendChild(dom_canvas);
 let CTX = dom_canvas.getContext("2d");
 
-const W = (dom_canvas.width = 800);
-const H = (dom_canvas.height = 800);
+let W, H, scale;
+const INITIAL_SIZE = 800;
+let cells = 20;
+let cellSize;
 
 let snake,
   food,
   currentHue,
-  cells = 20,
-  cellSize,
   isGameOver = false,
   tails = [],
   score = 00,
@@ -21,6 +21,28 @@ let snake,
   splashingParticleCount = 20,
   cellsCount,
   requestID;
+
+  function resizeCanvas() {
+    const container = canvas_container.getBoundingClientRect();
+    const maxSize = Math.min(container.width, container.height, 500);
+    W = H = maxSize;
+    dom_canvas.style.width = `${W}px`;
+    dom_canvas.style.height = `${H}px`;
+    scale = window.devicePixelRatio || 1;
+    dom_canvas.width = W * scale;
+    dom_canvas.height = H * scale;
+    CTX.scale(scale, scale);
+    cellSize = W / cells;
+    if (snake) {
+      snake.size = cellSize;
+    }
+    if (food) {
+      food.size = cellSize;
+    }
+  }
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 let helpers = {
   Vec: class {
@@ -46,7 +68,7 @@ let helpers = {
     }
   },
   isCollision(v1, v2) {
-    return v1.x == v2.x && v1.y == v2.y;
+    return v1.x === v2.x && v1.y === v2.y;
   },
   garbageCollector() {
     for (let i = 0; i < particles.length; i++) {
@@ -167,9 +189,9 @@ class Snake {
     this.dir = new helpers.Vec(0, 0);
     this.type = type;
     this.index = i;
-    this.delay = 10; //speed
-    this.size = W / cells;
-    this.color = "green"; //snake head color
+    this.delay = 5;
+    this.size = cellSize;
+    this.color = "white";
     this.history = [];
     this.total = 1;
   }
@@ -183,8 +205,7 @@ class Snake {
     if (this.total >= 2) {
       for (let i = 0; i < this.history.length - 1; i++) {
         let { x, y } = this.history[i];
-        CTX.lineWidth = 1;
-        CTX.fillStyle = "rgba(78,191,84,1)"; //snake body color
+        CTX.fillStyle = "rgba(225,225,225,1)";
         CTX.fillRect(x, y, this.size, this.size);
       }
     }
@@ -203,22 +224,7 @@ class Snake {
     if (x < 0) {
       this.pos.x = W - cellSize;
     }
-  }
-  controlls() {
-    let dir = this.size;
-    if (KEY.ArrowUp) {
-      this.dir = new helpers.Vec(0, -dir);
-    }
-    if (KEY.ArrowDown) {
-      this.dir = new helpers.Vec(0, dir);
-    }
-    if (KEY.ArrowLeft) {
-      this.dir = new helpers.Vec(-dir, 0);
-    }
-    if (KEY.ArrowRight) {
-      this.dir = new helpers.Vec(dir, 0);
-    }
-  }
+  }  
   selfCollision() {
     for (let i = 0; i < this.history.length; i++) {
       let p = this.history[i];
@@ -243,21 +249,33 @@ class Snake {
         this.history[i] = this.history[i + 1];
       }
       this.pos.add(this.dir);
-      this.delay = 10; //speed
+      this.delay = 5;
       this.total > 3 ? this.selfCollision() : null;
+    }
+  }
+  controlls() {
+    let dir = this.size;
+    if (KEY.ArrowUp) {
+      this.dir = new helpers.Vec(0, -dir);
+    }
+    if (KEY.ArrowDown) {
+      this.dir = new helpers.Vec(0, dir);
+    }
+    if (KEY.ArrowLeft) {
+      this.dir = new helpers.Vec(-dir, 0);
+    }
+    if (KEY.ArrowRight) {
+      this.dir = new helpers.Vec(dir, 0);
     }
   }
 }
 
 class Food {
   constructor() {
-    this.pos = new helpers.Vec(
-      ~~(Math.random() * cells) * cellSize,
-      ~~(Math.random() * cells) * cellSize
-    );
-    this.color = currentHue = `hsl(${~~(Math.random() * 360)},100%,50%)`;
     this.size = cellSize;
+    this.spawn();
   }
+
   draw() {
     let { x, y } = this.pos;
     CTX.globalCompositeOperation = "lighter";
@@ -268,14 +286,10 @@ class Food {
     CTX.globalCompositeOperation = "source-over";
     CTX.shadowBlur = 0;
   }
+
   spawn() {
     let randX = ~~(Math.random() * cells) * this.size;
     let randY = ~~(Math.random() * cells) * this.size;
-    for (let path of snake.history) {
-      if (helpers.isCollision(new helpers.Vec(randX, randY), path)) {
-        return this.spawn();
-      }
-    }
     this.color = currentHue = `hsl(${helpers.randHue()}, 100%, 50%)`;
     this.pos = new helpers.Vec(randX, randY);
   }
@@ -336,7 +350,7 @@ function initialize() {
   CTX.imageSmoothingEnabled = false;
   KEY.listen();
   cellsCount = cells * cells;
-  cellSize = W / cells;
+  resizeCanvas();
   snake = new Snake();
   food = new Food();
   dom_replay.addEventListener("click", reset, false);
