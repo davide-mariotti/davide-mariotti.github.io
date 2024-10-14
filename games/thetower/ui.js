@@ -1,50 +1,42 @@
-// ui.js
 class UI {
-    constructor(scene) {
+    constructor(scene, tower) {
         this.scene = scene;
-        this.points = 0; // Initialize points
-        this.createUpgradeMenu();
-        this.createHealthText();
+        this.tower = tower;
+
+        // Statistiche della torre (in alto a sinistra)
+        this.towerHealthText = this.scene.add.text(10, 10, '', { fontSize: '16px', fill: '#ffffff' });
+        this.towerDamageText = this.scene.add.text(10, 30, '', { fontSize: '16px', fill: '#ffffff' });
+        this.towerShootRatioText = this.scene.add.text(10, 50, '', { fontSize: '16px', fill: '#ffffff' });
+
+        // Informazioni di gioco (in basso a sinistra)
+        this.coinsText = this.scene.add.text(10, 435, '', { fontSize: '16px', fill: '#ffffff' });
+        this.expText = this.scene.add.text(10, 455, '', { fontSize: '16px', fill: '#ffffff' });
+        this.levelText = this.scene.add.text(10, 475, '', { fontSize: '16px', fill: '#ffffff' });
+
+        // Aggiungi l'indicatore del floor
+        this.floorText = this.scene.add.text(490, 490, '', { fontSize: '16px', fill: '#ffffff' });
+        this.floorText.setOrigin(1, 1);
+
+        // Aggiungi il contatore di kill
+        this.killCountText = this.scene.add.text(490, 10, '', { fontSize: '16px', fill: '#ffffff' });
+        this.killCountText.setOrigin(1, 0);
     }
 
-    createUpgradeMenu() {
-        // Create UI elements for upgrades
-        this.text = this.scene.add.text(10, 10, 'Points: 0', { fontSize: '32px', fill: '#fff' });
+    update(coins, exp, level, floor, killCount) {
+        // Aggiorna statistiche della torre
+        this.towerHealthText.setText(`Salute Torre: ${this.tower.health.toFixed(2)}/${this.tower.maxHealth}`);
+        this.towerDamageText.setText(`Danno Torre: ${this.tower.damage}`);
+        this.towerShootRatioText.setText(`Atk Rate: ${(1000 / this.tower.attackRate).toFixed(2)}/s`);
 
-        // Create upgrade buttons
-        this.createUpgradeButton('Damage Upgrade', 10, 50, 'damage');
-        this.createUpgradeButton('Range Upgrade', 10, 100, 'range');
-        this.createUpgradeButton('Fire Rate Upgrade', 10, 150, 'fireRate');
-    }
+        // Aggiorna informazioni di gioco
+        this.coinsText.setText(`Coins: ${coins}`);
+        this.expText.setText(`EXP: ${exp}/${LEVEL_UP_EXP}`);
+        this.levelText.setText(`Tower lvl: ${level}`);
 
-    createUpgradeButton(label, x, y, attribute) {
-        const button = this.scene.add.text(x, y, label, { fontSize: '24px', fill: '#0f0' })
-            .setInteractive()
-            .on('pointerdown', () => this.handleUpgrade(attribute));
+        // Aggiorna l'indicatore del floor
+        this.floorText.setText(`Floor: ${floor}`);
 
-        // Add hover effects
-        button.on('pointerover', () => button.setStyle({ fill: '#ff0' }));
-        button.on('pointerout', () => button.setStyle({ fill: '#0f0' }));
-    }
-
-    createHealthText() {
-        this.towerHealthText = this.scene.add.text(10, 200, 'Tower HP: 100', { fontSize: '24px', fill: '#fff' });
-    }
-
-    update() {
-        this.text.setText('Points: ' + this.points);
-        if (this.scene.tower) {
-            this.towerHealthText.setText('Tower HP: ' + this.scene.tower.health);
-        }
-    }
-
-    handleUpgrade(attribute) {
-        // Call the tower's upgrade method
-        this.scene.tower.upgrade(attribute);
-    }
-
-    addPoints(amount) {
-        this.points += amount; // Method to add points when enemies are defeated
-        this.update(); // Update UI
+        // Aggiorna il contatore di kill
+        this.killCountText.setText(`Kills: ${killCount}`);
     }
 }

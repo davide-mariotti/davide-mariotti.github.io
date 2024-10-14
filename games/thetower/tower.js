@@ -1,106 +1,104 @@
-// tower.js
+// games/thetower/tower.js
 class Tower {
-    constructor(scene) {
+    constructor(scene, enemies) {
         this.scene = scene;
-        this.damage = 10;
-        this.range = 200;
-        this.fireRate = 1000;
-        this.lastFired = 0;
-        this.health = 100; // Tower health
-        this.sprite = scene.physics.add.sprite(scene.cameras.main.centerX, scene.cameras.main.height - 50, 'tower');
-        this.sprite.setOrigin(0.5, 1);
-        this.sprite.setDisplaySize(100, 100); // Resize tower to 100x100
-        this.upgradeCost = {
-            damage: 20,
-            range: 30,
-            fireRate: 25
-        };
-        this.attachedEnemies = []; // Array to keep track of attached enemies
+        this.enemies = enemies;
+        this.baseSize = 10;
+        this.sprite = scene.physics.add.image(250, 250, 'tower').setOrigin(0.5, 0.5).setDisplaySize(this.baseSize, this.baseSize);
+        
+        this.maxHealth = 10;
+        this.health = this.maxHealth;
+        this.attackRate = 2000;
+        this.damage = 1;
+        
+        this.lastAttackTime = 0;
+        this.projectileSize = 2;
+        this.currentTarget = null;
     }
 
-    update() {
-        if (this.health > 0) {
-            this.handleAttachedEnemies();
-            const nearestEnemy = this.findNearestEnemy();
-            if (nearestEnemy) {
-                this.shoot(nearestEnemy);
-            }
-        } else {
-            this.sprite.destroy(); // Destroy tower if health is 0
-            clearInterval(enemySpawnInterval); // Stop spawning enemies
+    update(time) {
+        if (time - this.lastAttackTime > this.attackRate) {
+            this.attack();
+            this.lastAttackTime = time;
+        }
+
+        // Verifica se il bersaglio corrente è ancora valido
+        if (this.currentTarget && (!this.currentTarget.active || this.currentTarget.getData('enemyObject').health <= 0)) {
+            this.currentTarget = null;
         }
     }
 
-    handleAttachedEnemies() {
-        this.attachedEnemies.forEach(enemy => {
-            if (enemy.health > 0) {
-                this.takeDamage(1); // Tower takes damage from attached enemies
-            } else {
-                this.attachedEnemies = this.attachedEnemies.filter(e => e !== enemy); // Remove dead enemies
-            }
-        });
+    attack() {
+        if (!this.currentTarget) {
+            this.currentTarget = this.findNearestEnemy();
+        }
+
+        if (this.currentTarget) {
+            const enemy = this.currentTarget.getData('enemyObject');
+            const projectile = this.scene.physics.add.image(this.sprite.x, this.sprite.y, 'projectile')
+                .setDisplaySize(this.projectileSize, this.projectileSize);
+            this.scene.physics.moveTo(projectile, this.currentTarget.x, this.currentTarget.y, 300);
+
+            this.scene.physics.add.overlap(projectile, this.currentTarget, (proj, enemySprite) => {
+                enemy.takeDamage(this.damage);
+                if (enemy.health <= 0) {
+                    this.currentTarget = null;
+                    enemySprite.destroy();
+                    this.scene.events.emit('updateUI');
+                }
+                proj.destroy();
+            });
+        }
     }
 
     findNearestEnemy() {
-        let nearest = null;
-        let minDistance = Infinity;
-        this.scene.enemies.children.each(enemy => {
-            const distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, enemy.x, enemy.y);
-            if (distance < this.range && distance < minDistance) {
-                minDistance = distance;
-                nearest = enemy;
+        return this.enemies.getChildren().reduce((nearest, enemy) => {
+            if (!nearest || Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, enemy.x, enemy.y) < Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, nearest.x, nearest.y)) {
+                return enemy;
             }
-        });
-        return nearest;
-    }
-
-    shoot(enemy) {
-        const now = Date.now();
-        if (now - this.lastFired > this.fireRate) {
-            enemy.takeDamage(this.damage);
-            this.lastFired = now;
-
-            // Create a visual effect for the attack
-            const projectile = this.scene.add.sprite(this.sprite.x, this.sprite.y, 'projectile');
-            this.scene.physics.add.existing(projectile);
-            projectile.setDisplaySize(20, 20); // Resize projectile to 20x20 for better visibility
-            this.scene.physics.moveTo(projectile, enemy.x, enemy.y, 300); // Move projectile towards enemy
-
-            // Destroy the projectile after a short time
-            setTimeout(() => {
-                projectile.destroy();
-            }, 500);
-        }
+            return nearest;
+        }, null);
     }
 
     takeDamage(amount) {
         this.health -= amount;
+        this.health = Math.max(0, Math.round(this.health * 100) / 100); // Arrotonda a due decimali
+        console.log(`Tower took damage: ${amount.toFixed(2)}, New health: ${this.health.toFixed(2)}`);
         if (this.health <= 0) {
-            console.log('Tower destroyed!');
+            this.scene.events.emit('gameOver');
         }
     }
 
-    upgrade(attribute) {
-        if (this.scene.ui.points >= this.upgradeCost[attribute]) {
-            switch (attribute) {
-                case 'damage':
-                    this.damage += 5; // Increase damage
-                    break;
-                case 'range':
-                    this.range += 50; // Increase range
-                    break;
-                case 'fireRate':
-                    this.fireRate = Math.max(100, this.fireRate - 100); // Decrease fire rate (increase firing speed)
-                    break;
-                default:
-                    console.log('Invalid upgrade attribute');
-                    return;
-            }
-            this.scene.ui.points -= this.upgradeCost[attribute]; // Deduct points
-            this.scene.ui.update(); // Update UI
-            console.log(`${attribute} upgraded! New value: ${this[attribute]}`);
-        } else {
-            console.log('Not enough points to upgrade!');
-        }
+    reset() {
+        this.health = this.maxHealth;
+        this.sprite.setActive(true).setVisible(true);
+    }
+
+    upgradeHealth(value) {
+        this.maxHealth += value;
+        this.health = this.maxHealth;
+    }
+
+    upgradeDamage(value) {
+        this.damage += value;
+    }
+
+    upgradeAttackRate(value) {
+        this.attackRate = Math.max(500, this.attackRate - value);
+    }
+
+    levelUp() {
+        this.health += 5;
+        this.attackRate = Math.max(1000, this.attackRate - 200);
+        this.damage += 1;
+        
+        // Aumenta leggermente le dimensioni della torre
+        this.baseSize += 1;
+        this.sprite.setDisplaySize(this.baseSize, this.baseSize);
+        
+        // Aumenta leggermente le dimensioni dei proiettili
+        this.projectileSize += 0.2;
+        
+        console.log(`Tower Level Up! Health: ${this.health}, Attack Rate: ${this.attackRate}, Damage: ${this.damage}, Size: ${this.baseSize}`);
     }
 }
