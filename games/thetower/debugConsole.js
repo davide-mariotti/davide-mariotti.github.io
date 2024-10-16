@@ -22,18 +22,14 @@ class DebugConsole {
         title.setOrigin(0.5);
         this.container.add(title);
 
-        this.createInputField('Coins', -150, -75, (value) => { coins = parseInt(value); });
-        this.createInputField('Tower Max Health', -150, -25, (value) => { 
-            this.tower.maxHealth = parseFloat(value);
-            this.tower.health = Math.min(this.tower.health, this.tower.maxHealth);
-        });
-        this.createInputField('Tower Health', -150, 25, (value) => { 
-            this.tower.health = Math.min(parseFloat(value), this.tower.maxHealth);
-        });
-        this.createInputField('Tower Damage', -150, 75, (value) => { this.tower.damage = parseFloat(value); });
-        this.createInputField('Tower Attack Rate', -150, 125, (value) => { this.tower.attackRate = parseFloat(value); });
+        this.createInputField('Coins', -180, -100);
+        this.createInputField('Tower Max HP', -180, -60);
+        this.createInputField('Tower HP', -180, -20);
+        this.createInputField('Tower DMG', -180, 20);
+        this.createInputField('Tower ATK Rate', -180, 60);
+        this.createInputField('Floor', -180, 100);
 
-        const resetButton = this.scene.add.text(0, 160, 'Reset Game', { fontSize: '20px', fill: '#ffffff' });
+        const resetButton = this.scene.add.text(0, 140, 'Reset Game', { fontSize: '20px', fill: '#ffffff' });
         resetButton.setOrigin(0.5);
         resetButton.setInteractive({ useHandCursor: true });
         resetButton.on('pointerdown', () => this.resetGame());
@@ -45,7 +41,7 @@ class DebugConsole {
         this.container.add(closeButton);
     }
 
-    createInputField(label, x, y, callback) {
+    createInputField(label, x, y) {
         const text = this.scene.add.text(x, y, `${label}: `, { fontSize: '16px', fill: '#ffffff' });
         this.container.add(text);
 
@@ -69,10 +65,11 @@ class DebugConsole {
             let value;
             switch(label) {
                 case 'Coins': value = coins; break;
-                case 'Tower Max Health': value = this.tower.maxHealth; break;
-                case 'Tower Health': value = this.tower.health; break;
-                case 'Tower Damage': value = this.tower.damage; break;
-                case 'Tower Attack Rate': value = this.tower.attackRate; break;
+                case 'Tower Max HP': value = this.tower.maxHealth; break;
+                case 'Tower HP': value = this.tower.health; break;
+                case 'Tower DMG': value = this.tower.damage; break;
+                case 'Tower ATK Rate': value = this.tower.attackRate; break;
+                case 'Floor': value = currentFloor; break;
             }
             input.value = value.toFixed(2);
         };
@@ -82,7 +79,29 @@ class DebugConsole {
         updateInputValue();
 
         input.addEventListener('change', (e) => {
-            callback(e.target.value);
+            let value = parseFloat(e.target.value);
+            switch(label) {
+                case 'Coins':
+                    coins = Math.floor(value);
+                    break;
+                case 'Tower Max HP':
+                    this.tower.maxHealth = value;
+                    this.tower.health = Math.min(this.tower.health, this.tower.maxHealth);
+                    break;
+                case 'Tower HP':
+                    this.tower.health = Math.min(value, this.tower.maxHealth);
+                    break;
+                case 'Tower DMG':
+                    this.tower.damage = value;
+                    break;
+                case 'Tower ATK Rate':
+                    this.tower.attackRate = value;
+                    break;
+                case 'Floor':
+                    currentFloor = Math.floor(value);
+                    bossSpawned = false;
+                    break;
+            }
             updateInputValue();
             this.scene.events.emit('updateUI');
         });

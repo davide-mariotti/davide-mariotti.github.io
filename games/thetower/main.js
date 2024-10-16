@@ -298,6 +298,9 @@ function resetGame() {
         towerDamage: tower.damage,
         towerAttackRate: tower.attackRate
     });
+
+    currentFloor = 1;
+    bossSpawned = false;
 }
 
 function updateUI() {
