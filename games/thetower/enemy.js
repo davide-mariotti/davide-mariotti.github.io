@@ -1,22 +1,26 @@
 class Enemy {
-    constructor(scene, group, tower, floor) {
+    constructor(scene, group, tower, floor, isBoss = false) {
         this.scene = scene;
         this.tower = tower;
         this.floor = floor;
+        this.isBoss = isBoss;
 
-        // Riduciamo la salute iniziale e la scala di crescita
-        this.health = 3 * floor;
-        this.damage = 0.1 * floor;
-        this.speed = 50 * (1 + (floor - 1) * 0.1);
-
-        const baseSize = 6;
-        const sizeIncrease = (floor - 1) * 0.5;
-        const size = baseSize + sizeIncrease;
+        if (isBoss) {
+            this.health = 50 * Math.pow(1.2, floor / 10);
+            this.damage = 0.5 * Math.pow(1.2, floor / 10);
+            this.speed = 30 * (1 + (floor - 1) * 0.05);
+            this.size = 20 + (floor / 10);
+        } else {
+            this.health = 3 * floor;
+            this.damage = 0.1 * floor;
+            this.speed = 50 * (1 + (floor - 1) * 0.1);
+            this.size = 6 + (floor - 1) * 0.5;
+        }
 
         const spawnPosition = this.getRandomSpawnPosition();
-        this.sprite = scene.physics.add.sprite(spawnPosition.x, spawnPosition.y, 'enemy')
+        this.sprite = scene.physics.add.sprite(spawnPosition.x, spawnPosition.y, isBoss ? 'boss' : 'enemy')
             .setOrigin(0.5, 0.5)
-            .setDisplaySize(size, size);
+            .setDisplaySize(this.size, this.size);
 
         this.sprite.setData('enemyObject', this);
         group.add(this.sprite);
@@ -56,9 +60,12 @@ class Enemy {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health <= 0) {
-            coins += this.floor;
-            exp += this.floor;
-            killCount++; // Incrementa il contatore di kill
+            coins += this.isBoss ? this.floor * 10 : this.floor;
+            exp += this.isBoss ? this.floor * 5 : this.floor;
+            killCount++;
+            if (this.isBoss) {
+                debugLogger.log(`Boss defeated on floor ${this.floor}!`);
+            }
             this.sprite.destroy();
             this.scene.events.emit('updateUI');
             saveGameState();

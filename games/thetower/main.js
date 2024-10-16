@@ -26,13 +26,15 @@ let exp = 0;
 let level = 1;
 let enemyCount = 0;
 const EXP_PER_ENEMY = 1;
-const LEVEL_UP_EXP = 10;
+const BASE_LEVEL_UP_EXP = 10;
+const EXP_MULTIPLIER = 1.2;
 const ENEMIES_PER_FLOOR = 20; // Aggiungi questa riga
 let currentFloor = 1;
 let enemiesDefeated = 0;
 let gameOverShown = false;
 let debugConsole;
 let killCount = 0;
+let bossSpawned = false;
 
 function saveGameState() {
     const gameState = {
@@ -61,6 +63,7 @@ function loadGameState() {
 function preload() {
     this.load.image('tower', 'img/tower.png');
     this.load.image('enemy', 'img/enemy.png');
+    this.load.image('boss', 'img/boss.png');  // Aggiungi questa riga
     this.load.image('projectile', 'img/projectile.png');
 }
 
@@ -125,7 +128,7 @@ function update(time, delta) {
         });
 
         // Check if level up is possible
-        if (exp >= LEVEL_UP_EXP) {
+        if (exp >= getNextLevelExp(level)) {
             levelUp();
         }
     }
@@ -138,23 +141,41 @@ function update(time, delta) {
 }
 
 function spawnEnemy() {
-    if (tower.health > 0) {
-        const enemy = new Enemy(this, enemies, tower, currentFloor);
-        enemiesDefeated++;
-        if (enemiesDefeated % ENEMIES_PER_FLOOR === 0) {
-            currentFloor++;
-            console.log(`Floor increased to ${currentFloor}`);
-            // Aggiorna la frequenza di spawn dei nemici
-            this.enemySpawnTimer.delay = Math.max(500, 5000 / currentFloor);
-        }
+    const isBossFloor = currentFloor % 10 === 0;
+    
+    if (isBossFloor && bossSpawned) {
+        return; // Non generare più nemici se il boss è già stato generato
     }
+
+    const isBoss = isBossFloor && !bossSpawned;
+    const enemy = new Enemy(this, enemies, tower, currentFloor, isBoss);
+    
+    if (isBoss) {
+        bossSpawned = true;
+        debugLogger.log(`Boss spawned on floor ${currentFloor}`);
+    }
+
+    enemyCount++;
+
+    if (enemyCount >= ENEMIES_PER_FLOOR || (isBossFloor && bossSpawned)) {
+        enemyCount = 0;
+        currentFloor++;
+        bossSpawned = false;
+        this.events.emit('updateUI');
+    }
+
+    // Adjust spawn rate based on floor
+    this.enemySpawnTimer.delay = Math.max(1000, 5000 / Math.sqrt(currentFloor));
+}
+
+function getNextLevelExp(currentLevel) {
+    return Math.floor(BASE_LEVEL_UP_EXP * Math.pow(EXP_MULTIPLIER, currentLevel - 1));
 }
 
 function levelUp() {
-    exp -= LEVEL_UP_EXP;
     level++;
+    exp -= getNextLevelExp(level - 1);
     tower.levelUp();
-    console.log(`Level Up! Current Level: ${level}`);
     updateUI();
 }
 
@@ -181,14 +202,46 @@ function showGameOver() {
     marketplaceButton.setOrigin(0.5);
     marketplaceButton.setInteractive({ useHandCursor: true });
     marketplaceButton.on('pointerdown', () => {
+        if (this.autoplayTimer) {
+            this.autoplayTimer.remove();
+        }
         gameOverText.destroy();
         marketplaceButton.destroy();
         marketplace.show();
     });
+
+    // Aggiungi un timer per il restart automatico
+    this.autoplayTimer = this.time.delayedCall(5000, () => {
+        gameOverText.destroy();
+        marketplaceButton.destroy();
+        resetGame.call(this);
+    }, [], this);
+
+    // Aggiungi un testo per il conto alla rovescia
+    const countdownText = this.add.text(250, 300, 'Autoplay in 5...', { fontSize: '18px', fill: '#ffffff' });
+    countdownText.setOrigin(0.5);
+
+    // Aggiorna il testo del conto alla rovescia ogni secondo
+    this.time.addEvent({
+        delay: 1000,
+        repeat: 4,
+        callback: () => {
+            const remainingTime = Math.ceil((this.autoplayTimer.delay - this.autoplayTimer.elapsed) / 1000);
+            countdownText.setText(`Autoplay in ${remainingTime}...`);
+            if (remainingTime <= 0) {
+                countdownText.destroy();
+            }
+        }
+    });
 }
 
 function resetGame() {
-    console.clear(); // Pulisce la console
+    debugLogger.clear();
+
+    // Rimuovi il timer di autoplay se esiste
+    if (this.autoplayTimer) {
+        this.autoplayTimer.remove();
+    }
 
     // Salva le monete attuali e gli upgrade acquistati
     const currentCoins = coins;
@@ -208,6 +261,7 @@ function resetGame() {
     currentFloor = 1;
     enemiesDefeated = 0;
     killCount = 0;
+    bossSpawned = false;
 
     // Reset the tower with bought upgrades
     tower.reset(boughtUpgrades);
@@ -237,7 +291,7 @@ function resetGame() {
     this.events.removeListener('gameOver');
     this.events.on('gameOver', showGameOver, this);
 
-    console.log("Game reset. Current stats:", {
+    debugLogger.log("Game reset. Stats:", {
         coins: coins,
         towerHealth: tower.health,
         towerMaxHealth: tower.maxHealth,

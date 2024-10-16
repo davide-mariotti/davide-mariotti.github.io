@@ -20,6 +20,10 @@ class UI {
         // Aggiungi il contatore di kill
         this.killCountText = this.scene.add.text(490, 10, '', { fontSize: '16px', fill: '#ffffff' });
         this.killCountText.setOrigin(1, 0);
+
+        this.bossWarningText = this.scene.add.text(250, 50, '', { fontSize: '24px', fill: '#ff0000' });
+        this.bossWarningText.setOrigin(0.5);
+        this.bossWarningText.setVisible(false);
     }
 
     update(coins, exp, level, floor, killCount) {
@@ -30,7 +34,8 @@ class UI {
 
         // Aggiorna informazioni di gioco
         this.coinsText.setText(`Coins: ${coins}`);
-        this.expText.setText(`EXP: ${exp}/${LEVEL_UP_EXP}`);
+        const nextLevelExp = getNextLevelExp(level);
+        this.expText.setText(`EXP: ${exp}/${nextLevelExp}`);
         this.levelText.setText(`Tower lvl: ${level}`);
 
         // Aggiorna l'indicatore del floor
@@ -38,5 +43,16 @@ class UI {
 
         // Aggiorna il contatore di kill
         this.killCountText.setText(`Kills: ${killCount}`);
+
+        // Mostra l'avviso del boss
+        if (floor % 10 === 9) {
+            this.bossWarningText.setText('Boss incoming!');
+            this.bossWarningText.setVisible(true);
+        } else if (floor % 10 === 0) {
+            this.bossWarningText.setText('Boss floor!');
+            this.bossWarningText.setVisible(true);
+        } else {
+            this.bossWarningText.setVisible(false);
+        }
     }
 }

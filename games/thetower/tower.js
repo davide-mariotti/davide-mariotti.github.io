@@ -62,7 +62,8 @@ class Tower {
     takeDamage(amount) {
         this.health -= amount;
         this.health = Math.max(0, Math.round(this.health * 100) / 100); // Arrotonda a due decimali
-        console.log(`Tower took damage: ${amount.toFixed(2)}, New health: ${this.health.toFixed(2)}`);
+        //debugLogger.log(`Tower took damage: ${amount.toFixed(2)}, New health: ${this.health.toFixed(2)}`);
+        debugLogger.log(`Tower took damage -${amount.toFixed(2)}`);
         if (this.health <= 0) {
             this.health = 0; // Assicurati che la salute non scenda sotto lo zero
             this.scene.events.emit('gameOver');
@@ -94,15 +95,15 @@ class Tower {
             case 0:
                 this.maxHealth += 0.1;
                 this.health = this.maxHealth;
-                console.log(`Tower Level Up! Max Health increased to ${this.maxHealth.toFixed(1)}`);
+                debugLogger.log(`LVL Up! HP increased to ${this.maxHealth.toFixed(1)}`);
                 break;
             case 1:
                 this.damage += 0.1;
-                console.log(`Tower Level Up! Damage increased to ${this.damage.toFixed(1)}`);
+                debugLogger.log(`LVL Up! DMG increased to ${this.damage.toFixed(1)}`);
                 break;
             case 2:
                 this.attackRate = Math.max(500, this.attackRate - 10); // Diminuisce di 10ms, ma non scende sotto 500ms
-                console.log(`Tower Level Up! Attack Rate increased to ${(1000 / this.attackRate).toFixed(2)} attacks/second`);
+                debugLogger.log(`LVL Up! ATK/rate increased to ${(1000 / this.attackRate).toFixed(2)} atk/s`);
                 break;
         }
 
