@@ -3,16 +3,15 @@ class Tower {
     constructor(scene, enemies) {
         this.scene = scene;
         this.enemies = enemies;
-        this.baseSize = 10;
-        this.sprite = scene.physics.add.image(250, 250, 'tower').setOrigin(0.5, 0.5).setDisplaySize(this.baseSize, this.baseSize);
-        
         this.maxHealth = 10;
         this.health = this.maxHealth;
         this.attackRate = 2000;
         this.damage = 1;
+        this.baseSize = 10;
+        this.projectileSize = 2;
+        this.sprite = scene.physics.add.image(250, 250, 'tower').setOrigin(0.5, 0.5).setDisplaySize(this.baseSize, this.baseSize);
         
         this.lastAttackTime = 0;
-        this.projectileSize = 2;
         this.currentTarget = null;
     }
 
@@ -65,6 +64,7 @@ class Tower {
         this.health = Math.max(0, Math.round(this.health * 100) / 100); // Arrotonda a due decimali
         console.log(`Tower took damage: ${amount.toFixed(2)}, New health: ${this.health.toFixed(2)}`);
         if (this.health <= 0) {
+            this.health = 0; // Assicurati che la salute non scenda sotto lo zero
             this.scene.events.emit('gameOver');
         }
     }
@@ -88,17 +88,43 @@ class Tower {
     }
 
     levelUp() {
-        this.health += 5;
-        this.attackRate = Math.max(1000, this.attackRate - 200);
-        this.damage += 1;
-        
+        const upgradeType = Math.floor(Math.random() * 3); // 0: health, 1: damage, 2: attack rate
+
+        switch (upgradeType) {
+            case 0:
+                this.maxHealth += 0.1;
+                this.health = this.maxHealth;
+                console.log(`Tower Level Up! Max Health increased to ${this.maxHealth.toFixed(1)}`);
+                break;
+            case 1:
+                this.damage += 0.1;
+                console.log(`Tower Level Up! Damage increased to ${this.damage.toFixed(1)}`);
+                break;
+            case 2:
+                this.attackRate = Math.max(500, this.attackRate - 10); // Diminuisce di 10ms, ma non scende sotto 500ms
+                console.log(`Tower Level Up! Attack Rate increased to ${(1000 / this.attackRate).toFixed(2)} attacks/second`);
+                break;
+        }
+
         // Aumenta leggermente le dimensioni della torre
-        this.baseSize += 1;
+        this.baseSize += 0.1;
         this.sprite.setDisplaySize(this.baseSize, this.baseSize);
         
         // Aumenta leggermente le dimensioni dei proiettili
-        this.projectileSize += 0.2;
+        this.projectileSize += 0.02;
+    }
+
+    reset(boughtUpgrades) {
+        this.maxHealth = boughtUpgrades.health;
+        this.health = this.maxHealth;
+        this.damage = boughtUpgrades.damage;
+        this.attackRate = boughtUpgrades.attackRate;
         
-        console.log(`Tower Level Up! Health: ${this.health}, Attack Rate: ${this.attackRate}, Damage: ${this.damage}, Size: ${this.baseSize}`);
+        // Reset other properties that might have been changed during level ups
+        this.baseSize = 10;
+        this.sprite.setDisplaySize(this.baseSize, this.baseSize);
+        this.projectileSize = 2;
+        
+        this.sprite.setActive(true).setVisible(true);
     }
 }

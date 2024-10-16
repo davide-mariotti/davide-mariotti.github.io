@@ -4,12 +4,13 @@ class Enemy {
         this.tower = tower;
         this.floor = floor;
 
-        this.health = 5 * floor;
-        this.damage = 0.1 * floor; // Aumenta il danno base
+        // Riduciamo la salute iniziale e la scala di crescita
+        this.health = 3 * floor;
+        this.damage = 0.1 * floor;
         this.speed = 50 * (1 + (floor - 1) * 0.1);
 
         const baseSize = 6;
-        const sizeIncrease = (floor - 1) * 0.5; // Aumenta di 0.5 per ogni livello oltre il primo
+        const sizeIncrease = (floor - 1) * 0.5;
         const size = baseSize + sizeIncrease;
 
         const spawnPosition = this.getRandomSpawnPosition();

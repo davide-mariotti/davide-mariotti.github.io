@@ -37,9 +37,8 @@ let killCount = 0;
 function saveGameState() {
     const gameState = {
         coins: coins,
-        exp: exp,
         upgrades: {
-            health: Math.round(tower.maxHealth * 10) / 10,
+            health: tower.maxHealth,
             damage: tower.damage,
             attackRate: tower.attackRate
         }
@@ -52,11 +51,10 @@ function loadGameState() {
     if (savedState) {
         const gameState = JSON.parse(savedState);
         coins = gameState.coins || 0;
-        exp = gameState.exp || 0;
         tower.maxHealth = gameState.upgrades.health;
+        tower.health = tower.maxHealth;
         tower.damage = gameState.upgrades.damage;
         tower.attackRate = gameState.upgrades.attackRate;
-        tower.health = tower.maxHealth; // Ripristina la salute al massimo
     }
 }
 
@@ -113,10 +111,6 @@ function create() {
 
 function update(time, delta) {
     if ((debugConsole && debugConsole.isVisible) || (marketplace && marketplace.isVisible)) {
-        // Even when paused, check if the tower's health is 0
-        if (tower.health <= 0) {
-            this.events.emit('gameOver');
-        }
         return;
     }
 
@@ -136,7 +130,7 @@ function update(time, delta) {
         }
     }
 
-    if (tower.health <= 0) {
+    if (tower.health <= 0 && !gameOverShown) {
         this.events.emit('gameOver');
     }
 
@@ -175,6 +169,11 @@ function showGameOver() {
         debugConsole.toggle();
     }
 
+    // Se il marketplace è visibile, nascondilo
+    if (marketplace && marketplace.isVisible) {
+        marketplace.hide();
+    }
+
     const gameOverText = this.add.text(250, 200, 'Game Over', { fontSize: '32px', fill: '#ffffff' });
     gameOverText.setOrigin(0.5);
 
@@ -189,19 +188,29 @@ function showGameOver() {
 }
 
 function resetGame() {
+    console.clear(); // Pulisce la console
+
+    // Salva le monete attuali e gli upgrade acquistati
+    const currentCoins = coins;
+    const boughtUpgrades = {
+        health: tower.maxHealth,
+        damage: tower.damage,
+        attackRate: tower.attackRate
+    };
+
     // Remove all existing enemies
     enemies.clear(true, true);
     
     // Reset global variables
-    coins = 0;
+    coins = currentCoins;
     exp = 0;
     level = 1;
     currentFloor = 1;
     enemiesDefeated = 0;
     killCount = 0;
 
-    // Reset the tower
-    tower.reset();
+    // Reset the tower with bought upgrades
+    tower.reset(boughtUpgrades);
 
     // Recreate the enemy spawn timer
     if (this.enemySpawnTimer) {
@@ -217,15 +226,24 @@ function resetGame() {
     // Update the user interface
     updateUI();
 
-    // Remove saved data from localStorage
-    localStorage.removeItem('towerDefenseGameState');
-
     // Resume the game
     this.physics.resume();
     this.time.paused = false;
     if (this.enemySpawnTimer) {
         this.enemySpawnTimer.paused = false;
     }
+
+    gameOverShown = false;
+    this.events.removeListener('gameOver');
+    this.events.on('gameOver', showGameOver, this);
+
+    console.log("Game reset. Current stats:", {
+        coins: coins,
+        towerHealth: tower.health,
+        towerMaxHealth: tower.maxHealth,
+        towerDamage: tower.damage,
+        towerAttackRate: tower.attackRate
+    });
 }
 
 function updateUI() {
@@ -233,4 +251,3 @@ function updateUI() {
 }
 
 window.addEventListener('beforeunload', saveGameState);
-

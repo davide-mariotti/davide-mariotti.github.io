@@ -24,8 +24,8 @@ class UI {
 
     update(coins, exp, level, floor, killCount) {
         // Aggiorna statistiche della torre
-        this.towerHealthText.setText(`Salute Torre: ${this.tower.health.toFixed(2)}/${this.tower.maxHealth}`);
-        this.towerDamageText.setText(`Danno Torre: ${this.tower.damage}`);
+        this.towerHealthText.setText(`Tower Health: ${this.tower.health.toFixed(1)}/${this.tower.maxHealth.toFixed(1)}`);
+        this.towerDamageText.setText(`Tower Damage: ${this.tower.damage.toFixed(1)}`);
         this.towerShootRatioText.setText(`Atk Rate: ${(1000 / this.tower.attackRate).toFixed(2)}/s`);
 
         // Aggiorna informazioni di gioco
