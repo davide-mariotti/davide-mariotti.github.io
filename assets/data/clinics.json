@@ -5,7 +5,7 @@
         "url": "https://www.duomofirenze.it/",
         "address": "Piazza del Duomo, 50122 Firenze FI, Italia",
         "phone": "+39 055 2302885",
-        "product": "product2",
+        "products": ["product1", "product2", "product3"],
         "lat": 43.773073,
         "lng": 11.256902
     },
@@ -15,7 +15,7 @@
         "url": "https://www.basilicasanmarco.it/",
         "address": "Piazza San Marco, 30124 Venezia VE, Italia",
         "phone": "+39 041 2708311",
-        "product": "product2",
+        "products": ["product1"],
         "lat": 45.434336,
         "lng": 12.339236
     },
@@ -25,7 +25,7 @@
         "url": "https://galleriaborghese.beniculturali.it/",
         "address": "Piazzale Scipione Borghese, 5, 00197 Roma RM, Italia",
         "phone": "+39 06 8413979",
-        "product": "product3",
+        "category": ["product3"],
         "lat": 41.914565,
         "lng": 12.492251
     },
@@ -35,7 +35,7 @@
         "url": "https://www.opapisa.it/",
         "address": "Piazza del Duomo, 56126 Pisa PI, Italia",
         "phone": "+39 050 835011",
-        "product": "product2",
+        "category": ["product2"],
         "lat": 43.722952,
         "lng": 10.396597
     },
@@ -45,7 +45,7 @@
         "url": "https://www.milanocastello.it/",
         "address": "Piazza Castello, 20121 Milano MI, Italia",
         "phone": "+39 02 88463700",
-        "product": "product2",
+        "category": ["product2"],
         "lat": 45.470990,
         "lng": 9.179386
     },
@@ -55,7 +55,7 @@
         "url": "https://www.comune.milano.it/aree-tematiche/parchi-e-giardini/parco-sempione",
         "address": "Piazza Sempione, 20154 Milano MI, Italia",
         "phone": "+39 02 02 02",
-        "product": "product1",
+        "category": ["product1"],
         "lat": 45.480441,
         "lng": 9.168814
     },
@@ -65,7 +65,7 @@
         "url": "https://www.vatican.va/various/basiliche/san_pietro/index_it.htm",
         "address": "Piazza San Pietro, 00120 Città del Vaticano, Italia",
         "phone": "+39 06 69883145",
-        "product": "product5",
+        "category": ["product5"],
         "lat": 41.902783,
         "lng": 12.453900
     },
@@ -75,7 +75,7 @@
         "url": "https://www.parcogarfagnana.it/",
         "address": "Località Giuncugnano, 55030 Giuncugnano LU, Italia",
         "phone": "+39 0583 651003",
-        "product": "product1",
+        "category": ["product1"],
         "lat": 44.090982,
         "lng": 10.356762
     },
@@ -85,7 +85,7 @@
         "url": "https://www.teatroallascala.org/",
         "address": "Via Filodrammatici, 2, 20121 Milano MI, Italia",
         "phone": "+39 02 72003744",
-        "product": "product4",
+        "category": ["product4", "product1"],
         "lat": 45.465338,
         "lng": 9.189532
     },
@@ -95,7 +95,7 @@
         "url": "https://museonazionaleromano.beniculturali.it/",
         "address": "Piazza di Villa Peretti, 1, 00185 Roma RM, Italia",
         "phone": "+39 06 39967700",
-        "product": "product3",
+        "category": [],
         "lat": 41.902782,
         "lng": 12.496366
     },
@@ -105,7 +105,7 @@
         "url": "https://www.venezia.net/ponte-di-rialto.html",
         "address": "Ponte di Rialto, 30125 Venezia VE, Italia",
         "phone": "+39 041 5286200",
-        "product": "product4",
+        "category": [],
         "lat": 45.437191,
         "lng": 12.335134
     },
@@ -115,7 +115,7 @@
         "url": "https://www.turismotorino.org/it/vedere/parco-del-valentino",
         "address": "Viale Mattioli, 25, 10125 Torino TO, Italia",
         "phone": "+39 011 6660 410",
-        "product": "product1",
+        "category": ["product1"],
         "lat": 45.067284,
         "lng": 7.663112
     },
@@ -125,7 +125,7 @@
         "url": "https://www.duomofirenze.it/",
         "address": "Piazza del Duomo, 50122 Firenze FI, Italia",
         "phone": "+39 055 2302885",
-        "product": "product5",
+        "category": ["product5"],
         "lat": 43.773139,
         "lng": 11.257450
     }
