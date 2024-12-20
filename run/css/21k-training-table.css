@@ -1,3 +1,9 @@
+body {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+h1,p {
+    color: white;
+}
 .training-table {
     width: 100%;
     border-collapse: collapse;
@@ -98,4 +104,109 @@
     border-radius: 5px;
     text-transform: uppercase;
     font-family: 'Arial', sans-serif;
+}
+@media (max-width: 768px) { 
+    .target-time-input{
+        display: flex;
+    flex-direction: column;
+    }
+    .target-time-input select {
+        margin: 10px;
+    }
+    #racePace {
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+  .training-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .training-table thead {
+    display: none;
+  }
+
+  .training-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .training-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    overflow: hidden;
+  }
+
+  .training-table tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 50px 10px 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+        align-items: center;
+  }
+
+  .training-table tbody tr td:last-child {
+    border-bottom: none;
+  }
+
+  .training-table tbody tr td:first-child {
+    background: forestgreen;
+    font-weight: bold;    
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .training-table tbody tr td:nth-child(2)::after{
+    content: "Day 1";
+  }
+  .training-table tbody tr td:nth-child(3)::after{
+    content: "Day 2";
+  }
+  .training-table tbody tr td:nth-child(4)::after{
+    content: "Day 3";
+  }
+  .training-table tbody tr td:nth-child(5)::after{
+    content: "Day 4";
+  }
+  .training-table tbody tr td:nth-child(6)::after{
+    content: "Day 5";
+  }
+  .training-table tbody tr td:nth-child(7)::after{
+    content: "Day 6";
+  }
+  .training-table tbody tr td:last-child::after {
+    content: "Total km";
+  }
+  .training-table tbody tr td::after{
+    background-color: darkgreen;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    max-width: 5%;
+    text-align: center;
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-right: -45px;
+  }
+
+
+  .training-table tbody tr:first-child td {
+    color: #fff;
+    text-align: left;
+    font-size: 18px;
+  }
+
+  .training-table tbody tr td span {
+    display: block;
+    font-size: 14px;
+  }
 }
