@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano 4/5 Allenamenti a Settimana perMezza Maratona</title>
+    <link rel="stylesheet" href="css/21k-training-table.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Piano di Allenamento Mezza Maratona</h1>
+        <p>Inserisci il tempo obiettivo per la tua mezza maratona nel formato HH:MM:SS</p>
+        
+        <div class="target-time-input">
+            <input type="text" id="targetTime" placeholder="HH:MM:SS" pattern="[0-9]{1,2}:[0-9]{2}:[0-9]{2}">
+            <button onclick="generateTrainingPlan()">Genera Piano</button>
+        </div>
+        <div id="trainingPlan"></div>
+    </div>
+
+    <script src="js/21k-training-table.js"></script>
+</body>
+</html>
