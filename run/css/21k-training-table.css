@@ -85,3 +85,17 @@
 .training-table tr.recovery-week:hover {
     background-color: rgba(255, 215, 0, 0.2) !important;
 }
+
+#racePace {
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 1.2em;
+    text-align: center;
+    border: 1px solid forestgreen;
+    padding: 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
+}

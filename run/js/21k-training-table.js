@@ -7,6 +7,80 @@ const WORKOUT_TYPES = {
     RECOVERY: 'Recovery Run'
 };
 
+// Configurazione base dei km per livello e numero di allenamenti
+const BASE_KM_CONFIG = {
+    veryEasy: {
+        4: {
+            easyRun: 5,
+            tempo: 6,
+            intervals: 7,
+            longBase: 12
+        },
+        5: {
+            extraEasy: 4
+        },
+        6: {
+            extraEasy: 4
+        }
+    },
+    easy: {
+        4: {
+            easyRun: 6,
+            tempo: 7,
+            intervals: 8,
+            longBase: 14
+        },
+        5: {
+            extraEasy: 5
+        },
+        6: {
+            extraEasy: 5
+        }
+    },
+    base: {
+        4: {
+            easyRun: 7,
+            tempo: 8,
+            intervals: 9,
+            longBase: 16
+        },
+        5: {
+            extraEasy: 6
+        },
+        6: {
+            extraEasy: 6
+        }
+    },
+    hard: {
+        4: {
+            easyRun: 8,
+            tempo: 9,
+            intervals: 10,
+            longBase: 18
+        },
+        5: {
+            extraEasy: 7
+        },
+        6: {
+            extraEasy: 7
+        }
+    },
+    veryHard: {
+        4: {
+            easyRun: 9,
+            tempo: 10,
+            intervals: 11,
+            longBase: 20
+        },
+        5: {
+            extraEasy: 8
+        },
+        6: {
+            extraEasy: 8
+        }
+    }
+};
+
 // Funzione per calcolare il passo target in base al tempo obiettivo
 function calculateTargetPace(targetTime) {
     // Converti il tempo obiettivo in secondi
@@ -37,10 +111,41 @@ function calculatePaces(targetPace) {
     };
 }
 
+function getWorkoutDistance(baseLevel, workoutDays, workoutType, week) {
+    const config = BASE_KM_CONFIG[baseLevel];
+    let distance = 0;
+
+    if (workoutType === WORKOUT_TYPES.EASY) {
+        distance = config[4].easyRun;
+    } else if (workoutType === WORKOUT_TYPES.TEMPO) {
+        distance = config[4].tempo;
+    } else if (workoutType === WORKOUT_TYPES.INTERVALS) {
+        distance = config[4].intervals;
+    } else if (workoutType === WORKOUT_TYPES.LONG) {
+        distance = config[4].longBase;
+        
+        // Incremento progressivo del lungo
+        if (!isRecoveryWeek && !isTaperingWeek && week < 13) {
+            distance += week < 8 ? 1.5 : 1;
+        }
+    }
+
+    // Aggiusta la distanza per le settimane di recupero e tapering
+    if (isRecoveryWeek) {
+        distance *= 0.7;
+    } else if (isTaperingWeek) {
+        distance *= 0.6;
+    }
+
+    return Math.round(distance * 2) / 2;
+}
+
 // Funzione per generare il piano di allenamento
 function generateTrainingPlan() {
     const targetTime = document.getElementById('targetTime').value;
     const workoutDays = parseInt(document.getElementById('workoutDays').value);
+    const baseLevel = document.getElementById('baseLevel').value;
+    const config = BASE_KM_CONFIG[baseLevel];
     
     if (!targetTime) {
         alert('Inserisci il tempo obiettivo per la mezza maratona');
@@ -53,7 +158,7 @@ function generateTrainingPlan() {
     const trainingPlan = [];
 
     // Base settimanale di km per il lungo
-    let longRunBase = 14;
+    let longRunBase = config[4].longBase;  // Usa la configurazione per il lungo base
     
     for (let week = 1; week <= weeks; week++) {
         let weeklyKm = 0;
@@ -165,8 +270,8 @@ function generateTrainingPlan() {
                     case 1: // Lunedì
                         workout = {
                             type: WORKOUT_TYPES.EASY,
-                            distance: 6,
-                            description: `${WORKOUT_TYPES.EASY} 6km @${paces.easy}`
+                            distance: config[4].easyRun,  // Usa la configurazione per Easy Run
+                            description: `${WORKOUT_TYPES.EASY} ${config[4].easyRun}km @${paces.easy}`
                         };
                         break;
                     case 2: // Martedì
@@ -191,8 +296,8 @@ function generateTrainingPlan() {
                         if (!isTaperingWeek) {
                             workout = {
                                 type: WORKOUT_TYPES.TEMPO,
-                                distance: 8,
-                                description: `${WORKOUT_TYPES.TEMPO} 8km: 2km @${paces.easy} + 4km @${paces.tempo} + 2km @${paces.easy}`
+                                distance: config[4].tempo,  // Usa la configurazione per Tempo
+                                description: `${WORKOUT_TYPES.TEMPO} ${config[4].tempo}km: 2km @${paces.easy} + ${config[4].tempo-4}km @${paces.tempo} + 2km @${paces.easy}`
                             };
                         } else {
                             workout = {
@@ -211,22 +316,20 @@ function generateTrainingPlan() {
 
         // Aggiungi mercoledì e/o venerdì se richiesto
         if (workoutDays >= 5) {
-            // Inserisci l'Easy Run del mercoledì dopo martedì
             const wednesdayWorkout = {
                 type: WORKOUT_TYPES.EASY,
-                distance: 6,
-                description: `${WORKOUT_TYPES.EASY} 6km @${paces.easy}`
+                distance: config[5].extraEasy,  // Usa la configurazione per il giorno extra
+                description: `${WORKOUT_TYPES.EASY} ${config[5].extraEasy}km @${paces.easy}`
             };
             workouts.splice(2, 0, wednesdayWorkout);
             weeklyKm += wednesdayWorkout.distance;
         }
 
         if (workoutDays === 6) {
-            // Inserisci l'Easy Run del venerdì prima di sabato
             const fridayWorkout = {
                 type: WORKOUT_TYPES.EASY,
-                distance: 6,
-                description: `${WORKOUT_TYPES.EASY} 6km @${paces.easy}`
+                distance: config[6].extraEasy,  // Usa la configurazione per il giorno extra
+                description: `${WORKOUT_TYPES.EASY} ${config[6].extraEasy}km @${paces.easy}`
             };
             workouts.splice(4, 0, fridayWorkout);
             weeklyKm += fridayWorkout.distance;
@@ -307,3 +410,19 @@ function displayTrainingPlan(plan) {
     container.innerHTML = '';
     container.appendChild(table);
 }
+
+function updatePace() {
+    const targetTime = document.getElementById('targetTime').value;
+    const [hours, minutes, seconds] = targetTime.split(':').map(Number);
+    const totalMinutes = hours * 60 + minutes + seconds / 60;
+    const pacePerKm = totalMinutes / 21.0975; // Calcola il passo per km
+
+    const paceMinutes = Math.floor(pacePerKm);
+    const paceSeconds = Math.round((pacePerKm - paceMinutes) * 60);
+    const paceString = `${paceMinutes}:${paceSeconds < 10 ? '0' : ''}${paceSeconds} min/km`;
+
+    document.getElementById('racePace').textContent = `Passo gara: ${paceString}`;
+}
+
+// Chiamata iniziale per impostare il passo gara predefinito
+updatePace();
