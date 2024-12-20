@@ -40,6 +40,8 @@ function calculatePaces(targetPace) {
 // Funzione per generare il piano di allenamento
 function generateTrainingPlan() {
     const targetTime = document.getElementById('targetTime').value;
+    const workoutDays = parseInt(document.getElementById('workoutDays').value);
+    
     if (!targetTime) {
         alert('Inserisci il tempo obiettivo per la mezza maratona');
         return;
@@ -207,6 +209,29 @@ function generateTrainingPlan() {
             weeklyKm += workout.distance;
         }
 
+        // Aggiungi mercoledì e/o venerdì se richiesto
+        if (workoutDays >= 5) {
+            // Inserisci l'Easy Run del mercoledì dopo martedì
+            const wednesdayWorkout = {
+                type: WORKOUT_TYPES.EASY,
+                distance: 6,
+                description: `${WORKOUT_TYPES.EASY} 6km @${paces.easy}`
+            };
+            workouts.splice(2, 0, wednesdayWorkout);
+            weeklyKm += wednesdayWorkout.distance;
+        }
+
+        if (workoutDays === 6) {
+            // Inserisci l'Easy Run del venerdì prima di sabato
+            const fridayWorkout = {
+                type: WORKOUT_TYPES.EASY,
+                distance: 6,
+                description: `${WORKOUT_TYPES.EASY} 6km @${paces.easy}`
+            };
+            workouts.splice(4, 0, fridayWorkout);
+            weeklyKm += fridayWorkout.distance;
+        }
+
         trainingPlan.push({
             week,
             workouts,
@@ -225,7 +250,13 @@ function displayTrainingPlan(plan) {
     // Intestazione
     const header = table.createTHead();
     const headerRow = header.insertRow();
-    const headers = ['Week', 'Monday', 'Tuesday', 'Thursday', 'Saturday', 'Total Km'];
+    const workoutDays = parseInt(document.getElementById('workoutDays').value);
+    const headers = workoutDays === 6 ? 
+        ['Week', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Total Km'] :
+        workoutDays === 5 ?
+        ['Week', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Total Km'] :
+        ['Week', 'Monday', 'Tuesday', 'Thursday', 'Saturday', 'Total Km'];
+    
     headers.forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
@@ -239,22 +270,18 @@ function displayTrainingPlan(plan) {
     plan.forEach(week => {
         const row = tbody.insertRow();
         
-        // Aggiungi classe per settimane di recupero
         if (week.week === 5 || week.week === 10) {
             row.className = 'recovery-week';
         }
         
-        // Numero settimana
         const weekCell = row.insertCell();
         weekCell.textContent = `Week ${week.week}${week.week === 5 || week.week === 10 ? ' (Recovery)' : ''}`;
 
-        // Allenamenti
         week.workouts.forEach(workout => {
             const cell = row.insertCell();
             cell.textContent = workout.description;
         });
 
-        // Km totali settimanali
         const totalCell = row.insertCell();
         totalCell.textContent = `${week.totalKm} km`;
         totalKm += week.totalKm;
@@ -263,7 +290,14 @@ function displayTrainingPlan(plan) {
     // Riga totale km
     const totalRow = tbody.insertRow();
     const totalCell = totalRow.insertCell();
-    totalCell.colSpan = 5;
+    // Calcola il colspan corretto in base al numero di giorni
+    const colspanValue = {
+        4: 5,  // Week + 4 giorni
+        5: 6,  // Week + 5 giorni
+        6: 7   // Week + 6 giorni
+    }[workoutDays];
+    
+    totalCell.colSpan = colspanValue;
     totalCell.textContent = 'Total Kilometers';
     const grandTotalCell = totalRow.insertCell();
     grandTotalCell.textContent = `${Math.round(totalKm * 2) / 2} km`;

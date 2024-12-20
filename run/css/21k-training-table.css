@@ -64,6 +64,20 @@
     background-color: darkgreen;
 }
 
+.target-time-input select {
+    padding: 8px;
+    border: 1px solid forestgreen;
+    border-radius: 4px;
+    margin: 0 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.target-time-input select:focus {
+    outline: none;
+    border-color: darkgreen;
+}
+
 .training-table tr.recovery-week {
     background-color: rgba(255, 215, 0, 0.1) !important; /* Gold con bassa opacità */
 }
