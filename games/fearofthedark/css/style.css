@@ -1,0 +1,174 @@
+/* Reset CSS di base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+#game-container {
+    width: 800px;
+    height: 600px;
+    background-color: #111;
+    position: relative;
+    overflow: hidden;
+}
+
+#menu-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+}
+
+.menu-title {
+    font-size: 48px;
+    margin-bottom: 40px;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.menu-button {
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #ffd700;
+    padding: 15px 30px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #ffd700;
+    color: #000;
+}
+
+#character-creation {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 20px;
+}
+
+.creation-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.character-form {
+    padding: 20px;
+    background-color: rgba(51, 51, 51, 0.8);
+    border-radius: 5px;
+}
+
+.character-preview {
+    padding: 20px;
+    background-color: rgba(51, 51, 51, 0.8);
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffd700;
+}
+
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    background-color: #222;
+    border: 1px solid #ffd700;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.stats-display {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+}
+
+.stat-bar {
+    height: 20px;
+    background-color: #444;
+    margin: 5px 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    background-color: #ffd700;
+    transition: width 0.3s ease;
+}
+
+#game-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+}
+
+#game-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#game-ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+
+#player-stats {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.hp-bar .stat-fill {
+    background-color: #ff3333;
+}
+
+.mp-bar .stat-fill {
+    background-color: #3333ff;
+}
+
+.stat-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 1px 1px 2px black;
+} 

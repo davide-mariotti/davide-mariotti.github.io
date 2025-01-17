@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fear of the Dark</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="menu-screen">
+            <h1 class="menu-title">Fear of the Dark</h1>
+            <button class="menu-button" id="new-game">Nuova Partita</button>
+            <button class="menu-button" id="load-game">Carica Partita</button>
+            <button class="menu-button" id="settings">Impostazioni</button>
+        </div>
+
+        <div id="character-creation">
+            <div class="creation-container">
+                <div class="character-form">
+                    <h2>Crea il tuo Personaggio</h2>
+                    <div class="form-group">
+                        <label for="char-name">Nome</label>
+                        <input type="text" id="char-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="char-class">Classe</label>
+                        <select id="char-class">
+                            <option value="WARRIOR">Guerriero</option>
+                            <option value="MAGE">Mago</option>
+                            <option value="THIEF">Ladro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="char-subclass">Sottoclasse</label>
+                        <select id="char-subclass"></select>
+                    </div>
+                    <button class="menu-button" id="create-character">Crea Personaggio</button>
+                </div>
+                <div class="character-preview">
+                    <h2>Anteprima</h2>
+                    <div class="stats-display">
+                        <h3>Statistiche Base</h3>
+                        <div id="stats-container"></div>
+                    </div>
+                    <div class="class-description">
+                        <h3>Descrizione Classe</h3>
+                        <p id="class-description-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-screen" style="display: none;">
+            <canvas id="game-canvas"></canvas>
+            <div id="game-ui">
+                <div id="player-stats">
+                    <div class="stat-bar hp-bar">
+                        <div class="stat-fill"></div>
+                        <span class="stat-text">HP: 100/100</span>
+                    </div>
+                    <div class="stat-bar mp-bar">
+                        <div class="stat-fill"></div>
+                        <span class="stat-text">MP: 50/50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/character.js"></script>
+    <script src="js/sprite.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
