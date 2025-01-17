@@ -13,7 +13,7 @@ const CHARACTER_CLASSES = {
         description: 'Melee combat specialist with high durability.',
         sprites: {
             Berserker: {
-                path: 'assets/characters/warrior/berserker/',
+                path: 'assets/images/characters/warrior/berserker/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
@@ -21,11 +21,16 @@ const CHARACTER_CLASSES = {
                     jump: { frames: 3, speed: 5 },
                     attack1: { frames: 5, speed: 4 },
                     attack2: { frames: 6, speed: 4 },
-                    death: { frames: 7, speed: 10 }
+                    attack3: { frames: 6, speed: 4 },
+                    runattack: { frames: 6, speed: 4 },
+                    defend: { frames: 4, speed: 5 },
+                    protect: { frames: 4, speed: 5 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             },
             Knight: {
-                path: 'assets/characters/warrior/knight/',
+                path: 'assets/images/characters/warrior/knight/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
@@ -33,8 +38,12 @@ const CHARACTER_CLASSES = {
                     jump: { frames: 3, speed: 5 },
                     attack1: { frames: 5, speed: 4 },
                     attack2: { frames: 6, speed: 4 },
-                    shield: { frames: 4, speed: 5 },
-                    death: { frames: 7, speed: 10 }
+                    attack3: { frames: 6, speed: 4 },
+                    runattack: { frames: 6, speed: 4 },
+                    defend: { frames: 4, speed: 5 },
+                    protect: { frames: 4, speed: 5 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             }
         }
@@ -52,29 +61,36 @@ const CHARACTER_CLASSES = {
         description: 'Master of arcane arts with powerful spells.',
         sprites: {
             'Ice/Fire Mage': {
-                path: 'assets/characters/mage/ice_fire/',
+                path: 'assets/images/characters/mage/ice-fire/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
                     run: { frames: 6, speed: 6 },
                     jump: { frames: 3, speed: 5 },
-                    cast: { frames: 4, speed: 5 },
-                    fireSpell: { frames: 8, speed: 4 },
-                    iceSpell: { frames: 8, speed: 4 },
-                    death: { frames: 7, speed: 10 }
+                    attack1: { frames: 5, speed: 4 },
+                    attack2: { frames: 6, speed: 4 },
+                    charge: { frames: 4, speed: 5 },
+                    fireball: { frames: 8, speed: 4 },
+                    flamejet: { frames: 8, speed: 4 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             },
             'Wind/Healer': {
-                path: 'assets/characters/mage/wind_healer/',
+                path: 'assets/images/characters/mage/wind-healer/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
                     run: { frames: 6, speed: 6 },
                     jump: { frames: 3, speed: 5 },
-                    cast: { frames: 4, speed: 5 },
-                    heal: { frames: 8, speed: 4 },
-                    windSpell: { frames: 8, speed: 4 },
-                    death: { frames: 7, speed: 10 }
+                    attack1: { frames: 5, speed: 4 },
+                    attack2: { frames: 6, speed: 4 },
+                    charge1: { frames: 4, speed: 5 },
+                    charge2: { frames: 4, speed: 5 },
+                    magicarrow: { frames: 8, speed: 4 },
+                    magicsphere: { frames: 8, speed: 4 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             }
         }
@@ -92,29 +108,35 @@ const CHARACTER_CLASSES = {
         description: 'Agile and deadly, specializing in stealth attacks.',
         sprites: {
             Rogue: {
-                path: 'assets/characters/thief/rogue/',
+                path: 'assets/images/characters/thief/rogue/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
                     run: { frames: 6, speed: 6 },
                     jump: { frames: 3, speed: 5 },
                     attack1: { frames: 5, speed: 4 },
-                    stealth: { frames: 4, speed: 6 },
-                    backstab: { frames: 5, speed: 4 },
-                    death: { frames: 7, speed: 10 }
+                    attack2: { frames: 6, speed: 4 },
+                    blade: { frames: 5, speed: 4 },
+                    cast: { frames: 4, speed: 5 },
+                    kunai: { frames: 4, speed: 5 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             },
             Archer: {
-                path: 'assets/characters/thief/archer/',
+                path: 'assets/images/characters/thief/archer/',
                 animations: {
                     idle: { frames: 1, speed: 5 },
                     walk: { frames: 4, speed: 8 },
                     run: { frames: 6, speed: 6 },
                     jump: { frames: 3, speed: 5 },
-                    aim: { frames: 3, speed: 4 },
-                    shoot: { frames: 5, speed: 4 },
-                    dodge: { frames: 4, speed: 5 },
-                    death: { frames: 7, speed: 10 }
+                    attack1: { frames: 5, speed: 4 },
+                    attack2: { frames: 6, speed: 4 },
+                    cast: { frames: 4, speed: 5 },
+                    spine: { frames: 5, speed: 4 },
+                    eating: { frames: 4, speed: 5 },
+                    hurt: { frames: 3, speed: 3 },
+                    dead: { frames: 7, speed: 10 }
                 }
             }
         }
@@ -144,6 +166,20 @@ class Character {
 
         // Get sprite information
         this.spriteInfo = CHARACTER_CLASSES[characterClass].sprites[subclass];
+
+        this.levelSystem = new LevelSystem(this);
+        this.skillTree = new SkillTree(this);
+        this.skillPoints = 0;
+        
+        // Aggiungi statistiche base
+        this.stats = {
+            hp: 100,
+            mp: 50,
+            attack: 10,
+            defense: 5,
+            speed: 8,
+            magic: 10
+        };
     }
 
     levelUp() {
@@ -192,6 +228,8 @@ class Character {
     }
 
     getSpriteUrl(animationName) {
-        return `${this.spriteInfo.path}${animationName}.png`;
+        // Converti da camelCase a kebab-case
+        const fileName = animationName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+        return Utils.getAssetPath(`${this.spriteInfo.path}${fileName}.png`);
     }
 } 

@@ -51,6 +51,85 @@
             </div>
         </div>
 
+        <div id="settings-screen" style="display: none;">
+            <div class="settings-container">
+                <h2>Impostazioni</h2>
+                
+                <div class="settings-section">
+                    <h3>Controlli</h3>
+                    <div class="control-binding">
+                        <label>Movimento Sinistra:</label>
+                        <button class="bind-button" data-action="left">←</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Movimento Destra:</label>
+                        <button class="bind-button" data-action="right">→</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Salto:</label>
+                        <button class="bind-button" data-action="jump">Spazio</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Corsa:</label>
+                        <button class="bind-button" data-action="run">Shift</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Attacco:</label>
+                        <button class="bind-button" data-action="attack">X</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Difesa:</label>
+                        <button class="bind-button" data-action="defend">C</button>
+                    </div>
+                    <div class="control-binding">
+                        <label>Abilità Speciale:</label>
+                        <button class="bind-button" data-action="special">V</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Audio</h3>
+                    <div class="volume-control">
+                        <label>Volume Generale:</label>
+                        <input type="range" min="0" max="100" value="100" class="volume-slider" data-volume="master">
+                    </div>
+                    <div class="volume-control">
+                        <label>Musica:</label>
+                        <input type="range" min="0" max="100" value="70" class="volume-slider" data-volume="music">
+                    </div>
+                    <div class="volume-control">
+                        <label>Effetti Sonori:</label>
+                        <input type="range" min="0" max="100" value="80" class="volume-slider" data-volume="effects">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Interfaccia</h3>
+                    <div class="ui-option">
+                        <label>
+                            <input type="checkbox" checked data-ui="showHUD"> Mostra HUD
+                        </label>
+                    </div>
+                    <div class="ui-option">
+                        <label>
+                            <input type="checkbox" checked data-ui="showDamageNumbers"> Mostra Numeri Danno
+                        </label>
+                    </div>
+                    <div class="ui-option">
+                        <label>
+                            <input type="checkbox" data-ui="showFPS"> Mostra FPS
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <button class="menu-button" id="save-settings">Salva</button>
+                    <button class="menu-button" id="reset-settings">Ripristina Default</button>
+                    <button class="menu-button" id="back-to-menu">Indietro</button>
+                </div>
+            </div>
+        </div>
+
         <div id="game-screen" style="display: none;">
             <canvas id="game-canvas"></canvas>
             <div id="game-ui">
@@ -64,6 +143,168 @@
                         <span class="stat-text">MP: 50/50</span>
                     </div>
                 </div>
+                <div id="hotbar">
+                    <div class="hotbar-slot" data-slot="1" data-key="1">
+                        <div class="hotkey">1</div>
+                    </div>
+                    <div class="hotbar-slot" data-slot="2" data-key="2">
+                        <div class="hotkey">2</div>
+                    </div>
+                    <div class="hotbar-slot" data-slot="3" data-key="3">
+                        <div class="hotkey">3</div>
+                    </div>
+                    <div class="hotbar-slot" data-slot="4" data-key="4">
+                        <div class="hotkey">4</div>
+                    </div>
+                </div>
+            </div>
+            <div id="pause-menu" style="display: none;">
+                <div class="pause-container">
+                    <h2>Pausa</h2>
+                    <button class="menu-button" id="resume-game">Riprendi</button>
+                    <button class="menu-button" id="save-game">Salva Partita</button>
+                    <button class="menu-button" id="quit-game">Esci</button>
+                </div>
+                <!-- Contenitore per il menu di salvataggio -->
+                <div class="save-container" style="display: none;">
+                    <h3>Seleziona slot di salvataggio</h3>
+                    <div class="save-slots">
+                        <!-- Gli slot verranno generati dinamicamente -->
+                    </div>
+                    <button class="menu-button" id="back-to-pause">Indietro</button>
+                </div>
+            </div>
+            <div id="inventory-screen" style="display: none;">
+                <div class="inventory-container">
+                    <div class="equipment-section">
+                        <h3>Equipaggiamento</h3>
+                        <div class="equipment-slots">
+                            <div class="equip-slot" data-slot="helmet">
+                                <img src="assets/images/ui/slots/helmet.png" alt="Helmet">
+                            </div>
+                            <div class="equip-slot" data-slot="weapon">
+                                <img src="assets/images/ui/slots/weapon.png" alt="Weapon">
+                            </div>
+                            <div class="equip-slot" data-slot="armor">
+                                <img src="assets/images/ui/slots/armor.png" alt="Armor">
+                            </div>
+                            <div class="equip-slot" data-slot="boots">
+                                <img src="assets/images/ui/slots/boots.png" alt="Boots">
+                            </div>
+                            <div class="equip-slot" data-slot="accessory1">
+                                <img src="assets/images/ui/slots/accessory.png" alt="Accessory 1">
+                            </div>
+                            <div class="equip-slot" data-slot="accessory2">
+                                <img src="assets/images/ui/slots/accessory.png" alt="Accessory 2">
+                            </div>
+                        </div>
+                        <div class="character-stats">
+                            <h4>Statistiche</h4>
+                            <div class="stat-line">Attacco: <span id="stat-attack">0</span></div>
+                            <div class="stat-line">Difesa: <span id="stat-defense">0</span></div>
+                            <div class="stat-line">Velocità: <span id="stat-speed">0</span></div>
+                            <div class="stat-line">Magia: <span id="stat-magic">0</span></div>
+                        </div>
+                    </div>
+                    <div class="inventory-section">
+                        <h3>Inventario</h3>
+                        <div class="inventory-grid"></div>
+                    </div>
+                    <div class="item-tooltip" style="display: none;"></div>
+                    <button class="menu-button" id="close-inventory">Chiudi</button>
+                </div>
+            </div>
+            <div id="skill-screen" style="display: none;">
+                <div class="skill-container">
+                    <div class="character-info">
+                        <h2>Abilità di <span class="character-name"></span></h2>
+                        <div class="level-info">
+                            <p>Livello: <span class="current-level"></span></p>
+                            <p>Esperienza: <span class="current-exp"></span>/<span class="next-level-exp"></span></p>
+                            <div class="exp-bar">
+                                <div class="exp-fill"></div>
+                            </div>
+                            <p>Punti Abilità: <span class="skill-points"></span></p>
+                        </div>
+                    </div>
+                    <div class="skill-tree"></div>
+                    <button class="menu-button" id="close-skills">Chiudi</button>
+                </div>
+            </div>
+            <div id="quest-screen" style="display: none;">
+                <div class="quest-container">
+                    <h2>Diario delle Quest</h2>
+                    <div class="quest-log">
+                        <div class="active-quests"></div>
+                        <div class="completed-quests"></div>
+                    </div>
+                    <button class="menu-button" id="close-quests">Chiudi</button>
+                </div>
+            </div>
+            <div id="crafting-screen" style="display: none;">
+                <div class="crafting-container">
+                    <h2>Crafting</h2>
+                    <div class="crafting-content">
+                        <div class="recipe-list">
+                            <!-- Le ricette verranno generate dinamicamente -->
+                        </div>
+                        <div class="recipe-details">
+                            <p>Seleziona una ricetta</p>
+                        </div>
+                    </div>
+                    <button class="menu-button" id="close-crafting">Chiudi</button>
+                </div>
+            </div>
+            <div id="trading-screen" style="display: none;">
+                <div class="trading-container">
+                    <h2>Commercio con <span id="merchant-name"></span></h2>
+                    <div class="trading-content">
+                        <div class="inventories">
+                            <div class="merchant-section">
+                                <h3>Inventario Mercante</h3>
+                                <div class="merchant-inventory"></div>
+                                <div class="merchant-gold">
+                                    Oro: <span id="merchant-gold">1000</span>
+                                </div>
+                            </div>
+                            <div class="player-section">
+                                <h3>Il tuo Inventario</h3>
+                                <div class="player-inventory"></div>
+                                <div class="player-gold">
+                                    Oro: <span id="player-gold">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trade-details">
+                            <div class="item-details">
+                                <p>Seleziona un oggetto</p>
+                            </div>
+                            <div class="quantity-selector">
+                                <button id="quantity-decrease">-</button>
+                                <input type="number" id="quantity-input" value="1" min="1" max="99">
+                                <button id="quantity-increase">+</button>
+                            </div>
+                            <div class="total-price">
+                                Totale: <span id="total-price">0</span> Oro
+                            </div>
+                            <div class="trade-actions">
+                                <button id="buy-button" class="trade-button">Compra</button>
+                                <button id="sell-button" class="trade-button">Vendi</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="menu-button" id="close-trading">Chiudi</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="load-screen" style="display: none;">
+            <div class="load-container">
+                <h2>Carica Partita</h2>
+                <div class="save-slots">
+                    <!-- Gli slot verranno generati dinamicamente -->
+                </div>
+                <button class="menu-button" id="back-from-load">Indietro</button>
             </div>
         </div>
     </div>
@@ -71,11 +312,39 @@
     <!-- Scripts -->
     <script src="js/utils.js"></script>
     <script src="js/physics.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/saveManager.js"></script>
+    <script src="js/camera.js"></script>
+    <script src="js/enemies/enemy.js"></script>
+    <script src="js/enemies/orc.js"></script>
+    <script src="js/enemies/slime.js"></script>
+    <script src="js/items/item.js"></script>
+    <script src="js/items/consumable.js"></script>
+    <script src="js/items/equipment.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/ui/inventoryUI.js"></script>
     <script src="js/character.js"></script>
     <script src="js/sprite.js"></script>
     <script src="js/level.js"></script>
     <script src="js/player.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/ui/hotbarUI.js"></script>
+    <script src="js/effects/visualEffect.js"></script>
+    <script src="js/audio/audioManager.js"></script>
+    <script src="js/items/itemEffect.js"></script>
+    <script src="js/quests/quest.js"></script>
+    <script src="js/quests/questObjective.js"></script>
+    <script src="js/quests/questReward.js"></script>
+    <script src="js/quests/questManager.js"></script>
+    <script src="js/ui/questUI.js"></script>
+    <script src="js/dialogue/dialogueSystem.js"></script>
+    <script src="js/ui/dialogueUI.js"></script>
+    <script src="js/crafting/craftingSystem.js"></script>
+    <script src="js/ui/craftingUI.js"></script>
+    <script src="js/trading/merchant.js"></script>
+    <script src="js/trading/tradingSystem.js"></script>
+    <script src="js/ui/tradingUI.js"></script>
 </body>
 </html>

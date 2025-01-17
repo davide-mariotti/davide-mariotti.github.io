@@ -6,10 +6,11 @@ class Sprite {
         this.frameCount = 0;
         this.animations = {};
         this.currentAnimation = 'idle';
-        this.loadAnimations();
-        
-        // Placeholder canvas per sprite temporanei
         this.placeholderSprite = this.createPlaceholderSprite();
+        
+        this.loadAnimations().catch(error => {
+            console.error('Error loading animations:', error);
+        });
     }
 
     createPlaceholderSprite() {
@@ -18,18 +19,16 @@ class Sprite {
         canvas.height = this.frameHeight;
         const ctx = canvas.getContext('2d');
 
-        // Disegna un placeholder colorato in base alla classe
         const colors = {
-            'Warrior': '#ff0000',
-            'Mage': '#0000ff',
-            'Thief': '#00ff00'
+            'WARRIOR': '#ff0000',
+            'MAGE': '#0000ff',
+            'THIEF': '#00ff00'
         };
         const baseColor = colors[this.character.characterClass] || '#ffffff';
 
         ctx.fillStyle = baseColor;
         ctx.fillRect(0, 0, this.frameHeight, this.frameHeight);
         
-        // Aggiungi un bordo
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, this.frameHeight, this.frameHeight);
@@ -41,7 +40,8 @@ class Sprite {
         for (const [animName, animInfo] of Object.entries(this.character.spriteInfo.animations)) {
             try {
                 const image = new Image();
-                image.src = this.character.getSpriteUrl(animName);
+                const url = this.character.getSpriteUrl(animName);
+                image.src = url;
                 
                 await new Promise((resolve, reject) => {
                     image.onload = () => {
@@ -56,7 +56,6 @@ class Sprite {
                     };
                     image.onerror = () => {
                         console.warn(`Failed to load sprite: ${animName} for ${this.character.subclass}`);
-                        // Usa il placeholder per questa animazione
                         this.animations[animName] = {
                             image: this.placeholderSprite,
                             frames: 1,
@@ -90,7 +89,7 @@ class Sprite {
             ctx.save();
             if (direction === -1) {
                 ctx.scale(-1, 1);
-                x = -x - this.frameHeight;
+                x = -x - 64;
             }
             ctx.drawImage(this.placeholderSprite, x, y);
             ctx.restore();
@@ -100,7 +99,7 @@ class Sprite {
         ctx.save();
         if (direction === -1) {
             ctx.scale(-1, 1);
-            x = -x - animation.frameWidth;
+            x = -x - 64;
         }
         ctx.drawImage(
             animation.image,

@@ -13,5 +13,17 @@ const Utils = {
             img.onerror = reject;
             img.src = src;
         });
+    },
+
+    getAssetPath: (path) => {
+        path = path.replace(/^\//, '').replace(/^games\/fearofthedark\//, '');
+        
+        if (window.location.href.includes('127.0.0.1') || window.location.href.includes('localhost')) {
+            return path;
+        }
+        
+        return window.location.pathname.includes('/games/fearofthedark/') 
+            ? path 
+            : `games/fearofthedark/${path}`;
     }
 }; 
