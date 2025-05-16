@@ -165,44 +165,27 @@ h1 {
     width: 100%;
 }
 
-.category-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    padding: 0 1rem;
-}
-
-.category-button {
-    padding: 0.5rem 1rem;
+.category-select {
+    padding: 0.5rem;
     border: none;
-    border-radius: 20px;
+    border-radius: 5px;
+    background-color: #2a2a2a;
     color: white;
-    font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
-    transition: transform 0.2s, opacity 0.2s, background-color 0.2s;
-    font-size: 0.9rem;
-    background-color: #cccccc;
+    outline: none;
+    text-align: center;
+    width: auto;
 }
 
-.category-button:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-.category-button.active {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+.category-select option {
+    background-color: #2a2a2a;
+    color: white;
 }
 
 @media (max-width: 600px) {
-    .category-buttons {
-        gap: 0.3rem;
-    }
-    
-    .category-button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
+    .category-select {
+        font-size: 0.9rem;
     }
 }
 

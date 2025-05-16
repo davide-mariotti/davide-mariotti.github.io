@@ -49,40 +49,18 @@ function resetGame() {
 
 // Function to create category buttons
 function createCategoryButtons() {
-    const container = document.getElementById('categoryButtons');
+    const select = document.getElementById('categorySelect');
     
     Object.entries(categories).forEach(([key, category]) => {
-        const button = document.createElement('button');
-        button.className = 'category-button';
-        button.textContent = category.name;
-        
-        if (key === currentCategory) {
-            button.classList.add('active');
-            button.style.backgroundColor = category.color;
-        }
-        
-        button.addEventListener('click', () => {
-            // Remove active class and reset color from all buttons
-            document.querySelectorAll('.category-button').forEach(btn => {
-                btn.classList.remove('active');
-                btn.style.backgroundColor = '#cccccc';
-            });
-            
-            // Add active class and set color to clicked button
-            button.classList.add('active');
-            button.style.backgroundColor = category.color;
-            
-            // Update current category
-            currentCategory = key;
-            
-            // Reset used questions for the new category
-            usedQuestions.clear();
-            
-            // Display new question
-            displayNewQuestion();
-        });
-        
-        container.appendChild(button);
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = category.name;
+        select.appendChild(option);
+    });
+    
+    select.addEventListener('change', () => {
+        currentCategory = select.value;
+        usedQuestions.clear();
     });
 }
 
