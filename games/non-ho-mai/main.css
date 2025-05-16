@@ -19,6 +19,7 @@ body {
     max-width: 800px;
     padding: 20px;
     text-align: center;
+    position: relative;
 }
 
 h1 {
@@ -123,4 +124,122 @@ h1 {
 
 .fade-in {
     animation: fadeIn 0.5s ease-out;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.stat {
+    background-color: #2a2a2a;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.stat span:first-child {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .game-stats {
+        font-size: 1rem;
+        gap: 1rem;
+    }
+    
+    .stat {
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+.categories {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.category-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s, background-color 0.2s;
+    font-size: 0.9rem;
+    background-color: #cccccc;
+}
+
+.category-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.category-button.active {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 600px) {
+    .category-buttons {
+        gap: 0.3rem;
+    }
+    
+    .category-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+.reset-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #2a2a2a;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.reset-button:hover {
+    transform: rotate(180deg);
+    background-color: #3a3a3a;
+}
+
+.reset-button:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+@media (max-width: 600px) {
+    .reset-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1.3rem;
+        top: 15px;
+        right: 15px;
+    }
 }

@@ -8,14 +8,30 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+    <button id="resetButton" class="reset-button" title="Reset Game">↺</button>
     <div class="container">
+        
         <h1>Non Ho Mai</h1>
+        <div class="game-stats">
+            <div class="stat">
+                <span>Domande:</span>
+                <span id="questionCount">0</span>
+            </div>
+            <div class="stat">
+                <span>Tempo:</span>
+                <span id="gameTimer">00:00</span>
+            </div>
+        </div>
+        <div class="categories">
+            <div class="category-buttons" id="categoryButtons"></div>
+        </div>
         <div class="game-area">
             <div id="question" class="question"></div>
             <button id="nextQuestion" class="next-button">NEXT</button>
         </div>
     </div>
     <audio id="clickSound" src="button-sound.mp3" preload="auto"></audio>
+    <script src="categories.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
