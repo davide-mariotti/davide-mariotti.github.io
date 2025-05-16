@@ -12,6 +12,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .container {
@@ -70,6 +74,9 @@ h1 {
     letter-spacing: 3px;
     position: relative;
     z-index: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
 }
 
 .next-button:hover {
@@ -176,6 +183,9 @@ h1 {
     outline: none;
     text-align: center;
     width: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
 }
 
 .category-select option {
@@ -206,6 +216,9 @@ h1 {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
 }
 
 .reset-button:hover {
