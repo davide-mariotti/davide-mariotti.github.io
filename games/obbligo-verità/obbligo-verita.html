@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obbligo o Verità</title>
+    <link rel="stylesheet" href="obbligo-verita.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Obbligo o Verità</h1>
+        
+        <div class="counters">
+            <div class="counter truth-counter">
+                Verità: <span id="truthCount">0</span>/<span id="truthTotal">0</span>
+            </div>
+            <div class="counter dare-counter">
+                Obblighi: <span id="dareCount">0</span>/<span id="dareTotal">0</span>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="card" id="card">
+                <p id="question">Premi il pulsante per iniziare</p>
+            </div>
+            
+            <div class="buttons">
+                <button id="truthBtn" class="btn truth">Verità</button>
+                <button id="dareBtn" class="btn dare">Obbligo</button>
+            </div>
+        </div>
+
+        <div class="reset-area">
+            <button id="resetBtn" class="btn reset">Reset Domande</button>
+        </div>
+    </div>
+    <script type="module" src="./obbligo-verita.js"></script>
+</body>
+</html>
