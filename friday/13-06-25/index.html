@@ -6,88 +6,7 @@
     <title>Siena Notturna - Tour Guidato</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #e74c3c;
-            --accent-color: #3498db;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--primary-color);
-            background-color: #f8f9fa;
-        }
-
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background-color: var(--accent-color);
-        }
-
-        .timeline-item {
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .timeline-content {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .time-badge {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        .location-icon {
-            color: var(--accent-color);
-            margin-right: 5px;
-        }
-
-        .map-link {
-            color: var(--accent-color);
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        .map-link:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .timeline::before {
-                left: 30px;
-            }
-            
-            .timeline-content {
-                margin-left: 60px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container py-5">
@@ -96,26 +15,26 @@
         <div class="timeline">
             <!-- Partenza -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/01-partenza.html" class="timeline-content">
                     <span class="time-badge">18:30</span>
                     <h3><i class="fas fa-car location-icon"></i> Partenza da Empoli</h3>
                     <p>Imposta il navigatore verso: Parcheggio Santa Caterina, via Esterna di Fontebranda, Siena</p>
-                </div>
+                </a>
             </div>
 
             <!-- Parcheggio -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/02-parcheggio.html" class="timeline-content">
                     <span class="time-badge">19:30</span>
                     <h3><i class="fas fa-parking location-icon"></i> Arrivo e parcheggio</h3>
                     <p>Parcheggia al Parcheggio Santa Caterina</p>
                     <p>Prendi la risalita meccanizzata (scala mobile) → Segui indicazioni per via Fontebranda → Uscirai a fianco della Basilica di San Domenico</p>
-                </div>
+                </a>
             </div>
 
             <!-- Camminata -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/03-camminata.html" class="timeline-content">
                     <span class="time-badge">19:40-20:00</span>
                     <h3><i class="fas fa-walking location-icon"></i> Camminata fino a Piazza del Campo</h3>
                     <p>Uscito dalla scala mobile:</p>
@@ -124,63 +43,54 @@
                         <li>Alla fine, gira a sinistra su via delle Terme</li>
                         <li>Prosegui dritto fino a Piazza del Campo</li>
                     </ul>
-                    <a href="https://goo.gl/maps" class="map-link" target="_blank">
-                        <i class="fas fa-map-marker-alt"></i> Percorso Google Maps (Pedonale)
-                    </a>
-                </div>
+                </a>
             </div>
 
             <!-- Piazza del Campo -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/04-piazza-campo.html" class="timeline-content">
                     <span class="time-badge">20:00-20:15</span>
                     <h3><i class="fas fa-landmark location-icon"></i> Sosta in Piazza del Campo</h3>
                     <p>Camminate in centro alla piazza, fermatevi alla Fonte Gaia</p>
                     <p><em>Se vuoi: "Indovina in che città siamo?" 😏</em></p>
-                </div>
+                </a>
             </div>
 
             <!-- Duomo -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/05-duomo.html" class="timeline-content">
                     <span class="time-badge">20:15-20:30</span>
                     <h3><i class="fas fa-church location-icon"></i> Passeggiata verso il Duomo</h3>
                     <p>Uscite dalla piazza da via di Città (lato opposto alla torre)</p>
                     <p>Dopo 200 m, salite a sinistra in via del Capitano</p>
                     <p>Arrivo in Piazza del Duomo</p>
-                    <a href="https://goo.gl/maps" class="map-link" target="_blank">
-                        <i class="fas fa-map-marker-alt"></i> Percorso Google Maps
-                    </a>
-                </div>
+                </a>
             </div>
 
             <!-- Cena -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/06-cena.html" class="timeline-content">
                     <span class="time-badge">20:30-21:30</span>
                     <h3><i class="fas fa-utensils location-icon"></i> Cena vegana easy @ Poke House Siena</h3>
                     <p>📍 Via Banchi di Sopra, 31</p>
                     <p>4 minuti a piedi dal Duomo</p>
                     <p>Personalizza la bowl con tofu, edamame, verdure, avocado ecc.</p>
-                    <a href="https://goo.gl/maps" class="map-link" target="_blank">
-                        <i class="fas fa-map-marker-alt"></i> Tragitto Duomo → Poke House
-                    </a>
-                </div>
+                </a>
             </div>
 
             <!-- Passeggiata dopocena -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/07-passeggiata.html" class="timeline-content">
                     <span class="time-badge">21:30-22:00</span>
                     <h3><i class="fas fa-moon location-icon"></i> Passeggiata dopocena</h3>
                     <p>Esci e prosegui a piedi su via Banchi di Sopra</p>
                     <p>Dopo 200 m, arriva alla Loggia della Mercanzia (ottima vista su Croce del Travaglio)</p>
-                </div>
+                </a>
             </div>
 
             <!-- Belvedere -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/08-belvedere.html" class="timeline-content">
                     <span class="time-badge">22:00-22:30</span>
                     <h3><i class="fas fa-mountain location-icon"></i> Vista panoramica da Belvedere di San Domenico</h3>
                     <p>Da Loggia della Mercanzia:</p>
@@ -189,15 +99,12 @@
                         <li>Segui le indicazioni per la Basilica di San Domenico</li>
                         <li>Arriva al belvedere accanto al parcheggio pullman</li>
                     </ul>
-                    <a href="https://goo.gl/maps" class="map-link" target="_blank">
-                        <i class="fas fa-map-marker-alt"></i> Loggia → Belvedere San Domenico
-                    </a>
-                </div>
+                </a>
             </div>
 
             <!-- Dolce -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/09-dolce.html" class="timeline-content">
                     <span class="time-badge">22:30-23:00</span>
                     <h3><i class="fas fa-ice-cream location-icon"></i> Dolce finale (facoltativo)</h3>
                     <p>Se aperte:</p>
@@ -206,20 +113,17 @@
                         <li>Kopakabana (via dei Rossi, 54) → Gelato artigianale con opzioni vegane</li>
                     </ul>
                     <p>Altrimenti: bibita o bottiglietta d'acqua con vista, oppure niente e passeggiata tranquilla</p>
-                </div>
+                </a>
             </div>
 
             <!-- Ritorno -->
             <div class="timeline-item">
-                <div class="timeline-content">
+                <a href="steps/10-ritorno.html" class="timeline-content">
                     <span class="time-badge">23:00-23:30</span>
                     <h3><i class="fas fa-arrow-left location-icon"></i> Ritorno al parcheggio</h3>
                     <p>Rientra passando da via della Sapienza</p>
                     <p>Riprendi la risalita meccanica al Parcheggio Santa Caterina</p>
-                    <a href="https://goo.gl/maps" class="map-link" target="_blank">
-                        <i class="fas fa-map-marker-alt"></i> Belvedere → Parcheggio Santa Caterina
-                    </a>
-                </div>
+                </a>
             </div>
 
             <!-- Viaggio di ritorno -->
