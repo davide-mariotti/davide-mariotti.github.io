@@ -5,10 +5,14 @@
 }
 
 body {
+    background-color: #f8f9fa;
+    color: #333;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: var(--primary-color);
-    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 800px;
 }
 
 .timeline {
@@ -19,80 +23,91 @@ body {
 .timeline::before {
     content: '';
     position: absolute;
+    width: 2px;
+    background-color: #007bff;
+    top: 0;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background-color: var(--accent-color);
 }
 
 .timeline-item {
-    margin-bottom: 40px;
     position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .timeline-content {
     background: white;
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
     transition: transform 0.3s ease;
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--primary-color);
-    display: block;
 }
 
 .timeline-content:hover {
     transform: translateY(-5px);
-    text-decoration: none;
-    color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .time-badge {
-    background-color: var(--secondary-color);
+    display: inline-block;
+    background-color: #007bff;
     color: white;
     padding: 5px 15px;
     border-radius: 20px;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 10px;
+    font-size: 0.9em;
+    margin-bottom: 15px;
 }
 
 .location-icon {
-    color: var(--accent-color);
-    margin-right: 5px;
+    color: #007bff;
+    margin-right: 10px;
 }
 
 .map-link {
-    color: var(--accent-color);
-    text-decoration: none;
     display: inline-block;
-    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 20px 0;
+    transition: background-color 0.3s ease;
 }
 
 .map-link:hover {
-    text-decoration: underline;
+    background-color: #218838;
+    color: white;
+    text-decoration: none;
 }
 
 .navigation-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 2rem;
-    padding: 1rem 0;
+    margin-top: 30px;
+    gap: 10px;
 }
 
 .nav-button {
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #007bff;
     color: white;
-    background-color: var(--accent-color);
+    text-decoration: none;
+    border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 .nav-button:hover {
-    background-color: var(--primary-color);
+    background-color: #0056b3;
     color: white;
     text-decoration: none;
 }
@@ -104,74 +119,86 @@ body {
 
 @media (max-width: 768px) {
     .timeline::before {
-        left: 30px;
+        left: 50%;
     }
     
     .timeline-content {
-        margin-left: 60px;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+
+    .nav-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .step-container {
+        padding: 20px;
+    }
+
+    .restaurant-card,
+    .shop-card {
+        margin: 10px 0;
     }
 }
 
 .step-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .back-link {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
     text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
 }
 
 .back-link:hover {
-    text-decoration: underline;
+    color: #007bff;
+    text-decoration: none;
 }
 
 .steps-list {
-    list-style-type: none;
-    padding-left: 0;
+    padding-left: 20px;
 }
 
 .steps-list li {
-    margin-bottom: 1rem;
-    padding-left: 2rem;
-    position: relative;
-}
-
-.steps-list li:before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--accent-color);
+    margin-bottom: 10px;
 }
 
 .route-map {
-    width: 100%;
-    height: 300px;
-    background-color: #eee;
-    border-radius: 8px;
-    margin: 1rem 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: var(--accent-color);
+    background-color: #e9ecef;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.route-map i {
+    color: #007bff;
 }
 
 .checklist {
-    background-color: #e8f4f8;
+    background-color: #f8f9fa;
     border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: 20px;
+    margin: 20px 0;
 }
 
 .checklist h4 {
-    color: var(--accent-color);
-    margin-bottom: 1rem;
+    color: #007bff;
+    margin-bottom: 15px;
 }
 
 .checklist ul {
@@ -211,18 +238,28 @@ body {
 
 .fun-fact {
     background-color: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 0 8px 8px 0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.fun-fact h4 {
+    color: #856404;
+    margin-bottom: 15px;
 }
 
 .shop-card {
-    background-color: #f8f9fa;
+    background: white;
     border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid var(--accent-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.shop-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .shop-card h4 {
@@ -236,23 +273,17 @@ body {
 }
 
 .menu-item {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-top: 15px;
 }
 
 .menu-item h5 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
 .restaurant-info {
-    background-color: #e8f4f8;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
+    color: #6c757d;
+    margin: 10px 0;
 }
 
 .restaurant-info i {
