@@ -1,23 +1,41 @@
 // Array to store all questions
 let questions = [];
-let usedQuestions = new Set();
-let isButtonCooldown = false;
-const COOLDOWN_TIME = 5000; // 5 seconds in milliseconds
-let isFirstLoad = true;
-let questionCount = 0;
-let gameStartTime = null;
+// Persist usedQuestions, questionCount, and gameStartTime in sessionStorage
+let usedQuestions = new Set(JSON.parse(sessionStorage.getItem('usedQuestions') || '[]'));
+let questionCount = Number(sessionStorage.getItem('questionCount') || 0);
+let gameStartTime = sessionStorage.getItem('gameStartTime') ? new Date(sessionStorage.getItem('gameStartTime')) : null;
 let timerInterval = null;
+let isFirstLoad = true;
 let currentCategory = 'tutte';
+
+// Function to save usedQuestions to sessionStorage
+function saveUsedQuestions() {
+    sessionStorage.setItem('usedQuestions', JSON.stringify([...usedQuestions]));
+}
+// Function to save questionCount to sessionStorage
+function saveQuestionCount() {
+    sessionStorage.setItem('questionCount', questionCount);
+}
+// Function to save gameStartTime to sessionStorage
+function saveGameStartTime() {
+    if (gameStartTime) {
+        sessionStorage.setItem('gameStartTime', gameStartTime.toISOString());
+    } else {
+        sessionStorage.removeItem('gameStartTime');
+    }
+}
 
 // Function to reset the game
 function resetGame() {
     if (confirm('Sei sicuro di voler resettare il gioco? Tutti i progressi verranno persi.')) {
         // Reset all game variables
         usedQuestions.clear();
-        isButtonCooldown = false;
+        saveUsedQuestions();
         isFirstLoad = true;
         questionCount = 0;
+        saveQuestionCount();
         gameStartTime = null;
+        saveGameStartTime();
         
         // Clear intervals
         if (timerInterval) {
@@ -61,6 +79,7 @@ function createCategoryButtons() {
     select.addEventListener('change', () => {
         currentCategory = select.value;
         usedQuestions.clear();
+        saveUsedQuestions();
     });
 }
 
@@ -79,6 +98,9 @@ function updateTimer() {
 function startGameTimer() {
     if (!gameStartTime) {
         gameStartTime = new Date();
+        saveGameStartTime();
+    }
+    if (!timerInterval) {
         timerInterval = setInterval(updateTimer, 1000);
     }
 }
@@ -87,6 +109,7 @@ function startGameTimer() {
 function updateQuestionCount() {
     questionCount++;
     document.getElementById('questionCount').textContent = questionCount;
+    saveQuestionCount();
 }
 
 // Function to load questions from the text file
@@ -118,6 +141,7 @@ function getRandomQuestion() {
     // Se tutte usate, resetta
     if (availableQuestions.length === 0) {
         usedQuestions.clear();
+        saveUsedQuestions();
         availableQuestions = filteredQuestions;
     }
 
@@ -130,6 +154,7 @@ function getRandomQuestion() {
     const randomIndex = Math.floor(Math.random() * availableQuestions.length);
     const question = availableQuestions[randomIndex];
     usedQuestions.add(question);
+    saveUsedQuestions();
     return question.replace(/^\[[^\]]+\]\s*/, ''); // Rimuove il tag dalla domanda
 }
 
@@ -153,8 +178,6 @@ function playClickSound() {
 
 // Function to display a new question
 function displayNewQuestion() {
-    if (isButtonCooldown) return;
-
     const questionElement = document.getElementById('question');
     const nextButton = document.getElementById('nextQuestion');
     const question = getRandomQuestion();
@@ -179,24 +202,6 @@ function displayNewQuestion() {
     setTimeout(() => {
         questionElement.classList.remove('fade-in');
     }, 500);
-
-    // Start cooldown
-    isButtonCooldown = true;
-    nextButton.disabled = true;
-    
-    // Update button text to show countdown
-    let timeLeft = COOLDOWN_TIME / 1000;
-    const countdownInterval = setInterval(() => {
-        timeLeft--;
-        nextButton.textContent = timeLeft;
-        
-        if (timeLeft <= 0) {
-            clearInterval(countdownInterval);
-            nextButton.textContent = 'NEXT';
-            nextButton.disabled = false;
-            isButtonCooldown = false;
-        }
-    }, 1000);
 }
 
 // Initialize the game
@@ -210,6 +215,14 @@ async function initGame() {
     const resetButton = document.getElementById('resetButton');
     resetButton.addEventListener('click', resetGame);
     
+    // Restore stats from sessionStorage
+    document.getElementById('questionCount').textContent = questionCount;
+    if (gameStartTime) {
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+    } else {
+        document.getElementById('gameTimer').textContent = '00:00';
+    }
     // Clear the initial question text
     const questionElement = document.getElementById('question');
     questionElement.textContent = '';
