@@ -187,6 +187,97 @@
                 min-height: 90px;
             }
         }
+    /* Responsive mobile rules for viewport < 992px */
+    @media (max-width: 991.98px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 12px;
+        border-radius: 6px;
+      }
+
+      h1 {
+        font-size: 1.4em;
+        margin-bottom: 6px;
+      }
+
+      .subtitle { font-size: 0.95em; }
+      .race-date { font-size: 0.85em; }
+
+      .legend {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.9em;
+      }
+
+      .legend-box { width: 16px; height: 16px; }
+
+      /* Make the table behave like stacked cards on narrow screens */
+      table, thead, tbody, th, td, tr { display: block; width: 100%; }
+      thead { display: none; }
+
+      tr {
+        margin-bottom: 12px;
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      td {
+        border: none;
+        padding: 6px 0;
+        text-align: center; /* centra orizzontalmente il contenuto di ogni cella */
+        /* centro anche verticalmente usando flexbox */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 64px; /* spazio minimo per centrare verticalmente */
+      }
+
+      /* Color the Week cell same bluish used for desktop table header and center it */
+      td:first-child {
+        background: #34495e;
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+      }
+
+      /* Add day labels above workouts using CSS only (mobile-only), centered */
+      /* td indices: 1=Week, 2=Mar(tue), 3=Mer(wed), 4=Ven(fri), 5=Dom(sun), 6=KM */
+      td:nth-child(2)::before { content: "Mar"; display: block; font-weight: 700; color: #34495e; margin-bottom: 6px; text-align: center; }
+      td:nth-child(3)::before { content: "Mer"; display: block; font-weight: 700; color: #34495e; margin-bottom: 6px; text-align: center; }
+      td:nth-child(4)::before { content: "Ven"; display: block; font-weight: 700; color: #34495e; margin-bottom: 6px; text-align: center; }
+      td:nth-child(5)::before { content: "Dom"; display: block; font-weight: 700; color: #34495e; margin-bottom: 6px; text-align: center; }
+      /* Add KM tot label above the last (KM total) column */
+      td:nth-child(6)::before { content: "KM tot"; display: block; font-weight: 700; color: #34495e; margin-bottom: 6px; text-align: center; }
+
+      /* Center workout content */
+      .workout { text-align: center; }
+
+      .workout {
+        min-height: auto;
+        padding: 8px;
+        width: 100%;
+      }
+
+      .workout-type { font-size: 0.95em; }
+      .workout-details { font-size: 0.85em; }
+
+      .stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      #kmChart { height: 180px; }
+    }
     </style>
 </head>
 <body>
@@ -230,6 +321,10 @@
             <div class="stat-item">
                 <div class="stat-label">Lunghezza massima</div>
                 <div class="stat-value" id="maxkm"></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Km Tot</div>
+                <div class="stat-value" id="km"></div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Target gara</div>
@@ -358,13 +453,12 @@
                 sun: { type: "GARA", km: "21.1km", time: "1h27m-1h32m", details: "MEZZA MARATONA - Target 4:10-4:20/km" }
             }
         ];
-
         function getTypeClass(type) {
             if (type === "Corsa facile") return "easy";
             if (type === "Lungo") return "long";
-            if (type === "Ripetute") return "intervals";
+            if (type === "Ripetute" || type === "Ripetute di scarico") return "intervals";
             if (type === "Corto veloce" || type === "Scarico") return "tempo";
-            if (type === "GARA" || type === "Cronometro") return "race";
+            if (type === "Gara" || type === "Cronometro") return "race";
             return "easy";
         }
 
@@ -411,11 +505,28 @@
 
         renderChart();
 
-        function renderStats(){
-            durata.textContent=schedule.length+" settimane";
-            maxkm.textContent=Math.max(...schedule.flatMap(w=>Object.values(w).filter(v=>v.km).map(v=>parseFloat(v.km))))+" km";
-            }
-        renderStats();
+    function renderStats(){
+      // Durata (numero di settimane)
+      durata.textContent = schedule.length + " settimane";
+
+      // Lunghezza massima (massimo km in un singolo allenamento)
+      maxkm.textContent = Math.max(...schedule.flatMap(w => Object.values(w).filter(v => v.km).map(v => parseFloat(v.km)))) + " km";
+
+      // Km totali: somma di tutti i km specificati (tue/wed/fri/sun)
+      const totalKm = schedule
+        .flatMap(w => Object.values(w)
+          .filter(v => v && v.km)
+          .map(v => parseFloat(v.km)))
+        .reduce((a, b) => a + b, 0);
+
+      // Arrotonda il totale a numero intero (es. 899 invece di 899.56546)
+      const roundedKm = Math.round(totalKm);
+
+      // Imposta il valore nel DOM (elemento con id "km")
+      const kmEl = document.getElementById('km');
+      if (kmEl) kmEl.textContent = roundedKm + " km";
+    }
+    renderStats();
 
     </script>
 </body>
