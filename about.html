@@ -2,117 +2,126 @@
 <html lang="en">
 
 <head>
-    <title>dm.</title>
+    <title>Davide Mariotti | About Me</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
     <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
-    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
-    <!-- start bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- end bootstrap css -->
+
+    <!-- Icons -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
 </head>
 
 <body>
     <div id="loader"></div>
-    <!-- start nav -->
-    <div id="menu"></div>
-    <script>
-        fetch('menu.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('menu').innerHTML = data;
-            });
-    </script>
-    <!-- end nav -->
+    <app-header></app-header>
 
-    <div class="container py-5">
-        <div class="row" role="region" aria-label="section Know Who I am">
-            <div class="col-12 col-md-8 text-start">
-                <h1 class="text-center pb-3">Know Who <span class="green">I'M</span></h1>
-                <p>Hello there! My name is Davide, and I hail from San Miniato, Italy. Currently, I'm delighted to be
-                    part of the talented team at Adiacent, where I serve as a dedicated front-end developer. My
-                    educational journey has been quite enriching, having pursued specialized courses at IED and SSTI in
-                    Florence.</p>
+    <div class="container py-5 mt-5">
+        <div class="glass-panel p-4 mb-5">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-8 text-start p-4">
+                    <h1 class="text-center pb-3 text-md-start">Know Who <span class="text-gradient">I'M</span></h1>
+                    <p class="lead text-white opacity-75">Hello there! My name is Davide, and I hail from the beautiful
+                        hills of San Miniato, Italy. My journey into the digital world wasn't a straight line; it was
+                        fueled by a persistent desire to build and create.</p>
 
-                <p>Although I haven't graduated from a university, my passion for learning and honing my skills led me
-                    to complete specialized courses in relevant fields. These courses, undertaken at esteemed
-                    institutions like IED and SSTI in Florence, provided me with valuable insights and practical
-                    knowledge in my area of expertise.</p>
+                    <p class="text-white opacity-75">Currently, I am a dedicated Front-End Developer at Adiacent,
+                        where I help shape the digital presence of diverse brands through innovative web solutions.
+                        At Adiacent, I've transitioned from a builder of sites to an architect of experiences,
+                        collaborating with cross-functional teams to deliver projects that range from e-commerce
+                        platforms to bespoke internal tools.</p>
 
-                <p>As I continue to grow and evolve in my role as a front-end developer, I am grateful for the
-                    opportunities to apply the knowledge and skills acquired through my educational journey. I look
-                    forward to furthering my contributions to the dynamic world of web development at Adiacent and
-                    beyond!</p>
+                    <p class="text-white opacity-75">Although I haven't graduated from a university, my passion for
+                        learning and honing my skills led me to complete specialized courses at esteemed institutions
+                        like IED and SSTI in Florence. These provided a solid foundation in design thinking and
+                        technical execution, allowing me to bridge the gap between creative vision and code.</p>
 
-                <p>Beyond the realm of coding, I'm a passionate individual with a diverse set of interests. You can
-                    often find me immersing myself in various activities such as:</p>
+                    <p class="text-white opacity-75">As I continue to grow and evolve, I am grateful for the
+                        opportunities to apply the knowledge acquired through my educational journey. I am constantly
+                        exploring new technologies (React, Astro, Node.js) to stay at the forefront of modern web
+                        development.</p>
 
-                <ul class="Bug-list">
-                    <li>
-                        <p><i><u>Exploring the world of gaming</u></i>: Whether it's diving into the latest AAA title or
-                            enjoying a nostalgic retro game, gaming is one of my favorite pastimes.</p>
-                    </li>
-                    <li>
-                        <p><i><u>Expressing my thoughts through tech blogs:</u></i> I love sharing my insights and
-                            experiences in the tech industry through engaging blog posts. It's my way of contributing to the community and
-                            connecting with fellow enthusiasts.</p>
-                    </li>
-                    <li>
-                        <p><i><u>Embarking on exciting journeys</u></i>: Traveling is not just a hobby for me; it's an
-                            enriching experience that broadens my horizons and exposes me to diverse cultures and landscapes.</p>
-                    </li>
-                </ul>
+                    <hr class="my-4 border-secondary opacity-25">
 
-                <p>In essence, I strive to balance my professional endeavors with activities that fuel my curiosity and
-                    passion. Looking forward to exploring more opportunities and making meaningful contributions in both
-                    the tech world and beyond!</p>
+                    <h3 class="h5 mb-4 text-gradient">Interests & Hobbies</h3>
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-4">
+                            <div class="glass-panel p-3 h-100 text-center border-0"
+                                style="background: rgba(255,255,255,0.03);">
+                                <div class="h4 mb-2 text-primary">🎮</div>
+                                <div class="fw-bold text-white small">Gaming</div>
+                                <div class="text-white opacity-50 smaller" style="font-size: 0.75rem;">AAA & Retro</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="glass-panel p-3 h-100 text-center border-0"
+                                style="background: rgba(255,255,255,0.03);">
+                                <div class="h4 mb-2 text-primary">✍️</div>
+                                <div class="fw-bold text-white small">Blogging</div>
+                                <div class="text-white opacity-50 smaller" style="font-size: 0.75rem;">Tech Insights
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="glass-panel p-3 h-100 text-center border-0"
+                                style="background: rgba(255,255,255,0.03);">
+                                <div class="h4 mb-2 text-primary">🌍</div>
+                                <div class="fw-bold text-white small">Traveling</div>
+                                <div class="text-white opacity-50 smaller" style="font-size: 0.75rem;">Exploring Worlds
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 p-4 text-center">
+                    <img src="/assets/img/animated-developer.svg" alt="Developer Animation" class="img-fluid"
+                        style="max-height: 350px; filter: drop-shadow(0 0 20px rgba(0,255,136,0.3));" />
+                </div>
             </div>
-            <div class="col-12 col-md-4 p-4">
-                <img src="/assets/img/animated-developer.svg" alt="animated developer gif for about us" />
+        </div>
+
+        <div class="text-center mb-4">
+            <h2 class="section-title">Professional <span class="text-gradient">Skills</span></h2>
+
+            <div class="glass-panel p-4">
+                <div class="d-flex flex-wrap justify-content-center gap-4">
+                    <div class="skill-item">
+                        <img src="/assets/icons/acrobat.png" alt="Acrobat" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/photoshop.png" alt="Photoshop" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/illustrator.png" alt="Illustrator" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/xd.png" alt="XD" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/premiere-pro.png" alt="Premiere" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/after-effects.png" alt="After Effects" style="height: 50px;" />
+                    </div>
+                    <div class="skill-item">
+                        <img src="/assets/icons/adobe-audition.png" alt="Audition" style="height: 50px;" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container py-5 text-center">
-        <div class="row" role="region" aria-label="section Know Who I am">
-            <div class="col-12">
-                <h1 class="text-center">Professional <span class="green">Skills</span></h1>
-            </div>
-            <div class="d-flex flex-row flex-nowrap skillsGallery pb-3">
-                <div class="card card-body skill"><img src="/assets/icons/acrobat.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/photoshop.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/illustrator.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/xd.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/premiere-pro.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/after-effects.png" alt="" /></div>
-                <div class="card card-body skill"><img src="/assets/icons/adobe-audition.png" alt="" /></div>
-            </div>
-        </div>
-    </div>
+    <app-footer></app-footer>
 
-    <!-- start footer -->
-    <footer id="footer"></footer>
-    <script>
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-            });
-    </script>
-    <!-- end footer -->
-
-    <!--start script utili-->
+    <script src="/assets/js/components.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!--end script utili-->
-
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-
 </body>
 
 </html>

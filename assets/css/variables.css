@@ -1,0 +1,38 @@
+/* Design System Variables */
+:root {
+    /* Typographic Grid */
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Color Palette - Deep Forest & Emerald */
+    --color-bg-base: #020402;
+    /* Very dark green-black */
+    --color-bg-surface: #0a100c;
+    --color-bg-surface-glass: rgba(5, 20, 10, 0.7);
+    /* Darker glass for better contrast */
+
+    --color-primary: #228b22;
+    /* Forest Green */
+    --color-primary-dim: #1a6b1a;
+    /* Darker Forest */
+    --color-primary-glow: rgba(34, 139, 34, 0.4);
+
+    --color-secondary: #2ecc71;
+    /* Cohesive lighter green accent */
+
+    --color-text-main: #ffffff;
+    --color-text-muted: #ffffff;
+    /* Lighter gray for better visibility */
+
+    /* Glassmorphism Tokens */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    /* Stronger shadow */
+    --glass-blur: blur(16px);
+
+    /* Spacing & Layout */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+}

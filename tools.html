@@ -1,109 +1,131 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <title>dm.</title>
+    <title>Davide Mariotti | Tools</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
     <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Icons -->
     <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
-    <!-- start bootstrap css -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- end bootstrap css -->    
 </head>
 
 <body>
     <div id="loader"></div>
-    <!-- start nav -->
-    <div id="menu"></div>
-    <script>
-        fetch('menu.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('menu').innerHTML = data;
-        });
-    </script>
-    <!-- end nav -->
+    <app-header></app-header>
 
-    <div class="container py-5">
-        <div class="row" role="region" aria-label="section Know Who I am">
-            <div class="col-12 text-start">
-                <h1 class="text-center pb-3">My Personal <span class="green">TOOLS</span></h1>
+    <div class="container py-5 mt-5">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="section-title display-4">My Personal <span class="text-gradient">TOOLS</span></h1>
+                <p class="lead text-white opacity-75">Utilities to make life easier</p>
             </div>
-            <div class="cardsGallery pb-3">
-                <div class="card card-body"><img src="/assets/icons/case-converter.svg" alt="" />
-                    <h3>Case <span class="green">Converter</span></h3>
-                    <p>Case Converter is a versatile web tool for transforming text to various case styles. It offers
-                        quick conversions and advanced formatting options for efficient text manipulation.</p>
-                    <a href="/tools/case-converter" class="btn btn-primary" role="button">Read More</a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Tool Item Template -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/case-converter.svg" alt="Case Converter" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">Case <span class="text-gradient">Converter</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Transform text to various case styles.
+                        efficient text manipulation.</p>
+                    <a href="/tools/case-converter" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/psw-generator.svg" alt="" />
-                    <h3>Psw <span class="green">Generator</span></h3>
-                    <p>Password Generator creates secure passwords based on user preferences for length and character
-                        types (uppercase, lowercase, numbers, symbols). It assesses password security instantly, showing
-                        strength with color-coded feedback.</p>
-                    <a href="/tools/psw-generator" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/psw-generator.svg" alt="Psw Generator" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">Psw <span class="text-gradient">Generator</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Create secure passwords instantly with
+                        custom settings.</p>
+                    <a href="/tools/psw-generator" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/scrap-seo.svg" alt="" />
-                    <h3>Scrap <span class="green">Seo</span></h3>
-                    <p>This tool uses the Google Custom Search API to fetch and display search results from a specified
-                        domain, handling pagination to show all requested results.</p>
-                    <a href="/tools/scrap-seo" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/scrap-seo.svg" alt="Scrap Seo" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">Scrap <span class="text-gradient">Seo</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Fetch and display Google Custom Search
+                        results.</p>
+                    <a href="/tools/scrap-seo" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/color-vonverter.svg" alt="" />
-                    <h3>Color <span class="green">Converter</span></h3>
-                    <p>Color Converter is a tool that Converts color values between HEX, RGB, HSL, and CMYK formats.
-                        Includes copy icons for easy clipboard copying. Perfect for design and development tasks.</p>
-                    <a href="/tools/color-converter" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/color-vonverter.svg" alt="Color Converter" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">Color <span class="text-gradient">Converter</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Convert colors between HEX, RGB, HSL, and
+                        CMYK.</p>
+                    <a href="/tools/color-converter" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/wcag-contrast-calculator.svg" alt="" />
-                    <h3>WCAG <span class="green">Calculator</span></h3>
-                    <p>The WCAG Contrast Calculator evaluates color contrast between selected colors based on
-                        accessibility standards. Users can pick colors or enter hexadecimal codes. The tool checks if
-                        color combinations meet accessibility criteria for text, with visual examples provided.</p>
-                    <a href="/tools/wcag-contrast-calculator" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/wcag-contrast-calculator.svg" alt="WCAG Calculator" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">WCAG <span class="text-gradient">Calculator</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Check color contrast against accessibility
+                        standards.</p>
+                    <a href="/tools/wcag-contrast-calculator" class="btn btn-sm btn-outline-light rounded-pill">Open
+                        Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/img-optimization.svg" alt="" />
-                    <h3>IMG <span class="green">Optimizer</span></h3>
-                    <p>Image Optimization Tool lets you compress and enhance images in your browser. Upload images,
-                        adjust quality, and download optimized versions with custom filenames. It's user-friendly and
-                        secure, processing images locally for privacy. Optimize your web images effortlessly!</p>
-                    <a href="/tools/img-optimization" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/img-optimization.svg" alt="IMG Optimizer" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">IMG <span class="text-gradient">Optimizer</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Compress and enhance images locally in
+                        browser.</p>
+                    <a href="/tools/img-optimization" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/html-beautify.svg" alt="" />
-                    <h3>HTML <span class="green">Beautifier</span></h3>
-                    <p>HTML Beautifier Tool formats unorganized HTML code into neatly indented and structured HTML with
-                        a single click. Users can paste their code, click "Beautify," and copy the formatted result
-                        instantly.</p>
-                    <a href="/tools/html-beautify" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/html-beautify.svg" alt="HTML Beautifier" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">HTML <span class="text-gradient">Beautifier</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Format unorganized HTML code instantly.</p>
+                    <a href="/tools/html-beautify" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
-                <div class="card card-body"><img src="/assets/icons/weather-app.svg" alt="" />
-                    <h3>Weather <span class="green">App</span></h3>
-                    <p>Weather information app designed to provide real-time weather data for a specified city.</p>
-                    <a href="/tools/weather-app" class="btn btn-primary" role="button">Read More</a>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
+                    <img src="/assets/icons/weather-app.svg" alt="Weather App" class="mx-auto mb-3"
+                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h3 class="h5 fw-bold mb-3 text-white">Weather <span class="text-gradient">App</span></h3>
+                    <p class="small opacity-75 mb-4 flex-grow-1 text-white">Real-time weather data for any city.</p>
+                    <a href="/tools/weather-app" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- start footer -->
-    <footer id="footer"></footer>
-    <script>
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-        });
-    </script>
-    <!-- end footer -->
+    <app-footer></app-footer>
 
-    <!--start script utili-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!--end script utili-->
-
+    <script src="/assets/js/components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-
 </body>
 
 </html>
