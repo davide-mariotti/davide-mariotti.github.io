@@ -1,112 +1,125 @@
-// Get file input element
-const inputFile = document.getElementById('inputFile');
-const optimizeButton = document.getElementById('optimizeButton');
+/**
+ * Image Optimizer Logic
+ * Modernized with ES6 and standard modern APIs
+ */
 
-// Add event listener to file input for change detection
-inputFile.addEventListener('change', function() {
-    // Check if files have been selected
-    if (inputFile.files.length > 0) {
-        // Enable the optimizeButton if files are selected
-        optimizeButton.disabled = false;
+const el = {
+    input: document.getElementById('inputFile'),
+    optimizeBtn: document.getElementById('optimizeButton'),
+    fileName: document.getElementById('fileNameDisplay'),
+    qualityInput: document.getElementById('qualityInput'),
+    qualityDisplay: document.getElementById('qualityDisplay'),
+    canvas: document.getElementById('outputCanvasIMG'),
+    dropZone: document.getElementById('dropZone')
+};
 
-        // Display selected file name
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-        const fileName = inputFile.files[0].name;
-        fileNameDisplay.textContent = `Selected File: ${fileName}`;
+const ctx = el.canvas.getContext('2d');
+
+// Initial Message
+const displayInitialMessage = () => {
+    el.canvas.width = 400;
+    el.canvas.height = 200;
+    ctx.clearRect(0, 0, el.canvas.width, el.canvas.height);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.font = "14px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Preview will appear here after optimization", el.canvas.width / 2, el.canvas.height / 2);
+};
+
+displayInitialMessage();
+
+const updateQualityDisplay = () => {
+    const quality = Math.round(parseFloat(el.qualityInput.value) * 100);
+    el.qualityDisplay.textContent = `${quality}%`;
+};
+
+// Handle File selection
+el.input.addEventListener('change', () => {
+    if (el.input.files.length > 0) {
+        const file = el.input.files[0];
+        el.optimizeBtn.disabled = false;
+        el.fileName.textContent = `Selected File: ${file.name}`;
+        el.dropZone.style.borderColor = "var(--color-primary)";
     } else {
-        // Disable the optimizeButton if no files are selected
-        optimizeButton.disabled = true;
-
-        // Clear file name display
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-        fileNameDisplay.textContent = '';
+        el.optimizeBtn.disabled = true;
+        el.fileName.textContent = "Selected File: No File Uploaded";
+        el.dropZone.style.borderColor = "";
     }
 });
 
-function updateQualityDisplay() {
-    const qualityInput = document.getElementById('qualityInput');
-    const qualityDisplay = document.getElementById('qualityDisplay');
+// Drag & Drop
+el.dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    el.dropZone.classList.add('dragover');
+});
 
-    // Calculate and display the quality percentage
-    const qualityPercentage = Math.round(parseFloat(qualityInput.value) * 100);
-    qualityDisplay.textContent = `${qualityPercentage}%`;
-}
+el.dropZone.addEventListener('dragleave', () => {
+    el.dropZone.classList.remove('dragover');
+});
 
-// Function to handle file upload
-function handleFileUpload() {
-    // Trigger file input click event
-    inputFile.click();
-}
-
-async function optimizeImage() {
-    const inputElement = document.getElementById('inputFile');
-    const inputFile = inputElement.files[0];
-
-    if (!inputFile) {
-        alert('Please select an image file.');
-        return;
+el.dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    el.dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+        el.input.files = e.dataTransfer.files;
+        el.input.dispatchEvent(new Event('change'));
     }
+});
 
-    const imgElement = new Image();
-    imgElement.onload = async function() {
-        const canvas = document.getElementById('outputCanvasIMG');
-        const ctx = canvas.getContext('2d');
+const optimizeImage = async () => {
+    const file = el.input.files[0];
+    if (!file) return;
 
-        canvas.width = imgElement.width;
-        canvas.height = imgElement.height;
+    const quality = parseFloat(el.qualityInput.value);
 
-        ctx.drawImage(imgElement, 0, 0);
-
-        const qualityInput = document.getElementById('qualityInput');
-        const quality = parseFloat(qualityInput.value);
-
-        canvas.toBlob(async function(blob) {
-            const url = URL.createObjectURL(blob);
-
-            // Clear canvas before drawing optimized image
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const optimizedImg = new Image();
-            optimizedImg.onload = function() {
-                ctx.drawImage(optimizedImg, 0, 0);
-                URL.revokeObjectURL(url); // Clean up object URL
-            };
-            optimizedImg.src = url;
-
-            // Create download link with custom filename
-            const originalFileName = inputFile.name;
-            const fileExtension = originalFileName.split('.').pop(); // Get file extension
-            const fileNameWithoutExtension = originalFileName.replace('.' + fileExtension, '');
-            const formattedQuality = (quality * 100).toFixed().padStart(2, '0');
-            const optimizedFileName = `${fileNameWithoutExtension}_optimized-${formattedQuality}.${fileExtension}`;
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = optimizedFileName;
-            downloadLink.click();
-        }, 'image/jpeg', quality);
-
-    };
-
+    // Create an Image object
+    const img = new Image();
     const reader = new FileReader();
-    reader.onload = function(e) {
-        imgElement.src = e.target.result;
+
+    reader.onload = (e) => {
+        img.onload = () => {
+            // Setup canvas
+            el.canvas.width = img.width;
+            el.canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            // Convert to Blob (JPEG for compression support)
+            el.canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+
+                // Update Preview on Canvas with compressed version
+                const previewImg = new Image();
+                previewImg.onload = () => {
+                    ctx.clearRect(0, 0, el.canvas.width, el.canvas.height);
+                    ctx.drawImage(previewImg, 0, 0);
+
+                    // Trigger Download
+                    const originalName = file.name.substring(0, file.name.lastIndexOf('.'));
+                    const extension = file.name.split('.').pop();
+                    const downloadName = `${originalName}_optimized_${Math.round(quality * 100)}% .${extension}`;
+
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = downloadName;
+                    link.click();
+
+                    // Success state on button
+                    const originalBtnText = el.optimizeBtn.innerHTML;
+                    el.optimizeBtn.innerHTML = "✅ Optimized & Downloaded!";
+                    el.optimizeBtn.classList.remove('btn-primary');
+                    el.optimizeBtn.classList.add('btn-success');
+
+                    setTimeout(() => {
+                        el.optimizeBtn.innerHTML = originalBtnText;
+                        el.optimizeBtn.classList.add('btn-primary');
+                        el.optimizeBtn.classList.remove('btn-success');
+                        URL.revokeObjectURL(url);
+                    }, 3000);
+                };
+                previewImg.src = url;
+            }, 'image/jpeg', quality);
+        };
+        img.src = e.target.result;
     };
-    reader.readAsDataURL(inputFile);
-}
-
-// Get canvas element and its context
-const canvas = document.getElementById('outputCanvasIMG');
-const ctx = canvas.getContext('2d');
-
-// Function to display message on canvas
-function displayNoImageMessage() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-    ctx.fillStyle = 'black';
-    ctx.font = '15px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('No image uploaded or optimized', canvas.width / 2, canvas.height / 2);
-}
-
-// Call displayNoImageMessage initially when no image is uploaded
-displayNoImageMessage();
+    reader.readAsDataURL(file);
+};

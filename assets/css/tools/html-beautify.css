@@ -1,56 +1,92 @@
 /* - - - - - - - - - - */
-/* - -#html-beautify- - */
+/* - - HTML Beautify - - */
 /* - - - - - - - - - - */
 
-#html-beautify {
-    background-color: white;
-    border-radius: 30px;
-    width: 100%;
-    margin: 0px auto;
-    padding: 25px 65px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-  }
-  .html-area {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-  #html-beautify textarea {
-    width: 45%;
-    height: 500px;
-    padding: 10px;
-    border: 1px solid #2c9f45;
-    resize: none;
-    white-space: auto; /* Evita che il testo vada a capo */
-    overflow: auto;
-      
-}
-#html-beautify pre {
-    width: 45%;
-    height: 500px;
-    padding: 10px;
-    overflow: auto;
-    white-space: pre-wrap;
-    background-color: #f2f2f2;
-    border: 1px solid #2c9f45;
-    text-align: left;
-    overflow: auto;
-    position: relative;
-}
-#html-beautify button {
-    height: fit-content;
-    width: fit-content;
-}
-#html-beautify .copy-icon {
-    cursor: pointer;
-    width: 100%;
+.beautifier-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+#html-beautify {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  min-height: 500px;
+}
+
+@media (max-width: 992px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editor-pane {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.pane-header {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pane-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#input,
+#output {
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+  background: transparent;
+  border: none;
+  padding: 1.5rem;
+  color: var(--color-text-main);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+}
+
+#input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+#output {
+  white-space: pre;
+  overflow: auto;
+  margin: 0;
+  cursor: text;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.copy-btn-small {
+  padding: 2px 10px;
+  font-size: 0.7rem;
+}

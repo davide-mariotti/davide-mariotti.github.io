@@ -1,81 +1,75 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <title>dm.</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
-    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
-    <!-- start bootstrap css -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- end bootstrap css -->  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="/assets/css/tools/wcag-contrast-calculator.css" />
+  <title>WCAG Contrast Calculator | Davide Mariotti</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/tools/wcag-contrast-calculator.css" />
+
+  <!-- Icons -->
+  <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
 </head>
 
 <body>
-    <div id="loader"></div>
-    <!-- start nav -->
-    <div id="menu"></div>
-    <script>
-        fetch('/menu.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('menu').innerHTML = data;
-        });
-    </script>
-    <!-- end nav -->
+  <div id="loader"></div>
+  <app-header></app-header>
 
-  <div class="container py-5 text-center">
-    <div class="row" role="region" aria-label="section psw generator text">
-      <div class="col-12">
-        <h1><span class="green">WCAG</span> Contrast Calculator</h1>
-        <p>The WCAG Contrast Calculator evaluates color contrast between selected colors based on accessibility
-          standards. Users can pick colors or enter hexadecimal codes. The tool checks if color combinations meet
-          accessibility criteria for text, with visual examples provided.</p>
+  <div class="container py-5 mt-5">
+    <div class="calculator-container">
+      <div class="text-center mb-5">
+        <h1 class="section-title display-4"><span class="text-gradient">WCAG</span> Calculator</h1>
+        <p class="lead text-white opacity-75">Ensure your color choices meet web accessibility standards instantly.</p>
+      </div>
+
+      <div class="glass-panel">
         <div id="wcag-contrast-calculator">
           <div id="colorInputs">
-            <div id="colorInputs1">
-              <label for="color1">Text:</label>
-              <input type="color" id="color1" value="#000000">
-              <input type="text" id="color1Value" value="#000000">
+            <div class="color-input-group">
+              <label>Text Color</label>
+              <input type="color" id="color1" value="#00FFA3">
+              <input type="text" id="color1Value" class="hex-input" value="#00FFA3">
             </div>
-            <div id="result"></div>
-            <div id="colorInputs2">
-              <label for="color2">Background:</label>
-              <input type="color" id="color2" value="#ffffff">
-              <input type="text" id="color2Value" value="#ffffff">
+
+            <div id="result">
+              <span>Contrast Ratio</span>
+              <b id="contrast-ratio-display">--</b>
+            </div>
+
+            <div class="color-input-group">
+              <label>Background</label>
+              <input type="color" id="color2" value="#05140A">
+              <input type="text" id="color2Value" class="hex-input" value="#05140A">
             </div>
           </div>
-          <div id="colorExample"></div>
-          <div id="colorExampleResult"></div>
-        </div>
 
+          <div id="colorExample" class="text-center">
+            <!-- Preview text will be injected here -->
+          </div>
+
+          <div id="colorExampleResult">
+            <!-- Compliance results will be injected here -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  
+  <app-footer></app-footer>
 
-    <!-- start footer -->
-    <footer id="footer"></footer>
-    <script>
-        fetch('/footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-        });
-    </script>
-    <!-- end footer -->
-
-    <!--start script utili-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!--end script utili-->
-
-    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/tools/wcag-contrast-calculator.js" crossorigin="anonymous"></script>
+  <!-- Scripts -->
+  <script src="/assets/js/components.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+  <script src="/assets/js/tools/wcag-contrast-calculator.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

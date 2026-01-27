@@ -1,105 +1,120 @@
+/**
+ * Weather App Logic
+ * Modernized with ES6, async/await and localStorage API Key management
+ */
 
-function getWeather() {
-    const apiKey = '624e6840a359a69463005955d3627e2c';
-    const cityInput = document.getElementById('city');
-    const city = cityInput.value.trim() === '' ? 'Fucecchio' : cityInput.value;
+const STORAGE_KEY = 'weather_api_key';
+const DEFAULT_KEY = 'b2ed72738688945eaabeec6c00645e54'; // Fallback key
 
-    if (!city) {
-        alert('Please enter a city');
-        return;
+document.addEventListener("DOMContentLoaded", () => {
+    // Load saved key if exists
+    const savedKey = localStorage.getItem(STORAGE_KEY);
+    if (savedKey) {
+        document.getElementById('api-key-input').value = savedKey;
     }
 
-    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+    // Initial fetch for default city
+    getWeather();
+});
 
-    fetch(currentWeatherUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayWeather(data);
-        })
-        .catch(error => {
-            console.error('Error fetching current weather data:', error);
-            alert('Error fetching current weather data. Please try again.');
-        });
+const saveApiKey = () => {
+    const key = document.getElementById('api-key-input').value.trim();
+    if (key) {
+        localStorage.setItem(STORAGE_KEY, key);
+        alert('API Key saved successfully!');
+        getWeather(); // Refresh with new key
+    } else {
+        localStorage.removeItem(STORAGE_KEY);
+        alert('API Key cleared. Using default key.');
+        getWeather();
+    }
+};
 
-    fetch(forecastUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayHourlyForecast(data.list);
-        })
-        .catch(error => {
-            console.error('Error fetching hourly forecast data:', error);
-            alert('Error fetching hourly forecast data. Please try again.');
-        });
+async function getWeather() {
+    const cityInput = document.getElementById('city');
+    const weatherArea = document.getElementById('weather-display-area');
+    const statusMsg = document.getElementById('weather-status-msg');
+
+    // Priority: 1. Input Field (unsaved), 2. LocalStorage, 3. Default (hardcoded)
+    const apiKey = document.getElementById('api-key-input').value.trim() || localStorage.getItem(STORAGE_KEY) || DEFAULT_KEY;
+    const city = cityInput.value.trim() || 'Fucecchio';
+
+    statusMsg.innerHTML = '<div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading weather...</p>';
+    statusMsg.style.display = 'block';
+    weatherArea.style.display = 'none';
+
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+        const [weatherRes, forecastRes] = await Promise.all([
+            fetch(currentWeatherUrl),
+            fetch(forecastUrl)
+        ]);
+
+        const weatherData = await weatherRes.json();
+        const forecastData = await forecastRes.json();
+
+        if (weatherRes.status === 401) {
+            throw new Error("Invalid API Key or not yet active. Please check the 'Configure API Key' section below.");
+        }
+
+        if (weatherData.cod !== 200) {
+            throw new Error(weatherData.message || 'City not found');
+        }
+
+        displayWeather(weatherData);
+        displayHourlyForecast(forecastData.list);
+
+        statusMsg.style.display = 'none';
+        weatherArea.style.display = 'block';
+
+    } catch (error) {
+        console.error('Weather error:', error);
+        statusMsg.innerHTML = `<p class="text-danger">⚠️ ${error.message}</p>`;
+        // Open the settings automatically on 401 error
+        if (error.message.includes("API Key")) {
+            const apiCollapse = new bootstrap.Collapse(document.getElementById('apiConfig'), { show: true });
+        }
+    }
 }
 
 function displayWeather(data) {
-    const tempDivInfo = document.getElementById('temp-div');
-    const weatherInfoDiv = document.getElementById('weather-info');
-    const weatherIcon = document.getElementById('weather-icon');
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+    const tempDiv = document.getElementById('temp-div');
+    const infoDiv = document.getElementById('weather-info');
+    const iconImg = document.getElementById('weather-icon');
+    const cityName = document.getElementById('city-name-display');
 
-    // Clear previous content
-    weatherInfoDiv.innerHTML = '';
-    hourlyForecastDiv.innerHTML = '';
-    tempDivInfo.innerHTML = '';
+    cityName.textContent = data.name;
+    const temp = Math.round(data.main.temp);
+    const desc = data.weather[0].description;
+    const icon = data.weather[0].icon;
 
-    if (data.cod === '404') {
-        weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
-    } else {
-        const cityName = data.name;
-        const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-        const description = data.weather[0].description;
-        const iconCode = data.weather[0].icon;
-        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-
-        const temperatureHTML = `
-            <p>${temperature}°C</p>
-        `;
-
-        const weatherHtml = `
-            <p>${cityName}</p>
-            <p>${description}</p>
-        `;
-
-        tempDivInfo.innerHTML = temperatureHTML;
-        weatherInfoDiv.innerHTML = weatherHtml;
-        weatherIcon.src = iconUrl;
-        weatherIcon.alt = description;
-
-        showImage();
-    }
+    tempDiv.innerHTML = `<p>${temp}°</p>`;
+    infoDiv.textContent = desc;
+    iconImg.src = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+    iconImg.alt = desc;
 }
 
-function displayHourlyForecast(hourlyData) {
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+function displayHourlyForecast(list) {
+    const forecastDiv = document.getElementById('hourly-forecast');
+    forecastDiv.innerHTML = '';
 
-    const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+    // Get next 8 intervals (24 hours)
+    const dailyForecast = list.slice(0, 8);
 
-    next24Hours.forEach(item => {
-        const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-        const hour = dateTime.getHours();
-        const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-        const iconCode = item.weather[0].icon;
-        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+    dailyForecast.forEach(item => {
+        const time = new Date(item.dt * 1000).getHours();
+        const temp = Math.round(item.main.temp);
+        const icon = item.weather[0].icon;
 
-        const hourlyItemHtml = `
+        const html = `
             <div class="hourly-item">
-                <span>${hour}:00</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
+                <span>${time}:00</span>
+                <img src="https://openweathermap.org/img/wn/${icon}.png" alt="weather">
+                <span>${temp}°</span>
             </div>
         `;
-
-        hourlyForecastDiv.innerHTML += hourlyItemHtml;
+        forecastDiv.insertAdjacentHTML('beforeend', html);
     });
 }
-
-function showImage() {
-    const weatherIcon = document.getElementById('weather-icon');
-    weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
-}
-
-window.onload = function() {
-    getWeather();
-};

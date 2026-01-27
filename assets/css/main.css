@@ -656,12 +656,12 @@ ul.Bug-list li:nth-child(4)::before {
   color: #ffffff !important;
 }
 
-/* Force white text for everything inside glass panels, except buttons on hover */
-.glass-panel *:not(.btn):not(.btn *),
-.glass-panel p,
-.glass-panel h1,
-.glass-panel h2,
-.glass-panel h3 {
+/* Force white text for everything inside glass panels, except buttons on hover and the WCAG calculator preview */
+.glass-panel *:not(.btn):not(.btn *):not(#wcag-contrast-calculator *),
+.glass-panel p:not(#wcag-contrast-calculator p),
+.glass-panel h1:not(#wcag-contrast-calculator h1),
+.glass-panel h2:not(#wcag-contrast-calculator h2),
+.glass-panel h3:not(#wcag-contrast-calculator h3) {
   color: #ffffff !important;
 }
 
