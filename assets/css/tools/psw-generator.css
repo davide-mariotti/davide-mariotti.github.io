@@ -1,51 +1,107 @@
 /* - - - - - - - - - - */
 /* - - pswGenerator- - */
 /* - - - - - - - - - - */
+
+.generator-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 #pswGenerator {
-    background-color: white;
-    border-radius: 30px;
-    width: max-content;
-    margin: 0px auto;
-    padding: 25px 65px;
-    display: flex;
-    flex-direction: column;
-  }
-  @media screen and (max-width: 767.666px) {
-    #pswGenerator {
-      width: 100%;
-      padding: 25px;
-    }
-  }
-  #pswGenerator .form-check-input {
-    cursor: pointer;
-  }
-  #pswGenerator .form-check-input:focus {
-    border-color: #2c9f45;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 253, 93, 0.25);
-  }
-  #pswGenerator .form-check-input:checked {
-    background-color: #2c9f45; 
-    border-color: #217533;
-  }
-  
-  #pswGenerator .pswUpperCase,
-  #pswGenerator .pswLowerCase,
-  #pswGenerator .pswNumbers,
-  #pswGenerator .pswSpecialChar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-  }
-  #pswGenerator #password {
-    display: flex;
-    padding: 15px;
-    border: 0px;
-    font-size: 25px;
-    text-align: center;
-    background-color: #d3d3d36b;
-  }
-  #pswGenerator #password.green { background-color: #9eff9e; color: white;}
-  #pswGenerator #password.yellow { background-color: #fff599; color: black;}
-  #pswGenerator #password.red { background-color: #ff8a80; color: black;}
-  
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+#pswGenerator .control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#pswGenerator .control-group:last-of-type {
+  border-bottom: none;
+}
+
+#password {
+  width: 100%;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--color-text-main);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 2px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-top: 1rem;
+}
+
+/* Strength Indicators via Shadow/Borders */
+#password.green {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 20px rgba(34, 139, 34, 0.3);
+}
+
+#password.yellow {
+  border-color: #f1c40f;
+  box-shadow: 0 0 20px rgba(241, 196, 15, 0.2);
+}
+
+#password.red {
+  border-color: #e74c3c;
+  box-shadow: 0 0 20px rgba(231, 76, 60, 0.2);
+}
+
+#length {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  padding: 5px 10px;
+  width: 70px;
+  text-align: center;
+}
+
+.strength-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.7;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.green {
+  background: var(--color-primary);
+}
+
+.dot.yellow {
+  background: #f1c40f;
+}
+
+.dot.red {
+  background: #e74c3c;
+}
+
+/* Custom Switch Color */
+.form-check-input:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary-dim);
+}
