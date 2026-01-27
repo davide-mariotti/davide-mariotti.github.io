@@ -1,16 +1,63 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
+
 <head>
+    <title>Digital Jump | Davide Mariotti</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jump Game</title>
+
+    <!-- CSS -->
+    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="main.css">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+
+    <!-- Icons -->
     <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
 </head>
+
 <body>
-    <div id="game-container"></div>
+    <div id="loader"></div>
+    <app-header></app-header>
+
+    <div class="container py-5 mt-5">
+        <div class="jump-page-container">
+            <div class="text-center mb-5">
+                <h1 class="section-title display-4"><span class="text-gradient">Digital</span> Jump</h1>
+                <p class="lead text-white opacity-75">Ascend through the digital canopy. How high can you reach?</p>
+            </div>
+
+            <div class="glass-panel p-3 p-md-4">
+                <div id="game-container"></div>
+
+                <div class="game-controls-info">
+                    <div class="control-item">
+                        <span class="key-cap">←</span>
+                        <span class="key-cap">→</span>
+                        <span>Move</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 glass-panel p-4">
+                <h3 class="mb-3 text-primary">Instructions</h3>
+                <p>Jump on the emerald platforms to ascend. If you fall below the screen, the session ends. Use the
+                    screen-wrapping feature (go off one side to appear on the other) to stay alive!</p>
+            </div>
+        </div>
+    </div>
+
+    <app-footer></app-footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="/assets/js/components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
     <script src="main.js"></script>
 </body>
+
 </html>

@@ -1,3 +1,8 @@
+/**
+ * Snake Game Logic
+ * Modernized for Digital Forest Theme
+ */
+
 let dom_replay = document.querySelector("#replay");
 let dom_score = document.querySelector("#score");
 let dom_canvas = document.createElement("canvas");
@@ -6,7 +11,6 @@ canvas_container.appendChild(dom_canvas);
 let CTX = dom_canvas.getContext("2d");
 
 let W, H, scale;
-const INITIAL_SIZE = 800;
 let cells = 20;
 let cellSize;
 
@@ -14,233 +18,107 @@ let snake,
   food,
   currentHue,
   isGameOver = false,
-  tails = [],
-  score = 00,
-  maxScore = window.localStorage.getItem("maxScore") || undefined,
+  score = 0,
+  maxScore = window.localStorage.getItem("snake_highscore") || 0,
   particles = [],
-  splashingParticleCount = 20,
-  cellsCount,
   requestID;
 
-  function resizeCanvas() {
-    const container = canvas_container.getBoundingClientRect();
-    const maxSize = Math.min(container.width, container.height, 500);
-    W = H = maxSize;
-    dom_canvas.style.width = `${W}px`;
-    dom_canvas.style.height = `${H}px`;
-    scale = window.devicePixelRatio || 1;
-    dom_canvas.width = W * scale;
-    dom_canvas.height = H * scale;
-    CTX.scale(scale, scale);
-    cellSize = W / cells;
-    if (snake) {
-      snake.size = cellSize;
-    }
-    if (food) {
-      food.size = cellSize;
-    }
-  }
+function resizeCanvas() {
+  const container = canvas_container.getBoundingClientRect();
+  W = H = container.width;
+  dom_canvas.style.width = `${W}px`;
+  dom_canvas.style.height = `${H}px`;
+  scale = window.devicePixelRatio || 1;
+  dom_canvas.width = W * scale;
+  dom_canvas.height = H * scale;
+  CTX.scale(scale, scale);
+  cellSize = W / cells;
+  if (snake) snake.size = cellSize;
+  if (food) food.size = cellSize;
+}
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-let helpers = {
+const helpers = {
   Vec: class {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
-    }
-    add(v) {
-      this.x += v.x;
-      this.y += v.y;
-      return this;
-    }
-    mult(v) {
-      if (v instanceof helpers.Vec) {
-        this.x *= v.x;
-        this.y *= v.y;
-        return this;
-      } else {
-        this.x *= v;
-        this.y *= v;
-        return this;
-      }
-    }
+    constructor(x, y) { this.x = x; this.y = y; }
+    add(v) { this.x += v.x; this.y += v.y; return this; }
   },
-  isCollision(v1, v2) {
-    return v1.x === v2.x && v1.y === v2.y;
-  },
-  garbageCollector() {
-    for (let i = 0; i < particles.length; i++) {
-      if (particles[i].size <= 0) {
-        particles.splice(i, 1);
-      }
-    }
-  },
+  isCollision(v1, v2) { return v1.x === v2.x && v1.y === v2.y; },
   drawGrid() {
-    CTX.lineWidth = 1.1;
-    CTX.strokeStyle = "#2c9f4561";
-    CTX.shadowBlur = 0;
+    CTX.lineWidth = 0.5;
+    CTX.strokeStyle = "rgba(16, 185, 129, 0.1)"; // Very subtle primary green grid
     for (let i = 1; i < cells; i++) {
       let f = (W / cells) * i;
-      CTX.beginPath();
-      CTX.moveTo(f, 0);
-      CTX.lineTo(f, H);
-      CTX.stroke();
-      CTX.beginPath();
-      CTX.moveTo(0, f);
-      CTX.lineTo(W, f);
-      CTX.stroke();
-      CTX.closePath();
+      CTX.beginPath(); CTX.moveTo(f, 0); CTX.lineTo(f, H); CTX.stroke();
+      CTX.beginPath(); CTX.moveTo(0, f); CTX.lineTo(W, f); CTX.stroke();
     }
   },
-  randHue() {
-    return ~~(Math.random() * 360);
-  },
-  hsl2rgb(hue, saturation, lightness) {
-    if (hue == undefined) {
-      return [0, 0, 0];
-    }
-    var chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
-    var huePrime = hue / 60;
-    var secondComponent = chroma * (1 - Math.abs((huePrime % 2) - 1));
-
-    huePrime = ~~huePrime;
-    var red;
-    var green;
-    var blue;
-
-    if (huePrime === 0) {
-      red = chroma;
-      green = secondComponent;
-      blue = 0;
-    } else if (huePrime === 1) {
-      red = secondComponent;
-      green = chroma;
-      blue = 0;
-    } else if (huePrime === 2) {
-      red = 0;
-      green = chroma;
-      blue = secondComponent;
-    } else if (huePrime === 3) {
-      red = 0;
-      green = secondComponent;
-      blue = chroma;
-    } else if (huePrime === 4) {
-      red = secondComponent;
-      green = 0;
-      blue = chroma;
-    } else if (huePrime === 5) {
-      red = chroma;
-      green = 0;
-      blue = secondComponent;
-    }
-
-    var lightnessAdjustment = lightness - chroma / 2;
-    red += lightnessAdjustment;
-    green += lightnessAdjustment;
-    blue += lightnessAdjustment;
-
-    return [
-      Math.round(red * 255),
-      Math.round(green * 255),
-      Math.round(blue * 255)
-    ];
-  },
-  lerp(start, end, t) {
-    return start * (1 - t) + end * t;
-  }
+  randHue() { return ~~(Math.random() * 360); }
 };
 
 let KEY = {
-  ArrowUp: false,
-  ArrowRight: false,
-  ArrowDown: false,
-  ArrowLeft: false,
+  ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false,
   resetState() {
-    this.ArrowUp = false;
-    this.ArrowRight = false;
-    this.ArrowDown = false;
-    this.ArrowLeft = false;
+    this.ArrowUp = false; this.ArrowRight = false; this.ArrowDown = false; this.ArrowLeft = false;
   },
   listen() {
-    addEventListener(
-      "keydown",
-      (e) => {
-        if (e.key === "ArrowUp" && this.ArrowDown) return;
-        if (e.key === "ArrowDown" && this.ArrowUp) return;
-        if (e.key === "ArrowLeft" && this.ArrowRight) return;
-        if (e.key === "ArrowRight" && this.ArrowLeft) return;
-        this[e.key] = true;
-        Object.keys(this)
-          .filter((f) => f !== e.key && f !== "listen" && f !== "resetState")
-          .forEach((k) => {
-            this[k] = false;
-          });
-      },
-      false
-    );
+    addEventListener("keydown", (e) => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
+
+      let targetDir = null;
+      if (e.key === "ArrowUp" && !this.ArrowDown) targetDir = "ArrowUp";
+      if (e.key === "ArrowDown" && !this.ArrowUp) targetDir = "ArrowDown";
+      if (e.key === "ArrowLeft" && !this.ArrowRight) targetDir = "ArrowLeft";
+      if (e.key === "ArrowRight" && !this.ArrowLeft) targetDir = "ArrowRight";
+
+      if (targetDir) {
+        this.resetState();
+        this[targetDir] = true;
+      }
+    });
   }
 };
 
 class Snake {
-  constructor(i, type) {
+  constructor() {
     this.pos = new helpers.Vec(W / 2, H / 2);
     this.dir = new helpers.Vec(0, 0);
-    this.type = type;
-    this.index = i;
-    this.delay = 5;
+    this.delay = 7; // Slightly slower for better control
     this.size = cellSize;
-    this.color = "white";
     this.history = [];
     this.total = 1;
   }
+
   draw() {
-    let { x, y } = this.pos;
-    CTX.fillStyle = this.color;
-    CTX.shadowBlur = 20;
-    CTX.shadowColor = "rgba(255,255,255,.3 )";
-    CTX.fillRect(x, y, this.size, this.size);
+    CTX.fillStyle = "#10b981"; // Primary Green
+    CTX.shadowBlur = 10;
+    CTX.shadowColor = "rgba(16, 185, 129, 0.4)";
+    CTX.fillRect(this.pos.x + 1, this.pos.y + 1, this.size - 2, this.size - 2);
+
     CTX.shadowBlur = 0;
-    if (this.total >= 2) {
-      for (let i = 0; i < this.history.length - 1; i++) {
-        let { x, y } = this.history[i];
-        CTX.fillStyle = "rgba(225,225,225,1)";
-        CTX.fillRect(x, y, this.size, this.size);
-      }
-    }
-  }
-  walls() {
-    let { x, y } = this.pos;
-    if (x + cellSize > W) {
-      this.pos.x = 0;
-    }
-    if (y + cellSize > W) {
-      this.pos.y = 0;
-    }
-    if (y < 0) {
-      this.pos.y = H - cellSize;
-    }
-    if (x < 0) {
-      this.pos.x = W - cellSize;
-    }
-  }  
-  selfCollision() {
     for (let i = 0; i < this.history.length; i++) {
       let p = this.history[i];
-      if (helpers.isCollision(this.pos, p)) {
-        isGameOver = true;
-      }
+      CTX.fillStyle = "rgba(16, 185, 129, " + (0.4 + (i / this.history.length) * 0.6) + ")";
+      CTX.fillRect(p.x + 1, p.y + 1, this.size - 2, this.size - 2);
     }
   }
+
   update() {
     this.walls();
     this.draw();
-    this.controlls();
+    this.controls();
     if (!this.delay--) {
-      if (helpers.isCollision(this.pos, food.pos)) {
-        incrementScore();
-        particleSplash();
+      // Round positions to avoid floating point issues during collision check
+      const currentX = Math.round(this.pos.x / cellSize) * cellSize;
+      const currentY = Math.round(this.pos.y / cellSize) * cellSize;
+      const foodX = Math.round(food.pos.x / cellSize) * cellSize;
+      const foodY = Math.round(food.pos.y / cellSize) * cellSize;
+
+      if (currentX === foodX && currentY === foodY) {
+        score++;
+        dom_score.innerText = score.toString().padStart(2, "0");
         food.spawn();
         this.total++;
       }
@@ -249,24 +127,29 @@ class Snake {
         this.history[i] = this.history[i + 1];
       }
       this.pos.add(this.dir);
-      this.delay = 5;
-      this.total > 3 ? this.selfCollision() : null;
+      this.delay = 6;
+      if (this.total > 3) this.selfCollision();
     }
   }
-  controlls() {
-    let dir = this.size;
-    if (KEY.ArrowUp) {
-      this.dir = new helpers.Vec(0, -dir);
+
+  walls() {
+    if (this.pos.x + cellSize > W) this.pos.x = 0;
+    if (this.pos.y + cellSize > H) this.pos.y = 0;
+    if (this.pos.y < 0) this.pos.y = H - cellSize;
+    if (this.pos.x < 0) this.pos.x = W - cellSize;
+  }
+
+  selfCollision() {
+    for (let p of this.history) {
+      if (helpers.isCollision(this.pos, p)) isGameOver = true;
     }
-    if (KEY.ArrowDown) {
-      this.dir = new helpers.Vec(0, dir);
-    }
-    if (KEY.ArrowLeft) {
-      this.dir = new helpers.Vec(-dir, 0);
-    }
-    if (KEY.ArrowRight) {
-      this.dir = new helpers.Vec(dir, 0);
-    }
+  }
+
+  controls() {
+    if (KEY.ArrowUp) this.dir = new helpers.Vec(0, -this.size);
+    if (KEY.ArrowDown) this.dir = new helpers.Vec(0, this.size);
+    if (KEY.ArrowLeft) this.dir = new helpers.Vec(-this.size, 0);
+    if (KEY.ArrowRight) this.dir = new helpers.Vec(this.size, 0);
   }
 }
 
@@ -275,127 +158,66 @@ class Food {
     this.size = cellSize;
     this.spawn();
   }
-
   draw() {
-    let { x, y } = this.pos;
-    CTX.globalCompositeOperation = "lighter";
-    CTX.shadowBlur = 20;
-    CTX.shadowColor = this.color;
     CTX.fillStyle = this.color;
-    CTX.fillRect(x, y, this.size, this.size);
-    CTX.globalCompositeOperation = "source-over";
+    CTX.shadowBlur = 15;
+    CTX.shadowColor = this.color;
+    CTX.fillRect(this.pos.x + 2, this.pos.y + 2, this.size - 4, this.size - 4);
     CTX.shadowBlur = 0;
   }
-
   spawn() {
-    let randX = ~~(Math.random() * cells) * this.size;
-    let randY = ~~(Math.random() * cells) * this.size;
-    this.color = currentHue = `hsl(${helpers.randHue()}, 100%, 50%)`;
-    this.pos = new helpers.Vec(randX, randY);
+    this.pos = new helpers.Vec(
+      ~~(Math.random() * cells) * cellSize,
+      ~~(Math.random() * cells) * cellSize
+    );
+    this.color = `hsl(${helpers.randHue()}, 80%, 60%)`;
   }
-}
-
-class Particle {
-  constructor(pos, color, size, vel) {
-    this.pos = pos;
-    this.color = color;
-    this.size = Math.abs(size / 2);
-    this.ttl = 0;
-    this.gravity = -0.2;
-    this.vel = vel;
-  }
-  draw() {
-    let { x, y } = this.pos;
-    let hsl = this.color
-      .split("")
-      .filter((l) => l.match(/[^hsl()$% ]/g))
-      .join("")
-      .split(",")
-      .map((n) => +n);
-    let [r, g, b] = helpers.hsl2rgb(hsl[0], hsl[1] / 100, hsl[2] / 100);
-    CTX.shadowColor = `rgb(${r},${g},${b},${1})`;
-    CTX.shadowBlur = 0;
-    CTX.globalCompositeOperation = "lighter";
-    CTX.fillStyle = `rgb(${r},${g},${b},${1})`;
-    CTX.fillRect(x, y, this.size, this.size);
-    CTX.globalCompositeOperation = "source-over";
-  }
-  update() {
-    this.draw();
-    this.size -= 0.3;
-    this.ttl += 1;
-    this.pos.add(this.vel);
-    this.vel.y -= this.gravity;
-  }
-}
-
-function incrementScore() {
-  score++;
-  dom_score.innerText = score.toString().padStart(2, "0");
-}
-
-function particleSplash() {
-  for (let i = 0; i < splashingParticleCount; i++) {
-    let vel = new helpers.Vec(Math.random() * 6 - 3, Math.random() * 6 - 3);
-    let position = new helpers.Vec(food.pos.x, food.pos.y);
-    particles.push(new Particle(position, currentHue, food.size, vel));
-  }
-}
-
-function clear() {
-  CTX.clearRect(0, 0, W, H);
-}
-
-function initialize() {
-  CTX.imageSmoothingEnabled = false;
-  KEY.listen();
-  cellsCount = cells * cells;
-  resizeCanvas();
-  snake = new Snake();
-  food = new Food();
-  dom_replay.addEventListener("click", reset, false);
-  loop();
 }
 
 function loop() {
-  clear();
+  CTX.clearRect(0, 0, W, H);
   if (!isGameOver) {
-    requestID = setTimeout(loop, 1000 / 60);
+    requestID = requestAnimationFrame(loop);
     helpers.drawGrid();
     snake.update();
     food.draw();
-    for (let p of particles) {
-      p.update();
-    }
-    helpers.garbageCollector();
   } else {
-    clear();
-    gameOver();
+    showGameOver();
   }
 }
 
-function gameOver() {
-  maxScore ? null : (maxScore = score);
-  score > maxScore ? (maxScore = score) : null;
-  window.localStorage.setItem("maxScore", maxScore);
-  CTX.fillStyle = "#2c9f45";
+function showGameOver() {
+  if (score > maxScore) {
+    maxScore = score;
+    window.localStorage.setItem("snake_highscore", maxScore);
+  }
+  CTX.fillStyle = "rgba(0,0,0,0.6)";
+  CTX.fillRect(0, 0, W, H);
+
+  CTX.fillStyle = "#10b981";
   CTX.textAlign = "center";
-  CTX.font = "bold 30px Poppins, sans-serif";
-  CTX.fillText("GAME OVER", W / 2, H / 2);
-  CTX.font = "15px Poppins, sans-serif";
-  CTX.fillText(`SCORE   ${score}`, W / 2, H / 2 + 60);
-  CTX.fillText(`MAXSCORE   ${maxScore}`, W / 2, H / 2 + 80);
+  CTX.font = "bold 40px 'Outfit', sans-serif";
+  CTX.fillText("GAME OVER", W / 2, H / 2 - 20);
+
+  CTX.fillStyle = "white";
+  CTX.font = "20px 'Inter', sans-serif";
+  CTX.fillText(`Score: ${score} | Best: ${maxScore}`, W / 2, H / 2 + 30);
 }
 
 function reset() {
+  score = 0;
   dom_score.innerText = "00";
-  score = "00";
   snake = new Snake();
   food.spawn();
   KEY.resetState();
   isGameOver = false;
-  clearTimeout(requestID);
+  cancelAnimationFrame(requestID);
   loop();
 }
 
-initialize();
+// Init
+KEY.listen();
+snake = new Snake();
+food = new Food();
+dom_replay.addEventListener("click", reset);
+loop();

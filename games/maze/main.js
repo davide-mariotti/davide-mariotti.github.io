@@ -1,344 +1,288 @@
-// Constants
-const CELL_COLORS = {
-  PATH: "rgba(144, 238, 144, 0.5)",
-  WALL: "#000000",
-  END: "rgba(44, 159, 69, 0.8)"
+/**
+ * Maze Game Logic
+ * Modernized for Digital Forest Theme
+ */
+
+// Configuration
+const COLORS = {
+    PATH: "rgba(16, 185, 129, 0.3)", // Primary green semi-transparent
+    WALL: "#1a1a1a",
+    TRAIL: "rgba(16, 185, 129, 0.6)"
 };
 
-// Utility functions
+// Utilities
 const rand = (max) => Math.floor(Math.random() * max);
 const shuffle = (a) => {
-  for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 };
 
-// Image processing
-function changeBrightness(factor, sprite) {
-  const canvas = document.createElement("canvas");
-  canvas.width = sprite.width;
-  canvas.height = sprite.height;
-  const ctx = canvas.getContext("2d");
-  
-  ctx.drawImage(sprite, 0, 0);
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-
-  for (let i = 0; i < data.length; i += 4) {
-      data[i] *= factor;     // red
-      data[i + 1] *= factor; // green
-      data[i + 2] *= factor; // blue
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-  const newSprite = new Image();
-  newSprite.src = canvas.toDataURL();
-  return newSprite;
-}
-
-// Game logic
+// Maze Engine
 class Maze {
-  constructor(width, height) {
-      this.width = width;
-      this.height = height;
-      this.map = this.generateMap();
-      this.setStartEnd();
-      this.resetVisited(); // Add this line
-  }
-
-  generateMap() {
-    const map = new Array(this.height);
-    for (let y = 0; y < this.height; y++) {
-        map[y] = new Array(this.width);
-        for (let x = 0; x < this.width; x++) {
-            map[y][x] = {
-                n: false, s: false, e: false, w: false,
-                visited: false,
-                priorPos: null
-            };
-        }
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+        this.map = this.generateMap();
+        this.setStartEnd();
     }
 
-    const modDir = {
-        n: {y: -1, x: 0, o: "s"},
-        s: {y: 1, x: 0, o: "n"},
-        e: {y: 0, x: 1, o: "w"},
-        w: {y: 0, x: -1, o: "e"}
-    };
-
-    const dirs = ["n", "s", "e", "w"];
-    let pos = {x: 0, y: 0};
-    let visited = 1;
-    const totalCells = this.width * this.height;
-    
-    while (visited < totalCells) {
-        const shuffledDirs = shuffle(dirs);
-        let moved = false;
-
-        for (let i = 0; i < shuffledDirs.length; i++) {
-            const dir = shuffledDirs[i];
-            const nextPos = {
-                x: pos.x + modDir[dir].x,
-                y: pos.y + modDir[dir].y
-            };
-
-            if (this.isValidPosition(nextPos) && !map[nextPos.y][nextPos.x].visited) {
-                map[pos.y][pos.x][dir] = true;
-                map[nextPos.y][nextPos.x][modDir[dir].o] = true;
-                map[nextPos.y][nextPos.x].visited = true;
-                map[nextPos.y][nextPos.x].priorPos = {...pos};
-                pos = {...nextPos};
-                visited++;
-                moved = true;
-                break;
+    generateMap() {
+        const map = new Array(this.height);
+        for (let y = 0; y < this.height; y++) {
+            map[y] = new Array(this.width);
+            for (let x = 0; x < this.width; x++) {
+                map[y][x] = {
+                    n: false, s: false, e: false, w: false,
+                    visited: false,
+                    priorPos: null
+                };
             }
         }
 
-        if (!moved) {
-            pos = {...map[pos.y][pos.x].priorPos};
+        const modDir = {
+            n: { y: -1, x: 0, o: "s" },
+            s: { y: 1, x: 0, o: "n" },
+            e: { y: 0, x: 1, o: "w" },
+            w: { y: 0, x: -1, o: "e" }
+        };
+
+        const dirs = ["n", "s", "e", "w"];
+        let pos = { x: 0, y: 0 };
+        let visited = 1;
+        const totalCells = this.width * this.height;
+
+        map[0][0].visited = true;
+
+        while (visited < totalCells) {
+            const shuffledDirs = shuffle([...dirs]);
+            let moved = false;
+
+            for (const dir of shuffledDirs) {
+                const nextPos = {
+                    x: pos.x + modDir[dir].x,
+                    y: pos.y + modDir[dir].y
+                };
+
+                if (this.isValid(nextPos) && !map[nextPos.y][nextPos.x].visited) {
+                    map[pos.y][pos.x][dir] = true;
+                    map[nextPos.y][nextPos.x][modDir[dir].o] = true;
+                    map[nextPos.y][nextPos.x].visited = true;
+                    map[nextPos.y][nextPos.x].priorPos = { ...pos };
+                    pos = { ...nextPos };
+                    visited++;
+                    moved = true;
+                    break;
+                }
+            }
+
+            if (!moved) {
+                pos = { ...map[pos.y][pos.x].priorPos };
+            }
         }
+
+        // Clean up visited flags for game trail
+        for (let y = 0; y < this.height; y++)
+            for (let x = 0; x < this.width; x++)
+                map[y][x].visited = false;
+
+        return map;
     }
 
-    return map;
-}
-
-  isValidPosition(pos) {
-      return pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height;
-  }
-
-  setStartEnd() {
-      const cornerOptions = [
-          {x: 0, y: 0},
-          {x: 0, y: this.height - 1},
-          {x: this.width - 1, y: 0},
-          {x: this.width - 1, y: this.height - 1}
-      ];
-      [this.startCoord, this.endCoord] = shuffle(cornerOptions).slice(0, 2);
-  }
-
-  resetVisited() {
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        this.map[y][x].visited = false;
-      }
+    isValid(pos) {
+        return pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height;
     }
-  }
+
+    setStartEnd() {
+        const corners = [
+            { x: 0, y: 0 },
+            { x: 0, y: this.height - 1 },
+            { x: this.width - 1, y: 0 },
+            { x: this.width - 1, y: this.height - 1 }
+        ];
+        [this.startCoord, this.endCoord] = shuffle(corners).slice(0, 2);
+    }
 }
 
 class Player {
-    constructor(maze, cellSize, onComplete, sprite) {
+    constructor(maze, cellSize, sprite, onComplete) {
         this.maze = maze;
         this.cellSize = cellSize;
-        this.onComplete = onComplete;
         this.sprite = sprite;
-        this.position = { ...maze.startCoord };
-        this.moves = 0;
-        this.maze.map[this.position.y][this.position.x].visited = true; // Mark start position as visited
-
-        this.bindControls();
+        this.onComplete = onComplete;
+        this.reset();
     }
 
-    move(direction) {
-        const cell = this.maze.map[this.position.y][this.position.x];
-        if (cell[direction]) {
+    reset() {
+        this.pos = { ...this.maze.startCoord };
+        this.moves = 0;
+        this.maze.map[this.pos.y][this.pos.x].visited = true;
+    }
+
+    move(dir) {
+        if (gameOver) return;
+        const cell = this.maze.map[this.pos.y][this.pos.x];
+        if (cell[dir]) {
             this.moves++;
-            switch(direction) {
-                case 'n': this.position.y--; break;
-                case 's': this.position.y++; break;
-                case 'e': this.position.x++; break;
-                case 'w': this.position.x--; break;
+            switch (dir) {
+                case 'n': this.pos.y--; break;
+                case 's': this.pos.y++; break;
+                case 'e': this.pos.x++; break;
+                case 'w': this.pos.x--; break;
             }
-            
-            this.maze.map[this.position.y][this.position.x].visited = true;
-            redrawMaze(); // This function will be defined globally
-            
+            this.maze.map[this.pos.y][this.pos.x].visited = true;
+            redrawMaze();
             this.checkVictory();
         }
     }
 
     checkVictory() {
-        if (this.position.x === this.maze.endCoord.x && this.position.y === this.maze.endCoord.y) {
+        if (this.pos.x === this.maze.endCoord.x && this.pos.y === this.maze.endCoord.y) {
             this.onComplete(this.moves);
-            this.unbindControls();
         }
     }
 
     draw(ctx) {
-        const offset = this.cellSize / 50;
-        ctx.drawImage(
-            this.sprite,
-            0,
-            0,
-            this.sprite.width,
-            this.sprite.height,
-            this.position.x * this.cellSize + offset,
-            this.position.y * this.cellSize + offset,
-            this.cellSize - offset * 2,
-            this.cellSize - offset * 2
+        const pad = this.cellSize * 0.1;
+        ctx.drawImage(this.sprite,
+            this.pos.x * this.cellSize + pad,
+            this.pos.y * this.cellSize + pad,
+            this.cellSize - pad * 2,
+            this.cellSize - pad * 2
         );
-    }
-
-    bindControls() {
-        document.addEventListener("keydown", this.handleKeyDown.bind(this));
-        $("#view").swipe({
-            swipe: this.handleSwipe.bind(this),
-            threshold: 0
-        });
-    }
-
-    unbindControls() {
-        document.removeEventListener("keydown", this.handleKeyDown.bind(this));
-        $("#view").swipe("destroy");
-    }
-
-    handleKeyDown(e) {
-        switch (e.keyCode) {
-            case 37: case 65: this.move('w'); break; // left, A
-            case 38: case 87: this.move('n'); break; // up, W
-            case 39: case 68: this.move('e'); break; // right, D
-            case 40: case 83: this.move('s'); break; // down, S
-        }
-    }
-
-    handleSwipe(event, direction) {
-        switch (direction) {
-            case "left": this.move('w'); break;
-            case "up": this.move('n'); break;
-            case "right": this.move('e'); break;
-            case "down": this.move('s'); break;
-        }
     }
 }
 
-// Global variables and functions
-let maze, player;
-let mazeCanvas, ctx;
-let sprite, finishSprite;
+// Global UI handling
+let maze, player, canvas, ctx;
+let playerSprite, goalSprite;
+let gameOver = false;
+
+function init() {
+    canvas = document.getElementById("mazeCanvas");
+    ctx = canvas.getContext("2d");
+
+    playerSprite = new Image();
+    playerSprite.src = "./img/alien.png";
+
+    goalSprite = new Image();
+    goalSprite.src = "./img/spaceship.png";
+
+    Promise.all([
+        new Promise(res => playerSprite.onload = res),
+        new Promise(res => goalSprite.onload = res)
+    ]).then(makeMaze);
+
+    setupInput();
+}
+
+function makeMaze() {
+    const diff = parseInt(document.getElementById("diffSelect").value);
+    resizeCanvas();
+
+    const cellSize = canvas.width / diff;
+    maze = new Maze(diff, diff);
+    player = new Player(maze, cellSize, playerSprite, (m) => {
+        gameOver = true;
+        document.getElementById("moves").textContent = `Navigation successful in ${m} steps.`;
+        const container = document.getElementById("Message-Container");
+        container.classList.add("visible");
+    });
+
+    gameOver = false;
+    redrawMaze();
+}
+
+function resizeCanvas() {
+    const view = document.getElementById("view");
+    const container = document.getElementById("maze-wrapper");
+    const size = Math.min(view.offsetWidth, window.innerHeight * 0.6);
+    canvas.width = size;
+    canvas.height = size;
+    if (player) player.cellSize = canvas.width / maze.width;
+}
 
 function redrawMaze() {
-    ctx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-    
-    // Draw maze
-    ctx.strokeStyle = CELL_COLORS.WALL;
-    ctx.lineWidth = player.cellSize / 40;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw trail
+    for (let y = 0; y < maze.height; y++) {
+        for (let x = 0; x < maze.width; x++) {
+            if (maze.map[y][x].visited) {
+                ctx.fillStyle = COLORS.PATH;
+                ctx.fillRect(x * player.cellSize, y * player.cellSize, player.cellSize, player.cellSize);
+            }
+        }
+    }
+
+    // Draw walls
+    ctx.strokeStyle = COLORS.WALL;
+    ctx.lineWidth = Math.max(2, player.cellSize / 10);
+    ctx.lineCap = "round";
 
     for (let y = 0; y < maze.height; y++) {
         for (let x = 0; x < maze.width; x++) {
             const cell = maze.map[y][x];
-            const cellX = x * player.cellSize;
-            const cellY = y * player.cellSize;
-
-            if (cell.visited) {
-                ctx.fillStyle = CELL_COLORS.PATH;
-                ctx.fillRect(cellX, cellY, player.cellSize, player.cellSize);
-            }
+            const x1 = x * player.cellSize;
+            const y1 = y * player.cellSize;
+            const x2 = x1 + player.cellSize;
+            const y2 = y1 + player.cellSize;
 
             ctx.beginPath();
-            if (!cell.n) ctx.moveTo(cellX, cellY), ctx.lineTo(cellX + player.cellSize, cellY);
-            if (!cell.s) ctx.moveTo(cellX, cellY + player.cellSize), ctx.lineTo(cellX + player.cellSize, cellY + player.cellSize);
-            if (!cell.e) ctx.moveTo(cellX + player.cellSize, cellY), ctx.lineTo(cellX + player.cellSize, cellY + player.cellSize);
-            if (!cell.w) ctx.moveTo(cellX, cellY), ctx.lineTo(cellX, cellY + player.cellSize);
+            if (!cell.n) { ctx.moveTo(x1, y1); ctx.lineTo(x2, y1); }
+            if (!cell.s) { ctx.moveTo(x1, y2); ctx.lineTo(x2, y2); }
+            if (!cell.e) { ctx.moveTo(x2, y1); ctx.lineTo(x2, y2); }
+            if (!cell.w) { ctx.moveTo(x1, y1); ctx.lineTo(x1, y2); }
             ctx.stroke();
         }
     }
 
-    // Draw end sprite
-    const offset = player.cellSize / 50;
-    ctx.drawImage(
-        finishSprite,
-        2,
-        2,
-        finishSprite.width,
-        finishSprite.height,
-        maze.endCoord.x * player.cellSize + offset,
-        maze.endCoord.y * player.cellSize + offset,
-        player.cellSize - offset * 2,
-        player.cellSize - offset * 2
+    // Draw goal
+    const pad = player.cellSize * 0.1;
+    ctx.drawImage(goalSprite,
+        maze.endCoord.x * player.cellSize + pad,
+        maze.endCoord.y * player.cellSize + pad,
+        player.cellSize - pad * 2,
+        player.cellSize - pad * 2
     );
 
-    // Draw player
     player.draw(ctx);
 }
 
-function makeMaze() {
-    const diffSelect = document.getElementById("diffSelect");
-    const difficulty = parseInt(diffSelect.value);
-    const cellSize = mazeCanvas.width / difficulty;
+function setupInput() {
+    window.addEventListener("keydown", (e) => {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
+        switch (e.key) {
+            case "ArrowUp": case "w": player.move('n'); break;
+            case "ArrowDown": case "s": player.move('s'); break;
+            case "ArrowLeft": case "a": player.move('w'); break;
+            case "ArrowRight": case "d": player.move('e'); break;
+        }
+    });
 
-    maze = new Maze(difficulty, difficulty);
-    player = new Player(maze, cellSize, displayVictoryMess, sprite);
-
-    redrawMaze();
-
-    document.getElementById("mazeContainer").style.opacity = "100";
-}
-
-// Game initialization and management
-function initGame() {
-  mazeCanvas = document.getElementById("mazeCanvas");
-  ctx = mazeCanvas.getContext("2d");
-  resizeCanvas();
-  loadSprites(() => {
-      makeMaze();
-  });
-}
-
-function resizeCanvas() {
-  const view = document.getElementById("view");
-  const size = Math.min(view.offsetWidth, view.offsetHeight) - 20;
-  mazeCanvas.width = size;
-  mazeCanvas.height = size;
-}
-
-function loadSprites(callback) {
-  let loaded = 0;
-  const onLoad = () => {
-      loaded++;
-      if (loaded === 2) callback();
-  };
-
-  sprite = loadImage("./img/alien.png", () => {
-      sprite = changeBrightness(1.2, sprite);
-      onLoad();
-  });
-
-  finishSprite = loadImage("./img/spaceship.png", () => {
-      finishSprite = changeBrightness(1.1, finishSprite);
-      onLoad();
-  });
-}
-
-function loadImage(src, onload) {
-  const img = new Image();
-  img.onload = onload;
-  img.src = src + "?" + new Date().getTime();
-  return img;
-}
-
-function displayVictoryMess(moves) {
-  document.getElementById("moves").textContent = `You Moved ${moves} Steps.`;
-  toggleVisibility("Message-Container");
+    $("#view").swipe({
+        swipe: (event, direction) => {
+            switch (direction) {
+                case "up": player.move('n'); break;
+                case "down": player.move('s'); break;
+                case "left": player.move('w'); break;
+                case "right": player.move('e'); break;
+            }
+        },
+        threshold: 20
+    });
 }
 
 function toggleVisibility(id) {
-  const element = document.getElementById(id);
-  if (element.style.visibility === "visible") {
-      element.style.visibility = "hidden";
-      makeMaze(); // Automatically start a new maze when hiding the message
-  } else {
-      element.style.visibility = "visible";
-  }
+    const el = document.getElementById(id);
+    el.classList.remove("visible");
+    makeMaze();
 }
 
-window.onload = initGame;
+window.onload = init;
 window.onresize = () => {
-  resizeCanvas();
-  if (maze) {
-      const cellSize = mazeCanvas.width / maze.width;
-      player.cellSize = cellSize;
-      ctx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-      redrawMaze();
-  }
+    if (!maze) return;
+    makeMaze();
 };

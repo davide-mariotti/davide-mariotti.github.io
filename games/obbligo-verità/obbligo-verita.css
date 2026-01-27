@@ -1,158 +1,128 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* - - - - - - - - - - */
+/* - - Obbligo Verità - */
+/* - - - - - - - - - - */
+
+.obbligo-page-container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    min-height: 100vh;
+/* Card Styling */
+.game-card-display {
+    min-height: 200px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s;
 }
 
-.container {
-    width: 100%;
-    max-width: 500px;
+.question-text {
+    font-size: 1.8rem;
+    line-height: 1.4;
+    font-weight: 600;
+    color: white;
     text-align: center;
 }
 
-h1 {
-    color: white;
-    margin-bottom: 20px;
-    font-size: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+/* Action Buttons */
+.action-buttons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.counters {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.counter {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: 15px;
-    color: white;
-    font-size: 0.9rem;
-    backdrop-filter: blur(5px);
-}
-
-.truth-counter {
-    border: 1px solid #4CAF50;
-}
-
-.dare-counter {
-    border: 1px solid #f44336;
-}
-
-.game-area {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px 20px;
-    margin-bottom: 20px;
-    min-height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-#question {
-    font-size: 1.2rem;
-    color: #333;
-    line-height: 1.5;
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn {
-    padding: 12px 25px;
+.choice-btn {
+    padding: 1.5rem;
     border: none;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
+    border-radius: var(--radius-md);
+    font-size: 1.2rem;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
-.btn:disabled {
-    opacity: 0.5;
+.btn-truth {
+    background: var(--color-primary);
+    color: black;
+    box-shadow: 0 0 20px var(--color-primary-glow);
+}
+
+.btn-truth:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-3px);
+}
+
+.btn-dare {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.btn-dare:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.choice-btn:disabled {
+    opacity: 0.3;
     cursor: not-allowed;
     transform: none !important;
-    box-shadow: none !important;
 }
 
-.truth {
-    background: #4CAF50;
+/* Stats */
+.counters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
-.dare {
-    background: #f44336;
+.counter-glass {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
 }
 
-.reset {
-    background: #9c27b0;
-    font-size: 0.9rem;
-    padding: 10px 20px;
+.counter-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    display: block;
+    margin-bottom: 0.2rem;
 }
 
-.btn:not(:disabled):hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+.counter-val {
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
-.btn:not(:disabled):active {
-    transform: scale(0.95);
+/* Reset Button */
+.reset-container {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.reset-area {
-    margin-top: 10px;
-}
-
-@media (max-width: 480px) {
-    .buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-    }
-    
-    h1 {
-        font-size: 1.5rem;
-    }
-    
-    #question {
-        font-size: 1rem;
+@media (max-width: 600px) {
+    .action-buttons-row {
+        grid-template-columns: 1fr;
     }
 
-    .counters {
-        flex-direction: column;
-        gap: 10px;
+    .question-text {
+        font-size: 1.4rem;
+    }
+
+    .choice-btn {
+        padding: 1.2rem;
     }
 }

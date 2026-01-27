@@ -1,152 +1,78 @@
-@font-face {
-    font-family: "game";
-    src: url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;800&display=swap");
-  }
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-  button:focus {
-    outline: 0;
-  }
-  
-  html,
-  body {
-    height: 100%;
-    font-family: "Poppins", sans-serif;
-    color: #6e7888;
-  }
-  body {
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    min-height: 100vh;
-    margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  canvas {
-    background-color: #181825;
-  }
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 800px;
-    height: auto;
-  }
-  #ui {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 500px;
-    margin-top: 10px;
-  }
-  h2 {
-    font-size: 14px;
-    letter-spacing: 4px;
-    margin-bottom: 5px;
-    /* transform: rotate(270deg); */
-  }
-  #score {
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: 800;
-    transform: rotate(-90deg);
-  }
-  .noselect {
-    user-select: none;
-  }
-  #replay {
-    font-size: 14px;
-    padding: 8px 16px;
-    background: #2c9f45;
-    border: none;
-    color: white;
-    border-radius: 40px;
-    font-weight: 600;
-    transform: none;
-    cursor: pointer;
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    margin-right: 10px;
-  }
-  #replay:hover {
-    background: #217533;
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  #replay svg {
-    margin-right: 8px;
-  }
-  @media (max-width: 600px) {
-    body {
-        padding: 5px;
-    }
-    .wrapper {
-        flex-direction: column;
-    }
+/* - - - - - - - - - - */
+/* - - - Snake Game - - - */
+/* - - - - - - - - - - */
 
-    #ui {
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        max-width: 95vw;
-        margin-top: 10px;
-    }
+.snake-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-    #replay {
-        font-size: 12px;
-        padding: 6px 12px;
-        margin-bottom: 0;
-        margin-right: 0;
-    }
+#snake-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
 
-    #score {
-        font-size: 20px;
-        margin-left: 0;
-    }
-    #author {
-        font-size: 10px;
-        margin-top: 10px;
-    }
-  }
-  #author {
-    width: 100%;
-    bottom: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: inherit;
-    text-transform: uppercase;    
-    flex-direction: column;
-  }
-  #author span {
-    font-size: 10px;
-    margin-left: 20px;
-    color: inherit;
-    letter-spacing: 4px;
-  }
-  #author h1 {
-    font-size: 25px;
-  }
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  #canvas {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    aspect-ratio: 1 / 1;
-  }
+#canvas {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* UI Panel */
+.snake-ui {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.score-box {
+  text-align: right;
+}
+
+.score-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.5;
+  display: block;
+}
+
+#score {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.game-instructions {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.key-hint {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: white;
+}
