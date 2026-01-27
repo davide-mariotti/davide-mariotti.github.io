@@ -21,8 +21,22 @@ body {
 }
 
 .btn {
-  border: 0px;
+  border: 1px solid transparent;
+  /* Allow borders for outline buttons */
   font-family: "Raleway", sans-serif;
+}
+
+.btn-outline-light {
+  border: 2px solid rgba(255, 255, 255, 0.4) !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: var(--color-bg-base) !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .btn.btn-primary {

@@ -1,98 +1,118 @@
-function convertToUppercase() {
-    var inputText = document.getElementById("inputText").value;
-    var outputText = inputText.toUpperCase();
-    document.getElementById("outputText").value = outputText;
-}
+/**
+ * Case Converter Logic
+ * Modernized with ES6 and Navigator Clipboard API
+ */
 
-function convertToLowercase() {
-    var inputText = document.getElementById("inputText").value;
-    var outputText = inputText.toLowerCase();
-    document.getElementById("outputText").value = outputText;
-}
+const getElements = () => ({
+    input: document.getElementById("inputText"),
+    output: document.getElementById("outputText"),
+    count: document.getElementById("characterCount")
+});
 
-function convertToCamelcase() {
-    var inputText = document.getElementById("inputText").value;
-    var words = inputText.split(" ");
-    var camelCaseWords = words.map(function (word, index) {
-        if (index === 0) {
-            return word.toLowerCase();
-        } else {
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }
+const updateCharacterCount = () => {
+    const { input, count } = getElements();
+    const length = input.value.length;
+    count.textContent = `${length} Characters`;
+};
+
+const setOutput = (text) => {
+    const { output } = getElements();
+    output.value = text;
+};
+
+const convertToUppercase = () => {
+    const { input } = getElements();
+    setOutput(input.value.toUpperCase());
+};
+
+const convertToLowercase = () => {
+    const { input } = getElements();
+    setOutput(input.value.toLowerCase());
+};
+
+const convertToCamelcase = () => {
+    const { input } = getElements();
+    const text = input.value;
+    const words = text.split(/\s+/);
+    const camelCase = words.map((word, index) => {
+        if (index === 0) return word.toLowerCase();
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join("");
+    setOutput(camelCase);
+};
+
+const convertToSentenceCase = () => {
+    const { input } = getElements();
+    const text = input.value.toLowerCase();
+    const sentenceCase = text.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase());
+    setOutput(sentenceCase);
+};
+
+const convertToTitleCase = () => {
+    const { input } = getElements();
+    const text = input.value.toLowerCase();
+    const titleCase = text.replace(/\b\w/g, c => c.toUpperCase());
+    setOutput(titleCase);
+};
+
+const convertToInverseCase = () => {
+    const { input } = getElements();
+    const text = input.value;
+    const inverse = text.split('').map(c =>
+        c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()
+    ).join('');
+    setOutput(inverse);
+};
+
+const convertToTextForUpload = () => {
+    const { input } = getElements();
+    let text = input.value.toLowerCase();
+
+    // Map special characters to base chars
+    const charMap = {
+        '[èéêë]': 'e',
+        '[àáâãäå]': 'a',
+        '[ìíîï]': 'i',
+        '[òóôõö]': 'o',
+        '[ùúûü]': 'u',
+        '&': 'e'
+    };
+
+    Object.keys(charMap).forEach(key => {
+        text = text.replace(new RegExp(key, 'g'), charMap[key]);
     });
-    var outputText = camelCaseWords.join("");
-    document.getElementById("outputText").value = outputText;
-}
 
-function convertToSentenceCase() {
-    var inputText = document.getElementById("inputText").value;
-    var outputText = inputText.toLowerCase().replace(/(^|\. *)([a-z])/g, function (match, separator, char) {
-        return separator + char.toUpperCase();
-    });
-    document.getElementById("outputText").value = outputText;
-}
+    // Replace spaces with dashes
+    text = text.replace(/\s+/g, '-');
 
-function convertToTitleCase() {
-    var inputText = document.getElementById("inputText").value;
-    var outputText = inputText.toLowerCase().replace(/\b\w/g, function (char) {
-        return char.toUpperCase();
-    });
-    document.getElementById("outputText").value = outputText;
-}
+    // Remove unwanted chars
+    text = text.replace(/[\/()#,\.;:<>\{\}\[\]\*\+\!\?\^|]/g, '');
 
-function convertToInverseCase() {
-    var inputText = document.getElementById("inputText").value;
-    var outputText = "";
-    for (var i = 0; i < inputText.length; i++) {
-        var char = inputText[i];
-        if (char === char.toUpperCase()) {
-            outputText += char.toLowerCase();
-        } else {
-            outputText += char.toUpperCase();
-        }
+    setOutput(text);
+};
+
+const copyToClipboard = async () => {
+    const { output } = getElements();
+    if (!output.value) return;
+
+    try {
+        await navigator.clipboard.writeText(output.value);
+
+        // Visual feedback
+        const copyBtn = document.querySelector('button[onclick="copyToClipboard()"]');
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span class="me-2">✅</span> Copied!';
+        setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+        }, 2000);
+    } catch (err) {
+        console.error('Failed to copy: ', err);
     }
-    document.getElementById("outputText").value = outputText;
-}
+};
 
-function copyToClipboard() {
-    var outputText = document.getElementById("outputText");
-    outputText.select();
-    document.execCommand("copy");
-    //alert("Testo copiato negli appunti!");
-}
-
-function convertToTextForUpload() {
-    var inputText = document.getElementById("inputText").value;
-
-    // Converto in lowercase
-    inputText = inputText.toLowerCase();
-
-    // Sostituzione degli spazi con '-'
-    inputText = inputText.replace(/\s+/g, '-');
-
-    // Sostituzione di caratteri speciali
-    inputText = inputText.replace(/[èéêë]/g, 'e');
-    inputText = inputText.replace(/[àáâãäå]/g, 'a');
-    inputText = inputText.replace(/[ìíîï]/g, 'i');
-    inputText = inputText.replace(/[òóôõö]/g, 'o');
-    inputText = inputText.replace(/[ùúûü]/g, 'u');
-    inputText = inputText.replace(/&/g, 'e');
-
-    // Eliminazione dei caratteri specificati
-    inputText = inputText.replace(/[\/()#,\.;:<>\{\}\[\]\*\+\!\?\^|]/g, '');
-
-    // Aggiorno il textarea con il testo formattato
-    document.getElementById("outputText").value = inputText;
-}
-
-function resetText() {
-    // Reimposta il testo nell'input e nell'output
-    document.getElementById("inputText").value = "";
-    document.getElementById("outputText").value = "";
-}
-
-function updateCharacterCount() {
-    var inputText = document.getElementById("inputText").value;
-    var characterCount = inputText.length;
-    document.getElementById("characterCount").textContent = "Characters: " + characterCount;
-}
+const resetText = () => {
+    const { input, output, count } = getElements();
+    input.value = "";
+    output.value = "";
+    count.textContent = "0 Characters";
+};
