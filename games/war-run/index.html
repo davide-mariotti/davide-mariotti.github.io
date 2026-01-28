@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>War Run - Army Runner</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="ui-layer">
+            <div id="hud">
+                <div class="stat">SOLDIERS: <span id="soldier-count">1</span></div>
+                <div class="stat">SCORE: <span id="score">0</span></div>
+                <div class="stat small">BEST: <span id="best-score">0</span></div>
+            </div>
+
+            <div id="start-screen" class="overlay">
+                <h1>WAR RUN</h1>
+                <p>MOLTIPLICA IL TUO ESERCITO</p>
+                <p class="best-score-display">RECORD: <span id="start-best-score">0</span></p>
+                <button id="start-btn">GIOCA ORA</button>
+            </div>
+
+            <div id="game-over-screen" class="overlay hidden">
+                <h1>MISSIONE FALLITA</h1>
+                <p>Punteggio Finale: <span id="final-score">0</span></p>
+                <p class="best-score-display">RECORD: <span id="go-best-score">0</span></p>
+                <button id="retry-btn">RIPROVA</button>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
