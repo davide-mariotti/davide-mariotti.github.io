@@ -146,6 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateProfileModal() {
+        if (!currentUser) return;
+        pModalAvatar.src = currentUser.photoURL || 'user.png';
+        pModalEmail.textContent = currentUser.email;
+        pEditName.value = currentUser.displayName || "";
+        pEditPhoto.value = currentUser.photoURL || "";
+
+        pTotalGames.textContent = stats.gamesPlayed;
+        pTotalWins.textContent = stats.gamesWon;
+    }
+
     function loadDictionary() {
         fetch('parole.txt')
             .then(response => response.text())
