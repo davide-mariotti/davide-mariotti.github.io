@@ -1,6 +1,13 @@
 import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard, getUserStats, saveUserStats, updateUserProfile } from './firebase.js?v=2';
 import { ACHIEVEMENTS, getAllAchievements, checkAchievements, getRarityColor } from './achievements.js';
 
+// Version logging for cache debugging
+const VERSION = '2.5.0';
+const BUILD_DATE = '2026-02-02 23:35';
+console.log(`%c🎮 Wordle Enhanced v${VERSION}`, 'color: #10b981; font-size: 16px; font-weight: bold');
+console.log(`%c📅 Build: ${BUILD_DATE}`, 'color: #3b82f6; font-size: 12px');
+console.log(`%c✨ Features: Timed Mode, Hard Mode, 36 Achievements, Advanced Stats, Reset Stats`, 'color: #8b5cf6; font-size: 10px');
+
 document.addEventListener('DOMContentLoaded', () => {
     // Game Elements
     const board = document.getElementById('board');
