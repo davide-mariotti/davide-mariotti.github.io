@@ -1,4 +1,5 @@
 import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard, getUserStats, saveUserStats, updateUserProfile } from './firebase.js?v=2';
+import { ACHIEVEMENTS, getAllAchievements, checkAchievements, getRarityColor } from './achievements.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Game Elements
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const helpBtn = document.getElementById('help-btn');
     const statsBtn = document.getElementById('stats-btn');
     const leaderboardBtn = document.getElementById('leaderboard-btn');
+    const achievementsBtn = document.getElementById('achievements-btn');
     const loginBtn = document.getElementById('login-btn');
     const userProfileEl = document.getElementById('user-profile');
     const userAvatarEl = document.getElementById('user-avatar');
@@ -22,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsModal = document.getElementById('stats-modal');
     const leaderboardModal = document.getElementById('leaderboard-modal');
     const profileModal = document.getElementById('profile-modal');
+    const achievementsModal = document.getElementById('achievements-modal');
     const closeBtns = document.querySelectorAll('.close-btn');
 
     // Profile Modal Elements
@@ -34,8 +37,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const pTotalWins = document.getElementById('profile-total-wins');
 
     // Game State
-    let gameMode = 'practice'; // 'practice' or 'daily'
+    let gameMode = 'practice'; // 'practice', 'timed', or 'hard'
     let dailyPlayed = false;
+
+    // Timer State (for timed mode)
+    let timerActive = false;
+    let timeRemaining = 30;
+    let timerInterval = null;
+    let guessStartTime = null;
+
+    // Hard Mode State
+    let hardModeConstraints = {
+        correctLetters: {}, // {position: letter}
+        presentLetters: new Set() // letters that must be included
+    };
+
+    // Achievements State
+    let unlockedAchievements = [];
 
     // Game Constants & State
     let WORD_LENGTH = 5;
@@ -55,12 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
         gamesWon: 0,
         currentStreak: 0,
         maxStreak: 0,
-        guesses: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, fail: 0 }
+        guesses: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, fail: 0 },
+        hardModeWins: 0,
+        timedModeWins: 0,
+        achievements: [],
+        gameHistory: [] // Array of {date, won, attempts, mode, timeUsed, timeRemaining}
     };
 
     // Initialize
     loadStats();
+    loadAchievements();
     setupAuthListeners();
+    setupModeSelector();
+    setupStatsTabs();
+    setupLeaderboardFilters();
     loadDictionary();
 
     function setupAuthListeners() {
@@ -201,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initGame() {
         targetWord = dictionary[Math.floor(Math.random() * dictionary.length)];
         console.log("Target:", targetWord); // For debugging
+        resetHardModeConstraints();
         createBoard();
         setupKeyboard();
         setupInput();
@@ -211,6 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
         guesses = [];
         isGameOver = false;
         isAnimating = false;
+
+        // Stop timer if running
+        stopTimer();
+
+        // Reset hard mode constraints
+        resetHardModeConstraints();
 
         // Clear Board
         board.innerHTML = '';
@@ -228,6 +261,551 @@ document.addEventListener('DOMContentLoaded', () => {
         // New Word
         targetWord = dictionary[Math.floor(Math.random() * dictionary.length)];
         console.log("New Target:", targetWord);
+    }
+
+    // --- Mode System ---
+
+    function setupModeSelector() {
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const selectedMode = btn.getAttribute('data-mode');
+                switchMode(selectedMode);
+            });
+        });
+    }
+
+    function switchMode(newMode) {
+        if (isGameOver || isAnimating) {
+            showMessage("Finisci la partita corrente prima");
+            return;
+        }
+
+        gameMode = newMode;
+
+        // Update UI
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-mode') === newMode) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Show/hide mode-specific UI
+        const timerContainer = document.getElementById('timer-container');
+        const hardModeIndicator = document.getElementById('hard-mode-indicator');
+
+        if (newMode === 'timed') {
+            timerContainer.classList.remove('hidden');
+            hardModeIndicator.classList.add('hidden');
+        } else if (newMode === 'hard') {
+            timerContainer.classList.add('hidden');
+            hardModeIndicator.classList.remove('hidden');
+        } else {
+            timerContainer.classList.add('hidden');
+            hardModeIndicator.classList.add('hidden');
+        }
+
+        // Reset game for new mode
+        resetGame();
+    }
+
+    // --- Timer Functions ---
+
+    function startTimer() {
+        timeRemaining = 30;
+        guessStartTime = Date.now();
+        timerActive = true;
+        updateTimerUI();
+
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerUI();
+
+            if (timeRemaining <= 0) {
+                stopTimer();
+                handleTimerExpired();
+            }
+        }, 1000);
+    }
+
+    function stopTimer() {
+        timerActive = false;
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    function updateTimerUI() {
+        const timerDisplay = document.getElementById('timer-display');
+        const timerProgress = document.getElementById('timer-progress');
+        const timerContainer = document.getElementById('timer-container');
+
+        if (!timerDisplay || !timerProgress) return;
+
+        timerDisplay.textContent = timeRemaining;
+        const percentage = (timeRemaining / 30) * 100;
+        timerProgress.style.width = `${percentage}%`;
+
+        // Add warning class if < 10s
+        if (timeRemaining < 10) {
+            timerContainer.classList.add('warning');
+        } else {
+            timerContainer.classList.remove('warning');
+        }
+    }
+
+    function handleTimerExpired() {
+        showMessage("Tempo scaduto!", 2000);
+        // Auto-submit current guess if valid, otherwise lose the guess
+        if (currentGuess.length === WORD_LENGTH && dictionary.includes(currentGuess)) {
+            submitGuess();
+        } else {
+            // Move to next row
+            if (guesses.length < MAX_GUESSES) {
+                guesses.push(""); // Empty guess
+                updateStats(false, 0);
+                isGameOver = true;
+                showMessage(`La parola era: ${targetWord.toUpperCase()}`, -1);
+                setTimeout(() => showStatsModal(false), 1500);
+            }
+        }
+    }
+
+    // --- Hard Mode Functions ---
+
+    function resetHardModeConstraints() {
+        hardModeConstraints = {
+            correctLetters: {},
+            presentLetters: new Set()
+        };
+    }
+
+    function updateHardModeConstraints(guess, result) {
+        for (let i = 0; i < guess.length; i++) {
+            if (result[i] === 'correct') {
+                hardModeConstraints.correctLetters[i] = guess[i];
+            } else if (result[i] === 'present') {
+                hardModeConstraints.presentLetters.add(guess[i]);
+            }
+        }
+    }
+
+    function validateHardModeGuess(guess) {
+        // Check if all correct letters are used in correct positions
+        for (const [pos, letter] of Object.entries(hardModeConstraints.correctLetters)) {
+            if (guess[pos] !== letter) {
+                return {
+                    valid: false,
+                    message: `La lettera ${letter.toUpperCase()} deve essere in posizione ${parseInt(pos) + 1}`
+                };
+            }
+        }
+
+        // Check if all present letters are included
+        for (const letter of hardModeConstraints.presentLetters) {
+            if (!guess.includes(letter)) {
+                return {
+                    valid: false,
+                    message: `Devi usare la lettera ${letter.toUpperCase()}`
+                };
+            }
+        }
+
+        return { valid: true };
+    }
+
+    // --- Achievements Functions ---
+
+    function loadAchievements() {
+        unlockedAchievements = stats.achievements || [];
+        renderAchievementsGrid();
+    }
+
+    function checkAndUnlockAchievements(gameData = null) {
+        const newlyUnlocked = checkAchievements(stats, gameData, unlockedAchievements);
+
+        for (const achievement of newlyUnlocked) {
+            unlockAchievement(achievement);
+        }
+    }
+
+    function unlockAchievement(achievement) {
+        if (unlockedAchievements.includes(achievement.id)) return;
+
+        unlockedAchievements.push(achievement.id);
+        stats.achievements = unlockedAchievements;
+        saveStats();
+
+        showAchievementNotification(achievement);
+        renderAchievementsGrid();
+    }
+
+    function showAchievementNotification(achievement) {
+        const notification = document.getElementById('achievement-notification');
+        const icon = document.getElementById('achievement-notif-icon');
+        const name = document.getElementById('achievement-notif-name');
+        const desc = document.getElementById('achievement-notif-desc');
+
+        icon.textContent = achievement.icon;
+        name.textContent = achievement.name;
+        desc.textContent = achievement.description;
+
+        notification.classList.remove('hidden');
+
+        setTimeout(() => {
+            notification.classList.add('hidden');
+        }, 4000);
+    }
+
+    function renderAchievementsGrid() {
+        const grid = document.getElementById('achievements-grid');
+        const unlockedCount = document.getElementById('unlocked-count');
+        const totalCount = document.getElementById('total-count');
+
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        const allAchievements = getAllAchievements();
+
+        for (const achievement of allAchievements) {
+            const isUnlocked = unlockedAchievements.includes(achievement.id);
+            const badge = document.createElement('div');
+            badge.className = `achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}`;
+
+            const rarityColor = getRarityColor(achievement.rarity);
+
+            badge.innerHTML = `
+                <div class="icon">${achievement.icon}</div>
+                <div class="name">${achievement.name}</div>
+                <div class="desc">${achievement.description}</div>
+                <div class="rarity" style="color: ${rarityColor}">${achievement.rarity}</div>
+            `;
+
+            grid.appendChild(badge);
+        }
+
+        if (unlockedCount && totalCount) {
+            unlockedCount.textContent = unlockedAchievements.length;
+            totalCount.textContent = allAchievements.length;
+        }
+    }
+
+    // --- Chart & Heatmap Functions ---
+
+    let progressChart = null;
+    let winrateChart = null;
+
+    function initCharts() {
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not loaded');
+            return;
+        }
+
+        renderProgressChart();
+        renderWinRateChart();
+        renderHeatmap();
+    }
+
+    function renderProgressChart() {
+        const canvas = document.getElementById('progress-chart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        // Prepare data from game history
+        const history = (stats.gameHistory || []).slice(-30); // Last 30 games
+        const labels = history.map((g, i) => `#${i + 1}`);
+        const attempts = history.map(g => g.won ? g.attempts : 7); // 7 for failed
+
+        if (progressChart) progressChart.destroy();
+
+        progressChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Tentativi',
+                    data: attempts,
+                    borderColor: 'rgb(16, 185, 129)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => context.parsed.y === 7 ? 'Fallito' : `${context.parsed.y} tentativi`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 7,
+                        ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+                        grid: { color: 'rgba(255,255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderWinRateChart() {
+        const canvas = document.getElementById('winrate-chart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        // Calculate win rate per attempt number
+        const guessData = stats.guesses;
+        const data = [
+            guessData[1] || 0,
+            guessData[2] || 0,
+            guessData[3] || 0,
+            guessData[4] || 0,
+            guessData[5] || 0,
+            guessData[6] || 0
+        ];
+
+        if (winrateChart) winrateChart.destroy();
+
+        winrateChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6'],
+                datasets: [{
+                    label: 'Vittorie',
+                    data: data,
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            stepSize: 1
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderHeatmap() {
+        const container = document.getElementById('heatmap-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        const history = stats.gameHistory || [];
+
+        // Create a map of dates to game counts
+        const activityMap = {};
+        for (const game of history) {
+            const dateKey = new Date(game.date).toISOString().split('T')[0];
+            activityMap[dateKey] = (activityMap[dateKey] || 0) + 1;
+        }
+
+        // Generate last 12 weeks (84 days)
+        const today = new Date();
+        const weeks = [];
+
+        for (let w = 11; w >= 0; w--) {
+            const week = [];
+            for (let d = 0; d < 7; d++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - (w * 7 + (6 - d)));
+                const dateKey = date.toISOString().split('T')[0];
+                const count = activityMap[dateKey] || 0;
+
+                // Determine level (0-4)
+                let level = 0;
+                if (count === 1) level = 1;
+                else if (count === 2) level = 2;
+                else if (count === 3) level = 3;
+                else if (count >= 4) level = 4;
+
+                week.push({ date: dateKey, level, count });
+            }
+            weeks.push(week);
+        }
+
+        // Render weeks
+        for (const week of weeks) {
+            const weekRow = document.createElement('div');
+            weekRow.className = 'heatmap-row';
+
+            for (const day of week) {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell';
+                cell.setAttribute('data-level', day.level);
+                cell.title = `${day.date}: ${day.count} partite`;
+                weekRow.appendChild(cell);
+            }
+
+            container.appendChild(weekRow);
+        }
+    }
+
+    // --- Stats Tab Switching ---
+
+    function setupStatsTabs() {
+        const tabs = document.querySelectorAll('#stats-tabs .nav-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetTab = tab.getAttribute('data-tab');
+                switchStatsTab(targetTab);
+            });
+        });
+    }
+
+    function switchStatsTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('#stats-tabs .nav-link').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-tab') === tabName) {
+                tab.classList.add('active');
+            }
+        });
+
+        // Show/hide tab content
+        document.querySelectorAll('.tab-content-stats').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        const targetContent = document.getElementById(`tab-${tabName}`);
+        if (targetContent) {
+            targetContent.classList.remove('hidden');
+
+            // Render charts if switching to graphs or heatmap
+            if (tabName === 'graphs') {
+                setTimeout(() => initCharts(), 100);
+            } else if (tabName === 'heatmap') {
+                setTimeout(() => renderHeatmap(), 100);
+            }
+        }
+    }
+
+    // --- Leaderboard Filters ---
+
+    let currentLeaderboardPeriod = 'daily';
+
+    function setupLeaderboardFilters() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const period = btn.getAttribute('data-period');
+                switchLeaderboardFilter(period);
+            });
+        });
+    }
+
+    async function switchLeaderboardFilter(period) {
+        currentLeaderboardPeriod = period;
+
+        // Update button states
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-period') === period) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Reload leaderboard with filter
+        await loadLeaderboardWithFilter(period);
+    }
+
+    async function loadLeaderboardWithFilter(period) {
+        const listEl = document.getElementById('leaderboard-list');
+        listEl.innerHTML = `
+            <div class="d-flex justify-content-center p-3">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>`;
+
+        try {
+            // This would need enhanced Firebase query - for now use existing
+            const scores = await getLeaderboard();
+
+            // Filter by period (client-side for now)
+            const now = new Date();
+            let filteredScores = scores;
+
+            if (period === 'daily') {
+                const today = now.toISOString().split('T')[0];
+                filteredScores = scores.filter(s => {
+                    const scoreDate = new Date(s.timestamp.seconds * 1000).toISOString().split('T')[0];
+                    return scoreDate === today;
+                });
+            } else if (period === 'weekly') {
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                filteredScores = scores.filter(s => {
+                    const scoreDate = new Date(s.timestamp.seconds * 1000);
+                    return scoreDate >= weekAgo;
+                });
+            } else if (period === 'monthly') {
+                const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                filteredScores = scores.filter(s => {
+                    const scoreDate = new Date(s.timestamp.seconds * 1000);
+                    return scoreDate >= monthAgo;
+                });
+            }
+
+            listEl.innerHTML = '';
+
+            if (filteredScores.length === 0) {
+                listEl.innerHTML = '<p class="text-center p-3 opacity-75">Nessuna partita in questo periodo.</p>';
+                return;
+            }
+
+            filteredScores.forEach((s, index) => {
+                const item = document.createElement('div');
+                item.className = 'd-flex align-items-center p-2 border-bottom border-secondary bg-black bg-opacity-10 mb-1 rounded';
+                item.innerHTML = `
+                    <div class="fw-bold text-gradient me-3" style="width: 25px;">#${index + 1}</div>
+                    <img src="${s.photoURL || 'user.png'}" class="rounded-circle me-3" width="32" height="32">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${s.displayName || 'Anonimo'}</div>
+                        <div class="small opacity-50">${new Date(s.timestamp.seconds * 1000).toLocaleDateString()}</div>
+                    </div>
+                    <div class="fw-bold text-success">${s.attempts} tentativi</div>
+                `;
+                listEl.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error("Failed to load leaderboard", error);
+            listEl.innerHTML = '<p class="text-center text-danger p-3">Errore nel caricamento.</p>';
+        }
     }
 
     // --- UI Creation ---
@@ -413,6 +991,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Hard Mode Validation
+        if (gameMode === 'hard') {
+            const validation = validateHardModeGuess(currentGuess);
+            if (!validation.valid) {
+                showMessage(validation.message, 2000);
+                shakeRow();
+                return;
+            }
+        }
+
+        // Start timer on first guess in timed mode
+        if (gameMode === 'timed' && guesses.length === 0 && !timerActive) {
+            startTimer();
+        }
+
         isAnimating = true;
 
         const result = checkGuess(currentGuess, targetWord);
@@ -428,12 +1021,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }, i * 250);
         }
 
+        // Update hard mode constraints
+        if (gameMode === 'hard') {
+            updateHardModeConstraints(currentGuess, result);
+        }
+
         setTimeout(async () => {
             guesses.push(currentGuess);
 
             if (currentGuess === targetWord) {
+                // Stop timer if running
+                const finalTimeRemaining = timeRemaining;
+                stopTimer();
+
                 showMessage("Grande!", 2000);
                 updateStats(true, guesses.length);
+
+                // Create game data for achievements
+                const gameData = {
+                    won: true,
+                    attempts: guesses.length,
+                    mode: gameMode,
+                    timeRemaining: gameMode === 'timed' ? finalTimeRemaining : null,
+                    date: Date.now()
+                };
+
+                // Check achievements
+                checkAndUnlockAchievements(gameData);
 
                 if (gameMode === 'daily') {
                     const todayStr = new Date().toISOString().split('T')[0];
@@ -450,8 +1064,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => showStatsModal(true), 1500);
                 isAnimating = false;
             } else if (guesses.length >= MAX_GUESSES) {
+                stopTimer();
+
                 showMessage(`La parola era: ${targetWord.toUpperCase()}`, -1);
                 updateStats(false, 0);
+
+                // Check achievements even on loss
+                const gameData = {
+                    won: false,
+                    attempts: 0,
+                    mode: gameMode,
+                    date: Date.now()
+                };
+                checkAndUnlockAchievements(gameData);
 
                 if (gameMode === 'daily') {
                     const todayStr = new Date().toISOString().split('T')[0];
@@ -540,10 +1165,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 stats.maxStreak = stats.currentStreak;
             }
             stats.guesses[attemptCount]++;
+
+            // Track mode-specific wins
+            if (gameMode === 'hard') {
+                stats.hardModeWins = (stats.hardModeWins || 0) + 1;
+            } else if (gameMode === 'timed') {
+                stats.timedModeWins = (stats.timedModeWins || 0) + 1;
+            }
         } else {
             stats.currentStreak = 0;
             stats.guesses.fail++;
         }
+
+        // Add to game history
+        if (!stats.gameHistory) stats.gameHistory = [];
+        stats.gameHistory.push({
+            date: Date.now(),
+            won: won,
+            attempts: won ? attemptCount : 0,
+            mode: gameMode,
+            timeRemaining: gameMode === 'timed' ? timeRemaining : null
+        });
+
+        // Keep only last 100 games to avoid excessive storage
+        if (stats.gameHistory.length > 100) {
+            stats.gameHistory = stats.gameHistory.slice(-100);
+        }
+
         saveStats();
         updateStatsUI();
     }
@@ -596,7 +1244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showStatsModal(won) {
         updateStatsUI();
         statsModal.classList.remove('hidden');
-        renderGuessDistribution();
 
         if (won) {
             triggerConfetti();
@@ -676,6 +1323,21 @@ document.addEventListener('DOMContentLoaded', () => {
         showLeaderboardModal();
     });
 
+    if (achievementsBtn) {
+        achievementsBtn.addEventListener('click', () => {
+            achievementsModal.classList.remove('hidden');
+            renderAchievementsGrid();
+        });
+    }
+
+    // Share button handler
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            shareScore();
+        });
+    }
+
     closeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
@@ -692,6 +1354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === statsModal) statsModal.classList.add('hidden');
         if (e.target === leaderboardModal) leaderboardModal.classList.add('hidden');
         if (e.target === profileModal) profileModal.classList.add('hidden');
+        if (e.target === achievementsModal) achievementsModal.classList.add('hidden');
     });
 });
 

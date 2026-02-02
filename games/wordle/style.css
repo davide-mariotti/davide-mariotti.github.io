@@ -326,6 +326,9 @@
 
     #keyboard-container {
         padding-bottom: 20px;
+        margin-top: auto;
+        position: relative;
+        z-index: 100;
     }
 
     .keyboard-row {
@@ -338,17 +341,415 @@
         font-size: 0.9rem;
         padding: 0;
     }
+
+    /* Ensure game container is scrollable on small screens */
+    #game-container {
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Reduce spacing on mobile */
+    .mode-selector {
+        margin-bottom: 0.5rem !important;
+    }
+
+    #timer-container {
+        margin-bottom: 0.5rem !important;
+    }
+
+    #hard-mode-indicator {
+        margin-bottom: 0.5rem !important;
+    }
+
+    #board-container {
+        margin-bottom: 1rem !important;
+    }
 }
 
 @media (max-height: 650px) {
     #board {
         height: 300px;
         width: 250px;
+        max-height: 40vh;
     }
 
     .tile {
         font-size: 1.5rem;
     }
+
+    .keyboard-row button {
+        height: 45px;
+        font-size: 0.85rem;
+    }
+
+    .mode-selector {
+        margin-bottom: 0.25rem !important;
+    }
+
+    #board-container {
+        margin-bottom: 0.5rem !important;
+    }
+}
+
+/* Mode Selector */
+.mode-selector {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.mode-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+/* Timer */
+.timer-container {
+    text-align: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.timer-display {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    text-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.timer-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: 10px;
+    transition: width 1s linear;
+    box-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+/* Timer warning state (< 10s) */
+.timer-container.warning .timer-display {
+    color: #ef4444;
+    animation: pulse-timer 0.5s infinite;
+}
+
+.timer-container.warning .timer-progress-bar {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+@keyframes pulse-timer {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* Hard Mode Indicator */
+.hard-mode-indicator {
+    text-align: center;
+    padding: 8px 16px;
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Achievements Grid */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.achievement-badge {
+    padding: 16px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.achievement-badge:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+.achievement-badge.unlocked {
+    border-color: var(--color-primary);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.achievement-badge.locked {
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
+.achievement-badge .icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.achievement-badge .name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.achievement-badge .desc {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+.achievement-badge .rarity {
+    font-size: 0.65rem;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Achievement Notification */
+.achievement-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95));
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 280px;
+    animation: slideInRight 0. 5s ease, bounce 0.6s 0.5s;
+}
+
+.achievement-notification .achievement-icon {
+    font-size: 3rem;
+    animation: rotate-icon 0.8s ease;
+}
+
+.achievement-notification .achievement-details {
+    flex: 1;
+}
+
+.achievement-notification .achievement-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.9;
+    font-weight: 600;
+}
+
+.achievement-notification .achievement-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 4px 0;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes rotate-icon {
+    0% {
+        transform: rotate(0deg) scale(0.5);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.2);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+/* Stats Tabs */
+#stats-tabs {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#stats-tabs .nav-link {
+    color: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 0;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+#stats-tabs .nav-link:hover {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#stats-tabs .nav-link.active {
+    color: var(--color-primary);
+    background: transparent;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.tab-content-stats {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+}
+
+.chart-container canvas {
+    max-height: 100%;
+}
+
+/* Heatmap */
+#heatmap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 8px;
+}
+
+.heatmap-row {
+    display: flex;
+    gap: 3px;
+}
+
+.heatmap-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.5);
+    z-index: 10;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.heatmap-cell[data-level="0"] {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.heatmap-cell[data-level="1"] {
+    background: rgba(16, 185, 129, 0.3);
+}
+
+.heatmap-cell[data-level="2"] {
+    background: rgba(16, 185, 129, 0.5);
+}
+
+.heatmap-cell[data-level="3"] {
+    background: rgba(16, 185, 129, 0.7);
+}
+
+.heatmap-cell[data-level="4"] {
+    background: rgba(16, 185, 129, 0.9);
+}
+
+.heatmap-legend {
+    display: flex;
+    gap: 3px;
+}
+
+/* Leaderboard Filters */
+.leaderboard-filters {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.filter-btn {
+    flex: 1;
+    padding: 6px 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px var(--color-primary-glow);
 }
 
 /* Utility to force hide elements even with Bootstrap classes present */
