@@ -330,31 +330,58 @@
     }
 }
 
-/* Button Colors Fix - Make them consistent with site theme */
-.mode-btn,
-.stats-tab,
-.leaderboard-filter-btn,
-.btn-outline-danger,
+/* Button Colors Fix - iOS Compatible - VERY SPECIFIC SELECTORS */
+.mode-selector .mode-btn,
+button.mode-btn,
+.stats-tabs .stats-tab,
+button.stats-tab,
+.leaderboard-filters .leaderboard-filter-btn,
+button.leaderboard-filter-btn {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    border: 2px solid rgba(16, 185, 129, 0.4) !important;
+    color: #ffffff !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    min-height: 44px !important;
+    /* iOS minimum touch target */
+}
+
+.mode-selector .mode-btn:hover,
+button.mode-btn:hover,
+.stats-tabs .stats-tab:hover,
+button.stats-tab:hover,
+.leaderboard-filters .leaderboard-filter-btn:hover,
+button.leaderboard-filter-btn:hover,
+.mode-selector .mode-btn:active,
+button.mode-btn:active,
+.stats-tabs .stats-tab:active,
+button.stats-tab:active {
+    background-color: rgba(16, 185, 129, 0.25) !important;
+    border-color: rgba(16, 185, 129, 0.6) !important;
+}
+
+.mode-selector .mode-btn.active,
+button.mode-btn.active,
+.stats-tabs .stats-tab.active,
+button.stats-tab.active,
+.leaderboard-filters .leaderboard-filter-btn.active,
+button.leaderboard-filter-btn.active {
+    background-color: #10b981 !important;
+    background: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+/* Override any Bootstrap button styles */
 .btn-outline-light,
 .btn-sm {
-    background: rgba(16, 185, 129, 0.1) !important;
-    border-color: rgba(16, 185, 129, 0.3) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
-}
-
-.mode-btn:hover,
-.stats-tab:hover,
-.leaderboard-filter-btn:hover {
-    background: rgba(16, 185, 129, 0.2) !important;
-    border-color: rgba(16, 185, 129, 0.5) !important;
-}
-
-.mode-btn.active,
-.stats-tab.active,
-.leaderboard-filter-btn.active {
-    background: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
-    color: white !important;
+    background-color: transparent !important;
 }
 
 /* Reset Modal Text Contrast */

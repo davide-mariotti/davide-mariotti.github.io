@@ -2,8 +2,8 @@ import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboar
 import { ACHIEVEMENTS, getAllAchievements, checkAchievements, getRarityColor } from './achievements.js';
 
 // Version logging for cache debugging
-const VERSION = '2.6.0';
-const BUILD_DATE = '2026-02-02 23:56';
+const VERSION = '2.6.1';
+const BUILD_DATE = '2026-02-03 00:06';
 console.log(`%c🎮 Wordle Enhanced v${VERSION}`, 'color: #10b981; font-size: 16px; font-weight: bold');
 console.log(`%c📅 Build: ${BUILD_DATE}`, 'color: #3b82f6; font-size: 12px');
 console.log(`%c✨ Features: Static Keyboard, 36 Achievements, Mobile UI Fixed, Advanced Stats`, 'color: #8b5cf6; font-size: 10px');
@@ -849,7 +849,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const newKeys = document.querySelectorAll('.keyboard-row button');
         newKeys.forEach(key => {
             key.addEventListener('click', (e) => {
-                const letter = e.currentTarget.getAttribute('data-key');
+                let letter = e.currentTarget.getAttribute('data-key');
+
+                // Convert data-key values to match handleInput expectations
+                if (letter === 'ENTER') letter = 'Enter';
+                else if (letter === 'BACKSPACE') letter = 'Backspace';
+
                 handleInput(letter);
             });
         });
