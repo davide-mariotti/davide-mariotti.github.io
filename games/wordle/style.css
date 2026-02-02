@@ -28,6 +28,7 @@
     flex-grow: 1;
     overflow: hidden;
     margin-bottom: 2rem;
+    width: 100%;
 }
 
 #board {
@@ -305,22 +306,35 @@
 
 /* Responsive */
 @media (max-width: 500px) {
+    #board-container {
+        margin-bottom: 1rem;
+        padding-top: 10px;
+    }
+
     #board {
         width: 100%;
-        max-width: 300px;
-        height: 360px;
+        max-width: 330px;
+        aspect-ratio: 5 / 6;
+        height: auto;
+        max-height: 60vh;
+    }
+
+    .tile {
+        font-size: 1.5rem;
+    }
+
+    #keyboard-container {
+        padding-bottom: 20px;
     }
 
     .keyboard-row {
         gap: 3px;
-        /* Reduced gap */
         margin-bottom: 5px;
     }
 
     .keyboard-row button {
-        height: 50px;
-        /* Taller touch targets */
-        font-size: 0.8rem;
+        height: 52px;
+        font-size: 0.9rem;
         padding: 0;
     }
 }

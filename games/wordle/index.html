@@ -108,7 +108,7 @@
             <div class="examples">
                 <p><strong>Esempi</strong></p>
                 <div class="example-row d-flex gap-2 mb-2">
-                    <div class="tile correct">G</div>
+                    <div class="tile" data-state="correct">G</div>
                     <div class="tile">A</div>
                     <div class="tile">T</div>
                     <div class="tile">T</div>
@@ -117,7 +117,7 @@
                 <p class="small">La lettera <strong>G</strong> è nella parola e nel posto giusto.</p>
                 <div class="example-row d-flex gap-2 mb-2">
                     <div class="tile">P</div>
-                    <div class="tile present">I</div>
+                    <div class="tile" data-state="present">I</div>
                     <div class="tile">A</div>
                     <div class="tile">N</div>
                     <div class="tile">O</div>
@@ -127,7 +127,7 @@
                     <div class="tile">M</div>
                     <div class="tile">A</div>
                     <div class="tile">N</div>
-                    <div class="tile absent">G</div>
+                    <div class="tile" data-state="absent">G</div>
                     <div class="tile">O</div>
                 </div>
                 <p class="small">La lettera <strong>G</strong> non è nella parola in nessun posto.</p>
@@ -191,32 +191,50 @@
     </div>
 
     <!-- Profile Modal -->
-    <div id="profile-modal" class="modal hidden">
+    <div id="profile-modal" class="game-modal hidden">
         <div class="glass-panel modal-content border border-secondary shadow-lg text-center">
             <span class="close-btn position-absolute top-0 end-0 p-3 fs-3" style="cursor: pointer;"
                 data-target="profile-modal">&times;</span>
             <h2 class="h4 text-gradient mb-4">PROFILO UTENTE</h2>
 
             <div class="d-flex flex-column align-items-center mb-4">
-                <img id="profile-modal-avatar" src="" alt="Avatar"
+                <img id="profile-modal-avatar" src="user.png" alt="Avatar"
                     class="rounded-circle border border-2 border-success mb-3 shadow"
-                    style="width: 80px; height: 80px;">
-                <h3 id="profile-modal-name" class="h5 fw-bold mb-1">Nome Utente</h3>
-                <p id="profile-modal-email" class="small opacity-75 mb-0">email@example.com</p>
+                    style="width: 80px; height: 80px; object-fit: cover;">
+                <p id="profile-modal-email" class="small opacity-75 mb-3">email@example.com</p>
+
+                <!-- Edit Form -->
+                <div class="w-100 text-start">
+                    <div class="mb-3">
+                        <label for="edit-display-name" class="form-label small text-uppercase fw-bold opacity-75">Nome
+                            Visualizzato</label>
+                        <input type="text" id="edit-display-name"
+                            class="form-control bg-dark text-white border-secondary" placeholder="Il tuo nome">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-photo-url" class="form-label small text-uppercase fw-bold opacity-75">URL
+                            Avatar</label>
+                        <input type="text" id="edit-photo-url" class="form-control bg-dark text-white border-secondary"
+                            placeholder="https://...">
+                    </div>
+                </div>
             </div>
 
             <div class="d-flex justify-content-center gap-3 mb-4">
-                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25">
+                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25 flex-grow-1">
                     <div class="h3 fw-bold text-success mb-0" id="profile-total-games">0</div>
                     <div class="small opacity-75">Partite</div>
                 </div>
-                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25">
+                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25 flex-grow-1">
                     <div class="h3 fw-bold text-success mb-0" id="profile-total-wins">0</div>
                     <div class="small opacity-75">Vittorie</div>
                 </div>
             </div>
 
-            <button id="logout-btn" class="btn btn-outline-danger px-4 rounded-pill">Logout</button>
+            <div class="d-flex justify-content-between gap-2">
+                <button id="logout-btn" class="btn btn-outline-danger px-4 rounded-pill">Logout</button>
+                <button id="save-profile-btn" class="btn btn-primary px-4 rounded-pill">Salva Modifiche</button>
+            </div>
         </div>
     </div>
 

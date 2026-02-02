@@ -5,7 +5,8 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
     getFirestore,
@@ -50,6 +51,29 @@ export function logoutUser() {
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, callback);
 }
+
+export async function updateUserProfile(user, { displayName, photoURL }) {
+    if (!user) return;
+    try {
+        await updateProfile(user, {
+            displayName: displayName,
+            photoURL: photoURL
+        });
+
+        // Also update Firestore user record
+        await setDoc(doc(db, "wordle_users", user.uid), {
+            displayName: displayName,
+            photoURL: photoURL,
+            lastUpdated: serverTimestamp()
+        }, { merge: true });
+
+        console.log("Profile updated");
+    } catch (e) {
+        console.error("Error updating profile:", e);
+        throw e;
+    }
+}
+
 // Firestore Functions
 
 /**

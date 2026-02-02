@@ -1,4 +1,4 @@
-import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard, getUserStats, saveUserStats } from './firebase.js?v=1';
+import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard, getUserStats, saveUserStats, updateUserProfile } from './firebase.js?v=2';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Game Elements
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userAvatarEl = document.getElementById('user-avatar');
     const logoutBtn = document.getElementById('logout-btn');
     const playAgainBtn = document.getElementById('play-again-btn');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
 
     // Modals
     const helpModal = document.getElementById('modal');
@@ -25,8 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Profile Modal Elements
     const pModalAvatar = document.getElementById('profile-modal-avatar');
-    const pModalName = document.getElementById('profile-modal-name');
     const pModalEmail = document.getElementById('profile-modal-email');
+    const pEditName = document.getElementById('edit-display-name');
+    const pEditPhoto = document.getElementById('edit-photo-url');
+
     const pTotalGames = document.getElementById('profile-total-games');
     const pTotalWins = document.getElementById('profile-total-wins');
 
@@ -65,7 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 userProfileEl.classList.remove('hidden');
                 if (user.photoURL) userAvatarEl.src = user.photoURL;
                 else userAvatarEl.src = 'user.png';
-                showMessage(`Benvenuto, ${user.displayName.split(' ')[0]}!`);
+                showMessage(`Benvenuto, ${user.displayName ? user.displayName.split(' ')[0] : 'Utente'}!`);
+
+                // LOAD CLOUD STATS
+                // ... (GetUserStats call kept simplistic here to avoid re-writing huge block)
+                getUserStats(user).then(cloudStats => {
+                    if (cloudStats) {
+                        stats = cloudStats;
+                        saveStats();
+                        console.log("Stats synced from cloud");
+                    }
+                });
+
             } else {
                 // User Logged Out
                 loginBtn.classList.remove('hidden');
@@ -93,17 +107,52 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await logoutUser();
                 showMessage("Logout effettuato");
+                profileModal.classList.add('hidden');
             } catch (error) {
                 console.error("Logout failed", error);
             }
         });
+
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', async () => {
+                if (!currentUser) return;
+                const newName = pEditName.value.trim();
+                const newPhoto = pEditPhoto.value.trim();
+
+                if (!newName) {
+                    showMessage("Nome richiesto");
+                    return;
+                }
+
+                try {
+                    await updateUserProfile(currentUser, {
+                        displayName: newName,
+                        photoURL: newPhoto
+                    });
+                    showMessage("Profilo aggiornato!");
+
+                    // Force UI update
+                    if (newPhoto) userAvatarEl.src = newPhoto;
+                    else userAvatarEl.src = 'user.png';
+
+                    pModalAvatar.src = newPhoto || 'user.png';
+
+                    profileModal.classList.add('hidden');
+                } catch (err) {
+                    console.error("Update failed", err);
+                    showMessage("Errore aggiornamento");
+                }
+            });
+        }
     }
 
     function updateProfileModal() {
         if (!currentUser) return;
-        pModalAvatar.src = currentUser.photoURL || '';
-        pModalName.textContent = currentUser.displayName;
+        pModalAvatar.src = currentUser.photoURL || 'user.png';
         pModalEmail.textContent = currentUser.email;
+        pEditName.value = currentUser.displayName || "";
+        pEditPhoto.value = currentUser.photoURL || "";
+
         pTotalGames.textContent = stats.gamesPlayed;
         pTotalWins.textContent = stats.gamesWon;
     }
