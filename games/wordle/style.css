@@ -308,13 +308,20 @@
     #board {
         width: 100%;
         max-width: 300px;
-        /* Keep strict max width */
         height: 360px;
     }
 
+    .keyboard-row {
+        gap: 3px;
+        /* Reduced gap */
+        margin-bottom: 5px;
+    }
+
     .keyboard-row button {
-        height: 45px;
+        height: 50px;
+        /* Taller touch targets */
         font-size: 0.8rem;
+        padding: 0;
     }
 }
 

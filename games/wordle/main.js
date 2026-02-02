@@ -64,12 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginBtn.classList.add('hidden');
                 userProfileEl.classList.remove('hidden');
                 if (user.photoURL) userAvatarEl.src = user.photoURL;
+                else userAvatarEl.src = 'user.png';
                 showMessage(`Benvenuto, ${user.displayName.split(' ')[0]}!`);
             } else {
                 // User Logged Out
                 loginBtn.classList.remove('hidden');
                 userProfileEl.classList.add('hidden');
-                userAvatarEl.src = "";
+                userAvatarEl.src = "user.png";
                 profileModal.classList.add('hidden'); // Close if open
             }
         });
