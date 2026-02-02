@@ -2,8 +2,8 @@ import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboar
 import { ACHIEVEMENTS, getAllAchievements, checkAchievements, getRarityColor } from './achievements.js';
 
 // Version logging for cache debugging
-const VERSION = '2.6.1';
-const BUILD_DATE = '2026-02-03 00:06';
+const VERSION = '2.7.0';
+const BUILD_DATE = '2026-02-03 00:42';
 console.log(`%c🎮 Wordle Enhanced v${VERSION}`, 'color: #10b981; font-size: 16px; font-weight: bold');
 console.log(`%c📅 Build: ${BUILD_DATE}`, 'color: #3b82f6; font-size: 12px');
 console.log(`%c✨ Features: Static Keyboard, 36 Achievements, Mobile UI Fixed, Advanced Stats`, 'color: #8b5cf6; font-size: 10px');
@@ -1263,6 +1263,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function showStatsModal(won) {
         updateStatsUI();
         statsModal.classList.remove('hidden');
+
+        // Show word result message
+        const wordResultMessage = document.getElementById('word-result-message');
+        const wordResultText = document.getElementById('word-result-text');
+        const wordResultLink = document.getElementById('word-result-link');
+
+        if (wordResultMessage && wordResultText && wordResultLink && targetWord) {
+            const wordLowerCase = targetWord.toLowerCase();
+            const wordUpperCase = targetWord.toUpperCase();
+
+            if (won !== undefined) {
+                // Show message based on win/loss
+                if (won) {
+                    wordResultText.innerHTML = `🎉 Complimenti! La parola indovinata è <strong>${wordUpperCase}</strong>`;
+                } else {
+                    wordResultText.innerHTML = `😔 La parola era <strong>${wordUpperCase}</strong>`;
+                }
+
+                // Set link to 1parola.it
+                wordResultLink.href = `https://1parola.it/${wordLowerCase}`;
+                wordResultMessage.style.display = 'block';
+            } else {
+                // Hide message if no win/loss state
+                wordResultMessage.style.display = 'none';
+            }
+        }
 
         if (won) {
             triggerConfetti();
