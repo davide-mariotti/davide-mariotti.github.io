@@ -369,6 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveStats() {
         localStorage.setItem('wordle-it-stats', JSON.stringify(stats));
+        // Also save to cloud if logged in
+        if (currentUser) {
+            saveUserStats(currentUser, stats);
+        }
     }
 
     function updateStats(won, attemptCount) {
