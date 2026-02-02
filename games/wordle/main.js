@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pTotalGames = document.getElementById('profile-total-games');
     const pTotalWins = document.getElementById('profile-total-wins');
 
+    // Game State
+    let gameMode = 'practice'; // 'practice' or 'daily'
+    let dailyPlayed = false;
+
     // Game Constants & State
     let WORD_LENGTH = 5;
     const MAX_GUESSES = 6;
@@ -60,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDictionary();
 
     function setupAuthListeners() {
-        onAuthChange((user) => {
+        onAuthChange(async (user) => {
             currentUser = user;
             if (user) {
                 // User Logged In
@@ -71,14 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage(`Benvenuto, ${user.displayName ? user.displayName.split(' ')[0] : 'Utente'}!`);
 
                 // LOAD CLOUD STATS
-                // ... (GetUserStats call kept simplistic here to avoid re-writing huge block)
-                getUserStats(user).then(cloudStats => {
-                    if (cloudStats) {
-                        stats = cloudStats;
-                        saveStats();
-                        console.log("Stats synced from cloud");
-                    }
-                });
+                // Reset stats locally first to avoid leaking previous user data
+                resetStats();
+
+                const cloudStats = await getUserStats(user);
+                if (cloudStats) {
+                    stats = cloudStats;
+                    saveStats(); // Update local storage with user's cloud stats
+                    console.log("Stats synced from cloud");
+                } else {
+                    console.log("New user or no cloud stats. Starting fresh.");
+                }
 
             } else {
                 // User Logged Out
@@ -86,6 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 userProfileEl.classList.add('hidden');
                 userAvatarEl.src = "user.png";
                 profileModal.classList.add('hidden'); // Close if open
+
+                // Reset to anonymous/empty stats on logout
+                resetStats();
+                localStorage.removeItem('wordle-it-stats'); // Clear local storage to prevent persistence
+                showMessage("Logout effettuato");
             }
         });
 
@@ -106,8 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', async () => {
             try {
                 await logoutUser();
-                showMessage("Logout effettuato");
-                profileModal.classList.add('hidden');
+                // UI updates handled by onAuthChange
             } catch (error) {
                 console.error("Logout failed", error);
             }
@@ -175,6 +186,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 dictionary = ["palla", "gatto", "fiore", "piano", "treno"];
                 initGame();
             });
+    }
+
+    function resetStats() {
+        stats = {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            guesses: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, fail: 0 }
+        };
     }
 
     function initGame() {
@@ -270,21 +291,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleInput(key) {
         if (isGameOver || isAnimating) return;
-        // Modal check again just in case
-        if (!helpModal.classList.contains('hidden') || !statsModal.classList.contains('hidden')) return;
 
         if (key === 'Enter') {
             submitGuess();
         } else if (key === 'Backspace') {
-            if (currentGuess.length > 0) {
-                currentGuess = currentGuess.slice(0, -1);
-                updateBoard();
+            currentGuess = currentGuess.slice(0, -1);
+            updateBoard();
+        } else if (currentGuess.length < WORD_LENGTH && /^[a-zA-Z]$/.test(key)) {
+            currentGuess += key.toLowerCase();
+            updateBoard();
+
+            // Trigger Pop Animation on the last filled tile
+            const row = board.children[guesses.length];
+            const tile = row.children[currentGuess.length - 1];
+            if (tile) {
+                tile.classList.remove('pop-anim');
+                void tile.offsetWidth; // Trigger reflow
+                tile.setAttribute('data-state', 'active'); // Ensure state is active for CSS border
             }
+        }
+    }
+
+    function shareScore() {
+        const title = "Wordle IT";
+        const dayScore = `${guesses.length}/${MAX_GUESSES}`;
+
+        let grid = "";
+        const rows = board.children;
+        // Reconstruct grid from board state
+        for (let i = 0; i < guesses.length; i++) {
+            const row = rows[i];
+            for (let j = 0; j < WORD_LENGTH; j++) {
+                const tile = row.children[j];
+                const state = tile.getAttribute('data-state');
+                if (state === 'correct') grid += '🟩';
+                else if (state === 'present') grid += '🟨';
+                else grid += '⬜';
+            }
+            grid += "\n";
+        }
+
+        const shareText = `${title} ${dayScore}\n\n${grid}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: shareText
+            }).catch(console.error);
         } else {
-            if (currentGuess.length < WORD_LENGTH) {
-                currentGuess += key;
-                updateBoard();
+            navigator.clipboard.writeText(shareText).then(() => {
+                showMessage("Copiato negli appunti!");
+            });
+        }
+    }
+
+    function triggerConfetti() {
+        if (typeof confetti === 'function') {
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
             }
+
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+            });
+            fire(0.2, {
+                spread: 60,
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                scalar: 1.2
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
         }
     }
 
@@ -340,6 +435,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage("Grande!", 2000);
                 updateStats(true, guesses.length);
 
+                if (gameMode === 'daily') {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    localStorage.setItem('wordle-daily-last-played', todayStr);
+                }
+
                 // SAVE SCORE TO FIREBASE
                 if (currentUser) {
                     await saveGameScore(currentUser, guesses.length, true);
@@ -347,13 +447,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 isGameOver = true;
-                setTimeout(() => showStatsModal(), 1500);
+                setTimeout(() => showStatsModal(true), 1500);
                 isAnimating = false;
             } else if (guesses.length >= MAX_GUESSES) {
                 showMessage(`La parola era: ${targetWord.toUpperCase()}`, -1);
                 updateStats(false, 0);
+
+                if (gameMode === 'daily') {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    localStorage.setItem('wordle-daily-last-played', todayStr);
+                }
+
                 isGameOver = true;
-                setTimeout(() => showStatsModal(), 1500);
+                setTimeout(() => showStatsModal(false), 1500);
                 isAnimating = false;
             } else {
                 currentGuess = "";
@@ -487,9 +593,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function showStatsModal() {
+    function showStatsModal(won) {
         updateStatsUI();
         statsModal.classList.remove('hidden');
+        renderGuessDistribution();
+
+        if (won) {
+            triggerConfetti();
+        }
     }
 
     // --- Leaderboard Logic ---

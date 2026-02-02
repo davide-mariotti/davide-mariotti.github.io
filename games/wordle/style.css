@@ -94,11 +94,11 @@
 /* Animations */
 @keyframes pop {
     0% {
-        transform: scale(0.8);
+        transform: scale(1);
     }
 
-    40% {
-        transform: scale(1.1);
+    50% {
+        transform: scale(1.15);
     }
 
     100% {
