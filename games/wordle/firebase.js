@@ -47,8 +47,50 @@ export function logoutUser() {
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, callback);
 }
-
 // Firestore Functions
+
+/**
+ * Save user persistent stats
+ * @param {object} user - User object
+ * @param {object} stats - Stats object
+ */
+export async function saveUserStats(user, stats) {
+    if (!user) return;
+    try {
+        await setDoc(doc(db, "wordle_users", user.uid), {
+            stats: stats,
+            lastUpdated: serverTimestamp(),
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }, { merge: true });
+        console.log("Stats saved to cloud");
+    } catch (e) {
+        console.error("Error saving user stats:", e);
+    }
+}
+
+/**
+ * Get user persistent stats
+ * @param {object} user 
+ * @returns {object|null} stats
+ */
+export async function getUserStats(user) {
+    if (!user) return null;
+    try {
+        const docRef = doc(db, "wordle_users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data().stats;
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (e) {
+        console.error("Error fetching user stats:", e);
+        return null;
+    }
+}
 
 /**
  * Save a game score

@@ -1,4 +1,4 @@
-import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard } from './firebase.js';
+import { loginWithGoogle, logoutUser, onAuthChange, saveGameScore, getLeaderboard, getUserStats, saveUserStats } from './firebase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Game Elements
