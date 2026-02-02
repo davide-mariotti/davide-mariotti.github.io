@@ -304,6 +304,77 @@
     background-color: var(--color-primary);
 }
 
+/* Mobile Header Reorganization */
+@media (max-width: 768px) {
+    .glass-panel.p-4>.d-flex.justify-content-between {
+        flex-direction: column !important;
+        gap: 1rem;
+    }
+
+    .glass-panel.p-4>.d-flex.justify-content-between>.d-flex:first-child {
+        order: 1;
+        justify-content: center !important;
+        width: 100%;
+    }
+
+    .glass-panel.p-4>.d-flex.justify-content-between>h1 {
+        order: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .glass-panel.p-4>.d-flex.justify-content-between>.menu-right {
+        order: 2;
+        justify-content: center !important;
+        width: 100%;
+    }
+}
+
+/* Button Colors Fix - Make them consistent with site theme */
+.mode-btn,
+.stats-tab,
+.leaderboard-filter-btn,
+.btn-outline-danger,
+.btn-outline-light,
+.btn-sm {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mode-btn:hover,
+.stats-tab:hover,
+.leaderboard-filter-btn:hover {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+}
+
+.mode-btn.active,
+.stats-tab.active,
+.leaderboard-filter-btn.active {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: white !important;
+}
+
+/* Reset Modal Text Contrast */
+.alert-danger {
+    background-color: rgba(220, 38, 38, 0.2) !important;
+    border-color: rgba(220, 38, 38, 0.5) !important;
+    color: #fecaca !important;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.2) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    color: #fde68a !important;
+}
+
+.alert-danger strong,
+.alert-warning strong {
+    color: white !important;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
     #board-container {
