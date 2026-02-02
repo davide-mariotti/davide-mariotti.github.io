@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const leaderboardModal = document.getElementById('leaderboard-modal');
     const profileModal = document.getElementById('profile-modal');
     const achievementsModal = document.getElementById('achievements-modal');
+    const resetConfirmModal = document.getElementById('reset-confirm-modal');
     const closeBtns = document.querySelectorAll('.close-btn');
 
     // Profile Modal Elements
@@ -449,6 +450,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const icon = document.getElementById('achievement-notif-icon');
         const name = document.getElementById('achievement-notif-name');
         const desc = document.getElementById('achievement-notif-desc');
+
+        // Check if all elements exist
+        if (!notification || !icon || !name || !desc) {
+            console.warn('Achievement notification elements not found');
+            return;
+        }
 
         icon.textContent = achievement.icon;
         name.textContent = achievement.name;
@@ -1355,6 +1362,86 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === leaderboardModal) leaderboardModal.classList.add('hidden');
         if (e.target === profileModal) profileModal.classList.add('hidden');
         if (e.target === achievementsModal) achievementsModal.classList.add('hidden');
+        if (e.target === resetConfirmModal) resetConfirmModal.classList.add('hidden');
     });
+
+    // --- Reset Stats Functionality ---
+
+    const resetStatsBtn = document.getElementById('reset-stats-btn');
+    const confirmResetCheckbox = document.getElementById('confirm-reset-checkbox');
+    const confirmResetBtn = document.getElementById('confirm-reset-btn');
+    const cancelResetBtn = document.getElementById('cancel-reset-btn');
+
+    // Enable confirm button only when checkbox is checked
+    if (confirmResetCheckbox) {
+        confirmResetCheckbox.addEventListener('change', () => {
+            if (confirmResetBtn) {
+                confirmResetBtn.disabled = !confirmResetCheckbox.checked;
+            }
+        });
+    }
+
+    // Show confirmation modal
+    if (resetStatsBtn) {
+        resetStatsBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.remove('hidden');
+            // Reset checkbox state
+            if (confirmResetCheckbox) confirmResetCheckbox.checked = false;
+            if (confirmResetBtn) confirmResetBtn.disabled = true;
+        });
+    }
+
+    // Cancel reset
+    if (cancelResetBtn) {
+        cancelResetBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.add('hidden');
+        });
+    }
+
+    // Confirm reset - actually delete everything
+    if (confirmResetBtn) {
+        confirmResetBtn.addEventListener('click', async () => {
+            // Reset stats object
+            stats = {
+                gamesPlayed: 0,
+                gamesWon: 0,
+                currentStreak: 0,
+                maxStreak: 0,
+                guesses: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, fail: 0 },
+                hardModeWins: 0,
+                timedModeWins: 0,
+                achievements: [],
+                gameHistory: []
+            };
+
+            // Reset achievements
+            unlockedAchievements = [];
+
+            // Save to localStorage
+            saveStats();
+
+            // Save to cloud if user is logged in
+            if (currentUser) {
+                try {
+                    await saveUserStats(currentUser, stats);
+                    showMessage("Statistiche azzerate anche sul cloud", 2000);
+                } catch (error) {
+                    console.error("Error resetting cloud stats:", error);
+                    showMessage("Errore nell'azzeramento dati cloud", 2000);
+                }
+            }
+
+            // Update UI
+            updateStatsUI();
+            renderAchievementsGrid();
+
+            // Close modals
+            resetConfirmModal.classList.add('hidden');
+            statsModal.classList.add('hidden');
+
+            // Show success message
+            showMessage("✅ Tutte le statistiche sono state azzerate", 3000);
+        });
+    }
 });
 

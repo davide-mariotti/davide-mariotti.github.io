@@ -307,25 +307,26 @@
 /* Responsive */
 @media (max-width: 500px) {
     #board-container {
-        margin-bottom: 1rem;
-        padding-top: 10px;
+        margin-bottom: 0.5rem !important;
+        padding-top: 5px;
         width: 100%;
     }
 
     #board {
         width: 100%;
-        max-width: 330px;
+        max-width: 300px;
         aspect-ratio: 5 / 6;
         height: auto;
-        max-height: 60vh;
+        max-height: 35vh !important;
+        /* Ridotto drasticamente */
     }
 
     .tile {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     #keyboard-container {
-        padding-bottom: 20px;
+        padding-bottom: 10px;
         margin-top: auto;
         position: relative;
         z-index: 100;
@@ -333,62 +334,85 @@
 
     .keyboard-row {
         gap: 3px;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
 
     .keyboard-row button {
-        height: 52px;
-        font-size: 0.9rem;
+        height: 48px;
+        font-size: 0.85rem;
         padding: 0;
+        min-width: 24px;
     }
 
     /* Ensure game container is scrollable on small screens */
     #game-container {
-        max-height: calc(100vh - 120px);
+        max-height: calc(100vh - 100px);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
     }
 
-    /* Reduce spacing on mobile */
+    /* Reduce spacing on mobile - AGGRESSIVO */
     .mode-selector {
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.3rem !important;
+        gap: 4px !important;
+    }
+
+    .mode-btn {
+        padding: 6px 10px !important;
+        font-size: 0.85rem !important;
     }
 
     #timer-container {
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.3rem !important;
+        font-size: 0.9rem;
     }
 
     #hard-mode-indicator {
-        margin-bottom: 0.5rem !important;
-    }
-
-    #board-container {
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.3rem !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
     }
 }
 
 @media (max-height: 650px) {
     #board {
-        height: 300px;
-        width: 250px;
-        max-height: 40vh;
+        height: 250px;
+        width: 210px;
+        max-height: 30vh !important;
     }
 
     .tile {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .keyboard-row button {
-        height: 45px;
-        font-size: 0.85rem;
+        height: 42px;
+        font-size: 0.8rem;
     }
 
     .mode-selector {
-        margin-bottom: 0.25rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    .mode-btn {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
     }
 
     #board-container {
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    #timer-container {
+        margin-bottom: 0.2rem !important;
+        font-size: 0.85rem;
+    }
+
+    #hard-mode-indicator {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+        margin-bottom: 0.2rem !important;
     }
 }
 
