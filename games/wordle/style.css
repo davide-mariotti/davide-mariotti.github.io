@@ -1,0 +1,312 @@
+:root {
+    --green: var(--color-primary);
+    --yellow: #c9b458;
+    /* Keep original yellow or adjust to secondary if preferred, but yellow is standard for 'present' */
+    --gray: #787c7e;
+    --darkendGray: #3a3a3c;
+    --white: var(--color-text-main);
+    --black: #121213;
+
+    /* Map to Site Variables */
+    --color-correct: var(--color-primary);
+    --color-present: #d4ac0d;
+    /* Gold-ish yellow */
+    --color-absent: rgba(255, 255, 255, 0.1);
+    --color-tile-border: rgba(255, 255, 255, 0.2);
+    --color-tile-active: rgba(255, 255, 255, 0.5);
+
+    --key-bg: rgba(255, 255, 255, 0.1);
+    --key-bg-hover: rgba(255, 255, 255, 0.2);
+}
+
+/* Base resets handled by main.css, just specific overrides */
+
+#board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+#board {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 5px;
+    width: 300px;
+    height: 360px;
+    margin: 0 auto;
+}
+
+.game-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.tile {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--color-tile-border);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    /* Slightly smaller for better fit */
+    font-weight: 700;
+    line-height: 2rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+    user-select: none;
+    color: var(--white);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    /* Slight rounding */
+    transition: transform 0.1s, border-color 0.1s, background-color 0.3s;
+}
+
+/* Tile States */
+.tile[data-state='active'] {
+    border-color: var(--color-tile-active);
+    background: rgba(255, 255, 255, 0.05);
+    animation: pop 0.1s;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.tile[data-state='correct'] {
+    background-color: var(--color-correct);
+    border-color: var(--color-correct);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+.tile[data-state='present'] {
+    background-color: var(--color-present);
+    border-color: var(--color-present);
+}
+
+.tile[data-state='absent'] {
+    background-color: var(--color-absent);
+    border-color: transparent;
+}
+
+/* Animations */
+@keyframes pop {
+    0% {
+        transform: scale(0.8);
+    }
+
+    40% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateX(0);
+    }
+
+    50% {
+        transform: rotateX(90deg);
+    }
+
+    100% {
+        transform: rotateX(0);
+    }
+}
+
+.tile.flip {
+    animation: flip 0.5s ease-in;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.game-row.shake {
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+/* Keyboard */
+#keyboard-container {
+    width: 100%;
+    user-select: none;
+    padding: 0 5px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto 8px;
+    touch-action: manipulation;
+    gap: 6px;
+}
+
+.keyboard-row button {
+    font-family: inherit;
+    font-weight: 600;
+    border: 0;
+    padding: 0;
+    height: 50px;
+    /* Standardize height */
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--key-bg);
+    color: var(--white);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.keyboard-row button:hover {
+    background-color: var(--key-bg-hover);
+    transform: translateY(-2px);
+}
+
+.keyboard-row button.wide-button {
+    flex: 1.5;
+    font-size: 0.8rem;
+}
+
+.keyboard-row button[data-state='correct'] {
+    background-color: var(--color-correct);
+    box-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+.keyboard-row button[data-state='present'] {
+    background-color: var(--color-present);
+}
+
+.keyboard-row button[data-state='absent'] {
+    background-color: var(--color-absent);
+    opacity: 0.5;
+}
+
+/* Modal Adjustments (Since we are using custom HTML structure now) */
+/* Hidden handled by class */
+.modal.hidden {
+    display: none !important;
+}
+
+/* Toast Messages */
+#message-container {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.message {
+    background-color: var(--white);
+    color: var(--black);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    opacity: 1;
+    transition: opacity 0.5s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.message.fade-out {
+    opacity: 0;
+}
+
+/* Graph Bars */
+.graph-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.guess-count {
+    width: 20px;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.graph-bar-container {
+    flex-grow: 1;
+}
+
+.graph-bar {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: right;
+    min-width: 8%;
+    transition: width 0.5s ease-in-out;
+}
+
+.graph-bar.highlight {
+    background-color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    #board {
+        width: 100%;
+        max-width: 300px;
+        /* Keep strict max width */
+        height: 360px;
+    }
+
+    .keyboard-row button {
+        height: 45px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-height: 650px) {
+    #board {
+        height: 300px;
+        width: 250px;
+    }
+
+    .tile {
+        font-size: 1.5rem;
+    }
+}
+
+/* Utility to force hide elements even with Bootstrap classes present */
+.hidden {
+    display: none !important;
+}

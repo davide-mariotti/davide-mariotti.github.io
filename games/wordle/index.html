@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Italiano</title>
+
+    <!-- Main Site CSS -->
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Bootstrap (Required for site layout variables if used in main.css) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Web Component Header -->
+    <app-header></app-header>
+
+    <div class="container py-5 mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <!-- Game Wrapper with Glass Effect -->
+                <div class="glass-panel p-4 d-flex flex-column align-items-center" style="min-height: 80vh;">
+
+                    <!-- Game Header (Internal) -->
+                    <div
+                        class="w-100 d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+                        <!-- Left Side: Login / Profile -->
+                        <div class="menu-left d-flex align-items-center">
+                            <button id="login-btn" class="btn btn-sm btn-outline-light rounded-pill px-3"
+                                style="font-size: 0.8rem;">
+                                Login
+                            </button>
+                            <div id="user-profile" class="hidden d-flex align-items-center gap-2"
+                                style="cursor: pointer;">
+                                <img id="user-avatar" src="" alt="User" class="rounded-circle border border-success"
+                                    style="width: 32px; height: 32px;">
+                            </div>
+                        </div>
+
+                        <h1 class="h3 m-0 text-gradient text-uppercase fw-bold">Wordle IT</h1>
+
+                        <div class="menu-right d-flex gap-2">
+                            <button id="leaderboard-btn"
+                                class="btn btn-sm btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+                                aria-label="Classifica" style="width: 40px; height: 40px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor"
+                                        d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z" />
+                                </svg>
+                            </button>
+                            <button id="stats-btn"
+                                class="btn btn-sm btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+                                aria-label="Statistiche" style="width: 40px; height: 40px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor"
+                                        d="M16,6L16,6h2v12h-2V6z M12,18h2V10h-2V18z M8,18h2v-4H8V18z M2,20v2h20v-2H2z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <button id="help-btn"
+                                class="btn btn-sm btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+                                aria-label="Istruzioni" style="width: 40px; height: 40px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor"
+                                        d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8 8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="game-container" class="d-flex flex-column align-items-center w-100 flex-grow-1">
+                        <div id="board-container" class="mb-4">
+                            <div id="board"></div>
+                        </div>
+
+                        <div id="keyboard-container" class="w-100">
+                            <!-- Keyboard generated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web Component Footer -->
+    <app-footer></app-footer>
+
+    <!-- Modals -->
+
+    <div id="modal" class="modal hidden">
+        <div class="glass-panel modal-content border border-secondary shadow-lg">
+            <span class="close-btn position-absolute top-0 end-0 p-3 fs-3" style="cursor: pointer;"
+                data-target="modal">&times;</span>
+            <h2 class="h4 text-gradient mb-3">COME GIOCARE</h2>
+            <p>Indovina la parola nascosta in 6 tentativi.</p>
+            <p>Ogni tentativo deve essere una parola valida di 5 lettere. Premi Invio per inviare.</p>
+            <p>Dopo ogni tentativo, il colore delle tessere cambierà per mostrarti quanto sei andato vicino a
+                indovinare la parola.</p>
+            <hr class="border-secondary my-3">
+            <div class="examples">
+                <p><strong>Esempi</strong></p>
+                <div class="example-row d-flex gap-2 mb-2">
+                    <div class="tile correct">G</div>
+                    <div class="tile">A</div>
+                    <div class="tile">T</div>
+                    <div class="tile">T</div>
+                    <div class="tile">O</div>
+                </div>
+                <p class="small">La lettera <strong>G</strong> è nella parola e nel posto giusto.</p>
+                <div class="example-row d-flex gap-2 mb-2">
+                    <div class="tile">P</div>
+                    <div class="tile present">I</div>
+                    <div class="tile">A</div>
+                    <div class="tile">N</div>
+                    <div class="tile">O</div>
+                </div>
+                <p class="small">La lettera <strong>I</strong> è nella parola ma nel posto sbagliato.</p>
+                <div class="example-row d-flex gap-2 mb-2">
+                    <div class="tile">M</div>
+                    <div class="tile">A</div>
+                    <div class="tile">N</div>
+                    <div class="tile absent">G</div>
+                    <div class="tile">O</div>
+                </div>
+                <p class="small">La lettera <strong>G</strong> non è nella parola in nessun posto.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="stats-modal" class="modal hidden">
+        <div class="glass-panel modal-content border border-secondary shadow-lg text-center">
+            <span class="close-btn position-absolute top-0 end-0 p-3 fs-3" style="cursor: pointer;"
+                data-target="stats-modal">&times;</span>
+            <h2 class="h4 text-gradient mb-4">STATISTICHE</h2>
+
+            <div id="statistics" class="d-flex justify-content-center gap-4 mb-4">
+                <div class="statistic-container">
+                    <div class="statistic h2 fw-bold mb-0" id="total-played">0</div>
+                    <div class="label small opacity-75">Giocate</div>
+                </div>
+                <div class="statistic-container">
+                    <div class="statistic h2 fw-bold mb-0" id="win-pct">0</div>
+                    <div class="label small opacity-75">% Vittorie</div>
+                </div>
+                <div class="statistic-container">
+                    <div class="statistic h2 fw-bold mb-0" id="current-streak">0</div>
+                    <div class="label small opacity-75">Streak</div>
+                </div>
+                <div class="statistic-container">
+                    <div class="statistic h2 fw-bold mb-0" id="max-streak">0</div>
+                    <div class="label small opacity-75">Max Streak</div>
+                </div>
+            </div>
+
+            <h3 class="h5 mb-3">DISTRIBUZIONE TENTATIVI</h3>
+            <div id="guess-distribution" class="mb-4">
+                <!-- Graph bars will be injected here -->
+            </div>
+
+            <div id="footer-actions">
+                <button id="play-again-btn" class="btn btn-glow px-4 py-2">GIOCA DI NUOVO</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal hidden">
+        <div class="glass-panel modal-content border border-secondary shadow-lg text-center">
+            <span class="close-btn position-absolute top-0 end-0 p-3 fs-3" style="cursor: pointer;"
+                data-target="leaderboard-modal">&times;</span>
+            <h2 class="h4 text-gradient mb-4">CLASSIFICA GLOBALE</h2>
+            <p class="small text-white opacity-75 mb-3">Migliori partite recenti</p>
+
+            <div id="leaderboard-list" class="text-start" style="max-height: 300px; overflow-y: auto;">
+                <div class="d-flex justify-content-center p-3">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <!-- Leaderboard items injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal hidden">
+        <div class="glass-panel modal-content border border-secondary shadow-lg text-center">
+            <span class="close-btn position-absolute top-0 end-0 p-3 fs-3" style="cursor: pointer;"
+                data-target="profile-modal">&times;</span>
+            <h2 class="h4 text-gradient mb-4">PROFILO UTENTE</h2>
+
+            <div class="d-flex flex-column align-items-center mb-4">
+                <img id="profile-modal-avatar" src="" alt="Avatar"
+                    class="rounded-circle border border-2 border-success mb-3 shadow"
+                    style="width: 80px; height: 80px;">
+                <h3 id="profile-modal-name" class="h5 fw-bold mb-1">Nome Utente</h3>
+                <p id="profile-modal-email" class="small opacity-75 mb-0">email@example.com</p>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25">
+                    <div class="h3 fw-bold text-success mb-0" id="profile-total-games">0</div>
+                    <div class="small opacity-75">Partite</div>
+                </div>
+                <div class="p-3 rounded border border-secondary bg-black bg-opacity-25">
+                    <div class="h3 fw-bold text-success mb-0" id="profile-total-wins">0</div>
+                    <div class="small opacity-75">Vittorie</div>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="btn btn-outline-danger px-4 rounded-pill">Logout</button>
+        </div>
+    </div>
+
+    <div id="message-container"></div>
+    </div>
+    <script src="../../assets/js/components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>
