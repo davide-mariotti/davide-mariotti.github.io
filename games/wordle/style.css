@@ -309,6 +309,7 @@
     #board-container {
         margin-bottom: 1rem;
         padding-top: 10px;
+        width: 100%;
     }
 
     #board {
