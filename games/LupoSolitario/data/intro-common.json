@@ -1,0 +1,78 @@
+{
+    "title": "Lupo Solitario - Introduzione e Regole",
+    "description": "Contenuto introduttivo comune a tutti i libri di Lupo Solitario",
+    "sections": {
+        "backstory": {
+            "title": "Indietro nel tempo",
+            "content": "<p>Da molti secoli i nobili cavalieri del regno di Sommerlund usano mandare i loro figli presso il monastero di Ramas, affinché imparino le tecniche e le arti che fanno di un giovane un vero cavaliere.</p><p>I monaci di Ramas sono maestri in molte discipline, e i giovani loro affidati li amano e li rispettano malgrado le durezze dell'insegnamento. Essi sanno infatti che solo così potranno diventare cavalieri Ramas, preparati nel corpo e nella mente per difendere la loro terra dalla costante minaccia che viene da ovest, dai Signori delle Tenebre.</p><p>Anticamente, nell'età della Luna Nera, i Signori delle Tenebre portarono guerra a Sommerlund. Il conflitto lungo e sanguinoso finì con la vittoria degli eserciti di Sommerlund, guidati dal Re Ulnar, che insieme agli alleati del regno di Durenor sbaragliarono il nemico al passo di Moytura: Vashna, il condottiero dei Signori delle Tenebre, venne ucciso dalla spada di re Ulnar, la Spada del Sole. Da allora i Signori delle Tenebre hanno giurato vendetta contro le terre di Sommerlund e Durenor.</p><p>Oggi è il giorno della festa di Fendar, quando tutti i Ramas sono presenti al monastero per festeggiare i loro figli che finiscono il periodo di addestramento. Improvvisamente un'enorme nuvola appare nel cielo a occidente: sono creature dalle ali nere, e così tanti che il sole è completamente oscurato. I Signori delle Tenebre, gli eterni nemici di Sommerlund stanno attaccando. La guerra comincia.</p><p>In questo giorno fatale tu, Lupo Silenzioso (questo è il nome che ti è stato dato dai monaci), sei stato mandato a raccogliere legna nella foresta, come punizione perché sei sempre distratto. Mentre stai tornando vedi con orrore il monastero completamente avvolto da un nugolo di mostri alati dalla nera pelle squamosa.</p><p>Lasciando cadere la legna corri verso la battaglia che infuria. Ma nel buio innaturale inciampi e batti la testa sul tronco di una quercia secolare. Mentre stai perdendo conoscenza l'ultima cosa che vedi sono le mura del monastero che crollano al suolo.</p><p>Passano molte ore prima del tuo risveglio. Con gli occhi pieni di lacrime guardi quello scenario di morte. Alzi lo sguardo al cielo ormai chiaro e giuri di vendicare il massacro dei cavalieri Ramas: come in un lampo ti rendi conto di ciò che devi fare. Devi cercare di raggiungere la capitale per avvertire il Re della terribile minaccia che incombe sulle genti di Sommerlund.</p><p>Ora sei tu l'ultimo Ramas superstite: ora il tuo nome è <strong>Lupo Solitario</strong>.</p>"
+        },
+        "rules": {
+            "title": "Le Regole del Gioco",
+            "content": "<p>Durante la tua avventura devi tenere sempre aggiornato il Registro di Guerra. In questa versione digitale, tutti i tuoi dati sono salvati automaticamente nel cloud!</p><p>Durante il tuo apprendistato come Ramas hai sviluppato delle doti tattiche (Combattività) e fisiche (Resistenza). Prima di iniziare la tua avventura devi controllare il livello della tua preparazione.</p><p><strong>Combattività:</strong> Lancia un numero casuale dalla Tabella del Destino e aggiungi 10. Questo è il tuo punteggio di Combattività. Quando combatti la tua Combattività dovrà misurarsi con quella del tuo avversario. Un punteggio alto in questa casella è perciò molto vantaggioso.</p><p><strong>Resistenza:</strong> Lancia di nuovo dalla Tabella del Destino e aggiungi 20. Questo è il tuo punteggio di Resistenza. Se vieni ferito in combattimento perdi punti di Resistenza. Quando il tuo punteggio di Resistenza arriva a zero sei morto, e l'avventura è finita. I punti di Resistenza persi possono essere recuperati durante il gioco, ma il punteggio non può mai superare quello di partenza.</p>"
+        },
+        "kaiArts": {
+            "title": "Le Arti Ramas (Kai)",
+            "content": "<p>Nel corso dell'addestramento, ogni cavaliere Ramas apprende cinque delle dieci Arti Ramas (chiamate anche Arti Kai). Queste abilità speciali ti aiuteranno durante la tua avventura.</p>",
+            "arts": [
+                {
+                    "name": "Mimetismo",
+                    "emoji": "🎭",
+                    "description": "Questa arte permette a un Ramas di mimetizzarsi con l'ambiente circostante. In campagna può nascondersi dietro alberi e rocce; in città può mescolarsi alla folla. Con questa arte è quasi impossibile essere individuati."
+                },
+                {
+                    "name": "Caccia",
+                    "emoji": "🏹",
+                    "description": "Questa arte assicura che un Ramas non perda mai la strada in ambienti naturali e sia sempre in grado di cacciare cibo per se stesso, tranne che negli ambienti più aridi e desolati."
+                },
+                {
+                    "name": "Sesto Senso",
+                    "emoji": "👁️",
+                    "description": "Questa arte ti avverte di un pericolo imminente. Può anche rivelare l'autentica intenzione di uno straniero o di una creatura che incontri."
+                },
+                {
+                    "name": "Orientamento",
+                    "emoji": "🧭",
+                    "description": "Questa arte ti permette di identificare la direzione esatta del nord anche quando sei sottoterra, al buio o in mezzo alla nebbia. È un'abilità che ti renderà quasi impossibile perderti."
+                },
+                {
+                    "name": "Guarigione",
+                    "emoji": "💊",
+                    "description": "Questa arte può essere usata per recuperare punti di Resistenza persi in combattimento. Se possiedi questa arte puoi recuperare 1 punto di Resistenza per ogni sezione del libro attraverso la quale passi senza combattere. (Questa arte non può essere usata durante il combattimento)."
+                },
+                {
+                    "name": "Scherma",
+                    "emoji": "⚔️",
+                    "description": "Quando combatti con un'arma dalla lama (spada, ascia, sciabola) con la quale hai raggiunto la maestria, aggiungi 2 punti alla tua Combattività. Il grado di maestria si può ottenere solo con una delle armi elencate. All'inizio dell'avventura scegli a caso (dalla Tabella del Destino) l'arma nella quale hai raggiunto la maestria."
+                },
+                {
+                    "name": "Psicoschermo",
+                    "emoji": "🛡️",
+                    "description": "I Signori delle Tenebre e molte delle creature al loro servizio hanno il potere di attaccare la mente invece del corpo. Il Psicoschermo è una protezione contro questi attacchi."
+                },
+                {
+                    "name": "Psicolaser",
+                    "emoji": "⚡",
+                    "description": "Questa arte permette a un Ramas di attaccare un nemico usando il potere della mente. Può essere usata contemporaneamente all'uso di un'arma e aggiunge 2 punti alla tua Combattività. Non tutti i tipi di nemici sono sensibili al Psicolaser: quando incontri una creatura immune a questa arte te lo dirò."
+                },
+                {
+                    "name": "Affinità animale",
+                    "emoji": "🐺",
+                    "description": "Questa arte permette a un Ramas di comunicare con alcuni animali e di indurli ad aiutarlo."
+                },
+                {
+                    "name": "Telecinesi",
+                    "emoji": "🔮",
+                    "description": "Questa arte permette a un Ramas di muovere piccoli oggetti con il potere della mente."
+                }
+            ]
+        },
+        "equipment": {
+            "title": "Equipaggiamento",
+            "content": "<p><strong>Armi:</strong> I Ramas portano di solito due armi. Puoi scegliere due armi qualsiasi dall'elenco che segue. Scegli con cura, perché la disponibilità di armi durante l'avventura sarà limitata.</p><p><strong>Zaino:</strong> Puoi portare fino a 8 oggetti nello zaino. Gli oggetti speciali non occupano spazio nello zaino.</p><p><strong>Pasti:</strong> Durante il viaggio dovrai consumare regolarmente pasti. Se possiedi l'Arte Kai della Caccia, non hai bisogno di preoccuparti del cibo, tranne che nelle zone più desolate.</p><p><strong>Corone:</strong> La moneta di Sommerlund si chiama Corona d'Oro. Puoi portare fino a 50 Corone nel tuo borsello.</p>"
+        },
+        "combat": {
+            "title": "Regole di Combattimento",
+            "content": "<p>Durante l'avventura incontrerai spesso creature ostili che dovrai combattere. Il combattimento si svolge in questo modo:</p><ol><li><strong>Rapporto delle Forze:</strong> Sottrai la Combattività del tuo nemico dalla tua. Il risultato (positivo o negativo) è il Rapporto delle Forze.</li><li><strong>Numero del Destino:</strong> Lancia un numero casuale dalla Tabella del Destino (0-9).</li><li><strong>Consulta la Tabella di Combattimento:</strong> Incrocia il Rapporto delle Forze con il Numero del Destino per vedere quanti punti di Resistenza perdi tu e quanti ne perde il nemico.</li><li><strong>Ripeti:</strong> Continua a combattere round dopo round finché tu o il tuo avversario non viene sconfitto (Resistenza = 0).</li></ol><p>In questa versione digitale, il combattimento è automatizzato! Dovrai solo premere il pulsante \"Combatti\" per ogni round.</p>"
+        }
+    }
+}

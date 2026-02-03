@@ -1,0 +1,593 @@
+{
+  "bookId": "01-flight-from-the-dark",
+  "bookNumber": 1,
+  "title": "Fuga dalle Tenebre",
+  "originalTitle": "Flight from the Dark",
+  "author": "Joe Dever",
+  "illustrator": "Gary Chalk",
+  "sections": {
+    "000": {
+      "text": "<p>Tu sei Lupo Solitario, l'ultimo sopravvissuto del monastero di Ramas. I Signori delle Tenebre hanno attaccato e tutti i tuoi compagni sono stati massacrati. Devi raggiungere la capitale Holmgard per avvertire il Re della terribile minaccia che incombe su Sommerlund.</p><p>Vai alla <strong>sezione 1</strong> per iniziare la tua avventura!</p>",
+      "choices": [
+        {
+          "text": "Inizia l'avventura",
+          "section": 1
+        }
+      ]
+    },
+    "1": {
+      "text": "<p>Devi far presto, perché qualcosa ti dice che non è prudente indugiare presso le rovine fumanti del monastero. I Kraan, i mostri dalle nere ali, potrebbero tornare da un momento all'altro. Devi raggiungere Holmgard, la capitale di Sommerlund, e portare al Re la terribile notizia: tutti i cavalieri Ramas, salvo te, sono stati massacrati. Senza i Ramas alla testa del suo esercito, Sommerlund sarà alla mercè del suo antico nemico, i Signori delle Tenebre. Trattenendo le lacrime, dai un ultimo saluto ai tuoi compagni uccisi Dentro di te giuri che la loro morte sarà vendicata. Volti le spalle alle rovine e scendi con circospezione il ripido sentiero.</p><p>Ai piedi della collina il sentiero si biforca, ma entrambe le piste portano nel folto della foresta.</p>",
+      "choices": [
+        {
+          "text": "Scegli il sentiero di destra",
+          "section": 85
+        },
+        {
+          "text": "Scegli quello di sinistra",
+          "section": 275
+        },
+        {
+          "text": "Utilizza l'Arte del Sesto Senso",
+          "section": 141,
+          "requirements": {
+            "kaiArt": "Sesto Senso"
+          }
+        }
+      ]
+    },
+    "2": {
+      "text": "<p>Mentre corri nel bosco sempre più fitto le grida dei Giak si sentono sempre meno. Ormai li hai quasi seminati, ma improvvisamente inciampi in un ramo basso e finisci dentro un cespuglio. Scegli un numero della Tabella del Destino.</p>",
+      "choices": [
+        {
+          "text": "Numero da 0 a 4",
+          "section": 343
+        },
+        {
+          "text": "Numero da 5 a 9",
+          "section": 276
+        }
+      ]
+    },
+    "3": {
+      "text": "<p>Seguendo passo passo l'ufficiale attraversi un portale ad arco, e salendo per una stretta scala arrivi in un ampio cortile. C'è tutto un via vai di soldati, i quali portano agli ufficiali di guardia sulle mura della città gli ordini scritti su pergamene decorate. Un uomo scarno e con la faccia coperta di cicatrici, che indossa l'abito bianco e porpora dei cortigiani, si avvicina e ti invita a seguirlo nella rocca.</p>",
+      "choices": [
+        {
+          "text": "Seguilo",
+          "section": 196
+        },
+        {
+          "text": "Rifiuta il suo invito e torna nelle strade affollate",
+          "section": 144
+        }
+      ]
+    },
+    "4": {
+      "text": "<p>È una piccola canoa, molto in cattivo stato. Il legno è marcio e pieno di fessure, e l'acqua entra da tutte le parti. Rapidamente tappi i buchi più grossi con dell'argilla, e butti fuori l'acqua. Sembra che per adesso tenga. Sistemi il tuo equipaggiamento sotto prua, e con un pezzo di legno trovato lì vicino cominci a remare giù per la corrente. Dopo un po' senti dei cavalli al galoppo avvicinarsi sulla riva sinistra.</p>",
+      "choices": [
+        {
+          "text": "Nasconditi sul fondo della canoa",
+          "section": 75
+        },
+        {
+          "text": "Richiama la loro attenzione",
+          "section": 175
+        },
+        {
+          "text": "Utilizza l'Arte del Sesto Senso",
+          "section": 218,
+          "requirements": {
+            "kaiArt": "Sesto Senso"
+          }
+        }
+      ]
+    },
+    "5": {
+      "text": "<p>Dopo aver camminato per circa un'ora ecco che il sentiero piega leggermente a est. Arrivi a un guado che attraversa un rapido torrente che scende a sud. Poco dopo il guado incontri un sentiero più largo che va da nord a sud. Capisci che se vai a nord ti allontani dalla capitale, quindi all'incrocio giri a destra e ti dirigi a sud.</p>",
+      "choices": [
+        {
+          "text": "Continua il viaggio",
+          "section": 111
+        }
+      ]
+    },
+    "6": {
+      "text": "<p>In lontananza senti un galoppo di cavalli che si avvicinano. Ti nascondi dietro un albero e aspetti: è la cavalleria della Guardia Reale con le bianche uniformi di Sua Maestà.</p>",
+      "choices": [
+        {
+          "text": "Chiamali",
+          "section": 183
+        },
+        {
+          "text": "Lasciali passare e continua il cammino nella foresta",
+          "section": 200
+        }
+      ]
+    },
+    "7": {
+      "text": "<p>Per quella che ti sembra un'eternità, l'impeto della folla ti trascina come una foglia sull'onda della corrente. Tenti disperatamente di stare in piedi ma ti senti debole e ti gira la testa, e le tue gambe pesano come il piombo. Improvvisamente intravvedi una lunga e stretta scala di pietra che porta sul tetto di una locanda. Raccogliendo le ultime forze ti precipiti verso la scala e cominci faticosamente a salire. Da lì vedi il magnifico panorama dei tetti e delle torri di Holmgard, con le alte mura di pietra della rocca splendenti nel sole. Le case e i palazzi della capitale sono costruiti molto vicini uno all'altro, ed è possibile saltare da un tetto all'altro. Un tempo gli abitanti di Holmgard adoperavano questi percorsi aerei quando le pesanti piogge autunnali trasformavano le strade non pavimentate in impraticabili pantani. Ma dopo molti incidenti un regio decreto aveva proibito severamente quest'abitudine. Valutato il prò e il contro, decidi di seguire questa via: l'unica che ti consente di raggiungere il Re. Con un salto dopo l'altro sorvoli diverse strade: te ne manca solo una. Quest'ultima però è molto più larga delle altre, e il salto è molto più impegnativo. La paura ti attanaglia lo stomaco. Deciso a raggiungere la fortezza, fai qualche passo indietro e prendi la rincorsa per il salto. Con il cuore in gola arrivi al bordo del tetto e ti lanci nel vuoto, con gli occhi fissi sul tetto di fronte. Scegli un numero della Tabella del Destino.</p>",
+      "image": "/public/img/sections/01-007.jpg",
+      "imageCaption": "Da qui vedi il magnifico panorama dei tetti e delle torri di Holmgard",
+      "choices": [
+        {
+          "text": "Numero da 0 a 2",
+          "section": 108
+        },
+        {
+          "text": "Numero da 3 a 9",
+          "section": 25
+        }
+      ]
+    },
+    "8": {
+      "text": "<p>Il tuo Sesto Senso ti dice che a sud infuria una violenta battaglia. Tuttavia sai che la via più rapida per la capitale è proprio quella che va verso sud.</p>",
+      "choices": [
+        {
+          "text": "Vai al 70 e scegli la tua strada",
+          "section": 70
+        }
+      ]
+    },
+    "9": {
+      "text": "<p>Non riesci a muoverti: sei come immobilizzato da una forza misteriosa. I tuoi occhi sono attratti irresistibilmente dalla bocca dello scheletro. Dalle viscere della terra sale un cupo rumore, come il ronzio di milioni di api impazzite. Nelle vuote occhiaie dello scheletro del Re appare un lieve chiarore di brace, mentre il ronzio aumenta fino a diventare assordante. Sei in presenza di una forza malvagia primordiale, molto più antica e potente degli stessi Signori delle Tenebre.</p>",
+      "choices": [
+        {
+          "text": "Se possiedi una Gemma Vordak",
+          "section": 236,
+          "requirements": {
+            "item": "Gemma Vordak"
+          }
+        },
+        {
+          "text": "Altrimenti",
+          "section": 292
+        }
+      ]
+    },
+    "10": {
+      "text": "<p>Stai sudando, e le gambe ti dolgono. Poco lontano vedi un gruppo di capanne.</p>",
+      "choices": [
+        {
+          "text": "Entra in una capanna per riposarti",
+          "section": 115
+        },
+        {
+          "text": "Vai avanti",
+          "section": 83
+        }
+      ]
+    },
+    "11": {
+      "text": "<p>Ti precipiti dentro una stalla, e nascondi il camice da chirurgo sotto la paglia: è meglio farsi vedere come Ramas che come ciarlatano. Senza perdere un attimo ti dirigi verso la Grande Sala all'altro lato del cortile.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 139
+        }
+      ]
+    },
+    "12": {
+      "text": "<p>La guardia del corpo ti guarda con grande sospetto e poi sbatte la porta. Senti delle voci all'interno del carrozzone. Improvvisamente la porta si apre e compare la faccia di un agiato mercante. Dice che ci vogliono 10 Corone per il viaggio.</p>",
+      "choices": [
+        {
+          "text": "Paga 10 Corone d'oro",
+          "section": 262,
+          "requirements": {
+            "minGold": 10
+          }
+        },
+        {
+          "text": "Non hai abbastanza soldi o non vuoi pagare",
+          "section": 247
+        }
+      ]
+    },
+    "13": {
+      "text": "<p>Dopo un po' il sentiero sbocca in un'ampia radura. Al centro si innalza un albero molto più alto e grosso di tutti quelli che hai visto nella foresta. A una decina di metri d'altezza, tra i rami poderosi, riesci a intravedere una capanna aerea. Non c'è una scala ma la corteccia nodosa del tronco offre molti appigli.</p>",
+      "choices": [
+        {
+          "text": "Arrampicati per raggiungere la capanna",
+          "section": 307
+        },
+        {
+          "text": "Continua il viaggio",
+          "section": 213
+        }
+      ]
+    },
+    "14": {
+      "text": "<p>Arrivi in cima a una collinetta boscosa dove trovi dei grandi macigni disposti in circolo. Improvvisamente senti un ringhio feroce da dietro una roccia alla tua sinistra.</p>",
+      "choices": [
+        {
+          "text": "Estrai un'Arma e combatti",
+          "section": 43
+        },
+        {
+          "text": "Disimpegnati scendendo di corsa la collina",
+          "section": 106
+        }
+      ]
+    },
+    "15": {
+      "text": "<p>I rami bassi degli alberi formano una specie di lunga galleria molto buia, alla fine della quale ti trovi in un'ampia radura. Sopra un altare di pietra al centro della radura c'è una Spada, protetta da un fodero di cuoio nero. Legato all'impugnatura c'è un messaggio, scritto in una lingua che non conosci. Puoi prendere la Spada, se vuoi. Ci sono tre uscite da questa radura.</p>",
+      "effects": {
+        "canAddWeapon": "Spada"
+      },
+      "choices": [
+        {
+          "text": "Vai a est",
+          "section": 207
+        },
+        {
+          "text": "Vai a ovest",
+          "section": 201
+        },
+        {
+          "text": "Vai a sud",
+          "section": 35
+        }
+      ]
+    },
+    "16": {
+      "text": "<p>Riesci a sciogliere uno dei cavalli legati al carrozzone. È spaventato dall'odore dei Tigerwolf, e dalle urla dei loro malvagi cavalieri, i Giak. Con la tua Arma in pugno inciti il cavallo verso le belve che avanzano. Sono a meno di cinquanta metri, e si precipitano verso di te con le lance abbassate. State per arrivare allo scontro frontale.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 192
+        }
+      ]
+    },
+    "17": {
+      "text": "<p>Alzi la tua Arma per colpire il mostro, mentre i suoi denti affilati scattano a pochi centimetri dalla tua testa. È difficile tenersi in piedi sotto i battiti delle sue ali. Togli un punto dalla tua Combattività e combatti contro il Kraan.</p>",
+      "combat": {
+        "name": "Kraan",
+        "combattivita": 16,
+        "resistenza": 24,
+        "immuneToPsicolaser": false,
+        "playerCombatPenalty": 1,
+        "canFlee": false
+      },
+      "choices": [
+        {
+          "text": "Se il tuo numero è 0",
+          "section": 53
+        },
+        {
+          "text": "Da 1 a 2",
+          "section": 274
+        },
+        {
+          "text": "Da 3 a 9",
+          "section": 331
+        }
+      ]
+    },
+    "18": {
+      "text": "<p>Vieni svegliato dal rumore di un esercito in lontananza. Oltre il lago distingui le figure dei Drakkar con i loro mantelli neri, e un branco di Tigerwolf con i loro cavalieri. Un Kraan compare sopra gli alberi, e atterra sul tetto di una piccola capanna di legno. Lo cavalca un essere vestito di rosso. Il Kraan si alza di nuovo in volo e attraversa il lago dirigendosi verso il tuo nascondiglio.</p>",
+      "choices": [
+        {
+          "text": "Inoltrarti nella foresta",
+          "section": 239
+        },
+        {
+          "text": "Usa l'Arte del Mimetismo",
+          "section": 114,
+          "requirements": {
+            "kaiArt": "Mimetismo"
+          }
+        },
+        {
+          "text": "Combatti con il mostro",
+          "section": 29
+        }
+      ]
+    },
+    "19": {
+      "text": "<p>Ai piedi degli alberi distingui le macchie rossastre di un cespuglio dalle spine acuminate. Questa pianta è chiamata comunemente Dente del sonno, perché le sue spine sono molto affilate e se graffiano la pelle provocano debolezza e sonnolenza.</p>",
+      "choices": [
+        {
+          "text": "Evita il Dente del sonno e ritorna sul sentiero",
+          "section": 272
+        },
+        {
+          "text": "Avanza tra i rovi, inoltrandoti nella foresta",
+          "section": 119
+        },
+        {
+          "text": "Se disponi dell'Arte dell'Orientamento",
+          "section": 69,
+          "requirements": {
+            "kaiArt": "Orientamento"
+          }
+        }
+      ]
+    },
+    "20": {
+      "text": "<p>Chi abitava qui dev'essere andato via da poco, e in gran fretta. Sulla tavola ci sono i resti di un pasto non consumato, e una tazza di Jala scura ancora tiepida. Frugando in una cassa e in un piccolo armadio, trovi uno Zaino, cibo sufficiente per due Pasti, e un Pugnale. Se vuoi prendere questi oggetti ricordati di segnarli sul tuo Registro di Guerra. Il tuo viaggio continua.</p>",
+      "effects": {
+        "canAddItems": [
+          "Zaino",
+          "Pugnale"
+        ],
+        "canAddMeals": 2
+      },
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 273
+        }
+      ]
+    },
+    "21": {
+      "text": "<p>Hai cavalcato per circa cinque chilometri nell'intrico degli alberi, e ora il terreno sta diventando paludoso. Scegli un numero dalla Tabella del Destino.</p><p>Se è <strong>meno di 5</strong>, il tuo cavallo sprofonda improvvisamente con tutte le zampe nel fango denso.</p><p>Se esce un numero <strong>da 5 in su</strong>, riesci ad evitare la palude e puoi andare al 189.</p><p>Se rimani bloccato, prendi di nuovo la Tabella del Destino e scegli un altro numero. Se questa volta il numero è da <strong>7 in giù</strong>, sprofondi fino alle ascelle. Con un ultimo disperato nitrito il cavallo scompare nella melma gorgogliante.</p><p>Se esce un numero <strong>superiore a 7</strong> ce la fai a raggiungere il terreno solido e puoi andare al 189.</p><p>Altrimenti ti resta soltanto una possibilità! Prendi di nuovo la Tabella del Destino: se esce un numero <strong>diverso da 9</strong> allora il fango fetido ti prende e ti trascina giù. <strong>Qui finisce il tuo viaggio e con lui la vita</strong>.</p><p>Se invece esce il 9 vai al 312.</p>",
+      "choices": [
+        {
+          "text": "Primo lancio: 5-9 (eviti la palude)",
+          "section": 189
+        },
+        {
+          "text": "Secondo lancio: 8-9 (raggiungi terreno solido)",
+          "section": 189
+        },
+        {
+          "text": "Terzo lancio: 9 (ultima possibilità)",
+          "section": 312
+        }
+      ]
+    },
+    "22": {
+      "text": "<p>Dando una spinta al capopattuglia scappi via per la strada. Ma il rumore sinistro di una balestra che si carica dietro di te ti fa correre un brivido lungo la schiena. Scegli un numero della Tabella del Destino.</p>",
+      "choices": [
+        {
+          "text": "Numero da 0 a 4",
+          "section": 181
+        },
+        {
+          "text": "Numero da 5 a 9",
+          "section": 145
+        }
+      ]
+    },
+    "23": {
+      "text": "<p>Il corridoio porta in un'ampia sala. In fondo una scala di pietra sale verso un'enorme porta. Due candele nere ai lati della scala illuminano a malapena la sala. Eppure la cera non sembra sciogliersi, e avvicinandoti ti accorgi che non emettono calore. La superficie del muro presenta antichi disegni scolpiti. Non vedi l'ora di lasciare questa tomba diabolica, e cerchi di capire il sistema di apertura della porta. Sembra che uno spillo decorato tenga chiusa la porta, ma c'è anche il buco per la chiave.</p>",
+      "choices": [
+        {
+          "text": "Togli lo spillo",
+          "section": 337
+        },
+        {
+          "text": "Usa l'Arte della Telecinesi",
+          "section": 151,
+          "requirements": {
+            "kaiArt": "Telecinesi"
+          }
+        },
+        {
+          "text": "Usa la Chiave d'Oro",
+          "section": 326,
+          "requirements": {
+            "item": "Chiave d'Oro"
+          }
+        }
+      ]
+    },
+    "24": {
+      "text": "<p>Il mercante grida al cocchiere di saltar giù. 'Ci stanno attaccando!' grida, e sparisce per una finestrella rotonda.</p>",
+      "choices": [
+        {
+          "text": "Salta giù anche tu",
+          "section": 234
+        },
+        {
+          "text": "Sali a cassetta per controllare i cavalli",
+          "section": 184
+        }
+      ]
+    },
+    "25": {
+      "text": "<p>Cadi sul tetto di fronte con una tale violenza che ti si mozza il respiro, e rimani disteso con la testa che ti gira. Ci metti un paio di minuti per capire che ce l'hai fatta e che sei al sicuro. Appena ti sei ripreso ti alzi in piedi gridando di felicità. Trovi subito il modo di attraversare il tetto, e scendi in strada lungo il tubo di una grondaia. Vedi che le grandi porte di ferro della rocca sono aperte; un carro trascinato da due grossi cavalli sta uscendo proprio in quel momento. I cavalli sono spaventati dalla folla rumorosa e si impennano, provocando la rottura di una ruota anteriore del carro contro uno dei battenti. Nella confusione vedi la possibilità di entrare, e riesci a infilarti dentro un attimo prima che la guardia chiuda il portone.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 139
+        }
+      ]
+    },
+    "26": {
+      "text": "<p>Cautamente percorri il corridoio fin dove questo svolta bruscamente a est. In lontananza vedi una strana luce verdastra.</p>",
+      "choices": [
+        {
+          "text": "Continua verso la luce",
+          "section": 249
+        },
+        {
+          "text": "Torna indietro e prova in direzione sud",
+          "section": 100
+        }
+      ]
+    },
+    "27": {
+      "text": "<p>Cammini per questo sentiero per più di un'ora, guardando attentamente il cielo per non farti sorprendere da un altro attacco dei Kraan. Davanti a te un grande albero è caduto di traverso sul sentiero. Avvicinandoti senti delle voci che vengono da dietro l'enorme tronco.</p>",
+      "choices": [
+        {
+          "text": "Attacca",
+          "section": 250
+        },
+        {
+          "text": "Ascolta quello che dicono",
+          "section": 52
+        }
+      ]
+    },
+    "28": {
+      "text": "<p>Dopo alcune centinaia di metri, il sentiero si congiunge con un altro che va da nord a sud.</p>",
+      "choices": [
+        {
+          "text": "Vai a nord",
+          "section": 130
+        },
+        {
+          "text": "Vai a sud",
+          "section": 147
+        }
+      ]
+    },
+    "29": {
+      "text": "<p>Ti avvicini alla riva e ti prepari al combattimento. Il Kraan e il suo cavaliere ti vedono e si lanciano attraverso il lago volando a pochi centimetri sul pelo dell'acqua. Il cavaliere emette un urlo che ti gela il sangue. È uno dei Vordak, i feroci ufficiali dei Signori delle Tenebre. Oramai ti è addosso, e devi combatterlo. Togli due punti dalla tua Combattività, a meno che tu non abbia lo Psicoschermo; il nemico ti sta attaccando anche con il suo Psicolaser, non solo con la sua mazza.</p>",
+      "combat": {
+        "name": "Vordak",
+        "combattivita": 17,
+        "resistenza": 25,
+        "immuneToPsicolaser": false,
+        "playerCombatPenalty": 2,
+        "psicoschermoPreventsLoss": true,
+        "canFlee": false
+      },
+      "choices": [
+        {
+          "text": "Se vinci",
+          "section": 270
+        }
+      ]
+    },
+    "30": {
+      "text": "<p>La gente sembra stanca e affamata. Hanno percorso molti chilometri fuggendo dalla loro città incendiata. Improvvisamente senti il battito di enormi ali che arrivano da nord. 'I Kraan, i Kraan! Nascondetevi!' grida la gente lungo la strada. Proprio davanti a te un carro pieno di bambini piccoli si blocca con la ruota in un fosso. I bambini gridano in preda al panico.</p>",
+      "choices": [
+        {
+          "text": "Aiuta i bambini",
+          "section": 194
+        },
+        {
+          "text": "Riparati tra gli alberi",
+          "section": 261
+        }
+      ]
+    },
+    "31": {
+      "text": "<p>Tenti di soccorrere l'uomo ferito meglio che puoi, ma le sue ferite sono gravi e cade di nuovo svenuto. Lo copri con il suo mantello e torni a inoltrarti nella foresta.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 264
+        }
+      ]
+    },
+    "32": {
+      "text": "<p>Dopo aver cavalcato per un paio di chilometri vedi in lontananza l'inconfondibile sagoma di cinque grandi Tigerwolf. In groppa portano dei Giak. Stanno avanzando lungo il sentiero che porta ad un ampio prato. Improvvisamente uno dei Giak lascia gli altri, si gira, e viene nella tua direzione.</p>",
+      "choices": [
+        {
+          "text": "Nasconditi nel sottobosco e lascialo passare",
+          "section": 176
+        },
+        {
+          "text": "Affrontalo",
+          "section": 340
+        }
+      ]
+    },
+    "33": {
+      "text": "<p>Il pavimento della grotta è asciutto e polveroso. Cominci a muoverti nella penombra, e ad un certo punto senti odore di carne in decomposizione. In un avvallamento sono sparsi dei resti di piccoli animali: ossa, denti pezzi di pelliccia. Vedi una piccola borsa di stoffa tra questi resti, con dentro tre Corone d'oro. Le prendi e lasci quella che sembra la tana di un gatto selvatico, poi con cautela scendi la collina.</p>",
+      "effects": {
+        "addGold": 3
+      },
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 248
+        }
+      ]
+    },
+    "34": {
+      "text": "<p>Mentre meno te l'aspetti, una orribile figura vestita di rosso scende dal cielo a cavallo di un Kraan. Il suo grido ti congela il sangue. È un Vordak, uno dei feroci ufficiali dei Signori delle Tenebre. Ormai ti è addosso, e devi combatterlo. Togli due punti dalla tua Combattività, a meno che tu non abbia lo Psicoschermo; il nemico ti sta attaccando anche con il suo Psicolaser.</p>",
+      "combat": {
+        "name": "Vordak",
+        "combattivita": 17,
+        "resistenza": 25,
+        "immuneToPsicolaser": false,
+        "playerCombatPenalty": 2,
+        "psicoschermoPreventsLoss": true,
+        "canFlee": false
+      },
+      "choices": [
+        {
+          "text": "Se vinci",
+          "section": 328
+        }
+      ]
+    },
+    "35": {
+      "text": "<p>La foresta sta diventando più fitta, e il sentiero è invaso da cespugli spinosi. Verso est si diparte un altro sentiero, appena visibile nel sottobosco. Siccome il tuo sentiero sembra perdersi, decidi di seguire quello verso est.</p>",
+      "choices": [
+        {
+          "text": "Vai a est",
+          "section": 207
+        }
+      ]
+    },
+    "36": {
+      "text": "<p>La scala che porta alla vecchia torre di guardia è marcia, e diversi gradini si rompono mentre sali. Scegli un numero dalla Tabella del Destino.</p>",
+      "choices": [
+        {
+          "text": "Numero da 0 a 4 (cadi, perdi 2 Resistenza)",
+          "section": 140,
+          "effects": {
+            "loseEndurance": 2
+          }
+        },
+        {
+          "text": "Numero da 5 a 9 (non cadi)",
+          "section": 323
+        }
+      ]
+    },
+    "37": {
+      "text": "<p>Ti senti stanco e affamato, e devi fermarti per mangiare, altrimenti perdi 3 punti di Resistenza. Dopo il tuo Pasto, torni sui tuoi passi fino alla rocca e cominci a fare il giro delle mura, alte e inviolabili. Scopri un'altra entrata sul lato est, anche questa con due soldati di guardia.</p>",
+      "effects": {
+        "mustEatOrLoseEndurance": 3
+      },
+      "choices": [
+        {
+          "text": "Avvicinati e racconta la tua storia",
+          "section": 289
+        },
+        {
+          "text": "Usa l'Arte del Mimetismo",
+          "section": 282,
+          "requirements": {
+            "kaiArt": "Mimetismo"
+          }
+        }
+      ]
+    },
+    "38": {
+      "text": "<p>Per più di mezz'ora continui a camminare nella foresta, tra le felci e la ricca vegetazione. Ti imbatti in un ruscello, dove ti fermi un paio di minuti per lavarti il viso e bere un po' d'acqua fresca. Rinfrescato, attraversi il ruscello e avanzi. Dopo un po' senti odore di legna bruciata, e ti sembra che arrivi da nord.</p>",
+      "choices": [
+        {
+          "text": "Scopri da dove viene l'odore",
+          "section": 128
+        },
+        {
+          "text": "Tieniti alla larga",
+          "section": 347
+        }
+      ]
+    },
+    "39": {
+      "text": "<p>Dopo un attimo due piccole facce pelose e spaventate compaiono da dietro il tronco. Dicono di essere Kakarmi e ti informano che i Kraan sono dappertutto. Il loro paese si trova verso ovest, ma ormai ne rimane ben poco. Stanno cercando gli altri della loro tribù che sono fuggiti nella foresta durante l'attacco dei Kraan. Ti dicono che il sentiero verso est, quello dietro a loro, è senza uscita; però qualche metro più avanti nel sottobosco pu Human trovare una vecchia torre di guardia dove il sentiero si biforca. Tu devi prendere quello che porta a est, fino alla grande strada che collega Holmgard, la capitale, con il porto settentrionale di Toran. Ringrazi i Kakarmi e li saluti.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 228
+        }
+      ]
+    },
+    "40": {
+      "text": "<p>Tenendo d'occhio le capanne nel caso che il nemico si faccia vedere, fai il giro della radura tenendoti al riparo degli alberi e dei cespugli. Tornato sul sentiero, ti allontani in fretta da Fogwood.</p>",
+      "choices": [
+        {
+          "text": "Continua",
+          "section": 105
+        }
+      ]
+    }
+  }
+}

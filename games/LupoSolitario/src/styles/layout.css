@@ -1,0 +1,111 @@
+/* Layout CSS - Extracted from index.html */
+
+/* Game Layout */
+.game-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+}
+
+/* Character Sheet Layout */
+#character-sheet-container {
+    position: sticky;
+    top: 90px;
+}
+
+.stats-section,
+.section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.section h4 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.kai-arts-list,
+.weapons-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+/* Health Status Colors */
+.health-good {
+    color: var(--color-success);
+}
+
+.health-warning {
+    color: var(--color-warning);
+}
+
+.health-danger {
+    color: var(--color-danger);
+}
+
+/* Remove Item Button */
+.btn-remove {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    transition: all var(--transition-fast);
+}
+
+.btn-remove:hover {
+    background: var(--color-danger);
+    color: white;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    #character-sheet-container {
+        position: sticky;
+        top: 70px;
+        z-index: 50;
+    }
+
+    .character-sheet.collapsed .sheet-content {
+        display: none;
+    }
+
+    .character-sheet {
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-md);
+    }
+
+    .sheet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-remove {
+        width: 24px;
+        height: 24px;
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 769px) {
+    .sheet-header button {
+        display: none;
+    }
+}
