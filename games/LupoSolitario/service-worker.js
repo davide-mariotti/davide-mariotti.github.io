@@ -1,20 +1,21 @@
 // Service Worker for offline support
 const CACHE_NAME = 'lupo-solitario-v1';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/src/styles/main.css',
-    '/src/app.js',
-    '/src/firebase-config.js',
-    '/src/auth.js',
-    '/src/game-state.js',
-    '/src/save-manager.js',
-    '/src/components/character-creator.js',
-    '/src/components/character-sheet.js',
-    '/src/components/story-reader.js',
-    '/src/components/combat-manager.js',
-    '/src/components/destiny-table.js',
-    '/manifest.json'
+    './',
+    './index.html',
+    './src/styles/main.css',
+    './src/styles/layout.css',
+    './src/app.js',
+    './src/firebase-config.js',
+    './src/auth.js',
+    './src/game-state.js',
+    './src/save-manager.js',
+    './src/components/character-creator.js',
+    './src/components/character-sheet.js',
+    './src/components/story-reader.js',
+    './src/components/combat-manager.js',
+    './src/components/destiny-table.js',
+    './manifest.json'
 ];
 
 // Install event - cache resources

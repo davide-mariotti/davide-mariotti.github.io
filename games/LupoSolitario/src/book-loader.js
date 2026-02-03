@@ -18,7 +18,7 @@ export class BookLoader {
         }
 
         try {
-            const response = await fetch(`/data/books/${bookId}.json`);
+            const response = await fetch(`./data/books/${bookId}.json`);
             if (!response.ok) {
                 throw new Error(`Failed to load book: ${response.statusText}`);
             }
