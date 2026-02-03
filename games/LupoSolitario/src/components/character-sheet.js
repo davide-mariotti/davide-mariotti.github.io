@@ -21,6 +21,13 @@ export class CharacterSheet {
   update(container, state) {
     const { character } = state;
 
+    // Update container class
+    if (this.isCollapsed) {
+      container.classList.add('collapsed');
+    } else {
+      container.classList.remove('collapsed');
+    }
+
     container.innerHTML = `
       <div class="sheet-header">
         <button class="btn btn-small" id="toggle-sheet">
