@@ -151,6 +151,25 @@ class GameState {
 
     // Navigation methods
     goToSection(sectionNumber, addToHistory = true) {
+        // Healing Logic (Guarigione)
+        if (this.hasKaiArt('Guarigione')) {
+            // Heal 1 EP if the previous section did NOT have combat
+            // We check a flag 'sectionHadCombat' which is reset on navigation
+            if (!this.state.flags.sectionHadCombat) {
+                // Only heal if not full health
+                if (this.state.character.resistenza < this.state.character.resistenzaMax) {
+                    this.heal(1);
+                    // Optional: notify UI, but might be spammy. 
+                    // UIHelpers.showToast('💚 Guarigione: +1 Resistenza', 'success'); 
+                    // We can't access UIHelpers here easily without circular dependency usually, 
+                    // but GameState is low level. We'll skip toast or rely on listener.
+                }
+            }
+        }
+
+        // Reset combat flag for the new section
+        this.setFlag('sectionHadCombat', false);
+
         if (addToHistory) {
             this.setState({
                 currentSection: sectionNumber,
@@ -179,6 +198,7 @@ class GameState {
 
     // Combat methods
     startCombat(combatData) {
+        this.setFlag('sectionHadCombat', true);
         this.setState({
             inCombat: true,
             combatState: {

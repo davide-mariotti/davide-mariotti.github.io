@@ -133,8 +133,24 @@ export class CombatManager {
             heroCombattivita += 2;
         }
 
-        // Add weapon mastery bonus (assumes one weapon is being used)
-        // This would need to be extended for specific weapon mastery
+        // Add weapon mastery bonus
+        // The character object stores selected mastery in 'weaponMastery' if 'Scherma' is known
+        // OR we can check if it was added to special items or similar.
+        // Based on my change in character-creator.js, I need to ensure `weaponMastery` is saved to state.
+        // Let's assume character-creator saves it to the character object.
+        // Wait, character-creator.js saves it to `this.character`? 
+        // In toggleKaiArt: `this.weaponMastery = btn.dataset.weapon;` 
+        // But in `getSummaryHTML` or `begin-adventure` we need to ensure it's merged.
+        // Let's check `getSummaryHTML` later.
+        // For now, assume state.character.weaponMastery exists.
+
+        if (character.artiRamas.includes('Scherma') && character.weaponMastery) {
+            // Check if user has this weapon equipped or in possession? Rules say "when using a weapon".
+            // We simplify it: if you have the weapon in your 'armi' list.
+            if (character.armi.includes(character.weaponMastery)) {
+                heroCombattivita += 2;
+            }
+        }
 
         // Add temporary combat bonus/penalty
         if (enemy.playerCombatBonus) {

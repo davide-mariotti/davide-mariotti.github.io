@@ -414,6 +414,10 @@ export class CharacterCreator {
     const beginBtn = container.querySelector('#begin-adventure');
     if (beginBtn) {
       beginBtn.addEventListener('click', () => {
+        // Include weaponMastery in character data
+        if (this.weaponMastery) {
+          this.character.weaponMastery = this.weaponMastery;
+        }
         gameState.setCharacter(this.character);
         if (this.onComplete) this.onComplete();
       });
@@ -471,10 +475,38 @@ export class CharacterCreator {
         this.character.artiRamas.push(artName);
         card.classList.add('selected');
 
-        // Handle Scherma - roll for weapon mastery
+        // Handle Scherma - prompt for weapon mastery
         if (artName === 'Scherma' && !this.weaponMastery) {
-          const weaponIndex = getRandomDestinyNumber();
-          this.weaponMastery = WEAPONS[weaponIndex];
+          // Create a modal to select the weapon
+          const modal = document.createElement('div');
+          modal.className = 'modal-overlay';
+          modal.innerHTML = `
+               <div class="modal">
+                 <div class="modal-header">
+                   <h2>⚔️ Seleziona Arma per Scherma</h2>
+                 </div>
+                 <p>In quale arma sei maestro? (+2 Combattività quando la usi)</p>
+                 <div class="weapon-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 1rem;">
+                    ${WEAPONS.map((w, i) => `<button class="btn btn-outline weapon-select-btn" data-weapon="${w}">${w}</button>`).join('')}
+                 </div>
+               </div>
+             `;
+          document.body.appendChild(modal);
+
+          modal.querySelectorAll('.weapon-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              this.weaponMastery = btn.dataset.weapon;
+              // Add to character object property? Handled in summary? 
+              // Ideally we should tell the user.
+              const message = document.createElement('div');
+              message.className = 'kai-art-desc';
+              message.style.color = "var(--color-success)";
+              message.innerText = `Maestria: ${this.weaponMastery}`;
+              card.appendChild(message);
+
+              modal.remove();
+            });
+          });
         }
       }
     }
