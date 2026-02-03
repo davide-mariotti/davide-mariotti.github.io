@@ -47,12 +47,16 @@ export class StoryReader {
       html += this.renderCombat(combatState);
     }
 
-    // Show choices or Destiny Test
-    if (!inCombat && section.choices && section.choices.length > 0) {
-      if (this.isDestinyTest(section.choices)) {
-        html += this.renderDestinyTest();
-      } else {
-        html += this.renderStandardChoices(section.choices, state);
+    // Show choices, Destiny Test, or Death Message
+    if (!inCombat) {
+      if (section.isDeathSection) {
+        html += this.renderDeathSection();
+      } else if (section.choices && section.choices.length > 0) {
+        if (this.isDestinyTest(section.choices)) {
+          html += this.renderDestinyTest();
+        } else {
+          html += this.renderStandardChoices(section.choices, state);
+        }
       }
     }
 
@@ -89,6 +93,16 @@ export class StoryReader {
     const destinyBtn = container.querySelector('#destiny-roll-btn');
     if (destinyBtn) {
       destinyBtn.addEventListener('click', () => this.handleDestinyRoll(container, section));
+    }
+
+    const restartBtn = container.querySelector('#restart-btn');
+    if (restartBtn) {
+      restartBtn.addEventListener('click', async () => {
+        await saveManager.deleteSave('autosave');
+        gameState.resetGame();
+        // Use window.location.href to force a clean reload to the root or index
+        window.location.reload();
+      });
     }
 
 
@@ -384,6 +398,20 @@ export class StoryReader {
           </button>
           
           <div id="destiny-message" style="margin-top: 1rem; min-height: 1.5rem;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderDeathSection() {
+    return `
+      <div class="death-container" style="text-align: center; margin-top: 2rem;">
+        <div class="card" style="border-color: var(--color-danger); background: rgba(220, 38, 38, 0.1);">
+          <h3 style="color: var(--color-danger);">💀 GAME OVER</h3>
+          <p>La tua avventura finisce qui.</p>
+          <button class="btn btn-danger btn-large btn-block" id="restart-btn" style="margin-top: 1.5rem;">
+            🔄 Ricomincia l'avventura
+          </button>
         </div>
       </div>
     `;
