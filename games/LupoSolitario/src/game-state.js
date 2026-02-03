@@ -112,6 +112,13 @@ class GameState {
         this.updateStats({ armi });
     }
 
+    clearEquipment() {
+        this.updateStats({
+            armi: [],
+            zaino: []
+        });
+    }
+
     addCorone(amount) {
         const corone = Math.min(50, this.state.character.corone + amount);
         this.updateStats({ corone });

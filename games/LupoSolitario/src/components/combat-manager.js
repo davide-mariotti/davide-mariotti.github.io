@@ -114,7 +114,8 @@ export class CombatManager {
             enemy: enemyData.name,
             combattivita: enemyData.combattivita,
             resistenza: enemyData.resistenza,
-            immuneToPsicolaser: enemyData.immuneToPsicolaser || false
+            immuneToPsicolaser: enemyData.immuneToPsicolaser || false,
+            mindblast: enemyData.mindblast || false
         });
 
         this.log(`⚔️ Combattimento contro ${enemyData.name}!`);
@@ -150,6 +151,13 @@ export class CombatManager {
             if (character.armi.includes(character.weaponMastery)) {
                 heroCombattivita += 2;
             }
+        }
+
+        // Enemy Mindblast (Psicoattacco)
+        if (enemy.mindblast && !character.artiRamas.includes('Psicoschermo')) {
+            heroCombattivita -= 2;
+            // Ideally notify user, but we are in a calculation loop perhaps.
+            // rely on log? We don't log here.
         }
 
         // Add temporary combat bonus/penalty

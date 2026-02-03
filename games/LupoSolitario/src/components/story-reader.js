@@ -197,6 +197,18 @@ export class StoryReader {
 
     // Must eat or lose endurance
     if (effects.mustEatOrLoseEndurance) {
+      // Check for Caccia (Hunting)
+      // TODO: Check if current section is in a "Wasteland" where Hunting doesn't work.
+      // For now, assuming it works everywhere.
+      if (gameState.hasKaiArt('Caccia')) {
+        UIHelpers.showToast('🏹 Caccia: Hai procurato del cibo e non devi consumare un Pasto.', 'success');
+        const state = gameState.getState();
+        const currentSection = state.currentSection;
+        const mealFlagKey = `meal_consumed_section_${currentSection}`;
+        gameState.setFlag(mealFlagKey, true); // Mark as handled
+        return; // Skip the rest
+      }
+
       const state = gameState.getState();
       const currentSection = state.currentSection;
       const mealFlagKey = `meal_consumed_section_${currentSection}`;
@@ -240,7 +252,7 @@ export class StoryReader {
 
     // Automatic items (e.g. from Loot)
     if (effects.loseAllItems) {
-      // Logic handled by game state usually, but adding toast here if needed
+      gameState.clearEquipment();
       UIHelpers.showToast('🎒 Hai perso tutto il tuo equipaggiamento!', 'error');
     }
   }
