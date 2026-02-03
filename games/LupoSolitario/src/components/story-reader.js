@@ -150,8 +150,11 @@ export class StoryReader {
   async applyEffects(effects) {
     // Add single item
     if (effects.addItem) {
-      gameState.addToZaino(effects.addItem);
-      UIHelpers.showToast(`✅ Aggiunto: ${effects.addItem}`, 'success');
+      if (gameState.addToZaino(effects.addItem)) {
+        UIHelpers.showToast(`✅ Aggiunto: ${effects.addItem}`, 'success');
+      } else {
+        UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere: ${effects.addItem}`, 'error');
+      }
     }
 
     // Add multiple items with confirmation
@@ -159,8 +162,11 @@ export class StoryReader {
       for (const item of effects.canAddItems) {
         const confirmed = await UIHelpers.confirmAsync(`Vuoi prendere ${item}?`);
         if (confirmed) {
-          gameState.addToZaino(item);
-          UIHelpers.showToast(`✅ Preso: ${item}`, 'success');
+          if (gameState.addToZaino(item)) {
+            UIHelpers.showToast(`✅ Preso: ${item}`, 'success');
+          } else {
+            UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere: ${item}`, 'error');
+          }
         }
       }
     }
@@ -172,8 +178,14 @@ export class StoryReader {
 
     // Add meals
     if (effects.canAddMeals) {
-      gameState.addPasti(effects.canAddMeals);
-      UIHelpers.showToast(`🍖 Hai trovato ${effects.canAddMeals} pasti!`, 'success');
+      const added = gameState.addPasti(effects.canAddMeals);
+      if (added === effects.canAddMeals) {
+        UIHelpers.showToast(`🍖 Hai trovato ${effects.canAddMeals} pasti!`, 'success');
+      } else if (added > 0) {
+        UIHelpers.showToast(`🍖 Hai preso ${added} pasti, ma lo zaino è pieno.`, 'warning');
+      } else {
+        UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere i pasti.`, 'error');
+      }
     }
 
     // Add gold

@@ -85,7 +85,11 @@ class GameState {
 
     // Inventory methods
     addToZaino(item) {
-        if (this.state.character.zaino.length >= 8) {
+        // Limit is 8 items inclusive of Meals
+        const currentItems = this.state.character.zaino.length;
+        const currentMeals = this.state.character.pasti;
+
+        if (currentItems + currentMeals >= 8) {
             return false; // Zaino full
         }
         const zaino = [...this.state.character.zaino, item];
@@ -130,8 +134,18 @@ class GameState {
     }
 
     addPasti(amount) {
-        const pasti = this.state.character.pasti + amount;
+        const currentItems = this.state.character.zaino.length;
+        const currentMeals = this.state.character.pasti;
+        const availableSpace = 8 - (currentItems + currentMeals);
+
+        if (availableSpace <= 0) {
+            return 0; // No space
+        }
+
+        const amountToAdd = Math.min(amount, availableSpace);
+        const pasti = currentMeals + amountToAdd;
         this.updateStats({ pasti });
+        return amountToAdd;
     }
 
     consumePasto() {
