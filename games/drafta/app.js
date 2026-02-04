@@ -91,7 +91,7 @@ function setupEventListeners() {
         await updateDoc(doc(db, 'rooms', state.currentRoomId), { currentPick: null });
         showToast("Selezione annullata");
     });
-
+    document.getElementById('btn-export-csv').addEventListener('click', exportTeamsToCSV);
 
 
     // Modal
@@ -338,11 +338,16 @@ function enterRoom(roomId, isHost, password = null) {
         // Header Info Update
         document.getElementById('txt-room-id-display').textContent = `ID: ${roomId}`;
         const passEl = document.getElementById('txt-room-pass-display');
+
+        const btnCsv = document.getElementById('btn-export-csv');
+
         if (state.isHost) {
             passEl.textContent = `PSW: ${data.password}`;
             passEl.style.display = 'block';
+            if (btnCsv) btnCsv.style.display = 'inline-block';
         } else {
             passEl.style.display = 'none';
+            if (btnCsv) btnCsv.style.display = 'none';
         }
 
         // Request Notification Permission on Join
@@ -359,16 +364,12 @@ function enterRoom(roomId, isHost, password = null) {
         // View Routing
         renderLobbyOrDraft(data);
 
-        // First Round Order Modal Trigger (Host Only, First time)
-        if (state.isHost && data.status === 'started' && data.currentTurnIndex === 0) {
-            const modal = document.getElementById('modal-load-order');
-            if (!state.hasShownOrderModal) {
+        // Import Order Settings Modal (Host Only, Once per Import)
+        if (state.isHost && data.status === 'started' && data.isImported && !data.orderSettingsApplied) {
+            const modal = document.getElementById('modal-order-settings');
+            if (modal && !state.hasShownOrderModal) {
                 modal.classList.remove('hidden');
                 state.hasShownOrderModal = true;
-            }
-            // Always update preview if modal is open
-            if (!modal.classList.contains('hidden')) {
-                renderOrderPreview(data.draftOrder);
             }
         }
     });
@@ -595,27 +596,17 @@ function updateDraftUI(data) {
             if (state.lastTurnOwner !== state.user.uid) {
                 sendTurnNotification("È il tuo turno! Fai la tua scelta.");
             }
-
-            // Show Controls for Owner
-            document.getElementById('host-bid-controls').classList.remove('hidden');
-
+            // Controls visibility handled by updateStage now based on active pick
         } else {
             turnEl.textContent = currentTeam.name;
             turnEl.style.color = "white";
             turnEl.style.textShadow = "none";
-
-            // Show controls IF host, otherwise hide
-            if (!state.isHost) {
-                document.getElementById('host-bid-controls').classList.add('hidden');
-            } else {
-                document.getElementById('host-bid-controls').classList.remove('hidden');
-            }
         }
         state.lastTurnOwner = currentTeam.ownerUid; // Track for edge detection
 
     } else {
         turnEl.textContent = 'Fine Asta';
-        document.getElementById('host-bid-controls').classList.add('hidden');
+        // Hide controls handled by updateStage
     }
 
 
@@ -632,8 +623,30 @@ function updateDraftUI(data) {
 
     // 4. AVAILABLE PLAYERS
     const takenIds = new Set();
-    data.teams.forEach(t => t.roster.forEach(r => takenIds.add(r.playerId)));
-    updatePlayerListVisuals(takenIds);
+    data.teams.forEach(t => t.roster.forEach(r => takenIds.add(String(r.playerId))));
+
+    // Calculate Hidden Roles for Current Team
+    const hiddenRoles = [];
+    if (currentTeam) {
+        const roles = { P: 0, D: 0, C: 0, A: 0 };
+        // Count roles (re-using logic from confirmPick approx)
+        currentTeam.roster.forEach(r => {
+            // Find player in global state
+            const p = state.players.find(pl => String(pl.id) === String(r.playerId));
+            if (p) roles[p.role]++;
+        });
+
+        const maxRoles = { P: 3, D: 8, C: 8, A: 6 };
+        if (roles.P >= maxRoles.P) hiddenRoles.push('P');
+        if (roles.D >= maxRoles.D) hiddenRoles.push('D');
+        if (roles.C >= maxRoles.C) hiddenRoles.push('C');
+        if (roles.A >= maxRoles.A) hiddenRoles.push('A');
+    } else {
+        // No current team -> Draft Finished?
+        hiddenRoles.push('P', 'D', 'C', 'A');
+    }
+
+    updatePlayerListVisuals(takenIds, hiddenRoles);
 }
 
 // Turn strip removed
@@ -720,7 +733,7 @@ function renderTeamsMatrix(data) {
                      <span style="color:var(--accent)">${team.ownerName || 'No Owner'}</span>
                 </div>
                 <div class="matrix-meta">
-                     <span>💰 ${team.credits}</span>
+                     <span title="Valore Rosa Totale">💎 ${team.totalValue || 0}</span>
                      <span>👥 ${team.roster.length}/25</span>
                 </div>
             </div>
@@ -816,12 +829,33 @@ function updateStage(player) {
 
         card.style.opacity = 1;
 
-        // Image logic
         const imgEl = document.getElementById('active-player-img');
         if (imgEl) {
             imgEl.src = `https://content.fantacalcio.it/web/campioncini/20/card/${player.id}.png`;
             imgEl.classList.remove('hidden');
+
+            // Show/Hide Host Controls
+            const hBadge = document.getElementById('host-badge');
+            if (hBadge) hBadge.style.display = state.isHost ? 'inline-block' : 'none';
+
+            // Draft Order and CSV Export (Host Only)
+            const btnOrder = document.getElementById('btn-draft-order');
+            const btnCsv = document.getElementById('btn-export-csv');
+
+            if (btnOrder) btnOrder.style.display = state.isHost ? 'inline-flex' : 'none';
+            if (btnCsv) btnCsv.style.display = state.isHost ? 'inline-flex' : 'none';
+
+            // Password Reveal (Host only)
+            const passEl = document.getElementById('txt-room-pass-display');
+            if (passEl) passEl.style.display = state.isHost ? 'inline-block' : 'none';
         }
+
+        // Host Controls Visibility
+        const controls = document.getElementById('host-bid-controls');
+        if (controls) {
+            controls.style.display = state.isHost ? 'flex' : 'none';
+        }
+
     } else {
         nameEl.textContent = "Seleziona Giocatore";
         teamEl.textContent = "-";
@@ -834,6 +868,10 @@ function updateStage(player) {
             imgEl.src = 'icons/0000.png';
             imgEl.classList.remove('hidden');
         }
+
+        // Hide controls if no player selected
+        const controls = document.getElementById('host-bid-controls');
+        if (controls) controls.style.display = 'none';
     }
 }
 
@@ -886,7 +924,7 @@ async function confirmPick() {
     const cost = player.cost;
 
     // 2. Validation: Credits
-    if (team.credits < cost) return showToast("Crediti insufficienti!");
+    if (team.credits < cost && !state.isHost) return showToast("Crediti insufficienti!");
 
     // 3. Validation: Strict Role Order (P -> D -> C -> A)
     // Count current roles
@@ -899,21 +937,22 @@ async function confirmPick() {
 
     const targetRole = player.role;
 
-    // Strict Role Order Implementation
+    // Strict Role Order Implementation (Host CANNOT bypass if enabled)
     if (state.roomData.settings?.strictRoles) {
         if (targetRole === 'D' && roles.P < 3) return showBigError("Devi completare i portieri prima!");
         if (targetRole === 'C' && (roles.P < 3 || roles.D < 8)) return showBigError("Devi completare P e D prima!");
         if (targetRole === 'A' && (roles.P < 3 || roles.D < 8 || roles.C < 8)) return showBigError("Devi completare P, D e C prima!");
     }
 
-    // Also, don't allow picking P if P is full
+    // Also, don't allow picking if roles full (Host CANNOT bypass max slots to prevent errors)
     const maxRoles = { P: 3, D: 8, C: 8, A: 6 };
     if (roles[targetRole] >= maxRoles[targetRole]) return showBigError(`Slot ${targetRole} completi!`);
 
 
     // Update Logic
     const roomRef = doc(db, 'rooms', state.currentRoomId);
-    const newTeams = [...room.teams];
+    // DEEP COPY to prevent reference issues/data loss
+    const newTeams = JSON.parse(JSON.stringify(room.teams));
     const pickedItems = [{ playerId, cost }];
 
     // 4. Automatic GK Block Logic
@@ -954,7 +993,7 @@ async function confirmPick() {
     let nextDraftOrder = [...room.draftOrder];
     let nextRound = room.roundNumber;
 
-    if (nextTurnIndex >= room.draftOrder.length * room.roundNumber) {
+    if (nextTurnIndex >= room.draftOrder.length) {
         nextRound++;
         // Sort lowest value first for next round logic
         const sortedTeams = [...newTeams].sort((a, b) => a.totalValue - b.totalValue);
@@ -1061,6 +1100,10 @@ function renderPlayerList(filterRole = 'all', searchTerm = '') {
 
     // Filter
     let players = state.players.filter(p => {
+        // Filter out assigned players
+        const isAssigned = state.roomData.teams.some(t => t.roster && t.roster.some(r => String(r.playerId) === String(p.id)));
+        if (isAssigned) return false;
+
         if (filterRole !== 'all' && p.role !== filterRole) return false;
         if (searchTerm && !p.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
         return true;
@@ -1073,6 +1116,7 @@ function renderPlayerList(filterRole = 'all', searchTerm = '') {
         const li = document.createElement('li');
         li.className = 'player-item';
         li.dataset.id = p.id;
+        li.dataset.role = p.role; // Add role for filtering
         li.innerHTML = `
             <span class="p-role-badge role-${p.role}" style="background:var(--role-${p.role === 'P' ? 'gk' : p.role === 'D' ? 'def' : p.role === 'C' ? 'mid' : 'att'})">${p.role}</span>
             <div class="p-info">
@@ -1090,15 +1134,39 @@ function renderPlayerList(filterRole = 'all', searchTerm = '') {
     });
 }
 
-function updatePlayerListVisuals(takenIds) {
+function updatePlayerListVisuals(takenIds, hiddenRoles = []) {
     const items = document.querySelectorAll('.player-item');
     items.forEach(item => {
-        if (takenIds.has(item.dataset.id)) {
-            item.classList.add('hidden'); // Or style as disabled
+        const isTaken = takenIds.has(item.dataset.id);
+        const isHiddenRole = hiddenRoles.includes(item.dataset.role);
+
+        if (isTaken || isHiddenRole) {
+            item.classList.add('hidden');
         } else {
             item.classList.remove('hidden');
         }
     });
+
+    // Check if list is empty/all hidden
+    const visible = document.querySelectorAll('.player-item:not(.hidden)');
+    const msgEl = document.getElementById('list-status-msg');
+
+    if (visible.length === 0) {
+        if (!msgEl) {
+            const msg = document.createElement('div');
+            msg.id = 'list-status-msg';
+            msg.style.padding = '20px';
+            msg.style.textAlign = 'center';
+            msg.style.color = '#888';
+            msg.textContent = hiddenRoles.length >= 4 ? "Draft Completato! 🎉" : "Nessun giocatore disponibile per i ruoli richiesti.";
+            document.getElementById('player-list-container').appendChild(msg);
+        } else {
+            msg.textContent = hiddenRoles.length >= 4 ? "Draft Completato! 🎉" : "Nessun giocatore disponibile per i ruoli richiesti.";
+            msg.style.display = 'block';
+        }
+    } else {
+        if (msgEl) msgEl.style.display = 'none';
+    }
 }
 
 function setupFilters() {
@@ -1277,3 +1345,260 @@ function showBigError(msg) {
     audio.volume = 0.5;
     audio.play().catch(e => { });
 }
+
+// --- CSV EXPORT ---
+function exportTeamsToCSV() {
+    if (!state.roomData || !state.roomData.teams) {
+        showToast("Nessun dato da esportare");
+        return;
+    }
+
+    const teams = state.roomData.teams;
+    const csvLines = [];
+
+    // Generate CSV according to format: $,$,$ separator, then TeamName,PlayerID,0 for each player
+    teams.forEach(team => {
+        // Team separator
+        csvLines.push('$,$,$');
+
+        // Add each player in the roster
+        if (team.roster && team.roster.length > 0) {
+            team.roster.forEach(rosterItem => {
+                // Format: TeamName,PlayerID,0
+                csvLines.push(`${team.name},${rosterItem.playerId},0`);
+            });
+        }
+    });
+
+    // Join all lines with newline
+    const csvContent = csvLines.join('\n');
+
+    // Create blob and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+
+    // Filename: drafta-export-{roomId}-{timestamp}.csv
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    link.download = `drafta-export-${state.currentRoomId}-${timestamp}.csv`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast("✅ CSV esportato!");
+}
+
+// --- IMPORT LOGIC ---
+document.getElementById('btn-import-room').addEventListener('click', () => {
+    document.getElementById('input-import-csv').value = ''; // Reset
+    document.getElementById('input-import-csv').click();
+});
+
+document.getElementById('input-import-csv').addEventListener('change', handleImportCSV);
+
+function handleImportCSV(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        const text = event.target.result;
+        try {
+            await createRoomFromCSV(text);
+        } catch (err) {
+            console.error(err);
+            showToast("Errore importazione CSV: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+async function createRoomFromCSV(csvText) {
+    if (!state.user) return showToast("Devi essere loggato!");
+
+    const rows = csvText.split(/\r?\n/);
+    const teamsMap = new Map(); // Name -> { players: [] }
+
+    // Parse CSV
+    // Format: TeamName, PlayerID, Cost(ignored)
+    // Separator: $,$,$ (ignored)
+    rows.forEach(row => {
+        const parts = row.split(',');
+        if (parts.length < 2) return;
+
+        const teamName = parts[0].trim();
+        const playerId = parts[1].trim();
+
+        if (teamName === '$' || !teamName) return; // Skip separator
+
+        if (!teamsMap.has(teamName)) {
+            teamsMap.set(teamName, []);
+        }
+
+        if (playerId) {
+            teamsMap.get(teamName).push(playerId);
+        }
+    });
+
+    if (teamsMap.size === 0) throw new Error("Nessuna squadra trovata nel file");
+
+    // Init Logic similar to createRoom
+    const roomId = generateRoomId();
+    const password = Math.random().toString(36).slice(-4).toUpperCase(); // Random pass
+
+    // Create Teams Structure
+    const teams = [];
+    let i = 1;
+    for (const [name, playerIds] of teamsMap) {
+        // Build Roster
+        const roster = [];
+        let totalSpent = 0;
+
+        playerIds.forEach(pid => {
+            const p = state.players.find(pl => String(pl.id) === String(pid));
+            if (p) {
+                roster.push({ playerId: p.id, cost: p.cost });
+                totalSpent += p.cost;
+            }
+        });
+
+        teams.push({
+            id: `team-${i}`,
+            name: name,
+            ownerUid: (i === 1) ? state.user.uid : null, // Assign Host to Team 1
+            ownerName: (i === 1) ? state.user.displayName : null, // Assign Host to Team 1
+            credits: 500 - totalSpent,
+            roster: roster,
+            totalValue: totalSpent
+        });
+        i++;
+    }
+
+    const roomRef = doc(db, 'rooms', roomId);
+
+    // Config: deduce team count from file
+    // Settings: default
+    const roomData = {
+        hostId: state.user.uid,
+        password: password,
+        status: 'started', // Import -> Started directly
+        participantIds: [state.user.uid],
+        connectedUsers: [{
+            uid: state.user.uid,
+            name: state.user.displayName,
+            photoURL: state.user.photoURL
+        }],
+        teams: teams,
+        currentTurnIndex: 0,
+        roundNumber: 1,
+        draftOrder: teams.map(t => t.id), // Default 1..N order
+        currentPick: null,
+        settings: {
+            blockGK: false, // Default off for import
+            strictRoles: true // Default on?
+        },
+        createdAt: serverTimestamp(),
+        isImported: true
+    };
+
+    await setDoc(roomRef, roomData);
+
+    // Switch to room
+    state.currentRoomId = roomId;
+    document.getElementById('input-room-id').value = roomId; // For join field
+
+    showToast("Stanza importata con successo! Ingresso...");
+    enterRoom(roomId, true, password);
+}
+
+
+// --- ORDER LOGIC ---
+const mdOrder = document.getElementById('modal-order-settings');
+const btnCloseOrder = document.getElementById('btn-close-order-modal');
+
+if (document.getElementById('btn-draft-order')) {
+    document.getElementById('btn-draft-order').addEventListener('click', () => {
+        mdOrder.classList.remove('hidden');
+    });
+}
+if (btnCloseOrder) {
+    btnCloseOrder.addEventListener('click', () => {
+        mdOrder.classList.add('hidden');
+    });
+}
+
+// Order Buttons
+['btn-order-strict', 'btn-order-count', 'btn-order-value'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const type = id.replace('btn-order-', '');
+            applyDraftOrder(type);
+        });
+    }
+});
+
+async function applyDraftOrder(type) {
+    if (!state.isHost) return;
+    if (!state.roomData) return;
+
+    if (!state.players || state.players.length === 0) {
+        showToast("Attendi caricamento giocatori...");
+        return;
+    }
+
+    const teams = [...state.roomData.teams]; // Copy
+
+    // Helper to count roles
+    const countRoles = (roster) => {
+        const c = { P: 0, D: 0, C: 0, A: 0, Total: 0 };
+        roster.forEach(r => {
+            const p = state.players.find(pl => String(pl.id) === String(r.playerId));
+            if (p) { c[p.role]++; c.Total++; }
+        });
+        return c;
+    };
+
+    teams.sort((a, b) => {
+        const rA = countRoles(a.roster);
+        const rB = countRoles(b.roster);
+
+        if (type === 'strict') {
+            // P ascending
+            if (rA.P !== rB.P) return rA.P - rB.P;
+            // D ascending
+            if (rA.D !== rB.D) return rA.D - rB.D;
+            // C ascending
+            if (rA.C !== rB.C) return rA.C - rB.C;
+            // A ascending
+            if (rA.A !== rB.A) return rA.A - rB.A;
+            // Tie -> Value
+            return (a.totalValue || 0) - (b.totalValue || 0);
+        } else if (type === 'count') {
+            // Total Players ascending
+            if (rA.Total !== rB.Total) return rA.Total - rB.Total;
+            // Tie -> Value
+            return (a.totalValue || 0) - (b.totalValue || 0);
+        } else {
+            // Value ascending
+            return (a.totalValue || 0) - (b.totalValue || 0);
+        }
+    });
+
+    const newOrder = teams.map(t => t.id);
+
+    // Update Firebase
+    const roomRef = doc(db, 'rooms', state.currentRoomId);
+    await updateDoc(roomRef, {
+        draftOrder: newOrder,
+        currentTurnIndex: 0, // Reset round start
+        orderSettingsApplied: true
+    });
+
+    mdOrder.classList.add('hidden');
+    showToast("Ordine dei turni aggiornato!");
+}
+

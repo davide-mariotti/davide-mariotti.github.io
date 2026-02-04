@@ -118,7 +118,10 @@
                             Squadre</label>
                         <select id="input-team-count"
                             style="padding:12px; background:var(--bg-surface); color:white; border:none; border-radius:6px; font-size:1rem;">
-                            <option value="12" selected>12 Squadre</option>
+                            <option value="6">6 Squadre</option>
+                            <option value="8" selected>8 Squadre</option>
+                            <option value="10">10 Squadre</option>
+                            <option value="12">12 Squadre</option>
                             <option value="14">14 Squadre</option>
                             <option value="16">16 Squadre</option>
                             <option value="18">18 Squadre</option>
@@ -149,6 +152,10 @@
 
                     <button id="btn-create-room" class="btn btn-accent" style="margin-top:10px;">Crea Nuova
                         Asta</button>
+                    <button id="btn-import-room" class="btn btn-outline" style="width: 100%; margin-top: 10px;">
+                        📂 Importa Rose da File
+                    </button>
+                    <input type="file" id="input-import-csv" accept=".csv" style="display:none">
                 </div>
 
                 <div class="card action-card">
@@ -244,6 +251,10 @@
                             style="display:block; font-size:0.8rem; color:#666; text-transform:uppercase;">Round
                             1</span>
                     </div>
+                    <!-- Host-only Export CSV button -->
+                    <button id="btn-export-csv" class="btn btn-sm btn-outline" style="display:none;">
+                        📥 Export CSV
+                    </button>
                     <img id="header-user-avatar" src=""
                         style="width:32px; height:32px; border-radius:50%; background:#333;">
                 </div>
@@ -335,6 +346,31 @@
     </div>
 
     <script type="module" src="app.js"></script>
+    <!-- MODAL: Order Settings -->
+    <div id="modal-order-settings" class="modal-overlay hidden">
+        <div class="modal-card" style="max-width: 400px;">
+            <h3>Genera Ordine Turni</h3>
+            <p>Scegli il criterio per stabilire i turni:</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <button id="btn-order-strict" class="btn btn-outline" style="text-align:left;">
+                    <b>🏷️ Per Ruolo Mancante</b><br>
+                    <small>Priorità a chi ha meno Portieri, poi Difensori...</small>
+                </button>
+                <button id="btn-order-count" class="btn btn-outline" style="text-align:left;">
+                    <b>🔢 Per Numero Giocatori</b><br>
+                    <small>Chi ha meno giocatori in totale chiama prima.</small>
+                </button>
+                <button id="btn-order-value" class="btn btn-outline" style="text-align:left;">
+                    <b>💎 Per Valore Rosa</b><br>
+                    <small>Chi ha speso meno chiama prima (Standard).</small>
+                </button>
+            </div>
+            <div style="margin-top:20px; text-align:right;">
+                <button id="btn-close-order-modal" class="btn btn-text">Annulla</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
