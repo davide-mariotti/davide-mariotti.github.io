@@ -87,7 +87,7 @@
         <section id="view-login" class="view active">
             <div class="login-card">
                 <h1>DRAFTA</h1>
-                <p class="subtitle">Live Serie A Auction</p>
+                <p class="subtitle">Live Serie A Fantasy Draft</p>
 
                 <div class="login-actions">
                     <button id="btn-login-google" class="btn btn-primary">
@@ -111,21 +111,18 @@
                 <div class="card action-card">
                     <h2>Crea Stanza</h2>
                     <p>Sei l'Host? Crea una nuova asta.</p>
-                    <div class="input-group">
-                        <label for="input-data-url" style="font-size:0.8rem; color:var(--text-muted);">Lista Giocatori
-                            (Opzionale: URL JSON)</label>
-                        <input type="url" id="input-data-url" placeholder="https://example.com/players.json">
-                    </div>
+                    <!-- URL input removed - not needed -->
 
                     <div class="input-group" style="margin-top:10px;">
                         <label for="input-team-count" style="font-size:0.8rem; color:var(--text-muted);">Numero
                             Squadre</label>
                         <select id="input-team-count"
-                            style="padding:12px; background:var(--bg-surface); color:white; border:none; border-radius:6px;">
-                            <option value="6">6 Squadre</option>
-                            <option value="8" selected>8 Squadre</option>
-                            <option value="10">10 Squadre</option>
-                            <option value="12">12 Squadre</option>
+                            style="padding:12px; background:var(--bg-surface); color:white; border:none; border-radius:6px; font-size:1rem;">
+                            <option value="12" selected>12 Squadre</option>
+                            <option value="14">14 Squadre</option>
+                            <option value="16">16 Squadre</option>
+                            <option value="18">18 Squadre</option>
+                            <option value="20">20 Squadre</option>
                         </select>
                     </div>
 
@@ -231,9 +228,7 @@
                     </div>
                 </div>
 
-                <div class="header-center">
-                    <div class="timer-display" id="timer">--</div>
-                </div>
+                <!-- Timer removed - not used -->
 
                 <div class="header-right" id="room-info-display" style="display:flex; gap:15px; align-items:center;">
                     <div style="text-align:right;">

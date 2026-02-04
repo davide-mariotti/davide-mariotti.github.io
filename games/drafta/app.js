@@ -121,7 +121,7 @@ function setupEventListeners() {
 async function createRoom() {
     const roomId = generateRoomId();
     const password = Math.random().toString(36).slice(-4).toUpperCase();
-    const customUrl = document.getElementById('input-data-url').value.trim();
+    // customUrl removed - not needed anymore
     const teamCount = parseInt(document.getElementById('input-team-count').value);
     const blockGK = document.getElementById('input-block-gk').checked;
     const strictRoles = document.getElementById('input-strict-roles').checked;
@@ -140,16 +140,7 @@ async function createRoom() {
         });
     }
 
-    // Load players if URL provided
-    if (customUrl) {
-        try {
-            await playerService.loadFromUrl(customUrl);
-            state.players = playerService.getPlayers();
-            showToast("Lista giocatori caricata con successo");
-        } catch (error) {
-            return showToast("Errore caricamento lista: " + error.message);
-        }
-    }
+    // Player loading removed - always use local players.js
 
     const roomRef = doc(db, 'rooms', roomId);
 
@@ -157,7 +148,6 @@ async function createRoom() {
         hostId: state.user.uid,
         password: password,
         status: 'lobby',
-        dataSourceUrl: customUrl || null,
         participantIds: [state.user.uid],
         // Connected users list (waiting room)
         connectedUsers: [{
