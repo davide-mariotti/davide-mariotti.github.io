@@ -1083,10 +1083,8 @@ async function confirmPick() {
         if (nextTurnIndex >= room.draftOrder.length) {
             nextRound++;
             // Sort lowest value first for next round logic (Snake Variant?)
-            // Or just Standard Snake? 
-            // Original code sorted by Value for next round.
-            // Let's keep original behavior for Standard.
-            const sortedTeams = [...newTeams].sort((a, b) => a.totalValue - b.totalValue);
+            // Updated to use Smart Logic (Value + High Card Tie-Breaker)
+            const sortedTeams = [...newTeams].sort(compareTeamsSmart);
             nextDraftOrder = sortedTeams.map(t => t.id);
             nextTurnIndex = 0;
         }
@@ -1674,8 +1672,9 @@ function calculateDynamicOrder(teams, type) {
     sorted.sort((a, b) => {
         const rA = countRoles(a.roster);
         const rB = countRoles(b.roster);
-        const valA = a.totalValue || 0;
-        const valB = b.totalValue || 0;
+
+        // Use Smart Comparison for Value/Tie-Breaking
+        const valueComparison = compareTeamsSmart(a, b);
 
         if (type === 'strict') {
             // P ascending
@@ -1686,19 +1685,61 @@ function calculateDynamicOrder(teams, type) {
             if (rA.C !== rB.C) return rA.C - rB.C;
             // A ascending
             if (rA.A !== rB.A) return rA.A - rB.A;
-            // Tie -> Value Ascending
-            return valA - valB;
+            // Tie -> Value Smart
+            return valueComparison;
         } else if (type === 'count') {
             // Total Players ascending
             if (rA.Total !== rB.Total) return rA.Total - rB.Total;
-            // Tie -> Value Ascending
-            return valA - valB;
+            // Tie -> Value Smart
+            return valueComparison;
         } else {
-            // Value ascending
-            return valA - valB;
+            // Value Mode is just Smart Comparison directly
+            return valueComparison;
         }
     });
 
     return sorted.map(t => t.id);
+}
+
+/**
+ * Compare two teams based on:
+ * 1. Total Value (Lower goes first)
+ * 2. If Equal: "High Card" Rule (Team with the most expensive player goes LAST/LATER)
+ *    - Compare sorted costs of rosters (Desc)
+ *    - First mismatch determines winner
+ */
+function compareTeamsSmart(a, b) {
+    const valA = a.totalValue || 0;
+    const valB = b.totalValue || 0;
+
+    // 1. Primary: Total Value
+    if (valA !== valB) return valA - valB;
+
+    // 2. Secondary: High Card Logic
+    // Extract costs and sort Descending (100, 50, 10...)
+    const getCosts = (t) => t.roster.map(r => r.cost || 0).sort((x, y) => y - x);
+
+    const costsA = getCosts(a);
+    const costsB = getCosts(b);
+
+    const len = Math.max(costsA.length, costsB.length);
+
+    for (let i = 0; i < len; i++) {
+        const cA = costsA[i] || 0;
+        const cB = costsB[i] || 0;
+
+        if (cA !== cB) {
+            // "Chi ha quello più caro sceglie DOPO"
+            // So if A has 100 and B has 50, A should be > B.
+            // Returning Positive (A - B) puts A after B.
+            return cA - cB;
+        }
+    }
+
+    // 3. Fallback: Original ID Order (Stable)
+    // Assuming IDs like "team-1", "team-2"
+    // Does JavaScript sort preserve order? Yes generally, but explicit is safer?
+    // Let's stick to 0 (equal) if identical rosters.
+    return 0;
 }
 
