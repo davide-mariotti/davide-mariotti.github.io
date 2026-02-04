@@ -94,12 +94,23 @@ function setupEventListeners() {
     document.getElementById('btn-export-csv').addEventListener('click', exportTeamsToCSV);
 
 
-    // Modal
+    // Modal Enter Button Logic
     document.getElementById('btn-modal-enter').addEventListener('click', () => {
-        const roomId = document.getElementById('modal-room-id').textContent;
-        const password = document.getElementById('modal-room-pass').textContent;
-        enterRoom(roomId, true, password);
-        document.getElementById('modal-room-created').classList.add('hidden');
+        try {
+            const roomId = document.getElementById('modal-room-id').innerText.trim();
+            const password = document.getElementById('modal-room-pass').innerText.trim();
+
+            showToast("Ingresso in corso..."); // Feedback
+
+            // Allow UI update before heavy logic
+            requestAnimationFrame(() => {
+                enterRoom(roomId, true, password);
+                document.getElementById('modal-room-created').classList.add('hidden');
+            });
+        } catch (e) {
+            console.error(e);
+            showToast("Errore pulsante: " + e.message);
+        }
     });
 
     // Team Manager Save
