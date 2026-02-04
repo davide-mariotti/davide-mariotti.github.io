@@ -512,6 +512,15 @@ function renderConnectedUsers(data) {
 
 function renderTeamsGrid(data) {
     const grid = document.getElementById('lobby-teams-grid');
+
+    // FOCUS PRESERVATION LOGIC
+    let focusedElementId = null;
+    let focusedCursorPos = null;
+    if (document.activeElement && document.activeElement.tagName === 'INPUT' && document.activeElement.classList.contains('team-name-edit')) {
+        focusedElementId = document.activeElement.id;
+        focusedCursorPos = document.activeElement.selectionStart;
+    }
+
     grid.innerHTML = '';
 
     data.teams.forEach((team, index) => {
@@ -519,10 +528,13 @@ function renderTeamsGrid(data) {
         div.className = 'team-slot';
         if (state.selectedUserUid && !team.ownerUid) div.classList.add('active-assignment');
 
+        // Generate a unique ID for the input to track focus
+        const inputId = `team-input-${index}`;
+
         div.innerHTML = `
             <div>
                 <h4>Slot ${index + 1}</h4>
-                <input type="text" class="team-name-edit" value="${team.name}" ${state.isHost ? '' : 'disabled'}>
+                <input type="text" id="${inputId}" class="team-name-edit" value="${team.name}" ${state.isHost ? '' : 'disabled'}>
             </div>
             <div class="team-owner">
                 ${team.ownerName ? `👤 ${team.ownerName}` : '<i>Non assegnato</i>'}
@@ -532,9 +544,20 @@ function renderTeamsGrid(data) {
         // Host interactions
         if (state.isHost) {
             const input = div.querySelector('input');
+
+            // Restore focus if this was the focused element
+            if (focusedElementId === inputId) {
+                // We need to wait for append to happen, but since we are appending synchronously in loop/end, 
+                // we can just set a small timeout or do it after append.
+                // Doing it here immediately affects the element, but it must be in DOM.
+                // We'll restore it at the end of loop or immediately after append.
+            }
+
             input.addEventListener('change', (e) => {
                 updateTeamName(index, e.target.value);
             });
+            // Also handle 'input' or 'blur' if we want real-time, but 'change' is safer for DB writes.
+            // Using 'blur' to trigger update is standard for 'change'.
 
             div.addEventListener('click', (e) => {
                 if (e.target.tagName === 'INPUT') return; // Don't trigger on input click
@@ -546,6 +569,18 @@ function renderTeamsGrid(data) {
 
         grid.appendChild(div);
     });
+
+    // Restore Focus
+    if (focusedElementId) {
+        const el = document.getElementById(focusedElementId);
+        if (el) {
+            el.focus();
+            // Restore cursor position if possible
+            if (typeof focusedCursorPos === 'number') {
+                el.setSelectionRange(focusedCursorPos, focusedCursorPos);
+            }
+        }
+    }
 }
 
 async function updateTeamName(index, newName) {
@@ -1301,12 +1336,14 @@ function loadRecentRooms(uid) {
                 <span>➔</span>
             `;
 
-            // Click to pre-fill
+            // Click to pre-fill and JOIN
             li.addEventListener('click', () => {
                 document.getElementById('input-room-id').value = doc.id;
                 if (data.password) {
                     document.getElementById('input-room-pass').value = data.password;
                 }
+                // Auto-join for better UX
+                joinRoom();
             });
 
             // Delete button for Host

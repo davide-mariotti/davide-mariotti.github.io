@@ -536,8 +536,8 @@ button {
     }
 
     .player-database {
-        height: 300px;
-        /* Fixed height for list on mobile to allow scroll */
+        height: 550px;
+        /* Increased height for better mobile visibility */
         flex: none;
     }
 }
