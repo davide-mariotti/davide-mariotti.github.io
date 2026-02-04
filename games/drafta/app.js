@@ -1065,12 +1065,31 @@ async function confirmPick() {
     let nextDraftOrder = [...room.draftOrder];
     let nextRound = room.roundNumber;
 
-    if (nextTurnIndex >= room.draftOrder.length) {
-        nextRound++;
-        // Sort lowest value first for next round logic
-        const sortedTeams = [...newTeams].sort((a, b) => a.totalValue - b.totalValue);
-        nextDraftOrder = sortedTeams.map(t => t.id);
+    const sortMode = state.roomData.settings?.sortMode;
+
+    if (sortMode) {
+        // --- DYNAMIC SORTING MODE ---
+        // Recalculate order based on new state
+        nextDraftOrder = calculateDynamicOrder(newTeams, sortMode);
+        // Reset to 0 because the first in array is always the priority
         nextTurnIndex = 0;
+        // We don't increment round number typically here as it's a continuous flow, 
+        // or we could increment it if everyone has picked at least once? 
+        // For simplicity in dynamic mode, Round Number is less relevant for logic, 
+        // but we can increment it if the 'Leader' changes or just leave it. 
+        // Let's leave it as is for now.
+    } else {
+        // --- STANDARD MODE ---
+        if (nextTurnIndex >= room.draftOrder.length) {
+            nextRound++;
+            // Sort lowest value first for next round logic (Snake Variant?)
+            // Or just Standard Snake? 
+            // Original code sorted by Value for next round.
+            // Let's keep original behavior for Standard.
+            const sortedTeams = [...newTeams].sort((a, b) => a.totalValue - b.totalValue);
+            nextDraftOrder = sortedTeams.map(t => t.id);
+            nextTurnIndex = 0;
+        }
     }
 
     await updateDoc(roomRef, {
@@ -1624,7 +1643,23 @@ async function applyDraftOrder(type) {
         return;
     }
 
-    const teams = [...state.roomData.teams]; // Copy
+    const newOrder = calculateDynamicOrder(state.roomData.teams, type);
+
+    // Update Firebase
+    const roomRef = doc(db, 'rooms', state.currentRoomId);
+    await updateDoc(roomRef, {
+        draftOrder: newOrder,
+        currentTurnIndex: 0, // Reset round start
+        orderSettingsApplied: true,
+        "settings.sortMode": type // Save the mode for dynamic updates!
+    });
+
+    mdOrder.classList.add('hidden');
+    showToast("Ordine dei turni aggiornato!");
+}
+
+function calculateDynamicOrder(teams, type) {
+    const sorted = [...teams];
 
     // Helper to count roles
     const countRoles = (roster) => {
@@ -1636,9 +1671,11 @@ async function applyDraftOrder(type) {
         return c;
     };
 
-    teams.sort((a, b) => {
+    sorted.sort((a, b) => {
         const rA = countRoles(a.roster);
         const rB = countRoles(b.roster);
+        const valA = a.totalValue || 0;
+        const valB = b.totalValue || 0;
 
         if (type === 'strict') {
             // P ascending
@@ -1649,30 +1686,19 @@ async function applyDraftOrder(type) {
             if (rA.C !== rB.C) return rA.C - rB.C;
             // A ascending
             if (rA.A !== rB.A) return rA.A - rB.A;
-            // Tie -> Value
-            return (a.totalValue || 0) - (b.totalValue || 0);
+            // Tie -> Value Ascending
+            return valA - valB;
         } else if (type === 'count') {
             // Total Players ascending
             if (rA.Total !== rB.Total) return rA.Total - rB.Total;
-            // Tie -> Value
-            return (a.totalValue || 0) - (b.totalValue || 0);
+            // Tie -> Value Ascending
+            return valA - valB;
         } else {
             // Value ascending
-            return (a.totalValue || 0) - (b.totalValue || 0);
+            return valA - valB;
         }
     });
 
-    const newOrder = teams.map(t => t.id);
-
-    // Update Firebase
-    const roomRef = doc(db, 'rooms', state.currentRoomId);
-    await updateDoc(roomRef, {
-        draftOrder: newOrder,
-        currentTurnIndex: 0, // Reset round start
-        orderSettingsApplied: true
-    });
-
-    mdOrder.classList.add('hidden');
-    showToast("Ordine dei turni aggiornato!");
+    return sorted.map(t => t.id);
 }
 
