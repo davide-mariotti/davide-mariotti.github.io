@@ -108,16 +108,20 @@ function setupEventListeners() {
 
             showToast("Ingresso in corso..."); // Feedback
 
-            // Allow UI update before heavy logic
-            requestAnimationFrame(() => {
-                // Request Notifications on User Click (Required for iOS)
-                if (Notification && Notification.permission === 'default') {
-                    Notification.requestPermission().catch(err => console.log(err));
+            // Request Notifications on User Click (Required for iOS)
+            // Wrapped in try-catch to ensure it doesn't block the main action if it fails
+            try {
+                if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+                    Notification.requestPermission().catch(err => console.log('Notification permission error:', err));
                 }
+            } catch (notifyErr) {
+                console.warn('Notification API not supported or failed:', notifyErr);
+            }
 
-                enterRoom(roomId, true, password);
-                document.getElementById('modal-room-created').classList.add('hidden');
-            });
+            // Enter room immediately (synchronous to click for best mobile support)
+            enterRoom(roomId, true, password);
+            document.getElementById('modal-room-created').classList.add('hidden');
+
         } catch (e) {
             console.error(e);
             showToast("Errore pulsante: " + e.message);
@@ -324,6 +328,7 @@ function enterRoom(roomId, isHost, password = null) {
     };
 
     window.addEventListener('beforeunload', removePresence);
+    window.addEventListener('pagehide', removePresence); // Better for mobile/iOS
     state.presenceCleanup = removePresence;
     state.heartbeatInterval = heartbeatInterval;
 
