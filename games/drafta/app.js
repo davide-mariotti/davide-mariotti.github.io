@@ -96,6 +96,9 @@ function setupEventListeners() {
 
     // Modal
     document.getElementById('btn-modal-enter').addEventListener('click', () => {
+        const roomId = document.getElementById('modal-room-id').textContent;
+        const password = document.getElementById('modal-room-pass').textContent;
+        enterRoom(roomId, true, password);
         document.getElementById('modal-room-created').classList.add('hidden');
     });
 
@@ -175,17 +178,12 @@ async function createRoom() {
         document.getElementById('modal-room-pass').textContent = password;
         document.getElementById('modal-room-created').classList.remove('hidden');
 
-        // Allow entering when modal closed (via listener) or automatic if we want:
-        // But prompt says "pop up... mantieni id/psw".
-
-        // Let's enter partially but stay on modal? 
-        // Or better: entering room puts you in lobby. Modal is overlay.
-
-        enterRoom(roomId, true, password);
+        // Removed auto-enter to allow user to read credentials first
+        // enterRoom(roomId, true, password); 
 
     } catch (e) {
         console.error(e);
-        showToast("Errore creazione stanza");
+        showToast("Errore creazione stanza: " + e.message);
     }
 }
 
