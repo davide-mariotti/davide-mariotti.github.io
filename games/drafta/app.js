@@ -77,7 +77,13 @@ function setupEventListeners() {
 
     // Dashboard
     document.getElementById('btn-create-room').addEventListener('click', createRoom);
-    document.getElementById('btn-join-room').addEventListener('click', joinRoom);
+    document.getElementById('btn-join-room').addEventListener('click', () => {
+        // Request Notifications on User Click
+        if (Notification && Notification.permission === 'default') {
+            Notification.requestPermission().catch(err => console.log(err));
+        }
+        joinRoom();
+    });
 
     // Lobby
     document.getElementById('btn-leave-lobby').addEventListener('click', leaveRoom);
@@ -104,6 +110,11 @@ function setupEventListeners() {
 
             // Allow UI update before heavy logic
             requestAnimationFrame(() => {
+                // Request Notifications on User Click (Required for iOS)
+                if (Notification && Notification.permission === 'default') {
+                    Notification.requestPermission().catch(err => console.log(err));
+                }
+
                 enterRoom(roomId, true, password);
                 document.getElementById('modal-room-created').classList.add('hidden');
             });
@@ -359,10 +370,7 @@ function enterRoom(roomId, isHost, password = null) {
             if (btnCsv) btnCsv.style.display = 'none';
         }
 
-        // Request Notification Permission on Join
-        if (Notification.permission === 'default') {
-            Notification.requestPermission();
-        }
+
 
         const avatarEl = document.getElementById('header-user-avatar');
         avatarEl.src = state.user.photoURL || 'https://via.placeholder.com/32';
