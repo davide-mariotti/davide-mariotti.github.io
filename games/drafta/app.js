@@ -364,12 +364,27 @@ function enterRoom(roomId, isHost, password = null) {
         // View Routing
         renderLobbyOrDraft(data);
 
-        // Import Order Settings Modal (Host Only, Once per Import)
+        // Show Modal Logic:
+        // 1. Imported Room -> Order Settings Modal (Rules)
         if (state.isHost && data.status === 'started' && data.isImported && !data.orderSettingsApplied) {
             const modal = document.getElementById('modal-order-settings');
             if (modal && !state.hasShownOrderModal) {
                 modal.classList.remove('hidden');
                 state.hasShownOrderModal = true;
+            }
+        }
+        // 2. Standard Room -> Random Order Modal (Randomizer)
+        else if (state.isHost && data.status === 'started' && !data.isImported && data.currentTurnIndex === 0) {
+            const modal = document.getElementById('modal-load-order');
+            if (modal) {
+                if (!state.hasShownOrderModal) {
+                    modal.classList.remove('hidden');
+                    state.hasShownOrderModal = true;
+                }
+                // Update preview live (for randomizer feedback)
+                if (!modal.classList.contains('hidden') && typeof renderOrderPreview === 'function') {
+                    renderOrderPreview(data.draftOrder);
+                }
             }
         }
     });
