@@ -457,8 +457,8 @@ function enterRoom(roomId, isHost, password = null) {
                 state.hasShownOrderModal = true;
             }
         }
-        // 2. Standard Room -> Random Order Modal (Randomizer)
-        else if (state.isHost && data.status === 'started' && !data.isImported && data.currentTurnIndex === 0) {
+        // 2. Standard Room -> Random Order Modal (Randomizer) - ONLY FIRST TURN EVER
+        else if (state.isHost && data.status === 'started' && !data.isImported && data.currentTurnIndex === 0 && data.roundNumber === 1) {
             const modal = document.getElementById('modal-load-order');
             if (modal) {
                 if (!state.hasShownOrderModal) {
@@ -471,6 +471,26 @@ function enterRoom(roomId, isHost, password = null) {
                 }
             }
         }
+
+        // 3. Nudge Notification Listener
+        if (data.notification && data.notification.targetUid === state.user.uid) {
+            // Check if this is a new notification (not already processed)
+            if (!state.lastNudgeTimestamp || data.notification.timestamp > state.lastNudgeTimestamp) {
+                state.lastNudgeTimestamp = data.notification.timestamp;
+
+                // Show browser notification
+                if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                    new Notification('Sollecito Drafta', {
+                        body: data.notification.msg,
+                        icon: 'icons/icon-192x192.png'
+                    });
+                }
+
+                // Also show toast
+                showToast(`📲 ${data.notification.sender}: ${data.notification.msg}`);
+            }
+        }
+
     });
 
     // --- Event Listeners for Order Modal ---
@@ -1321,10 +1341,13 @@ function updatePlayerListVisuals(takenIds, hiddenRoles = []) {
             msg.style.textAlign = 'center';
             msg.style.color = '#888';
             msg.textContent = hiddenRoles.length >= 4 ? "Draft Completato! 🎉" : "Nessun giocatore disponibile per i ruoli richiesti.";
-            document.getElementById('player-list-container').appendChild(msg);
+            const container = document.querySelector('.player-list-container');
+            if (container) {
+                container.appendChild(msg);
+            }
         } else {
-            msg.textContent = hiddenRoles.length >= 4 ? "Draft Completato! 🎉" : "Nessun giocatore disponibile per i ruoli richiesti.";
-            msg.style.display = 'block';
+            msgEl.textContent = hiddenRoles.length >= 4 ? "Draft Completato! 🎉" : "Nessun giocatore disponibile per i ruoli richiesti.";
+            msgEl.style.display = 'block';
         }
     } else {
         if (msgEl) msgEl.style.display = 'none';
