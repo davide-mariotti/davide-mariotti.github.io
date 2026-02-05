@@ -1,4 +1,4 @@
-import { auth, db, googleProvider, signInWithPopup, onAuthStateChanged, signOut, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc, arrayUnion, serverTimestamp, query, collection, where } from './firebase-modules.js';
+import { auth, db, googleProvider, signInWithPopup, onAuthStateChanged, signOut, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc, arrayUnion, serverTimestamp, query, collection, where, messaging, getToken, onMessage } from './firebase-modules.js';
 import { playerService } from './player-service.js';
 
 // --- STATE ---
@@ -50,6 +50,9 @@ function initAuth() {
             loadRecentRooms(user.uid);
             showToast(`Benvenuto, ${user.displayName}!`);
 
+            // Initialize FCM (Service Worker + token registration)
+            initializeFCM();
+
             // Show notification permission modal on first login
             checkAndShowNotificationModal();
         } else {
@@ -87,12 +90,16 @@ function enableNotifications() {
         return;
     }
 
-    Notification.requestPermission().then(permission => {
+    Notification.requestPermission().then(async permission => {
         localStorage.setItem('drafta-notification-asked', 'true');
         document.getElementById('modal-notifications').classList.add('hidden');
 
         if (permission === 'granted') {
             showToast('✅ Notifiche abilitate!');
+
+            // Request FCM token
+            await requestFCMToken();
+
             // Send test notification
             try {
                 new Notification('Drafta', {
@@ -117,6 +124,86 @@ function closeNotificationModal() {
     localStorage.setItem('drafta-notification-asked', 'true');
     document.getElementById('modal-notifications').classList.add('hidden');
     showToast('Puoi abilitare le notifiche in seguito dalle impostazioni del browser');
+}
+
+// --- FIREBASE CLOUD MESSAGING ---
+async function initializeFCM() {
+    if (!messaging) {
+        console.log('FCM not supported on this browser');
+        return;
+    }
+
+    // Register Service Worker
+    try {
+        const registration = await navigator.serviceWorker.register('/games/drafta/firebase-messaging-sw.js');
+        console.log('Service Worker registered:', registration);
+
+        // Request FCM token after notification permission is granted
+        if (Notification.permission === 'granted') {
+            await requestFCMToken();
+        }
+
+        // Handle foreground messages (when app is open)
+        onMessage(messaging, (payload) => {
+            console.log('Foreground message received:', payload);
+
+            const notificationTitle = payload.notification?.title || 'Drafta';
+            const notificationBody = payload.notification?.body || 'Nuova notifica';
+
+            // Show toast
+            showToast(`${notificationTitle}: ${notificationBody}`);
+
+            // Also show browser notification
+            if (Notification.permission === 'granted') {
+                new Notification(notificationTitle, {
+                    body: notificationBody,
+                    icon: 'icons/icon-192x192.png',
+                    requireInteraction: true
+                });
+            }
+        });
+
+    } catch (err) {
+        console.error('Service Worker registration failed:', err);
+    }
+}
+
+async function requestFCMToken() {
+    if (!messaging) return;
+
+    try {
+        const currentToken = await getToken(messaging, {
+            vapidKey: 'BBP4-oexEv80hhemDsV2cq6SoOdelDUh0I3fI-hbiSy2OpBTzL7YODA2fNFYhIQJB2LSsrCHWInAFQFyoha5i0E'
+        });
+
+        if (currentToken) {
+            console.log('FCM Token obtained:', currentToken);
+            // Save token to Firestore
+            await saveFCMToken(currentToken);
+        } else {
+            console.log('No FCM registration token available');
+        }
+    } catch (err) {
+        console.error('Error getting FCM token:', err);
+    }
+}
+
+async function saveFCMToken(token) {
+    if (!state.user) return;
+
+    try {
+        // Save to user's fcmTokens subcollection
+        const tokenRef = doc(db, `users/${state.user.uid}/fcmTokens/${token}`);
+        await setDoc(tokenRef, {
+            token: token,
+            createdAt: serverTimestamp(),
+            lastUsed: serverTimestamp(),
+            userAgent: navigator.userAgent
+        });
+        console.log('FCM token saved to Firestore');
+    } catch (err) {
+        console.error('Error saving FCM token:', err);
+    }
 }
 
 function setupEventListeners() {
