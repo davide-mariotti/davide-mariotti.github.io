@@ -1,62 +1,243 @@
-# ⚽ DRAFTA - L'Arte della Guerra (Fanta-Calcistica) ⚔️
+# 🏆 DRAFTA v4.0
 
-> *Stanco dei fogli Excel che si rompono alla terza chiamata? Stufo di urlare "A QUANTO STIAMO?" ogni 5 minuti? Benvenuto nel futuro (distopico) delle aste.*
+**Live Serie A Fantasy Draft** - Sistema di draft in tempo reale perFantaCalcio con notifiche push avanzate.
 
-**Drafta** non è solo un'app. È uno strumento di tortura psicologica per i tuoi amici di lega, travestito da software gestionale. Progettata per gestire aste live in tempo reale, senza pietà e senza calcolatrici.
-
----
-
-## 🚀 Perché Drafta? (Le Feature che ti cambiano la vita)
-
-### ⚡ **Real-Time Estremo (Grazie Google)**
-Usiamo **Firebase Firestore** per sincronizzare ogni singolo bit. Se il tuo amico clicca "Pick" su Lukaku, tu lo vedi prima ancora che lui se ne penta. Latenza? Non pervenuta (si spera).
-
-### 💂 **Gestione Rose Draconiana**
-Basta difensori messi in attacco "per sbaglio". Drafta sa contare:
-- **3 Portieri, 8 Difensori, 8 Centrocampisti, 6 Attaccanti**.
-- Non puoi comprare il settimo attaccante. Non puoi. Mettiti l'anima in pace.
-- **Blocco Portieri**: Compri il primo portiere della Juve? Il sistema ti suggerisce (o impone, se sei Host cattivo) di prendere gli altri due.
-
-### 🧠 **Cervellone Import/Export**
-- **Importa Rose**: Hai un file CSV brutto e sporco con le rose parziali? Buttalo dentro! Drafta crea la stanza, assegna i giocatori, calcola i crediti spesi e ti mette in pista.
-- **Export CSV**: A fine asta (o quando vi arrendete), scarica un file CSV pulito, profumato e pronto per il sito di leghe.
-
-### ⚖️ **L'Ordine dei Turni (Democrazia Algoritmica)**
-Chi chiama il prossimo giocatore? Non si tira a caso (o forse sì, se vuoi).
-Abbiamo implementato un **Popup Intelligente** per le leghe importate:
-1.  🏷️ **Strict (Il Rigoroso)**: Chi ha meno Portieri chiama. A pari merito? Chi ha meno Difensori. E via così. P>D>C>A. Perfetto per chi ha l'OCD.
-2.  🔢 **Free (Il Democratico)**: Chi ha meno giocatori in totale chiama. Semplice.
-3.  💎 **Value (Il Capitalista)**: Chi ha speso meno chiama. I poveri prima!
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 🤓 L'Angolo del Nerd (Tech Stack)
+## ✨ Features
 
-Sotto il cofano non c'è React, non c'è Angular, non c'è Svelte. C'è **Puro, Sporco, Vanilla JavaScript**.
-Perché? Perché ci piace soffrire e avere il controllo totale sul DOM (o quasi).
+### 🔔 **Push Notifications (v4.0 - NEW!)**
+- **Notifiche anche con browser chiuso** tramite Firebase Cloud Messaging
+- Notifica automatica quando è il tuo turno
+- Sistema di solleciti per utenti offline
+- Service Worker per notifiche background
+- Supporto multi-dispositivo
 
--   **Frontend**: HTML5, CSS3 (Variabili CSS, Grid, Flexbox e tante imprecazioni).
--   **Backend**: Firebase (Auth, Firestore per il DB NoSQL).
--   **Assets**: Immagini giocatori pescate dinamicamente (sperando che l'URL non cambi mai).
--   **PWA Ready**: Funziona su mobile come se fosse nativa. Installala e sentiti un hacker.
+### 🎮 **Draft Management**
+- Draft in tempo reale multi-utente
+- Ordine draft randomizzabile o manuale
+- Supporto snake draft
+- Visualizzazione matrice team in tempo reale
+- Import/export formazioni CSV
+
+### 👥 **Team & Users**
+- Autenticazione Google Firebase
+- Gestione squadre multiple
+- Tracking utenti online/offline
+- Solleciti per utenti inattivi
+
+### 📊 **Player Database**
+- Database giocatori Serie A integrato
+- Filtri per ruolo (P, D, C, A)
+- Ricerca giocatori
+- Statistiche complete
 
 ---
 
-## 🛠️ Istruzioni per l'Uso
+## 🚀 Quick Start
 
-1.  **Entra**: Login con Google (comodo, veloce, ci rubiamo solo l'anima).
-2.  **Crea o Importa**:
-    *   *Nuova Asta*: Parti da zero. Tabula rasa.
-    *   *Importa Rose*: Carica quel file CSV e prega. Il sistema riconosce le squadre e ti fa entrare automaticamente (sì, abbiamo fixato il bug dell'auto-join, tranquillo).
-3.  **Il Draft**:
-    *   **Host**: Tu sei Dio. Puoi forzare pick, resettare turni, mostrare password.
-    *   **Utenti**: Voi subite. Cliccate "Pick" quando tocca a voi.
-4.  **Conflitti**: Se due cliccano insieme? Vince Firestore. La verità sta nel cloud.
+### Prerequisites
+
+- **Node.js 20+**
+- **Firebase CLI**: `npm install -g firebase-tools`
+- **Firebase Project** con piano Blaze (gratis fino a 2M invocazioni/mese)
+
+### Installation
+
+```bash
+# Clone del repository
+git clone https://github.com/davide-mariotti/davide-mariotti.github.io.git
+cd davide-mariotti.github.io/games/drafta
+
+# Installa dipendenze Cloud Functions
+cd functions
+npm install
+cd ..
+
+# Login Firebase
+firebase login
+
+# Deploy Cloud Functions (per le notifiche)
+firebase deploy --only functions
+```
+
+### Configuration
+
+1. **Firebase Setup:**
+   - Crea progetto su [Firebase Console](https://console.firebase.google.com)
+   - Abilita Authentication (Google provider)
+   - Abilita Firestore Database
+   - Abilita Cloud Messaging
+   - Ottieni VAPID key da Project Settings → Cloud Messaging
+
+2. **Aggiorna `firebase-modules.js`** con la tua config Firebase
+
+3. **Aggiorna `firebase-messaging-sw.js`** con la stessa config
+
+4. **Aggiorna `app.js`** con la tua VAPID key nella funzione `requestFCMToken()`
 
 ---
 
-## 📜 Disclaimer
+## 📁 Project Structure
 
-*L'autore non si assume responsabilità per amicizie rovinate, crediti spesi per giocatori rotti, o crash del server durante l'asta per Haaland. Drafta responsabilmente.*
+```
+drafta/
+├── index.html              # UI principale
+├── app.js                  # Logic applicazione + FCM
+├── firebase-modules.js     # Firebase SDK config
+├── firebase-messaging-sw.js # Service Worker per notifiche
+├── player-service.js       # Gestione database giocatori
+├── styles.css              # Styling
+├── functions/              # Cloud Functions backend
+│   ├── index.js           # Turn & nudge notifications
+│   └── package.json       # Dipendenze
+├── firebase.json          # Firebase config
+└── .firebaserc            # Progetto Firebase ID
+```
 
-> *Made con ❤️ (e tanta caffeina) da Davide Mariotti.*
+---
+
+## 🔔 Notification System
+
+### Come Funziona
+
+1. **User Login** → Richiesta permessi notifiche → Registrazione FCM token
+2. **Token salvato** in Firestore: `users/{uid}/fcmTokens/{token}`
+3. **Cambio turno** → Cloud Function `onTurnChange` → Invia notifica
+4. **Sollecito** → Cloud Function `onNudge` → Invia notifica al target
+
+### Cloud Functions
+
+#### `onTurnChange`
+Trigger: `onDocumentWritten("rooms/{roomId}")`
+- Detecta cambio `currentTurnIndex`
+- Trova owner del nuovo turno
+- Recupera FCM tokens
+- Invia notifica push
+
+#### `onNudge`
+Trigger: `onDocumentWritten("rooms/{roomId}")`
+- Detecta campo `notification` modificato
+- Trova utente target
+- Invia sollecito via push notification
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Vanilla JavaScript (ES6 modules)
+- **Backend**: Firebase Cloud Functions (Node.js 20)
+- **Database**: Firebase Firestore
+- **Auth**: Firebase Authentication (Google)
+- **Notifications**: Firebase Cloud Messaging + Service Worker
+- **Hosting**: GitHub Pages
+
+---
+
+## 📝 Changelog
+
+### v4.0 (2026-02-05) - **FCM Notification System** 🔔
+- ✅ Implementato Firebase Cloud Messaging
+- ✅ Notifiche push anche con browser chiuso
+- ✅ Service Worker per background notifications
+- ✅ Cloud Functions per turn & nudge notifications
+- ✅ Token management in Firestore
+- ✅ Multi-device support
+
+### v3.2 (2026-02-05) - **Bug Fixes**
+- 🐛 Fixed appendChild null error
+- 🐛 Fixed random order modal appearing every turn
+- 🐛 Fixed nudge notification listener
+
+### v3.1 (2026-02-05) - **Notification Modal**
+- ✨ Added notification permission modal on first login
+- ✨ localStorage tracking for modal display
+
+### v3.0 (2026-02-05) - **Pick Button Visibility**
+- 🔧 Fixed pick buttons visible for all users during their turn
+
+### v2.9 and earlier
+- Initial release with core draft functionality
+
+---
+
+## 🧪 Testing
+
+### Test Notifications
+
+1. **Browser aperto:**
+   ```
+   - Login → Verifica console: "FCM Token obtained"
+   - Unisciti a room → Aspetta turno → Notifica ✅
+   ```
+
+2. **Browser chiuso (FCM):**
+   ```
+   - Login e abilita notifiche
+   - Chiudi completamente browser
+   - Da altro device, cambia turno
+   - Notifica dovrebbe arrivare! 🎉
+   ```
+
+3. **Solleciti:**
+   ```
+   - Clicca pallino rosso (●) utente offline
+   - Utente riceve notifica push
+   ```
+
+### Debug Logs
+
+```bash
+# Logs Cloud Functions in tempo reale
+firebase functions:log
+
+# Oppure su Firebase Console → Functions → Logs
+```
+
+---
+
+## 💰 Costs
+
+| Service | Free Tier | Costo Stimato |
+|---------|-----------|---------------|
+| **FCM** | Unlimited | **€0** ✅ |
+| **Cloud Functions** | 2M invocazioni/mese | **€0** ✅ |
+| **Firestore** | 1GB storage + 50K reads/day | **€0** ✅ |
+| **Authentication** | Unlimited | **€0** ✅ |
+
+**Total:** Completamente gratis per uso normale! 🎉
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Per favore apri una issue prima di fare modifiche maggiori.
+
+---
+
+## 📄 License
+
+MIT License - vedi [LICENSE](LICENSE) per dettagli
+
+---
+
+## 👨‍💻 Author
+
+**Davide Mariotti**
+- GitHub: [@davide-mariotti](https://github.com/davide-mariotti)
+- Email: d.mariotti1991@gmail.com
+
+---
+
+## 🙏 Acknowledgments
+
+- Firebase Team per le API fantastiche
+- Serie A per i dati giocatori
+- Community FantaCalcio italiana
+
+---
+
+**Made with ❤️ for FantaCalcio lovers**
