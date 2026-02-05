@@ -49,6 +49,9 @@ function initAuth() {
             switchView('dashboard');
             loadRecentRooms(user.uid);
             showToast(`Benvenuto, ${user.displayName}!`);
+
+            // Show notification permission modal on first login
+            checkAndShowNotificationModal();
         } else {
             state.user = null;
             switchView('login');
@@ -61,7 +64,61 @@ function updateUserInfo(user) {
     document.getElementById('user-avatar').src = user.photoURL;
 }
 
-// --- EVENT LISTENERS ---
+// --- NOTIFICATION PERMISSION ---
+function checkAndShowNotificationModal() {
+    // Check if notifications are supported
+    if (typeof Notification === 'undefined') return;
+
+    // Check if we've already asked (use localStorage)
+    const hasAsked = localStorage.getItem('drafta-notification-asked');
+
+    // Only show if permission is default and we haven't asked before
+    if (Notification.permission === 'default' && !hasAsked) {
+        // Small delay to let dashboard load first
+        setTimeout(() => {
+            document.getElementById('modal-notifications').classList.remove('hidden');
+        }, 1000);
+    }
+}
+
+function enableNotifications() {
+    if (typeof Notification === 'undefined') {
+        showToast('Notifiche non supportate su questo browser');
+        return;
+    }
+
+    Notification.requestPermission().then(permission => {
+        localStorage.setItem('drafta-notification-asked', 'true');
+        document.getElementById('modal-notifications').classList.add('hidden');
+
+        if (permission === 'granted') {
+            showToast('✅ Notifiche abilitate!');
+            // Send test notification
+            try {
+                new Notification('Drafta', {
+                    body: 'Notifiche abilitate correttamente! 🎉',
+                    icon: 'icons/icon-192x192.png'
+                });
+            } catch (e) {
+                console.log('Test notification failed:', e);
+            }
+        } else if (permission === 'denied') {
+            showToast('Notifiche bloccate. Puoi abilitarle dalle impostazioni del browser.');
+        }
+    }).catch(err => {
+        console.error('Notification error:', err);
+        showToast('Errore richiesta notifiche');
+        localStorage.setItem('drafta-notification-asked', 'true');
+        document.getElementById('modal-notifications').classList.add('hidden');
+    });
+}
+
+function closeNotificationModal() {
+    localStorage.setItem('drafta-notification-asked', 'true');
+    document.getElementById('modal-notifications').classList.add('hidden');
+    showToast('Puoi abilitare le notifiche in seguito dalle impostazioni del browser');
+}
+
 function setupEventListeners() {
     // Auth
     document.getElementById('btn-login-google').addEventListener('click', async () => {
@@ -98,6 +155,11 @@ function setupEventListeners() {
         showToast("Selezione annullata");
     });
     document.getElementById('btn-export-csv').addEventListener('click', exportTeamsToCSV);
+
+    // Notification Modal Buttons
+    document.getElementById('btn-notif-enable').addEventListener('click', enableNotifications);
+    document.getElementById('btn-notif-later').addEventListener('click', closeNotificationModal);
+
 
 
     // Modal Enter Button Logic
@@ -922,10 +984,21 @@ function updateStage(player) {
             if (passEl) passEl.style.display = state.isHost ? 'inline-block' : 'none';
         }
 
-        // Host Controls Visibility
+        // Pick Controls Visibility: Host always, or user when it's their turn
         const controls = document.getElementById('host-bid-controls');
         if (controls) {
-            controls.style.display = state.isHost ? 'flex' : 'none';
+            // Check if it's the current user's turn
+            let canPick = state.isHost; // Host can always pick
+
+            if (!canPick && state.roomData && state.roomData.draftOrder) {
+                const currentTeamId = state.roomData.draftOrder[state.roomData.currentTurnIndex];
+                const currentTeam = state.roomData.teams.find(t => t.id === currentTeamId);
+                if (currentTeam && currentTeam.ownerUid === state.user.uid) {
+                    canPick = true; // It's the user's turn
+                }
+            }
+
+            controls.style.display = canPick ? 'flex' : 'none';
         }
 
     } else {
