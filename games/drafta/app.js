@@ -135,7 +135,12 @@ async function initializeFCM() {
 
     // Register Service Worker
     try {
-        const registration = await navigator.serviceWorker.register('/games/drafta/firebase-messaging-sw.js');
+        // Dynamic path: works locally and on GitHub Pages
+        const swPath = window.location.pathname.includes('/games/drafta/')
+            ? '/games/drafta/firebase-messaging-sw.js'
+            : './firebase-messaging-sw.js';
+
+        const registration = await navigator.serviceWorker.register(swPath);
         console.log('Service Worker registered:', registration);
 
         // Request FCM token after notification permission is granted
