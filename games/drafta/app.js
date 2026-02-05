@@ -143,6 +143,9 @@ async function initializeFCM() {
         const registration = await navigator.serviceWorker.register(swPath);
         console.log('Service Worker registered:', registration);
 
+        // Store registration for later use
+        state.swRegistration = registration;
+
         // Request FCM token after notification permission is granted
         if (Notification.permission === 'granted') {
             await requestFCMToken();
@@ -178,7 +181,8 @@ async function requestFCMToken() {
 
     try {
         const currentToken = await getToken(messaging, {
-            vapidKey: 'BBP4-oexEv80hhemDsV2cq6SoOdelDUh0I3fI-hbiSy2OpBTzL7YODA2fNFYhIQJB2LSsrCHWInAFQFyoha5i0E'
+            vapidKey: 'BBP4-oexEv80hhemDsV2cq6SoOdelDUh0I3fI-hbiSy2OpBTzL7YODA2fNFYhIQJB2LSsrCHWInAFQFyoha5i0E',
+            serviceWorkerRegistration: state.swRegistration // Use our registration!
         });
 
         if (currentToken) {
