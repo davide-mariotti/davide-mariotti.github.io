@@ -1605,6 +1605,7 @@ input:checked+.slider:before {
         padding: 15px 10px !important;
         gap: 10px !important;
         flex-wrap: wrap !important;
+        height: max-content;
         /* Allow wrapping to 2 rows if needed */
     }
 
@@ -1612,6 +1613,14 @@ input:checked+.slider:before {
         flex-direction: column;
         align-items: flex-start !important;
         gap: 8px;
+    }
+
+    .header-right {
+        margin: 0 auto;
+    }
+
+    .filters {
+        min-height: 95px;
     }
 
     /* Turn Indicator - Make it more visible */
@@ -1630,6 +1639,7 @@ input:checked+.slider:before {
     #player-list-container {
         max-height: 50vh !important;
         overflow-y: auto;
+        min-height: 420px;
     }
 
     #player-list {
@@ -1696,6 +1706,7 @@ input:checked+.slider:before {
     .active-player-panel {
         width: 100% !important;
         max-width: 100%;
+        min-height: 315px;
     }
 
     /* Reduce font sizes slightly for mobile */
