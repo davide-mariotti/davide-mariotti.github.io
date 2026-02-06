@@ -62,7 +62,25 @@ exports.onTurnChange = onDocumentWritten("rooms/{roomId}", async (event) => {
                 roomId: event.params.roomId,
                 teamId: currentTeamId
             },
-            tokens: tokens
+            tokens: tokens,
+            // 1) Web Push Config (Action Link)
+            webpush: {
+                fcm_options: {
+                    link: `https://davide-mariotti.github.io/games/drafta/`
+                }
+            },
+            // 2) APNs (Apple) Config for Background/Closed App
+            apns: {
+                headers: {
+                    "apns-priority": "10"
+                },
+                payload: {
+                    aps: {
+                        "content-available": 1,
+                        "sound": "default"
+                    }
+                }
+            }
         };
 
         // Send to all user's devices
@@ -148,7 +166,25 @@ exports.onNudge = onDocumentWritten("rooms/{roomId}", async (event) => {
                 roomId: event.params.roomId,
                 sender: sender
             },
-            tokens: tokens
+            tokens: tokens,
+            // 1) Web Push Config (Action Link)
+            webpush: {
+                fcm_options: {
+                    link: `https://davide-mariotti.github.io/games/drafta/`
+                }
+            },
+            // 2) APNs (Apple) Config for Background/Closed App
+            apns: {
+                headers: {
+                    "apns-priority": "10"
+                },
+                payload: {
+                    aps: {
+                        "content-available": 1,
+                        "sound": "default"
+                    }
+                }
+            }
         };
 
         // Send to all user's devices
