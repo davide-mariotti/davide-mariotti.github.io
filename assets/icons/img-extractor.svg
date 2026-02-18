@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="rgba(34,139,34,0.12)" stroke="rgba(34,139,34,0.4)" stroke-width="1.5"/>
+
+  <!-- Browser/page frame -->
+  <rect x="18" y="22" width="64" height="48" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <!-- Browser top bar -->
+  <rect x="18" y="22" width="64" height="10" rx="6" fill="rgba(34,139,34,0.25)" stroke="none"/>
+  <rect x="24" y="22" width="64" height="5" rx="0" fill="rgba(34,139,34,0.25)" stroke="none"/>
+  <!-- Browser dots -->
+  <circle cx="25" cy="27" r="2" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="32" cy="27" r="2" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="39" cy="27" r="2" fill="rgba(255,255,255,0.5)"/>
+
+  <!-- Image thumbnail 1 (landscape) -->
+  <rect x="24" y="37" width="22" height="16" rx="3" fill="rgba(34,139,34,0.3)" stroke="rgba(34,139,34,0.5)" stroke-width="1"/>
+  <!-- Mountain shape inside thumb 1 -->
+  <polygon points="24,53 31,43 38,49 46,53" fill="rgba(34,139,34,0.5)"/>
+  <circle cx="40" cy="41" r="2.5" fill="rgba(255,220,80,0.6)"/>
+
+  <!-- Image thumbnail 2 -->
+  <rect x="52" y="37" width="22" height="16" rx="3" fill="rgba(34,139,34,0.3)" stroke="rgba(34,139,34,0.5)" stroke-width="1"/>
+  <polygon points="52,53 59,44 66,50 74,53" fill="rgba(34,139,34,0.5)"/>
+  <circle cx="68" cy="41" r="2.5" fill="rgba(255,220,80,0.6)"/>
+
+  <!-- Image thumbnail 3 (bottom left) -->
+  <rect x="24" y="58" width="22" height="7" rx="3" fill="rgba(34,139,34,0.2)" stroke="rgba(34,139,34,0.4)" stroke-width="1"/>
+
+  <!-- Image thumbnail 4 (bottom right) -->
+  <rect x="52" y="58" width="22" height="7" rx="3" fill="rgba(34,139,34,0.2)" stroke="rgba(34,139,34,0.4)" stroke-width="1"/>
+
+  <!-- Download arrow -->
+  <g transform="translate(50, 78)">
+    <!-- Arrow shaft -->
+    <line x1="0" y1="-6" x2="0" y2="4" stroke="#228b22" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Arrow head -->
+    <polyline points="-5,-1 0,5 5,-1" stroke="#228b22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Base line -->
+    <line x1="-7" y1="7" x2="7" y2="7" stroke="#228b22" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>
