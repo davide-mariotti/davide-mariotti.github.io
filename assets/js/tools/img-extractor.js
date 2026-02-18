@@ -152,6 +152,8 @@ const applyFilter = () => {
 
     const countEl = document.getElementById('visibleCount');
     if (countEl) countEl.textContent = visible;
+
+    refreshUrlPanel();
 };
 
 /* ── Rendering ───────────────────────────────────────── */
@@ -228,9 +230,24 @@ const renderResults = (images, sourceUrl) => {
             <div class="result-summary">
                 Found <strong>${images.length}</strong> images on <strong>${domain}</strong>
             </div>
-            <button class="btn btn-primary btn-glow px-4 py-2 rounded-pill" onclick="downloadAll()">
-                ⬇ Download All
-            </button>
+            <div class="download-actions">
+                <button class="btn btn-outline-light px-3 py-2 rounded-pill" onclick="toggleUrlPanel()" title="Show / hide image URLs">
+                    📋 URLs
+                </button>
+                <button class="btn btn-outline-light px-3 py-2 rounded-pill" onclick="copyUrls()" title="Copy all visible URLs to clipboard">
+                    ⎘ Copy URLs
+                </button>
+                <button class="btn btn-primary btn-glow px-4 py-2 rounded-pill" onclick="downloadAll()">
+                    ⬇ Download All
+                </button>
+            </div>
+        </div>
+        <div class="url-panel" id="urlPanel">
+            <div class="url-panel-header">
+                <span>Image URLs <span class="url-panel-count" id="urlPanelCount"></span></span>
+                <button class="url-panel-copy" onclick="copyUrls()">⎘ Copy all</button>
+            </div>
+            <textarea id="urlTextarea" class="url-textarea" readonly spellcheck="false"></textarea>
         </div>
         <div class="image-grid">
             ${cardsHtml}
@@ -241,8 +258,59 @@ const renderResults = (images, sourceUrl) => {
     countBadge.classList.remove('d-none');
     document.getElementById('visibleCount').textContent = images.length;
 
-    // Re-apply active filter
+    // Re-apply active filter (also updates URL panel if open)
     applyFilter();
+};
+
+/* ── URL Panel ──────────────────────────────────────── */
+
+const getVisibleUrls = () =>
+    [...document.querySelectorAll('.img-card:not(.hidden)')].map(c => c.dataset.url);
+
+const toggleUrlPanel = () => {
+    const panel = document.getElementById('urlPanel');
+    if (!panel) return;
+    const isOpen = panel.classList.toggle('open');
+    if (isOpen) refreshUrlPanel();
+};
+
+const refreshUrlPanel = () => {
+    const panel = document.getElementById('urlPanel');
+    if (!panel || !panel.classList.contains('open')) return;
+    const urls = getVisibleUrls();
+    const textarea = document.getElementById('urlTextarea');
+    const countEl = document.getElementById('urlPanelCount');
+    if (textarea) textarea.value = urls.join('\n');
+    if (countEl) countEl.textContent = `(${urls.length})`;
+};
+
+const copyUrls = async () => {
+    const urls = getVisibleUrls();
+    if (!urls.length) return;
+    try {
+        await navigator.clipboard.writeText(urls.join('\n'));
+        showToast(`✓ ${urls.length} URL${urls.length > 1 ? 's' : ''} copied!`);
+    } catch {
+        // Fallback: open panel so user can manually copy
+        const panel = document.getElementById('urlPanel');
+        if (panel && !panel.classList.contains('open')) toggleUrlPanel();
+        showToast('Open the URLs panel and copy manually.', true);
+    }
+};
+
+const showToast = (msg, isWarn = false) => {
+    const existing = document.getElementById('imgExtractorToast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'imgExtractorToast';
+    toast.className = 'img-extractor-toast' + (isWarn ? ' warn' : '');
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('visible'));
+    setTimeout(() => {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.remove(), 400);
+    }, 2500);
 };
 
 /* ── Download ────────────────────────────────────────── */
@@ -303,10 +371,10 @@ const downloadAll = async () => {
 
 /* ── Count update after broken images removed ────────── */
 const updateCount = () => {
-    const total = document.querySelectorAll('.img-card').length;
     const visible = document.querySelectorAll('.img-card:not(.hidden)').length;
     const countEl = document.getElementById('visibleCount');
     if (countEl) countEl.textContent = visible;
+    refreshUrlPanel();
 };
 
 /* ── Enter key support ───────────────────────────────── */
