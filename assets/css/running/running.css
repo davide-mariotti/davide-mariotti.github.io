@@ -1,0 +1,637 @@
+/* ========================================================
+   RunStats — running.css
+   Stili specifici per la sezione corsa. Mobile-first.
+   Usa le variabili da /assets/css/variables.css
+   ======================================================== */
+
+@import url('/assets/css/variables.css');
+
+/* =================== HERO HEADER =================== */
+.run-hero {
+    padding: 1.5rem 0 0.5rem;
+}
+
+.run-hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
+}
+
+/* =================== USER BAR =================== */
+.user-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    color: #ffffff;
+}
+
+.user-bar,
+.user-bar * {
+    color: #ffffff;
+}
+
+.user-bar img.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    object-fit: cover;
+}
+
+.user-bar .user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.85;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =================== STAT CARDS =================== */
+.stat-card {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--color-primary-glow);
+}
+
+.stat-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--color-secondary) !important;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.6;
+    display: block;
+}
+
+/* =================== CHART PANELS =================== */
+.chart-panel {
+    height: 100%;
+}
+
+.chart-panel h5 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.chart-empty {
+    text-align: center;
+    padding: 2rem 1rem;
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+
+/* =================== DROP ZONE =================== */
+.drop-zone {
+    border: 2px dashed rgba(34, 139, 34, 0.45) !important;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 2.5rem 1.5rem;
+    position: relative;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: var(--color-secondary) !important;
+    background: rgba(46, 204, 113, 0.07) !important;
+    box-shadow: 0 0 30px rgba(46, 204, 113, 0.15), var(--glass-shadow);
+}
+
+.drop-zone .drop-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    transition: transform 0.2s;
+}
+
+.drop-zone.drag-over .drop-icon {
+    transform: scale(1.15);
+}
+
+.drop-zone .drop-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.drop-zone .drop-sub {
+    font-size: 0.82rem;
+    opacity: 0.5;
+    margin-bottom: 1.25rem;
+}
+
+.drop-zone .btn-upload {
+    background: rgba(34, 139, 34, 0.15);
+    border: 1px solid var(--color-primary);
+    color: #fff !important;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.25s ease;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.drop-zone .btn-upload:hover {
+    background: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+/* =================== SESSION LIST =================== */
+.sessions-section h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.3px;
+}
+
+.session-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-surface-glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.session-card:hover {
+    transform: translateX(4px);
+    border-color: rgba(34, 139, 34, 0.3);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+.session-card,
+.session-card * {
+    color: #ffffff;
+}
+
+.session-date-col {
+    min-width: 90px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55) !important;
+    line-height: 1.3;
+    text-transform: capitalize;
+}
+
+.session-distance {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-secondary) !important;
+    min-width: 70px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.session-distance span {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.session-meta {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+}
+
+.session-meta .meta-item {
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.session-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.btn-delete:hover {
+    color: #ff5f5f;
+    background: rgba(255, 95, 95, 0.1);
+}
+
+/* Mobile: stack layout */
+@media (max-width: 575px) {
+    .session-card {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .session-date-col {
+        flex: 1;
+        min-width: auto;
+    }
+
+    .session-meta {
+        width: 100%;
+    }
+
+    .session-name {
+        max-width: 100%;
+    }
+}
+
+/* =================== EMPTY STATE =================== */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    opacity: 0.55;
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* =================== TOAST NOTIFICATIONS =================== */
+.run-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 99999;
+    background: rgba(5, 20, 10, 0.95);
+    border: 1px solid var(--color-primary);
+    color: #fff;
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    font-size: 0.88rem;
+    font-weight: 500;
+    max-width: 320px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(12px);
+}
+
+.run-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.run-toast.toast-error {
+    border-color: #ff5f5f;
+}
+
+.run-toast.toast-success {
+    border-color: var(--color-secondary);
+}
+
+/* =================== LOADING STATE =================== */
+.sessions-loading {
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+
+/* =================== LOGIN PAGE =================== */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1rem 2rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.login-logo {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.login-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    letter-spacing: -1px;
+}
+
+.login-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-bottom: 2rem;
+}
+
+.login-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    text-align: left;
+}
+
+.login-features li {
+    font-size: 0.85rem;
+    padding: 0.35rem 0;
+    opacity: 0.75;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white !important;
+}
+
+.btn-google {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: #fff !important;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+}
+
+.btn-google:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-google svg {
+    flex-shrink: 0;
+}
+
+.login-note {
+    font-size: 0.75rem;
+    opacity: 0.4;
+    margin-top: 1.5rem;
+}
+
+/* =================== SCROLLBAR =================== */
+.run-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.run-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.run-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+}
+
+/* =================== SECTION LABEL =================== */
+.section-label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+/* =================== PR CARDS =================== */
+.pr-card {
+    padding: 1.1rem 0.75rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+    color: #ffffff;
+}
+.pr-card:hover { transform: translateY(-3px); }
+.pr-card,
+.pr-card * { color: #ffffff; }
+.pr-icon { font-size: 1.5rem; display: block; margin-bottom: 0.3rem; }
+.pr-value { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--color-secondary) !important; display: block; line-height: 1; }
+.pr-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; display: block; margin-top: 0.25rem; }
+.pr-date { font-size: 0.72rem; opacity: 0.45; display: block; margin-top: 0.15rem; }
+
+/* =================== ACWR =================== */
+#acwr-panel h5 { font-size: 0.95rem; font-weight: 700; }
+#acwr-panel,
+#acwr-panel * { color: #ffffff; }
+
+.acwr-metric { padding: 0.5rem 0; }
+.acwr-value { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--color-secondary) !important; }
+.acwr-label { font-size: 0.75rem; opacity: 0.6; margin-top: 0.1rem; }
+.acwr-ratio-wrap { padding: 0.5rem 0; }
+.acwr-ratio-value { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; line-height: 1; }
+.acwr-status { font-size: 0.82rem; margin-top: 0.25rem; opacity: 0.9; }
+.acwr-scale { margin-top: 0.75rem; position: relative; }
+.acwr-scale-bar { display: flex; height: 8px; border-radius: 50px; overflow: hidden; }
+.acwr-zone { display: block; font-size: 0; }
+.acwr-pointer {
+    position: absolute; top: -4px; width: 16px; height: 16px;
+    background: white; border-radius: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
+    transition: left 0.5s ease;
+}
+
+/* =================== RACE PREDICTOR =================== */
+#race-predictor-section,
+#race-predictor-section * { color: #ffffff; }
+#race-predictor-section h5 { font-size: 0.95rem; font-weight: 700; }
+
+.race-card {
+    padding: 1.1rem 0.75rem;
+    text-align: center;
+    transition: transform 0.2s;
+}
+.race-card:hover { transform: translateY(-3px); }
+.race-card, .race-card * { color: #ffffff; }
+.race-icon { font-size: 1.4rem; display: block; margin-bottom: 0.2rem; }
+.race-dist { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; display: block; }
+.race-time { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--color-secondary) !important; display: block; }
+.race-label { font-size: 0.68rem; opacity: 0.5; display: block; margin-top: 0.2rem; }
+
+/* =================== FILTER BAR =================== */
+.filter-bar { padding: 0.5rem 0; }
+.filter-label { font-size: 0.78rem; opacity: 0.55; color: #ffffff; }
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 0.78rem;
+    padding: 0.25rem 0.7rem;
+    transition: all 0.2s ease;
+}
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+.filter-btn.active {
+    background: rgba(34, 139, 34, 0.3) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-secondary) !important;
+    font-weight: 600;
+}
+
+/* =================== SESSION DETAIL: HERO =================== */
+.session-hero-name {
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 800;
+    color: #ffffff !important;
+    letter-spacing: -0.5px;
+}
+.session-hero-meta { font-size: 0.82rem; color: rgba(255,255,255,0.55) !important; }
+.session-hero-distance {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-secondary) !important;
+    line-height: 1;
+}
+.session-hero-sub { font-size: 0.85rem; color: rgba(255,255,255,0.65) !important; margin-top: 0.25rem; }
+
+/* =================== SPLITS TABLE =================== */
+.splits-table {
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-size: 0.85rem;
+    color: #ffffff;
+}
+.splits-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #ffffff;
+}
+.splits-table td {
+    padding: 0.5rem 0.75rem;
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.85);
+}
+.splits-table td:first-child { border-radius: 8px 0 0 8px; }
+.splits-table td:last-child  { border-radius: 0 8px 8px 0; }
+.split-fast td { background: rgba(46, 204, 113, 0.08); }
+.split-slow td { background: rgba(255, 100, 60, 0.07); }
+
+/* =================== HR ZONES =================== */
+.hr-zones-bar {
+    display: flex;
+    height: 20px;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+.hz-segment { transition: flex 0.5s ease; }
+
+.hr-zones-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.78rem;
+}
+.hz-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.8);
+}
+.hz-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* =================== ACWR values forced white =================== */
+.acwr-metric .acwr-label,
+.acwr-status { color: #ffffff; }
