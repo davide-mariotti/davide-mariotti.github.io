@@ -36,32 +36,46 @@
 
         <!-- STAT SUMMARY CARDS -->
         <div class="row g-3 mb-4" id="summary-cards">
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">📅</span>
                     <span class="stat-value">35</span>
                     <span class="stat-label">Settimane totali</span>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">📏</span>
                     <span class="stat-value" id="total-km">—</span>
                     <span class="stat-label">km pianificati</span>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">⛰️</span>
                     <span class="stat-value" id="peak-km">—</span>
                     <span class="stat-label">km settimana picco</span>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">🗓️</span>
                     <span class="stat-value" id="current-week-label">—</span>
                     <span class="stat-label">settimana corrente</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="stat-card glass-panel text-center">
+                    <span class="stat-icon">⏳</span>
+                    <span class="stat-value" id="marathon-countdown">—</span>
+                    <span class="stat-label">alla maratona</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="stat-card glass-panel text-center">
+                    <span class="stat-icon">🏁</span>
+                    <span class="stat-value" id="marathon-target-time">—</span>
+                    <span class="stat-label">tempo obiettivo</span>
                 </div>
             </div>
         </div>
@@ -104,7 +118,7 @@
 
     <!-- WEEK DETAIL MODAL -->
     <div class="modal fade" id="weekModal" tabindex="-1" aria-labelledby="weekModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content trn-modal-content">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title" id="weekModalLabel">—</h5>
@@ -113,6 +127,15 @@
                 </div>
                 <div class="modal-body pt-2" id="weekModalBody">
                     <!-- Rendered by JS -->
+                </div>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                    <button id="modal-btn-prev" class="btn btn-sm modal-nav-btn" disabled>
+                        ← Prec.
+                    </button>
+                    <span class="modal-nav-hint">← → per navigare</span>
+                    <button id="modal-btn-next" class="btn btn-sm modal-nav-btn">
+                        Succ. →
+                    </button>
                 </div>
             </div>
         </div>
