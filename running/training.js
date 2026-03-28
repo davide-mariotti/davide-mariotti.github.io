@@ -9,40 +9,40 @@
    DATA EMBEDDED FROM EXCEL
    ---------------------------------------------------------- */
 const PLAN = [
-  { week:'W01',  d1km:13, d1desc:'13km FL',           d2km:10, d2desc:"R (800m): 2.5km WU / 6×(800m @4'30\" + 90s rest @6'30\") / 2.3km CD",         d3km:13, d3desc:'13km FL',  d4km:24, d4desc:"25km totali: tutti @ 5'50\"/km.",                                     totKm:60 },
-  { week:'W02',  d1km:13, d1desc:'13km FL',           d2km:10, d2desc:"R (1000m): 2.5km WU / 5×(1000m @4'35\" + 2' rest @6'30\") / 1.8km CD",        d3km:13, d3desc:'13km FL',  d4km:25, d4desc:"25km totali: 20km @ 5'50\" + ultimi 5km @ 5'20\"/km",                  totKm:61 },
-  { week:'W03',  d1km:13, d1desc:'14km FL',           d2km:10, d2desc:"R (1500m): 2.0km WU / 4×(1500m @4'40\" + 3' rest @6'30\") / 1.5km CD",        d3km:13, d3desc:'13km FL',  d4km:26, d4desc:"26km totali: tutti @ 5'50\"/km.",                                     totKm:62 },
+  { week:'W01',  d1km:15, d1desc:'15km FL',           d2km:10, d2desc:"R (400m): 2.5km WU / 8×(400m @4'20\" + 90s rest @6'30\") / 1.5km CD",         d3km:11, d3desc:'11km FL',  d4km:24, d4desc:"25km totali: tutti @ 5'50\"/km.",                                     totKm:60, phase:'base' },
+  { week:'W02',  d1km:15, d1desc:'15km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'55\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:25, d4desc:"25km totali: 20km @ 5'50\" + ultimi 5km @ 5'20\"/km",                  totKm:61, phase:'base' },
+  { week:'W03',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"R (600m): 2.5km WU / 6×(600m @4'25\" + 2' rest @6'30\") / 1.5km CD",          d3km:10, d3desc:'10km FL',  d4km:26, d4desc:"26km totali: tutti @ 5'50\"/km.",                                     totKm:62, phase:'base' },
   { week:'W04',  d1km:9,  d1desc:'9km FL',            d2km:6,  d2desc:"R (Fartlek): 2km WU / 5×(300m @4'30\" + 200m rest @6'00\") / 1.5km CD",                 d3km:10, d3desc:'10km FL', d4km:15, d4desc:"(Scarico): 15km totali: 10km @ 5'55\" + ultimi 5km @ 5'20\"/km.",                   totKm:40,  phase:'recovery' },
-  { week:'W05',  d1km:14, d1desc:'14km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 5'15\" / 1km CD",                                    d3km:13, d3desc:'13km FL',  d4km:26, d4desc:"26km totali: 21km @ 5'50\" + ultimi 5km @ 5'10\"/km.",                 totKm:63 },
-  { week:'W06',  d1km:14, d1desc:'14km FL',           d2km:10, d2desc:"R (400m): 2.5km WU / 10×(400m @4'20\" + 60s rest @6'30\") / 2.8km CD",        d3km:13, d3desc:'14km FL',  d4km:27, d4desc:"26km totali: tutti @ 5'50\"/km.",                                     totKm:64 },
-  { week:'W07',  d1km:14, d1desc:'14km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 5'10\" / 1km CD",                                    d3km:14, d3desc:'14km FL',  d4km:27, d4desc:"27km totali: 20km @ 5'50\" + ultimi 7km @ 5'15\"/km.",                 totKm:65 },
+  { week:'W05',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"R (800m): 2.0km WU / 6×(800m @4'30\" + 90s rest @6'30\") / 2km CD",           d3km:11, d3desc:'11km FL',  d4km:26, d4desc:"26km totali: 21km @ 5'50\" + ultimi 5km @ 5'10\"/km.",                 totKm:63, phase:'base' },
+  { week:'W06',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'55\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"26km totali: tutti @ 5'50\"/km.",                                     totKm:64, phase:'base' },
+  { week:'W07',  d1km:17, d1desc:'17km FL',           d2km:10, d2desc:"R (400m): 2.5km WU / 10×(400m @4'20\" + 60s rest @6'30\") / 1.5km CD",        d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"27km totali: 20km @ 5'50\" + ultimi 7km @ 5'15\"/km.",                 totKm:65, phase:'base' },
   { week:'W08',  d1km:9,  d1desc:'9km FL',            d2km:7,  d2desc:"R (Fartlek): 2km WU / 7×(300m @4'30\" + 200m rest @6'00\") / 1.5km CD",                 d3km:9,  d3desc:'9km FL',   d4km:16, d4desc:"(Scarico): 16km totali: 11km @ 5'55\" + ultimi 5km @ 5'20\"/km.",                   totKm:41,  phase:'recovery' },
-  { week:'W09',  d1km:14, d1desc:'15km FL',           d2km:11, d2desc:"R (1000m): 2.5km WU / 6×(1000m @4'35\" + 2' rest @6'30\") / 1.8km CD",        d3km:14, d3desc:'14km FL',  d4km:27, d4desc:"27km totali: tutti @ 5'50\"/km.",                                     totKm:66 },
-  { week:'W10',  d1km:14, d1desc:'15km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 5'15\" / 1km CD",                                    d3km:14, d3desc:'14km FL',  d4km:28, d4desc:"28km Progressivo: 10km @ 5'55\" + 10km @ 5'35\" + 8km @ 5'15\".",       totKm:67 },
-  { week:'W11',  d1km:15, d1desc:'15km FL',           d2km:11, d2desc:"R (2000m): 2.5km WU / 3×(2000m @4'45\" + 3' rest @6'30\") / 1.5km CD",        d3km:14, d3desc:'14km FL',  d4km:28, d4desc:"28km totali: tutti @ 5'50\"/km.",                                     totKm:68 },
+  { week:'W09',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (1000m): 2.5km WU / 5×(1000m @4'30\" + 2' rest @6'30\") / 1.5km CD",        d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"27km totali: tutti @ 5'50\"/km.",                                     totKm:66, phase:'base' },
+  { week:'W10',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'55\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:28, d4desc:"28km Progressivo: 10km @ 5'55\" + 10km @ 5'35\" + 8km @ 5'15\".",       totKm:67, phase:'base' },
+  { week:'W11',  d1km:18, d1desc:'18km FL',           d2km:11, d2desc:"R (800m): 2.5km WU / 7×(800m @4'30\" + 90s rest @6'30\") / 1.5km CD",         d3km:11, d3desc:'11km FL',  d4km:28, d4desc:"28km totali: tutti @ 5'50\"/km.",                                     totKm:68, phase:'base' },
   { week:'W12',  d1km:10, d1desc:'10km FL',           d2km:7,  d2desc:"R (400m): 2km WU / 6×(400m @4'25\" + 200m rest @6'00\") / 1.4km CD",                   d3km:9,  d3desc:'9km FL',   d4km:17, d4desc:"(Scarico): 17km totali: 12km @ 5'55\" + ultimi 5km @ RMa (5'00\").",                totKm:43,  phase:'recovery' },
-  { week:'W13',  d1km:15, d1desc:'15km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 5'10\" / 1km CD",                                    d3km:15, d3desc:'15km FL',  d4km:29, d4desc:"29km totali: 24km @ 5'50\" + ultimi 5km @ RMa (5'00\").",               totKm:70 },
-  { week:'W14',  d1km:16, d1desc:'16km FL',           d2km:11, d2desc:"R (800m): 2.5km WU / 8×(800m @4'30\" + 90s rest @6'30\") / 1.5km CD",         d3km:15, d3desc:'15km FL',  d4km:29, d4desc:"29km totali: tutti @ 5'50\"/km.",                                     totKm:71 },
-  { week:'W15',  d1km:16, d1desc:'16km FL',           d2km:12, d2desc:"R (1500m): 2.0km WU / 5×(1500m @4'40\" + 3' rest @6'30\") / 1.5km CD",        d3km:15, d3desc:'15km FL',  d4km:30, d4desc:"30km totali: 20km @ 5'50\" + ultimi 10km @ 5'20\"/km.",                totKm:73 },
+  { week:'W13',  d1km:18, d1desc:'18km FL',           d2km:11, d2desc:"R (1000m): 2.0km WU / 6×(1000m @4'35\" + 2' rest @6'30\") / 1.5km CD",        d3km:12, d3desc:'12km FL',  d4km:29, d4desc:"29km totali: 24km @ 5'50\" + ultimi 5km @ RMa (5'00\").",               totKm:70, phase:'build' },
+  { week:'W14',  d1km:19, d1desc:'19km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'50\" / 1km CD",                                    d3km:12, d3desc:'12km FL',  d4km:29, d4desc:"29km totali: tutti @ 5'50\"/km.",                                     totKm:71, phase:'build' },
+  { week:'W15',  d1km:19, d1desc:'19km FL',           d2km:12, d2desc:"R (1500m): 2.0km WU / 5×(1500m @4'40\" + 2' rest @6'30\") / 1.5km CD",        d3km:12, d3desc:'12km FL',  d4km:30, d4desc:"30km totali: 20km @ 5'50\" + ultimi 10km @ 5'20\"/km.",                totKm:73, phase:'build' },
   { week:'W16',  d1km:10, d1desc:'10km FL',           d2km:8,  d2desc:"R (Allunghi): 5km FL / 8×(100m @4'20\" + 100m rest @6'15\") / 1.4km CD",               d3km:10, d3desc:'10km FL', d4km:18, d4desc:"(Scarico): 18km totali: 12km @ 5'55\" + ultimi 6km @ 5'20\"/km.",                   totKm:46,  phase:'recovery' },
-  { week:'W17',  d1km:16, d1desc:'16km FL',           d2km:12, d2desc:"FM (12km): 1km WU / 10km @ 5'15\" / 1km CD",                                   d3km:15, d3desc:'15km FL',  d4km:30, d4desc:"30km totali: 20km @ 5'50\" + 10km @ RMa (5'00\").",                    totKm:73 },
-  { week:'W18',  d1km:16, d1desc:'16km FL',           d2km:12, d2desc:"R (1000m): 2.0km WU / 7×(1000m @4'35\" + 2' rest @6'30\") / 2.0km CD",        d3km:16, d3desc:'16km FL',  d4km:30, d4desc:"30km totali: tutti @ 5'50\"/km.",                                     totKm:74 },
-  { week:'W19',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"R (2000m): 2.0km WU / 4×(2000m @4'45\" + 3' rest @6'30\") / 1.0km CD",        d3km:16, d3desc:'16km FL',  d4km:31, d4desc:"31km Progressivo: 11km @ 5'50\" + 10km @ 5'30\" + 10km @ 5'10\".",       totKm:76 },
+  { week:'W17',  d1km:19, d1desc:'19km FL',           d2km:12, d2desc:"R (2000m): 2.0km WU / 3×(2000m @4'40\" + 3' rest @6'30\") / 2.0km CD",        d3km:12, d3desc:'12km FL',  d4km:30, d4desc:"30km totali: 20km @ 5'50\" + 10km @ RMa (5'00\").",                    totKm:73, phase:'build' },
+  { week:'W18',  d1km:19, d1desc:'19km FL',           d2km:12, d2desc:"FM (12km): 1km WU / 10km @ 4'55\" / 1km CD",                                   d3km:13, d3desc:'13km FL',  d4km:30, d4desc:"30km totali: tutti @ 5'50\"/km.",                                     totKm:74, phase:'build' },
+  { week:'W19',  d1km:20, d1desc:'20km FL',           d2km:12, d2desc:"R (1000m): 2.0km WU / 7×(1000m @4'35\" + 2' rest @6'30\") / 1.0km CD",        d3km:13, d3desc:'13km FL',  d4km:31, d4desc:"31km Progressivo: 11km @ 5'50\" + 10km @ 5'30\" + 10km @ 5'10\".",       totKm:76, phase:'build' },
   { week:'W20',  d1km:11, d1desc:'11km FL',           d2km:8,  d2desc:"R (Fartlek): 2km WU / 5×(400m @4'35\" + 200m rest @6'00\") / 3km CD",                  d3km:10, d3desc:'10km FL', d4km:19, d4desc:"(Scarico): 19km totali: 13km @ 5'55\" + ultimi 6km @ RMa (5'00\").",                totKm:48,  phase:'recovery' },
-  { week:'W21',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"FM (12km): 1km WU / 10km @ 5'10\" / 1km CD",                                   d3km:16, d3desc:'16km FL',  d4km:31, d4desc:"31km totali: 10km FL + 11km @ RMa (5'00\") + 10km FL.",                 totKm:76 },
-  { week:'W22',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"R (400m): 2.5km WU / 12×(400m @4'20\" + 60s rest @6'30\") / 3.0km CD",        d3km:16, d3desc:'16km FL',  d4km:32, d4desc:"32km totali: tutti @ 5'50\"/km.",                                     totKm:77 },
-  { week:'W23',  d1km:17, d1desc:'17km FL',           d2km:13, d2desc:"FM (13km): 1km WU / 11km @ 5'15\" / 1km CD",                                   d3km:16, d3desc:'16km FL',  d4km:32, d4desc:"32km totali: 20km @ 5'50\" + 12km @ 5'20\"/km.",                        totKm:78 },
+  { week:'W21',  d1km:20, d1desc:'20km FL',           d2km:12, d2desc:"FM (12km): 1km WU / 10km @ 4'50\" / 1km CD",                                   d3km:13, d3desc:'13km FL',  d4km:31, d4desc:"31km totali: 10km FL + 11km @ RMa (5'00\") + 10km FL.",                 totKm:76, phase:'build' },
+  { week:'W22',  d1km:20, d1desc:'20km FL',           d2km:12, d2desc:"R (1000m): 2.0km WU / 8×(1000m @4'35\" + 2' rest @6'30\") / 2.0km CD",        d3km:13, d3desc:'13km FL',  d4km:32, d4desc:"32km totali: tutti @ 5'50\"/km.",                                     totKm:77, phase:'build' },
+  { week:'W23',  d1km:20, d1desc:'20km FL',           d2km:13, d2desc:"FM (13km): 1km WU / 11km @ 4'55\" / 1km CD",                                   d3km:13, d3desc:'13km FL',  d4km:32, d4desc:"32km totali: 20km @ 5'50\" + 12km @ 5'20\"/km.",                        totKm:78, phase:'build' },
   { week:'W24',  d1km:12, d1desc:'12km FL',           d2km:9,  d2desc:"R (Allunghi): 6km FL / 10×(100m @4'20\" + 100m rest @6'15\") / 1km CD",                d3km:11, d3desc:'11km FL', d4km:19, d4desc:"(Scarico): 19km totali: 13km @ 5'55\" + ultimi 6km @ 5'20\"/km.",                   totKm:51,  phase:'recovery' },
-  { week:'W25',  d1km:17, d1desc:'17km FL',           d2km:13, d2desc:"R (1500m): 1.5km WU / 6×(1500m @4'40\" + 3' rest @6'30\") / 1.5km CD",        d3km:16, d3desc:'16km FL',  d4km:32, d4desc:"32km totali: 17km FL @ 5'50\" + 15km @ RMa (5'00\").",                  totKm:78 },
-  { week:'W26',  d1km:17, d1desc:'17km FL',           d2km:13, d2desc:"FM (14km): 1km WU / 11km @ 5'10\" / 1km CD",                                   d3km:17, d3desc:'17km FL',  d4km:33, d4desc:"33km totali: tutti @ 5'45\"/km",                                       totKm:80 },
-  { week:'W27',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"R (1000m): 2.0km WU / 8×(1000m @4'35\" + 2' rest @6'30\") / 2.5km CD",        d3km:17, d3desc:'17km FL',  d4km:33, d4desc:"33km totali: 18km FL + 15km @ RMa (5'00\").",                           totKm:81 },
+  { week:'W25',  d1km:20, d1desc:'20km FL',           d2km:13, d2desc:"R (2000m): 2.0km WU / 4×(2000m @4'40\" + 3' rest @6'30\") / 3.0km CD",        d3km:13, d3desc:'13km FL',  d4km:32, d4desc:"32km totali: 17km FL @ 5'50\" + 15km @ RMa (5'00\").",                  totKm:78, phase:'build' },
+  { week:'W26',  d1km:20, d1desc:'20km FL',           d2km:13, d2desc:"FM (14km): 1km WU / 11km @ 4'50\" / 1km CD",                                   d3km:14, d3desc:'14km FL',  d4km:33, d4desc:"33km totali: tutti @ 5'45\"/km",                                       totKm:80, phase:'build' },
+  { week:'W27',  d1km:20, d1desc:'20km FL',           d2km:14, d2desc:"R (3000m): 2.0km WU / 3×(3000m @4'45\" + 3' rest @6'30\") / 3.0km CD",        d3km:14, d3desc:'14km FL',  d4km:33, d4desc:"33km totali: 18km FL + 15km @ RMa (5'00\").",                           totKm:81, phase:'build' },
   { week:'W28',  d1km:12, d1desc:'12km FL',           d2km:10, d2desc:"R (Fartlek): 2.5km WU / 8×(400m @4'35\" + 200m rest @6'00\") / 2.7km CD",              d3km:11, d3desc:'11km FL', d4km:20, d4desc:"(Scarico): 20km totali: 13km @ 5'55\" + ultimi 7km @ RMa (5'00\").",                totKm:53,  phase:'recovery' },
-  { week:'W29',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"FM (14km): 1km WU / 12km @ 5'10\" / 1km CD",                                   d3km:17, d3desc:'17km FL',  d4km:33, d4desc:"33km totali: 13km FL + 20km @ RMa (5'00\").",                           totKm:81 },
-  { week:'W30',  d1km:17, d1desc:'17km FL',           d2km:15, d2desc:"R (2000m): 2km WU / 5×(2000m @4'45\" + 3' rest @6'30\") / 2km CD",            d3km:17, d3desc:'17km FL',  d4km:34, d4desc:"34km totali: 14km FL + 20km @ RMa (5'00\").",                           totKm:83 },
-  { week:'W31',  d1km:17, d1desc:'17km FL',           d2km:15, d2desc:"FM (16km): 1km WU / 13km @ 5'15\" / 1km CD",                                   d3km:17, d3desc:'17km FL',  d4km:36, d4desc:"36km totali: 16km FL @ 5'45\" + 20km @ RMa (5'00\").",                  totKm:85 },
-  { week:'W32',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 5'10\" / 1km CD",                                    d3km:15, d3desc:'15km FL',  d4km:29, d4desc:"29km totali: 19km FL @ 5'50\" + 10km @ RMa (5'00\").",                  totKm:70,  phase:'taper' },
+  { week:'W29',  d1km:20, d1desc:'20km FL',           d2km:14, d2desc:"FM (14km): 1km WU / 12km @ 4'50\" / 1km CD",                                   d3km:14, d3desc:'14km FL',  d4km:33, d4desc:"33km totali: 13km FL + 20km @ RMa (5'00\").",                           totKm:81, phase:'peak' },
+  { week:'W30',  d1km:20, d1desc:'20km FL',           d2km:15, d2desc:"R (4000m): 2km WU / 3×(4000m @4'55\" + 3' rest @6'30\") / 1km CD",            d3km:14, d3desc:'14km FL',  d4km:34, d4desc:"34km totali: 14km FL + 20km @ RMa (5'00\").",                           totKm:83, phase:'peak' },
+  { week:'W31',  d1km:20, d1desc:'20km FL',           d2km:15, d2desc:"FM (15km): 1km WU / 13km @ 4'50\" / 1km CD",                                   d3km:14, d3desc:'14km FL',  d4km:36, d4desc:"36km totali: 16km FL @ 5'45\" + 20km @ RMa (5'00\").",                  totKm:85, phase:'peak' },
+  { week:'W32',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'50\" / 1km CD",                                    d3km:15, d3desc:'15km FL',  d4km:29, d4desc:"29km totali: 19km FL @ 5'50\" + 10km @ RMa (5'00\").",                  totKm:70,  phase:'taper' },
   { week:'W33',  d1km:14, d1desc:'14km FL',           d2km:10, d2desc:"R (Allunghi): 8km FL + 5×(100m @4'15\" + 100m rest @6'15\") / 1km CD",                 d3km:13, d3desc:'13km FL',  d4km:20, d4desc:"20km totali: 10km FL @ 5'50\" + 10km @ RMa (5'00\").",                  totKm:57,  phase:'taper' },
-  { week:'W34',  d1km:11, d1desc:'11km FL',           d2km:9,  d2desc:"9km FL: 9km totali a 6'15\" (Molto lento, solo per far girare le gambe)",       d3km:10, d3desc:'10km FL', d4km:16, d4desc:"16km totali: tutti @ 5'55\"/km (Sgambata facile).",                      totKm:46,  phase:'taper' },
+  { week:'W34',  d1km:11, d1desc:'11km FL',           d2km:9,  d2desc:"FM (9km): 2.5km WU / 4km @ 5'00\" / 2.5km CD",                                 d3km:10, d3desc:'10km FL', d4km:16, d4desc:"16km totali: tutti @ 5'55\"/km (Sgambata facile).",                      totKm:46,  phase:'taper' },
   { week:'W35',  d1km:9,  d1desc:'9km FL',            d2km:9,  d2desc:"R (Allunghi): 7km FL + 5×(100m @4'15\" + 100m rest @6'15\") / 1km CD",                 d3km:0,  d3desc:'OFF',      d4km:42, d4desc:"🏅 MARATONA (42.195km): Primi 5km @ 5'05\", poi costante @ 4'58\"-5'00\".",  totKm:60,  phase:'race' },
 ];
 
@@ -59,15 +59,15 @@ function sessionType(desc) {
 }
 
 function sessionIcon(type) {
-  return { reps:'⚡', tempo:'🔥', off:'🛌', easy:'🏃' }[type] || '🏃';
+  return { reps: '⚡', tempo: '🔥', off: '🛌', easy: '🏃' }[type] || '🏃';
 }
 
 function sessionLabel(type) {
-  return { reps:'Ripetute', tempo:'Fondo Medio', off:'Riposo', easy:'Fondo Lento' }[type] || 'Fondo Lento';
+  return { reps: 'Ripetute', tempo: 'Fondo Medio', off: 'Riposo', easy: 'Fondo Lento' }[type] || 'Fondo Lento';
 }
 
 function phaseName(p) {
-  return { recovery:'🟡 Scarico', taper:'🟣 Taper', race:'🔴 Gara', build:'🟢 Build' }[p] || '🟢 Build';
+  return { recovery: '🟡 Scarico', taper: '🟣 Taper', race: '🔴 Gara', build: '🟢 Build', base: '⚪ Base', peak: '🟠 Picco' }[p] || '🟢 Build';
 }
 
 function phaseClass(p) {
@@ -87,7 +87,7 @@ function weekStartDate(idx) {
   return d;
 }
 
-const SHORT_MONTHS = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+const SHORT_MONTHS = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 function fmtShort(d) {
   return `${d.getDate()} ${SHORT_MONTHS[d.getMonth()]}`;
 }
@@ -95,7 +95,7 @@ function fmtShort(d) {
 /** Returns "lun DD MMM – dom DD MMM" for a given week index. */
 function weekDateRange(idx) {
   const start = weekStartDate(idx);
-  const end   = new Date(start);
+  const end = new Date(start);
   end.setDate(end.getDate() + 6);
   return `${fmtShort(start)} – ${fmtShort(end)}`;
 }
@@ -120,7 +120,7 @@ function computeMarathonTargetTime() {
   for (const m of segMatches) {
     const dist = parseFloat(m[1]);
     const secs = parseInt(m[2]) * 60 + parseInt(m[3]);
-    totalTime   += dist * secs;
+    totalTime += dist * secs;
     coveredDist += dist;
   }
 
@@ -154,14 +154,14 @@ function fmtTime(totalSecs) {
  */
 function weekLoadTrend(idx) {
   if (idx === 0) return null;
-  const prevKm    = PLAN[idx - 1].totKm;
-  const ratio     = (PLAN[idx].totKm - prevKm) / prevKm;
+  const prevKm = PLAN[idx - 1].totKm;
+  const ratio = (PLAN[idx].totKm - prevKm) / prevKm;
   const changePct = Math.round(ratio * 100);
   let trend;
-  if      (ratio >  0.15) trend = 'high';
-  else if (ratio >  0.05) trend = 'up';
+  if (ratio > 0.15) trend = 'high';
+  else if (ratio > 0.05) trend = 'up';
   else if (ratio < -0.10) trend = 'down';
-  else                    trend = 'stable';
+  else trend = 'stable';
   return { prevKm, changePct, trend };
 }
 
@@ -169,9 +169,9 @@ function weekLoadTrend(idx) {
 function buildTrendBadge(t) {
   if (!t || t.trend === 'stable') return '';
   const cfg = {
-    high:   { icon: '⚠️', label: 'Carico alto' },
-    up:     { icon: '↑',   label: 'In crescita' },
-    down:   { icon: '↓',   label: 'Scarico'     },
+    high: { icon: '⚠️', label: 'Carico alto' },
+    up: { icon: '↑', label: 'In crescita' },
+    down: { icon: '↓', label: 'Scarico' },
   };
   const { icon, label } = cfg[t.trend];
   const sign = t.changePct > 0 ? '+' : '';
@@ -195,7 +195,7 @@ function parseD2Splits(d2km, d2desc) {
   const cd = cdMatch ? parseFloat(cdMatch[1]) : 0;
   const qualityKm = Math.max(0, (d2km || 0) - wu - cd);
 
-  if (type === 'reps')  return { easyKm: round1(wu + cd), fastKm: round1(qualityKm), medioKm: 0 };
+  if (type === 'reps') return { easyKm: round1(wu + cd), fastKm: round1(qualityKm), medioKm: 0 };
   if (type === 'tempo') return { easyKm: round1(wu + cd), fastKm: 0, medioKm: round1(qualityKm) };
 
   return { easyKm: d2km || 0, fastKm: 0, medioKm: 0 };
@@ -226,13 +226,12 @@ function parseD4Splits(d4km, d4desc) {
 function round1(n) { return Math.round(n * 10) / 10; }
 
 /* Compute splits for every week */
-PLAN.forEach(w => {
-  if (!w.phase) w.phase = 'build';
+PLAN.forEach((w, idx) => {
   const d2s = parseD2Splits(w.d2km, w.d2desc);
   const d4s = parseD4Splits(w.d4km, w.d4desc);
   w.splits = {
-    easyKm:  round1((w.d1km || 0) + (w.d3km || 0) + d2s.easyKm + d4s.easyKm),
-    fastKm:  round1(d2s.fastKm),
+    easyKm: round1((w.d1km || 0) + (w.d3km || 0) + d2s.easyKm + d4s.easyKm),
+    fastKm: round1(d2s.fastKm),
     medioKm: round1(d2s.medioKm + d4s.medioKm),
   };
 });
@@ -241,7 +240,7 @@ PLAN.forEach(w => {
    GLOBALS
    ---------------------------------------------------------- */
 
-const maxKm   = Math.max(...PLAN.map(w => w.totKm));
+const maxKm = Math.max(...PLAN.map(w => w.totKm));
 const totalKm = PLAN.reduce((s, w) => s + w.totKm, 0);
 
 // Marathon date = Sunday of W35 (last week, day 6)
@@ -260,7 +259,7 @@ const currentIdx = getCurrentWeekIdx();
    ---------------------------------------------------------- */
 
 document.getElementById('total-km').textContent = totalKm.toLocaleString('it-IT');
-document.getElementById('peak-km').textContent  = maxKm + ' km';
+document.getElementById('peak-km').textContent = maxKm + ' km';
 const curW = PLAN[currentIdx];
 document.getElementById('current-week-label').textContent = curW ? curW.week : '—';
 
@@ -291,13 +290,13 @@ if (marathonTimeEl) {
    ---------------------------------------------------------- */
 
 const C = {
-  green:  'rgba(46,204,113,0.9)',
-  amber:  'rgba(251,191,36,0.9)',
+  green: 'rgba(46,204,113,0.9)',
+  amber: 'rgba(251,191,36,0.9)',
   purple: 'rgba(167,139,250,0.9)',
-  red:    'rgba(248,113,113,0.9)',
-  blue:   'rgba(96,165,250,0.9)',
-  grid:   'rgba(255,255,255,0.06)',
-  tick:   'rgba(255,255,255,0.4)',
+  red: 'rgba(248,113,113,0.9)',
+  blue: 'rgba(96,165,250,0.9)',
+  grid: 'rgba(255,255,255,0.06)',
+  tick: 'rgba(255,255,255,0.4)',
 };
 
 Chart.defaults.color = C.tick;
@@ -309,12 +308,12 @@ Chart.defaults.font.family = 'Inter, sans-serif';
  */
 function dimColor(color) {
   return color.replace(/[\d.]+\)$/, a => `${(parseFloat(a) * 0.45).toFixed(2)})`)
-              .replace('0.9)', '0.4)').replace('0.85)', '0.4)').replace('0.75)', '0.4)');
+    .replace('0.9)', '0.4)').replace('0.85)', '0.4)').replace('0.75)', '0.4)');
 }
 
 /* [FEATURE 4] Stacked bar chart — easy / medio / fast layers */
 let volumeChart;
-(function() {
+(function () {
   const ctx = document.getElementById('chart-volume').getContext('2d');
 
   const mk = (base, isNow) => isNow ? base : dimColor(base);
@@ -375,7 +374,7 @@ let volumeChart;
       },
       scales: {
         x: { stacked: true, grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } },
-        y: { stacked: true, grid: { color: C.grid },  ticks: { font: { size: 10 } }, beginAtZero: true }
+        y: { stacked: true, grid: { color: C.grid }, ticks: { font: { size: 10 } }, beginAtZero: true }
       },
       // [FEATURE 1/6 partial] Click on bar → open modal
       onClick: (evt, elements) => {
@@ -389,11 +388,11 @@ let volumeChart;
 })();
 
 /* Distribution doughnut — uses computed splits */
-(function() {
+(function () {
   const ctx = document.getElementById('chart-distribution').getContext('2d');
 
-  const easyTotal  = round1(PLAN.reduce((s, w) => s + w.splits.easyKm,  0));
-  const fastTotal  = round1(PLAN.reduce((s, w) => s + w.splits.fastKm,  0));
+  const easyTotal = round1(PLAN.reduce((s, w) => s + w.splits.easyKm, 0));
+  const fastTotal = round1(PLAN.reduce((s, w) => s + w.splits.fastKm, 0));
   const medioTotal = round1(PLAN.reduce((s, w) => s + w.splits.medioKm, 0));
 
   new Chart(ctx, {
@@ -403,7 +402,7 @@ let volumeChart;
       datasets: [{
         data: [easyTotal, fastTotal, medioTotal],
         backgroundColor: ['rgba(34,139,34,0.75)', 'rgba(249,115,22,0.8)', 'rgba(251,191,36,0.8)'],
-        borderColor:     ['rgba(46,204,113,0.6)', 'rgba(253,186,116,0.6)', 'rgba(252,211,77,0.6)'],
+        borderColor: ['rgba(46,204,113,0.6)', 'rgba(253,186,116,0.6)', 'rgba(252,211,77,0.6)'],
         borderWidth: 1.5,
         hoverOffset: 8,
       }]
@@ -433,14 +432,14 @@ let volumeChart;
 const grid = document.getElementById('weeks-grid');
 
 PLAN.forEach((w, idx) => {
-  const phase      = w.phase || 'build';
-  const isNow      = idx === currentIdx;
-  const sp         = w.splits;
+  const phase = w.phase || 'build';
+  const isNow = idx === currentIdx;
+  const sp = w.splits;
   const totalSplit = sp.easyKm + sp.fastKm + sp.medioKm;
-  const trend      = weekLoadTrend(idx);
+  const trend = weekLoadTrend(idx);
 
-  const pctEasy  = totalSplit ? Math.round(sp.easyKm  / totalSplit * 100) : 100;
-  const pctFast  = totalSplit ? Math.round(sp.fastKm  / totalSplit * 100) : 0;
+  const pctEasy = totalSplit ? Math.round(sp.easyKm / totalSplit * 100) : 100;
+  const pctFast = totalSplit ? Math.round(sp.fastKm / totalSplit * 100) : 0;
   const pctMedio = totalSplit ? Math.round(sp.medioKm / totalSplit * 100) : 0;
 
   const col = document.createElement('div');
@@ -460,16 +459,17 @@ PLAN.forEach((w, idx) => {
       <span class="week-date-range">${weekDateRange(idx)}</span>
       ${buildTrendBadge(trend)}
 
-      <div class="week-sessions">
-        ${sp.easyKm  ? `<span class="ws-badge easy">🏃 ${sp.easyKm}km</span>`  : ''}
-        ${sp.fastKm  ? `<span class="ws-badge reps">⚡ ${sp.fastKm}km</span>`  : ''}
-        ${sp.medioKm ? `<span class="ws-badge tempo">🔥 ${sp.medioKm}km</span>` : ''}
+      <div class="week-sessions mt-2 d-flex flex-nowrap gap-1" style="overflow:-moz-hidden-unscrollable; overflow: hidden;">
+        <span class="ws-badge easy px-1" title="${w.d1desc}">🏃 ${w.d1km}</span>
+        <span class="ws-badge ${w.d2desc.startsWith('FM') ? 'tempo' : 'reps'} px-1" title="${w.d2desc}">${w.d2desc.startsWith('FM') ? '🔥' : '⚡'} ${w.d2km}</span>
+        ${w.d3km > 0 ? `<span class="ws-badge easy px-1" title="${w.d3desc}">🏃 ${w.d3km}</span>` : `<span class="ws-badge off px-1" title="Riposo">💤 OFF</span>`}
+        <span class="ws-badge ${w.phase === 'race' ? 'race' : 'long'} px-1" title="${w.d4desc}">${w.phase === 'race' ? '🏅' : '🪨'} ${w.d4km}</span>
       </div>
 
       <div class="km-bar-wrap">
         <div class="split-bar">
-          ${pctEasy  ? `<div class="split-seg seg-easy"  style="width:${pctEasy}%"  title="Fondo Lento: ${sp.easyKm}km"></div>` : ''}
-          ${pctFast  ? `<div class="split-seg seg-fast"  style="width:${pctFast}%"  title="Veloci: ${sp.fastKm}km"></div>` : ''}
+          ${pctEasy ? `<div class="split-seg seg-easy"  style="width:${pctEasy}%"  title="Fondo Lento: ${sp.easyKm}km"></div>` : ''}
+          ${pctFast ? `<div class="split-seg seg-fast"  style="width:${pctFast}%"  title="Veloci: ${sp.fastKm}km"></div>` : ''}
           ${pctMedio ? `<div class="split-seg seg-medio" style="width:${pctMedio}%" title="Medio: ${sp.medioKm}km"></div>` : ''}
         </div>
       </div>
@@ -506,11 +506,11 @@ document.querySelectorAll('.trn-phase-btn').forEach(btn => {
    WEEK DETAIL MODAL
    ---------------------------------------------------------- */
 
-const weekModal  = new bootstrap.Modal(document.getElementById('weekModal'));
+const weekModal = new bootstrap.Modal(document.getElementById('weekModal'));
 const modalTitle = document.getElementById('weekModalLabel');
-const modalBody  = document.getElementById('weekModalBody');
-const btnPrev    = document.getElementById('modal-btn-prev');
-const btnNext    = document.getElementById('modal-btn-next');
+const modalBody = document.getElementById('weekModalBody');
+const btnPrev = document.getElementById('modal-btn-prev');
+const btnNext = document.getElementById('modal-btn-next');
 
 let activeModalIdx = currentIdx;
 
@@ -558,9 +558,9 @@ function buildSplitSummary(sp) {
   const total = sp.easyKm + sp.fastKm + sp.medioKm;
   if (!total) return '';
   const bars = [
-    { label:'🏃 Fondo Lento', km:sp.easyKm,  cls:'seg-easy',  color:'rgba(34,139,34,0.7)' },
-    { label:'⚡ Veloci',       km:sp.fastKm,  cls:'seg-fast',  color:'rgba(249,115,22,0.7)' },
-    { label:'🔥 Medio/RMa',   km:sp.medioKm, cls:'seg-medio', color:'rgba(251,191,36,0.7)' },
+    { label: '🏃 Fondo Lento', km: sp.easyKm, cls: 'seg-easy', color: 'rgba(34,139,34,0.7)' },
+    { label: '⚡ Veloci', km: sp.fastKm, cls: 'seg-fast', color: 'rgba(249,115,22,0.7)' },
+    { label: '🔥 Medio/RMa', km: sp.medioKm, cls: 'seg-medio', color: 'rgba(251,191,36,0.7)' },
   ].filter(b => b.km > 0);
 
   const legendHtml = bars.map(b => {
@@ -578,9 +578,9 @@ function buildSplitSummary(sp) {
       <div class="small opacity-50 text-uppercase fw-bold mb-2" style="letter-spacing:1px;font-size:.65rem;">Distribuzione km settimana</div>
       <div class="split-bar mb-3" style="height:14px;">
         ${bars.map(b => {
-          const pct = Math.round(b.km / total * 100);
-          return `<div class="split-seg ${b.cls}" style="width:${pct}%" title="${b.label}: ${b.km}km"></div>`;
-        }).join('')}
+    const pct = Math.round(b.km / total * 100);
+    return `<div class="split-seg ${b.cls}" style="width:${pct}%" title="${b.label}: ${b.km}km"></div>`;
+  }).join('')}
       </div>
       <div class="d-flex flex-column gap-1">${legendHtml}</div>
     </div>`;
@@ -604,15 +604,15 @@ function openWeekModal(idx) {
 
   activeModalIdx = idx;
 
-  const phase    = w.phase || 'build';
-  const isNow    = idx === currentIdx;
-  const d2type   = sessionType(w.d2desc);
+  const phase = w.phase || 'build';
+  const isNow = idx === currentIdx;
+  const d2type = sessionType(w.d2desc);
   const longType = phase === 'race' ? 'race' : 'long';
-  const sp       = w.splits;
+  const sp = w.splits;
 
   const completedKm = PLAN.slice(0, idx).reduce((s, ww) => s + ww.totKm, 0);
   const progressPct = Math.round(completedKm / totalKm * 100);
-  const dateRange   = weekDateRange(idx);
+  const dateRange = weekDateRange(idx);
 
   // [FEATURE 1] Update prev/next button states
   if (btnPrev) btnPrev.disabled = idx === 0;
@@ -637,9 +637,9 @@ function openWeekModal(idx) {
     <div class="modal-stat-row">
       <div class="modal-stat-pill">📏 <span class="msp-val">${w.totKm} km</span> totali</div>
       <div class="modal-stat-pill">🏃 <span class="msp-val">${sp.easyKm}</span> lenti</div>
-      ${sp.fastKm  ? `<div class="modal-stat-pill">⚡ <span class="msp-val">${sp.fastKm}</span> veloci</div>` : ''}
+      ${sp.fastKm ? `<div class="modal-stat-pill">⚡ <span class="msp-val">${sp.fastKm}</span> veloci</div>` : ''}
       ${sp.medioKm ? `<div class="modal-stat-pill">🔥 <span class="msp-val">${sp.medioKm}</span> medio</div>` : ''}
-      ${(() => { const t = weekLoadTrend(idx); if (!t || t.trend === 'stable') return ''; const cfg = { high:['⚠️','trend-high'], up:['↑','trend-up'], down:['↓','trend-down'] }; const [icon, cls] = cfg[t.trend]; const sign = t.changePct > 0 ? '+' : ''; return `<div class="modal-stat-pill modal-trend-pill ${cls}">${icon} <span class="msp-val">${sign}${t.changePct}%</span> vs ${t.prevKm}km</div>`; })()}
+      ${(() => { const t = weekLoadTrend(idx); if (!t || t.trend === 'stable') return ''; const cfg = { high: ['⚠️', 'trend-high'], up: ['↑', 'trend-up'], down: ['↓', 'trend-down'] }; const [icon, cls] = cfg[t.trend]; const sign = t.changePct > 0 ? '+' : ''; return `<div class="modal-stat-pill modal-trend-pill ${cls}">${icon} <span class="msp-val">${sign}${t.changePct}%</span> vs ${t.prevKm}km</div>`; })()}
     </div>
 
     <div class="progress-section">
@@ -682,7 +682,7 @@ if (btnNext) btnNext.addEventListener('click', () => { if (activeModalIdx < PLAN
 document.addEventListener('keydown', e => {
   const isOpen = document.getElementById('weekModal').classList.contains('show');
   if (!isOpen) return;
-  if (e.key === 'ArrowLeft')  { e.preventDefault(); if (activeModalIdx > 0)               openWeekModal(activeModalIdx - 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); if (activeModalIdx > 0) openWeekModal(activeModalIdx - 1); }
   if (e.key === 'ArrowRight') { e.preventDefault(); if (activeModalIdx < PLAN.length - 1) openWeekModal(activeModalIdx + 1); }
   // Escape is handled natively by Bootstrap
 });

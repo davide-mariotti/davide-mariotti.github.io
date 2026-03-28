@@ -73,8 +73,16 @@
 }
 
 /* Phase color bars */
+.week-card.phase-base::before {
+    background: linear-gradient(90deg, #64748b, #94a3b8);
+}
+
 .week-card.phase-build::before {
     background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.week-card.phase-peak::before {
+    background: linear-gradient(90deg, #ea580c, #f97316);
 }
 
 .week-card.phase-recovery::before {
@@ -93,6 +101,16 @@
     transform: translateY(-4px);
     border-color: rgba(34, 139, 34, 0.35);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--color-primary-glow);
+}
+
+.week-card.phase-base:hover {
+    border-color: rgba(100, 116, 139, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(100, 116, 139, 0.25);
+}
+
+.week-card.phase-peak:hover {
+    border-color: rgba(234, 88, 12, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(234, 88, 12, 0.25);
 }
 
 .week-card.phase-recovery:hover {
@@ -161,8 +179,16 @@
     display: block;
 }
 
+.week-card.phase-base .week-km {
+    color: #94a3b8 !important;
+}
+
 .week-card.phase-build .week-km {
     color: var(--color-secondary) !important;
+}
+
+.week-card.phase-peak .week-km {
+    color: #f97316 !important;
 }
 
 .week-card.phase-recovery .week-km {
@@ -726,11 +752,25 @@
  * Colored border-top + ambient glow on the modal content,
  * matching the phase of the selected training week.
  */
+.trn-modal-content.phase-modal-base {
+    border-top: 3px solid #94a3b8 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
+        0 0 60px rgba(100, 116, 139, 0.08),
+        inset 0 1px 0 rgba(100, 116, 139, 0.2) !important;
+}
+
 .trn-modal-content.phase-modal-build {
     border-top: 3px solid var(--color-secondary) !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
         0 0 60px rgba(46, 204, 113, 0.08),
         inset 0 1px 0 rgba(46, 204, 113, 0.2) !important;
+}
+
+.trn-modal-content.phase-modal-peak {
+    border-top: 3px solid #f97316 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
+        0 0 60px rgba(234, 88, 12, 0.08),
+        inset 0 1px 0 rgba(234, 88, 12, 0.2) !important;
 }
 
 .trn-modal-content.phase-modal-recovery {
@@ -755,8 +795,16 @@
 }
 
 /* Modal title color tinting per phase */
+.phase-modal-base #weekModalLabel {
+    color: #94a3b8 !important;
+}
+
 .phase-modal-build #weekModalLabel {
     color: var(--color-secondary) !important;
+}
+
+.phase-modal-peak #weekModalLabel {
+    color: #f97316 !important;
 }
 
 .phase-modal-recovery #weekModalLabel {
