@@ -20,7 +20,7 @@ const PLAN = [
   { week:'W09',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (1000m): 2.5km WU / 5×(1000m @4'30\" + 2' rest @6'30\") / 1.5km CD",        d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"27km totali: tutti @ 6'20\"/km.",                                     totKm:66, phase:'base' },
   { week:'W10',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'50\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:28, d4desc:"28km Progressivo: 10km @ 6'25\" + 10km @ 5'50\" + 8km @ 5'10\".",       totKm:67, phase:'base' },
   { week:'W11',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (800m): 2.5km WU / 7×(800m @4'30\" + 90s rest @6'30\") / 1.5km CD",         d3km:12, d3desc:'12km FL',  d4km:28, d4desc:"28km totali: tutti @ 6'20\"/km.",                                     totKm:68, phase:'base' },
-  { week:'W12',  d1km:10, d1desc:'10km FL',           d2km:7,  d2desc:"R (400m): 2km WU / 6×(400m @4'25\" + 200m rest @6'00\") / 1.4km CD",                   d3km:9,  d3desc:'9km FL',   d4km:17, d4desc:"(Scarico): 17km totali: 12km @ 6'25\" + ultimi 5km @ RMa (4'55\").",                totKm:43,  phase:'recovery' },
+  { week:'W12',  d1km:10, d1desc:'10km FL',           d2km:7,  d2desc:"R (400m): 2km WU / 6×(400m @4'25\" + 200m rest @6'00\") / 1.4km CD",                   d3km:9,  d3desc:'9km FL',   d4km:15, d4desc:"🏅 GARA TEST (10km): 15km totali (3km WU FL + 10km @ 4'20\" gara all-out + 2km CD FL).",                totKm:41,  phase:'recovery' },
   { week:'W13',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (1000m): 2.0km WU / 6×(1000m @4'35\" + 2' rest @6'30\") / 1.5km CD",        d3km:13, d3desc:'13km FL',  d4km:29, d4desc:"29km totali: 24km @ 6'20\" + ultimi 5km @ RMa (4'55\").",               totKm:70, phase:'build' },
   { week:'W14',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'45\" / 1km CD",                                    d3km:14, d3desc:'14km FL',  d4km:29, d4desc:"29km totali: tutti @ 6'20\"/km.",                                     totKm:71, phase:'build' },
   { week:'W15',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"R (1500m): 2.0km WU / 5×(1500m @4'40\" + 2' rest @6'30\") / 1.5km CD",        d3km:14, d3desc:'14km FL',  d4km:30, d4desc:"30km totali: 20km @ 6'20\" + ultimi 10km @ 5'25\"/km.",                totKm:73, phase:'build' },
@@ -36,7 +36,7 @@ const PLAN = [
   { week:'W25',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"R (2000m): 2.5km WU / 4×(2000m @4'40\" + 3' rest @6'30\") / 3.5km CD",        d3km:15, d3desc:'15km FL',  d4km:32, d4desc:"32km totali: 17km FL @ 6'20\" + 15km @ RMa (4'55\").",                  totKm:78, phase:'build' },
   { week:'W26',  d1km:17, d1desc:'17km FL',           d2km:15, d2desc:"FM (14km): 2km WU / 11km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: tutti @ 6'15\"/km",                                       totKm:80, phase:'build' },
   { week:'W27',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"R (3000m): 3.0km WU / 3×(3000m @4'45\" + 3' rest @6'30\") / 4.0km CD",        d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: 18km FL + 15km @ RMa (4'55\").",                           totKm:81, phase:'build' },
-  { week:'W28',  d1km:12, d1desc:'12km FL',           d2km:10, d2desc:"R (Fartlek): 2.5km WU / 8×(400m @4'35\" + 200m rest @6'00\") / 2.7km CD",              d3km:11, d3desc:'11km FL', d4km:20, d4desc:"(Scarico): 20km totali: 13km @ 6'25\" + ultimi 7km @ RMa (4'55\").",                totKm:53,  phase:'recovery' },
+  { week:'W28',  d1km:12, d1desc:'12km FL',           d2km:10, d2desc:"R (Fartlek): 2.5km WU / 8×(400m @4'35\" + 200m rest @6'00\") / 2.7km CD",              d3km:11, d3desc:'11km FL', d4km:23, d4desc:"🏅 GARA TEST (Mezza Maratona): 23.1km totali (1km WU FL + 21.1km @ 4'40\" gara tirata + 1km CD FL).",                totKm:56,  phase:'recovery' },
   { week:'W29',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"FM (14km): 2km WU / 12km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: 13km FL + 20km @ RMa (4'55\").",                           totKm:81, phase:'peak' },
   { week:'W30',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"R (4000m): 2.5km WU / 3×(4000m @4'55\" + 3' rest @6'30\") / 1.5km CD",        d3km:16, d3desc:'16km FL',  d4km:34, d4desc:"34km totali: 14km FL + 20km @ RMa (4'55\").",                           totKm:83, phase:'peak' },
   { week:'W31',  d1km:17, d1desc:'17km FL',           d2km:17, d2desc:"FM (15km): 2km WU / 13km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:36, d4desc:"36km totali: 16km FL @ 6'15\" + 20km @ RMa (4'55\").",                  totKm:85, phase:'peak' },
@@ -452,8 +452,12 @@ PLAN.forEach((w, idx) => {
   const pctMedio = totalSplit ? Math.round(sp.medioKm / totalSplit * 100) : 0;
 
   const col = document.createElement('div');
-  col.className = `col-6 col-md-4 col-lg-3 weeks-grid-item`;
+  col.className = `col-12 col-md-4 col-lg-3 weeks-grid-item`;
   col.dataset.phase = phase;
+
+  const isD4Race = phase === 'race' || /GARA/i.test(w.d4desc);
+  const longType = isD4Race ? 'race' : 'long';
+  const longIcon = isD4Race ? '🏅' : '🪨';
 
   col.innerHTML = `
     <div class="week-card ${phaseClass(phase)}${isNow ? ' is-current' : ''}"
@@ -472,7 +476,7 @@ PLAN.forEach((w, idx) => {
         <span class="ws-badge easy px-1" title="${w.d1desc}">🏃 ${w.d1km}</span>
         <span class="ws-badge ${w.d2desc.startsWith('FM') ? 'tempo' : 'reps'} px-1" title="${w.d2desc}">${w.d2desc.startsWith('FM') ? '🔥' : '⚡'} ${w.d2km}</span>
         ${w.d3km > 0 ? `<span class="ws-badge easy px-1" title="${w.d3desc}">🏃 ${w.d3km}</span>` : `<span class="ws-badge off px-1" title="Riposo">💤 OFF</span>`}
-        <span class="ws-badge ${w.phase === 'race' ? 'race' : 'long'} px-1" title="${w.d4desc}">${w.phase === 'race' ? '🏅' : '🪨'} ${w.d4km}</span>
+        <span class="ws-badge ${longType} px-1" title="${w.d4desc}">${longIcon} ${w.d4km}</span>
       </div>
 
       <div class="km-bar-wrap">
@@ -616,7 +620,10 @@ function openWeekModal(idx) {
   const phase = w.phase || 'build';
   const isNow = idx === currentIdx;
   const d2type = sessionType(w.d2desc);
-  const longType = phase === 'race' ? 'race' : 'long';
+  const isD4Race = phase === 'race' || /GARA/i.test(w.d4desc);
+  const longType = isD4Race ? 'race' : 'long';
+  const longLabel = isD4Race ? (phase === 'race' ? 'Maratona' : 'Gara Test') : 'Lungo';
+  const longIcon = isD4Race ? '🏅' : '🪨';
   const sp = w.splits;
 
   const completedKm = PLAN.slice(0, idx).reduce((s, ww) => s + ww.totKm, 0);
@@ -674,8 +681,8 @@ function openWeekModal(idx) {
         ${buildSessionBlock('🏃', 'easy', 'Fondo Lento', w.d3km, w.d3desc)}
       </div>
       <div class="col-12 col-md-6">
-        <h6 class="small opacity-50 text-uppercase mb-2">🏅 Day 4 — ${phase === 'race' ? 'Gara' : 'Lungo'}</h6>
-        ${buildSessionBlock('🏅', longType, phase === 'race' ? 'Maratona' : 'Lungo', w.d4km, w.d4desc)}
+        <h6 class="small opacity-50 text-uppercase mb-2">${longIcon} Day 4 — ${longLabel}</h6>
+        ${buildSessionBlock(longIcon, longType, longLabel, w.d4km, w.d4desc)}
       </div>
     </div>
   `;
