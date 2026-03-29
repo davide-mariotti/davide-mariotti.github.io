@@ -149,12 +149,19 @@ function fmtTime(totalSecs) {
    ---------------------------------------------------------- */
 
 /**
- * Compare week[idx] volume to the rolling avg of the previous 1–3 weeks.
- * Returns { avgKm, changePct, trend: 'high'|'up'|'stable'|'down' }
+ * Compare week[idx] volume to the previous week.
+ * Se la settimana corrente non è di scarico, ignora la settimana di scarico precedente e usa
+ * l'ultima settimana di carico per fare un confronto reale.
  */
 function weekLoadTrend(idx) {
   if (idx === 0) return null;
-  const prevKm = PLAN[idx - 1].totKm;
+  
+  let compIdx = idx - 1;
+  if (PLAN[compIdx].phase === 'recovery' && PLAN[idx].phase !== 'recovery') {
+    while (compIdx > 0 && PLAN[compIdx].phase === 'recovery') compIdx--;
+  }
+
+  const prevKm = PLAN[compIdx].totKm;
   const ratio = (PLAN[idx].totKm - prevKm) / prevKm;
   const changePct = Math.round(ratio * 100);
   let trend;
@@ -162,7 +169,8 @@ function weekLoadTrend(idx) {
   else if (ratio > 0.05) trend = 'up';
   else if (ratio < -0.10) trend = 'down';
   else trend = 'stable';
-  return { prevKm, changePct, trend };
+  
+  return { prevKm, changePct, trend, compWeeklyTarget: compIdx === idx - 1 ? 'precedente' : PLAN[compIdx].week };
 }
 
 /** Build the load-trend badge HTML for a week card (empty string if stable). */
@@ -175,7 +183,8 @@ function buildTrendBadge(t) {
   };
   const { icon, label } = cfg[t.trend];
   const sign = t.changePct > 0 ? '+' : '';
-  return `<span class="load-trend-badge trend-${t.trend}" title="${label}: ${sign}${t.changePct}% vs settimana precedente (${t.prevKm}km)">${icon} ${sign}${t.changePct}%</span>`;
+  const compLabel = t.compWeeklyTarget === 'precedente' ? 'settimana precedente' : `settimana ${t.compWeeklyTarget}`;
+  return `<span class="load-trend-badge trend-${t.trend}" title="${label}: ${sign}${t.changePct}% vs ${compLabel} (${t.prevKm}km)">${icon} ${sign}${t.changePct}%</span>`;
 }
 
 /* ----------------------------------------------------------
@@ -639,7 +648,7 @@ function openWeekModal(idx) {
       <div class="modal-stat-pill">🏃 <span class="msp-val">${sp.easyKm}</span> lenti</div>
       ${sp.fastKm ? `<div class="modal-stat-pill">⚡ <span class="msp-val">${sp.fastKm}</span> veloci</div>` : ''}
       ${sp.medioKm ? `<div class="modal-stat-pill">🔥 <span class="msp-val">${sp.medioKm}</span> medio</div>` : ''}
-      ${(() => { const t = weekLoadTrend(idx); if (!t || t.trend === 'stable') return ''; const cfg = { high: ['⚠️', 'trend-high'], up: ['↑', 'trend-up'], down: ['↓', 'trend-down'] }; const [icon, cls] = cfg[t.trend]; const sign = t.changePct > 0 ? '+' : ''; return `<div class="modal-stat-pill modal-trend-pill ${cls}">${icon} <span class="msp-val">${sign}${t.changePct}%</span> vs ${t.prevKm}km</div>`; })()}
+      ${(() => { const t = weekLoadTrend(idx); if (!t || t.trend === 'stable') return ''; const cfg = { high: ['⚠️', 'trend-high'], up: ['↑', 'trend-up'], down: ['↓', 'trend-down'] }; const [icon, cls] = cfg[t.trend]; const sign = t.changePct > 0 ? '+' : ''; const compName = t.compWeeklyTarget === 'precedente' ? 'prec.' : t.compWeeklyTarget; return `<div class="modal-stat-pill modal-trend-pill ${cls}">${icon} <span class="msp-val">${sign}${t.changePct}%</span> vs ${compName} (${t.prevKm}km)</div>`; })()}
     </div>
 
     <div class="progress-section">
