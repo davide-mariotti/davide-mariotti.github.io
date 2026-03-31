@@ -8,43 +8,7 @@
 /* ----------------------------------------------------------
    DATA EMBEDDED FROM EXCEL
    ---------------------------------------------------------- */
-const PLAN = [
-  { week:'W01',  d1km:15, d1desc:'15km FL',           d2km:10, d2desc:"R (400m): 2.5km WU / 8×(400m @4'20\" + 90s rest @6'30\") / 1.5km CD",         d3km:11, d3desc:'11km FL',  d4km:24, d4desc:"25km totali: tutti @ 6'20\"/km.",                                     totKm:60, phase:'base' },
-  { week:'W02',  d1km:15, d1desc:'15km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'50\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:25, d4desc:"25km totali: 20km @ 6'20\" + ultimi 5km @ 5'25\"/km",                  totKm:61, phase:'base' },
-  { week:'W03',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"R (600m): 2.5km WU / 6×(600m @4'25\" + 2' rest @6'30\") / 1.5km CD",          d3km:10, d3desc:'10km FL',  d4km:26, d4desc:"26km totali: tutti @ 6'20\"/km.",                                     totKm:62, phase:'base' },
-  { week:'W04',  d1km:9,  d1desc:'9km FL',            d2km:6,  d2desc:"R (Fartlek): 2km WU / 5×(300m @4'30\" + 200m rest @6'00\") / 1.5km CD",                 d3km:10, d3desc:'10km FL', d4km:15, d4desc:"(Scarico): 15km totali: 10km @ 6'25\" + ultimi 5km @ 5'25\"/km.",                   totKm:40,  phase:'recovery' },
-  { week:'W05',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"R (800m): 2.0km WU / 6×(800m @4'30\" + 90s rest @6'30\") / 2km CD",           d3km:11, d3desc:'11km FL',  d4km:26, d4desc:"26km totali: 21km @ 6'20\" + ultimi 5km @ 5'15\"/km.",                 totKm:63, phase:'base' },
-  { week:'W06',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'50\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"26km totali: tutti @ 6'20\"/km.",                                     totKm:64, phase:'base' },
-  { week:'W07',  d1km:17, d1desc:'17km FL',           d2km:10, d2desc:"R (400m): 2.5km WU / 10×(400m @4'20\" + 60s rest @6'30\") / 1.5km CD",        d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"27km totali: 20km @ 6'20\" + ultimi 7km @ 5'15\"/km.",                 totKm:65, phase:'base' },
-  { week:'W08',  d1km:9,  d1desc:'9km FL',            d2km:7,  d2desc:"R (Fartlek): 2km WU / 7×(300m @4'30\" + 200m rest @6'00\") / 1.5km CD",                 d3km:9,  d3desc:'9km FL',   d4km:16, d4desc:"(Scarico): 16km totali: 11km @ 6'25\" + ultimi 5km @ 5'25\"/km.",                   totKm:41,  phase:'recovery' },
-  { week:'W09',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (1000m): 2.5km WU / 5×(1000m @4'30\" + 2' rest @6'30\") / 1.5km CD",        d3km:11, d3desc:'11km FL',  d4km:27, d4desc:"27km totali: tutti @ 6'20\"/km.",                                     totKm:66, phase:'base' },
-  { week:'W10',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'50\" / 1km CD",                                    d3km:11, d3desc:'11km FL',  d4km:28, d4desc:"28km Progressivo: 10km @ 6'25\" + 10km @ 5'50\" + 8km @ 5'10\".",       totKm:67, phase:'base' },
-  { week:'W11',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (800m): 2.5km WU / 7×(800m @4'30\" + 90s rest @6'30\") / 1.5km CD",         d3km:12, d3desc:'12km FL',  d4km:28, d4desc:"28km totali: tutti @ 6'20\"/km.",                                     totKm:68, phase:'base' },
-  { week:'W12',  d1km:10, d1desc:'10km FL',           d2km:7,  d2desc:"R (400m): 2km WU / 6×(400m @4'25\" + 200m rest @6'00\") / 1.4km CD",                   d3km:9,  d3desc:'9km FL',   d4km:15, d4desc:"🏅 GARA TEST (10km): 15km totali (3km WU FL + 10km @ 4'20\" gara all-out + 2km CD FL).",                totKm:41,  phase:'recovery' },
-  { week:'W13',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"R (1000m): 2.0km WU / 6×(1000m @4'35\" + 2' rest @6'30\") / 1.5km CD",        d3km:13, d3desc:'13km FL',  d4km:29, d4desc:"29km totali: 24km @ 6'20\" + ultimi 5km @ RMa (4'55\").",               totKm:70, phase:'build' },
-  { week:'W14',  d1km:17, d1desc:'17km FL',           d2km:11, d2desc:"FM (11km): 1km WU / 9km @ 4'45\" / 1km CD",                                    d3km:14, d3desc:'14km FL',  d4km:29, d4desc:"29km totali: tutti @ 6'20\"/km.",                                     totKm:71, phase:'build' },
-  { week:'W15',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"R (1500m): 2.0km WU / 5×(1500m @4'40\" + 2' rest @6'30\") / 1.5km CD",        d3km:14, d3desc:'14km FL',  d4km:30, d4desc:"30km totali: 20km @ 6'20\" + ultimi 10km @ 5'25\"/km.",                totKm:73, phase:'build' },
-  { week:'W16',  d1km:10, d1desc:'10km FL',           d2km:8,  d2desc:"R (Allunghi): 5km FL / 8×(100m @4'20\" + 100m rest @6'15\") / 1.4km CD",               d3km:10, d3desc:'10km FL', d4km:18, d4desc:"(Scarico): 18km totali: 12km @ 6'25\" + ultimi 6km @ 5'25\"/km.",                   totKm:46,  phase:'recovery' },
-  { week:'W17',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"R (2000m): 2.0km WU / 3×(2000m @4'40\" + 3' rest @6'30\") / 2.0km CD",        d3km:14, d3desc:'14km FL',  d4km:30, d4desc:"30km totali: 20km @ 6'20\" + 10km @ RMa (4'55\").",                    totKm:73, phase:'build' },
-  { week:'W18',  d1km:17, d1desc:'17km FL',           d2km:12, d2desc:"FM (12km): 1km WU / 10km @ 4'50\" / 1km CD",                                   d3km:15, d3desc:'15km FL',  d4km:30, d4desc:"30km totali: tutti @ 6'20\"/km.",                                     totKm:74, phase:'build' },
-  { week:'W19',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"R (1000m): 3.0km WU / 7×(1000m @4'35\" + 2' rest @6'30\") / 2.0km CD",        d3km:14, d3desc:'14km FL',  d4km:31, d4desc:"31km Progressivo: 11km @ 6'20\" + 10km @ 5'40\" + 10km @ 5'05\".",       totKm:76, phase:'build' },
-  { week:'W20',  d1km:11, d1desc:'11km FL',           d2km:8,  d2desc:"R (Fartlek): 2km WU / 5×(400m @4'35\" + 200m rest @6'00\") / 3km CD",                  d3km:10, d3desc:'10km FL', d4km:19, d4desc:"(Scarico): 19km totali: 13km @ 6'25\" + ultimi 6km @ RMa (4'55\").",                totKm:48,  phase:'recovery' },
-  { week:'W21',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"FM (12km): 2km WU / 10km @ 4'45\" / 2km CD",                                   d3km:14, d3desc:'14km FL',  d4km:31, d4desc:"31km totali: 10km FL + 11km @ RMa (4'55\") + 10km FL.",                 totKm:76, phase:'build' },
-  { week:'W22',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"R (1000m): 3.0km WU / 8×(1000m @4'35\" + 2' rest @6'30\") / 3.0km CD",        d3km:14, d3desc:'14km FL',  d4km:32, d4desc:"32km totali: tutti @ 6'20\"/km.",                                     totKm:77, phase:'build' },
-  { week:'W23',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"FM (13km): 1.5km WU / 11km @ 4'50\" / 1.5km CD",                               d3km:15, d3desc:'15km FL',  d4km:32, d4desc:"32km totali: 20km @ 6'20\" + 12km @ 5'25\"/km.",                        totKm:78, phase:'build' },
-  { week:'W24',  d1km:12, d1desc:'12km FL',           d2km:9,  d2desc:"R (Allunghi): 6km FL / 10×(100m @4'20\" + 100m rest @6'15\") / 1km CD",                d3km:11, d3desc:'11km FL', d4km:19, d4desc:"(Scarico): 19km totali: 13km @ 6'25\" + ultimi 6km @ 5'25\"/km.",                   totKm:51,  phase:'recovery' },
-  { week:'W25',  d1km:17, d1desc:'17km FL',           d2km:14, d2desc:"R (2000m): 2.5km WU / 4×(2000m @4'40\" + 3' rest @6'30\") / 3.5km CD",        d3km:15, d3desc:'15km FL',  d4km:32, d4desc:"32km totali: 17km FL @ 6'20\" + 15km @ RMa (4'55\").",                  totKm:78, phase:'build' },
-  { week:'W26',  d1km:17, d1desc:'17km FL',           d2km:15, d2desc:"FM (14km): 2km WU / 11km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: tutti @ 6'15\"/km",                                       totKm:80, phase:'build' },
-  { week:'W27',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"R (3000m): 3.0km WU / 3×(3000m @4'45\" + 3' rest @6'30\") / 4.0km CD",        d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: 18km FL + 15km @ RMa (4'55\").",                           totKm:81, phase:'build' },
-  { week:'W28',  d1km:12, d1desc:'12km FL',           d2km:10, d2desc:"R (Fartlek): 2.5km WU / 8×(400m @4'35\" + 200m rest @6'00\") / 2.7km CD",              d3km:11, d3desc:'11km FL', d4km:23, d4desc:"🏅 GARA TEST (Mezza Maratona): 23.1km totali (1km WU FL + 21.1km @ 4'40\" gara tirata + 1km CD FL).",                totKm:56,  phase:'recovery' },
-  { week:'W29',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"FM (14km): 2km WU / 12km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:33, d4desc:"33km totali: 13km FL + 20km @ RMa (4'55\").",                           totKm:81, phase:'peak' },
-  { week:'W30',  d1km:17, d1desc:'17km FL',           d2km:16, d2desc:"R (4000m): 2.5km WU / 3×(4000m @4'55\" + 3' rest @6'30\") / 1.5km CD",        d3km:16, d3desc:'16km FL',  d4km:34, d4desc:"34km totali: 14km FL + 20km @ RMa (4'55\").",                           totKm:83, phase:'peak' },
-  { week:'W31',  d1km:17, d1desc:'17km FL',           d2km:17, d2desc:"FM (15km): 2km WU / 13km @ 4'45\" / 2km CD",                                   d3km:15, d3desc:'15km FL',  d4km:36, d4desc:"36km totali: 16km FL @ 6'15\" + 20km @ RMa (4'55\").",                  totKm:85, phase:'peak' },
-  { week:'W32',  d1km:16, d1desc:'16km FL',           d2km:10, d2desc:"FM (10km): 1km WU / 8km @ 4'45\" / 1km CD",                                    d3km:15, d3desc:'15km FL',  d4km:29, d4desc:"29km totali: 19km FL @ 6'20\" + 10km @ RMa (4'55\").",                  totKm:70,  phase:'taper' },
-  { week:'W33',  d1km:14, d1desc:'14km FL',           d2km:10, d2desc:"R (Allunghi): 8km FL + 5×(100m @4'15\" + 100m rest @6'15\") / 1km CD",                 d3km:13, d3desc:'13km FL',  d4km:20, d4desc:"20km totali: 10km FL @ 6'20\" + 10km @ RMa (4'55\").",                  totKm:57,  phase:'taper' },
-  { week:'W34',  d1km:11, d1desc:'11km FL',           d2km:9,  d2desc:"FM (9km): 2.5km WU / 4km @ 4'55\" / 2.5km CD",                                 d3km:10, d3desc:'10km FL', d4km:16, d4desc:"16km totali: tutti @ 6'25\"/km (Sgambata facile).",                      totKm:46,  phase:'taper' },
-  { week:'W35',  d1km:9,  d1desc:'9km FL',            d2km:9,  d2desc:"R (Allunghi): 7km FL + 5×(100m @4'15\" + 100m rest @6'15\") / 1km CD",                 d3km:0,  d3desc:'OFF',      d4km:42, d4desc:"🏅 MARATONA (42.195km): Primi 5km @ 5'05\", poi costante @ 4'53\"-4'55\".",  totKm:60,  phase:'race' },
-];
+
 
 /* ----------------------------------------------------------
    HELPERS — SESSION TYPE
@@ -78,7 +42,7 @@ function phaseClass(p) {
    WEEK DATE HELPERS
    ---------------------------------------------------------- */
 
-const PLAN_START = new Date('2026-03-30T00:00:00');
+
 
 /** Monday date for a given plan week index (0-based). */
 function weekStartDate(idx) {
@@ -111,7 +75,7 @@ function weekDateRange(idx) {
 function computeMarathonTargetTime() {
   const raceWeek = PLAN[PLAN.length - 1];
   const desc = raceWeek.d4desc;
-  const totalDist = 42.195;
+  const totalDist = typeof RACE_DISTANCE !== 'undefined' ? RACE_DISTANCE : 42.195;
   let totalTime = 0;
   let coveredDist = 0;
 
@@ -131,6 +95,12 @@ function computeMarathonTargetTime() {
       const s1 = parseInt(rangeMatch[1]) * 60 + parseInt(rangeMatch[2]);
       const s2 = parseInt(rangeMatch[3]) * 60 + parseInt(rangeMatch[4]);
       totalTime += (totalDist - coveredDist) * ((s1 + s2) / 2);
+    } else {
+      const flatMatch = desc.match(/@\s*(\d+)'(\d+)"/);
+      if (flatMatch) {
+        const secs = parseInt(flatMatch[1]) * 60 + parseInt(flatMatch[2]);
+        totalTime += (totalDist - coveredDist) * secs;
+      }
     }
   }
 
@@ -213,11 +183,13 @@ function parseD2Splits(d2km, d2desc) {
 function parseD4Splits(d4km, d4desc) {
   if (!d4desc || !d4km) return { easyKm: 0, medioKm: 0 };
 
-  if (/MARATONA/i.test(d4desc)) return { easyKm: 0, medioKm: d4km };
+  const keywordMatch = typeof RACE_KEYWORD !== 'undefined' ? RACE_KEYWORD : 'MARATONA';
+  if (new RegExp(keywordMatch, 'i').test(d4desc)) return { easyKm: 0, medioKm: d4km };
 
   let medioKm = 0;
 
-  const rmaMatches = [...d4desc.matchAll(/(\d+(?:\.\d+)?)\s*km\s*@\s*RMa/gi)];
+  const paceTokenMatch = typeof PACE_TOKEN !== 'undefined' ? PACE_TOKEN : 'RMa';
+  const rmaMatches = [...d4desc.matchAll(new RegExp('(\\d+(?:\\.\\d+)?)\\s*km\\s*@\\s*' + paceTokenMatch, 'gi'))];
   if (rmaMatches.length > 0) {
     for (const m of rmaMatches) medioKm += parseFloat(m[1]);
     return { easyKm: Math.max(0, d4km - medioKm), medioKm: round1(medioKm) };
@@ -440,6 +412,18 @@ let volumeChart;
 
 const grid = document.getElementById('weeks-grid');
 
+if (grid) {
+  const firstRecIdx = PLAN.findIndex(w => w.phase === 'recovery');
+  if (firstRecIdx !== -1) {
+    const emptyCount = (3 - (firstRecIdx % 4) + 4) % 4;
+    for (let i = 0; i < emptyCount; i++) {
+      const emptyCol = document.createElement('div');
+      emptyCol.className = 'col-12 col-md-4 col-lg-3 d-none d-lg-block weeks-grid-item empty-offset';
+      grid.appendChild(emptyCol);
+    }
+  }
+}
+
 PLAN.forEach((w, idx) => {
   const phase = w.phase || 'build';
   const isNow = idx === currentIdx;
@@ -622,7 +606,7 @@ function openWeekModal(idx) {
   const d2type = sessionType(w.d2desc);
   const isD4Race = phase === 'race' || /GARA/i.test(w.d4desc);
   const longType = isD4Race ? 'race' : 'long';
-  const longLabel = isD4Race ? (phase === 'race' ? 'Maratona' : 'Gara Test') : 'Lungo';
+  const longLabel = isD4Race ? (phase === 'race' ? (typeof RACE_NAME !== 'undefined' ? RACE_NAME : 'Maratona') : 'Gara Test') : 'Lungo';
   const longIcon = isD4Race ? '🏅' : '🪨';
   const sp = w.splits;
 
@@ -644,7 +628,7 @@ function openWeekModal(idx) {
   modalTitle.innerHTML = `
     ${phaseName(phase)} — ${w.week}
     ${isNow ? '<span class="current-badge ms-2">In corso</span>' : ''}
-    <span class="ms-2 opacity-40 small">(Settimana ${idx + 1}/35)</span>
+    <span class="ms-2 opacity-40 small">(Sett. ${idx + 1}/${PLAN.length})</span>
   `;
 
   modalBody.innerHTML = `

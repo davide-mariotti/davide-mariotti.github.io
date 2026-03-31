@@ -1,45 +1,32 @@
 <!doctype html>
 <html lang="it">
-
 <head>
-    <title>RunStats | Piano Maratona</title>
+    <title>RunStats | Mezza Maratona AP</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Il tuo piano di allenamento per la maratona — 35 settimane di progressione.">
-
-    <!-- CSS -->
+    <meta name="description" content="Piano allenamento 26 settimane per mezza maratona">
     <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
     <link href="/assets/css/running/running.css" rel="stylesheet" crossorigin="anonymous" />
     <link href="/running/training.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
 </head>
-
 <body>
     <div id="loader"></div>
     <app-header></app-header>
-
     <div class="container py-4 mt-5">
-
-        <!-- HERO -->
         <div class="run-hero d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <div>
-                <h1 class="mb-0">🏅 Piano <span class="text-gradient">MarIOtona</span></h1>
-                <p class="small mb-0 mt-1 opacity-50">35 settimane · Build progressivo verso la maratona</p>
+                <h1 class="mb-0">🏅 Piano <span class="text-gradient">Andrea Mezza</span></h1>
+                <p class="small mb-0 mt-1 opacity-50">26 settimane · Build progressivo verso la mezza maratona (11 Ottobre 2026)</p>
             </div>
             <a href="/running/" class="btn btn-sm btn-outline-light rounded-pill">← Dashboard</a>
         </div>
-
-        <!-- STAT SUMMARY CARDS -->
         <div class="row g-3 mb-4" id="summary-cards">
             <div class="col-6 col-md-4">
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">📅</span>
-                    <span class="stat-value">35</span>
+                    <span class="stat-value">26</span>
                     <span class="stat-label">Settimane totali</span>
                 </div>
             </div>
@@ -68,7 +55,7 @@
                 <div class="stat-card glass-panel text-center">
                     <span class="stat-icon">⏳</span>
                     <span class="stat-value" id="marathon-countdown">—</span>
-                    <span class="stat-label">alla maratona</span>
+                    <span class="stat-label">alla mezza</span>
                 </div>
             </div>
             <div class="col-6 col-md-4">
@@ -79,64 +66,47 @@
                 </div>
             </div>
         </div>
-
-        <!-- HEART RATE LIMITS -->
         <div class="glass-panel mb-4 p-3 p-md-4">
-            <h5 class="mb-3" style="font-size: 1.1rem;">❤️ Zone di Frequenza Cardiaca (FC)</h5>
-            <div class="table-responsive">
-                <table class="table table-borderless table-sm text-white mb-0"
-                    style="--bs-table-bg: transparent; min-width: 500px;">
-                    <thead>
-                        <tr class="opacity-75" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <th class="ps-2" style="width: 25%;">Tipo Allenamento</th>
-                            <th style="width: 15%;">Range (bpm)</th>
-                            <th class="pe-2">Note Tecniche</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">🏃 <strong>FL</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Fondo Lento)</span></td>
-                            <td class="fw-bold text-success">&lt; 142</td>
-                            <td class="opacity-75 small pe-2">Se superi 142, rallenta il passo oltre i 06:20 min/km.
-                            </td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">🔥 <strong>FM</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Fondo Medio)</span></td>
-                            <td class="fw-bold text-warning">152 – 158</td>
-                            <td class="opacity-75 small pe-2">Non superare i 160 bpm; è il limite della tua efficienza
-                                attuale.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">⚡ <strong>R</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Ripetute)</span></td>
-                            <td class="fw-bold text-danger">Max 172</td>
-                            <td class="opacity-75 small pe-2">Non cercare il massimale. Fermati al 91% della tua FC Max.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-2 py-2">🪨 <strong>LR</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Lungo)</span></td>
-                            <td class="fw-bold text-info">135 – 148</td>
-                            <td class="opacity-75 small pe-2">Inizia basso e accetta una deriva massima di +10 bpm nel
-                                finale.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <h5 class="mb-3" style="font-size: 1.1rem;">❤️ Indicazioni di Ritmo (Pace)</h5>
+            <table class="table table-borderless table-sm text-white mb-0" style="--bs-table-bg: transparent; min-width: 500px;">
+                <thead>
+                    <tr class="opacity-75" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <th class="ps-2" style="width: 25%;">Tipo Allenamento</th>
+                        <th style="width: 15%;">Pace Indicativo</th>
+                        <th class="pe-2">Note Tecniche</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="ps-2 py-2">🏃 <strong>FL</strong> <span class="opacity-75 d-none d-sm-inline">(Fondo Lento)</span></td>
+                        <td class="fw-bold text-success">~06:30/km</td>
+                        <td class="opacity-75 small pe-2">Ritmo per costruire base aerobica, corsa rilassata.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="ps-2 py-2">🔥 <strong>FM</strong> <span class="opacity-75 d-none d-sm-inline">(Fondo Medio)</span></td>
+                        <td class="fw-bold text-warning">~05:40/km</td>
+                        <td class="opacity-75 small pe-2">Lavoro su soglia anaerobica, impegno costante.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="ps-2 py-2">⚡ <strong>R</strong> <span class="opacity-75 d-none d-sm-inline">(Ripetute)</span></td>
+                        <td class="fw-bold text-danger">~05:00/km</td>
+                        <td class="opacity-75 small pe-2">Sviluppo della potenza e velocità in frazioni brevi/medie.</td>
+                    </tr>
+                    <tr>
+                        <td class="ps-2 py-2">🪨 <strong>LR</strong> <span class="opacity-75 d-none d-sm-inline">(Lungo)</span></td>
+                        <td class="fw-bold text-info">~06:30/km</td>
+                        <td class="opacity-75 small pe-2">Costruzione di resistenza sulle lunghe distanze.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <!-- CHARTS ROW -->
         <div class="row g-4 mb-4">
-            <!-- Volume settimanale -->
             <div class="col-12 col-lg-8">
                 <div class="glass-panel chart-panel">
                     <h5>📊 Volume settimanale (km)</h5>
                     <canvas id="chart-volume" height="130"></canvas>
                 </div>
             </div>
-            <!-- Distribuzione tipi allenamento -->
             <div class="col-12 col-lg-4">
                 <div class="glass-panel chart-panel">
                     <h5>🥧 Distribuzione km</h5>
@@ -146,8 +116,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- NAVIGATION: fasi -->
         <div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
             <span class="filter-label">Filtra fase:</span>
             <button class="btn btn-sm filter-btn active trn-phase-btn" data-phase="all">Tutte</button>
@@ -159,15 +127,10 @@
             <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="race">Gara</button>
             <span class="ms-auto small opacity-40 text-white">Clicca una settimana per i dettagli</span>
         </div>
-
-        <!-- WEEK CARDS GRID -->
         <div class="row g-3 mb-5" id="weeks-grid"></div>
-
-        <!-- GYM SECTION -->
         <div class="glass-panel p-4 mb-5">
-            <h4 class="mb-3">🏋️‍♂️ Forza e Stabilità (Routine con manubri da 10kg)</h4>
-            <p class="opacity-75 mb-4">Per un maratoneta, il peso non deve servire a "fare massa", ma a creare stabilità e resistenza muscolare. Ecco due routine da 30 minuti, mirate a correggere l'oscillazione verticale e a proteggere le ginocchia per i chilometri che verranno.</p>
-            
+            <h4 class="mb-3">🏋️‍♂️ Forza e Stabilità (Routine base)</h4>
+            <p class="opacity-75 mb-4">Consigli per rafforzare gambe e core, ideale per prepararsi alla mezza maratona senza infortunarsi.</p>
             <div class="row g-4">
                 <!-- MARTEDI -->
                 <div class="col-12 col-md-6">
@@ -264,45 +227,28 @@
                 </ul>
             </div>
         </div>
-
     </div>
-
-    <!-- WEEK DETAIL MODAL -->
-    <div class="modal fade" id="weekModal" tabindex="-1" aria-labelledby="weekModalLabel" aria-hidden="true">
+    <div class="modal fade" id="weekModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content trn-modal-content">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title" id="weekModalLabel">—</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Chiudi"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body pt-2" id="weekModalBody">
-                    <!-- Rendered by JS -->
-                </div>
+                <div class="modal-body pt-2" id="weekModalBody"></div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
-                    <button id="modal-btn-prev" class="btn btn-sm modal-nav-btn" disabled>
-                        ← Prec.
-                    </button>
-                    <span class="modal-nav-hint">← → per navigare</span>
-                    <button id="modal-btn-next" class="btn btn-sm modal-nav-btn">
-                        Succ. →
-                    </button>
+                    <button id="modal-btn-prev" class="btn btn-sm modal-nav-btn" disabled>← Prec.</button>
+                    <button id="modal-btn-next" class="btn btn-sm modal-nav-btn">Succ. →</button>
                 </div>
             </div>
         </div>
     </div>
-
     <app-footer></app-footer>
-
-    <!-- Scripts -->
     <script src="/assets/js/components.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-    <script src="/running/training-data.js"></script>
+    <script src="/running/training-data-AP.js"></script>
     <script src="/running/training.js"></script>
 </body>
-
 </html>
