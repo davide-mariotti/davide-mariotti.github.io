@@ -172,10 +172,28 @@ function parseD2Splits(d2km, d2desc) {
   const cdMatch = d2desc.match(/(\d+(?:\.\d+)?)\s*km\s*CD/i);
   const wu = wuMatch ? parseFloat(wuMatch[1]) : 0;
   const cd = cdMatch ? parseFloat(cdMatch[1]) : 0;
-  const qualityKm = Math.max(0, (d2km || 0) - wu - cd);
 
-  if (type === 'reps') return { easyKm: round1(wu + cd), fastKm: round1(qualityKm), medioKm: 0 };
-  if (type === 'tempo') return { easyKm: round1(wu + cd), fastKm: 0, medioKm: round1(qualityKm) };
+  if (type === 'tempo') {
+    const qualityKm = Math.max(0, (d2km || 0) - wu - cd);
+    return { easyKm: round1(wu + cd), fastKm: 0, medioKm: round1(qualityKm) };
+  }
+
+  if (type === 'reps') {
+    // Extract actual rep distance: pattern like "N×(Xm" or "N×(X.Xkm"
+    let repKm = 0;
+    const repMatch = d2desc.match(/(\d+)\s*[×x]\s*\(\s*(\d+(?:\.\d+)?)\s*(m|km)/i);
+    if (repMatch) {
+      const n = parseInt(repMatch[1]);
+      const dist = parseFloat(repMatch[2]);
+      const unit = repMatch[3].toLowerCase();
+      repKm = round1(n * (unit === 'km' ? dist : dist / 1000));
+    } else {
+      // Fallback: qualityKm = d2km - wu - cd
+      repKm = round1(Math.max(0, (d2km || 0) - wu - cd));
+    }
+    const easyKm = round1(Math.max(0, (d2km || 0) - repKm));
+    return { easyKm, fastKm: repKm, medioKm: 0 };
+  }
 
   return { easyKm: d2km || 0, fastKm: 0, medioKm: 0 };
 }
@@ -206,14 +224,28 @@ function parseD4Splits(d4km, d4desc) {
 
 function round1(n) { return Math.round(n * 10) / 10; }
 
+/** Parse D3 for any medio segments (pace ≤ 5'40") — handles cases like FM on day 3 */
+function parseD3Splits(d3km, d3desc) {
+  if (!d3desc || d3desc === 'OFF' || !d3km) return { easyKm: d3km || 0, medioKm: 0 };
+  // Match pace patterns like "Xkm @ M'SS""
+  const paceMatches = [...d3desc.matchAll(/(\d+(?:\.\d+)?)\s*km\s*@\s*(\d+)'(\d+)"/g)];
+  let medioKm = 0;
+  for (const m of paceMatches) {
+    const secs = parseInt(m[2]) * 60 + parseInt(m[3]);
+    if (secs <= 340) medioKm += parseFloat(m[1]);
+  }
+  return { easyKm: round1(Math.max(0, d3km - medioKm)), medioKm: round1(medioKm) };
+}
+
 /* Compute splits for every week */
 PLAN.forEach((w, idx) => {
   const d2s = parseD2Splits(w.d2km, w.d2desc);
+  const d3s = parseD3Splits(w.d3km, w.d3desc);
   const d4s = parseD4Splits(w.d4km, w.d4desc);
   w.splits = {
-    easyKm: round1((w.d1km || 0) + (w.d3km || 0) + d2s.easyKm + d4s.easyKm),
+    easyKm: round1((w.d1km || 0) + d3s.easyKm + d2s.easyKm + d4s.easyKm),
     fastKm: round1(d2s.fastKm),
-    medioKm: round1(d2s.medioKm + d4s.medioKm),
+    medioKm: round1(d2s.medioKm + d3s.medioKm + d4s.medioKm),
   };
 });
 
