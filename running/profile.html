@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+    <title>RunStats | Profilo Atleta</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Configura il tuo profilo atleta per analisi personalizzate.">
+
+    <!-- CSS -->
+    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
+    <link href="/assets/css/running/running.css" rel="stylesheet" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Icons -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+
+    <style>
+        /* ===== Profile Form Styles ===== */
+        .profile-hero { padding: 1.5rem 0 0.5rem; }
+        .profile-hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .profile-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .profile-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-secondary);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Form controls */
+        .profile-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 0.35rem;
+            display: block;
+        }
+        .profile-hint {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.25rem;
+        }
+
+        .profile-input {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: #fff;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .profile-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(34,139,34,0.2);
+        }
+        .profile-input::placeholder { color: rgba(255,255,255,0.25); }
+        input[type="date"].profile-input::-webkit-calendar-picker-indicator {
+            filter: invert(0.7);
+            cursor: pointer;
+        }
+
+        /* Race distance selector */
+        .race-dist-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        .race-dist-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.65);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-body);
+        }
+        .race-dist-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .race-dist-btn.active {
+            background: rgba(34,139,34,0.25);
+            border-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+
+        /* HR zones preview */
+        .hr-preview {
+            display: flex;
+            height: 10px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+            gap: 2px;
+        }
+        .hr-preview-zone {
+            border-radius: 4px;
+            transition: flex 0.4s ease;
+            min-width: 4px;
+        }
+
+        /* Save button */
+        .btn-save-profile {
+            background: linear-gradient(135deg, #228b22, #2ecc71);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.85rem 2.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: var(--font-body);
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 20px rgba(34,139,34,0.4);
+        }
+        .btn-save-profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(34,139,34,0.5);
+        }
+        .btn-save-profile:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* First-time banner */
+        .first-time-banner {
+            background: rgba(46,204,113,0.08);
+            border: 1px solid rgba(46,204,113,0.25);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .first-time-banner strong { color: var(--color-secondary); }
+    </style>
+</head>
+
+<body>
+    <div id="loader"></div>
+    <app-header></app-header>
+
+    <div id="loading-section" class="container py-5 mt-5 text-center text-white opacity-50">
+        <div class="spinner-border text-success" role="status"></div>
+        <p class="mt-3 small">Caricamento profilo...</p>
+    </div>
+
+    <div id="profile-section" style="display:none;">
+        <div class="container py-4 mt-5">
+
+            <!-- HERO -->
+            <div class="profile-hero d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h1 class="mb-0">🎯 Profilo <span class="text-gradient">Atleta</span></h1>
+                    <p class="small mb-0 mt-1 opacity-50">Configuralo una volta — l'analisi si adatta a te</p>
+                </div>
+                <a href="/running/" id="btn-back" class="btn btn-sm btn-outline-light rounded-pill">← Dashboard</a>
+            </div>
+
+            <!-- BANNER primo accesso -->
+            <div id="first-time-banner" class="first-time-banner d-none">
+                👋 <strong>Benvenuto in RunStats!</strong> Configura il tuo profilo per sbloccare analisi personalizzate: trend FC sul fondo lento, predittore gara intelligente e classificazione delle sessioni.
+            </div>
+
+            <form id="profile-form" novalidate>
+
+                <!-- SEZIONE 1: Gara obiettivo -->
+                <div class="profile-section">
+                    <div class="profile-section-title">🏅 Gara Obiettivo</div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="profile-label">Distanza</label>
+                            <div class="race-dist-grid" id="race-dist-grid">
+                                <button type="button" class="race-dist-btn" data-dist="5">5k</button>
+                                <button type="button" class="race-dist-btn" data-dist="10">10k</button>
+                                <button type="button" class="race-dist-btn" data-dist="21.097">21k</button>
+                                <button type="button" class="race-dist-btn active" data-dist="42.195">42k</button>
+                            </div>
+                            <input type="number" id="race-dist-custom" class="profile-input mt-2" placeholder="Distanza personalizzata (km)" min="1" max="200" step="0.001" style="display:none;">
+                            <p class="profile-hint">Seleziona la distanza della tua prossima gara obiettivo</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="race-date">Data gara</label>
+                            <input type="date" id="race-date" class="profile-input">
+                            <p class="profile-hint">Usata per il countdown nella dashboard</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="race-target-pace">Passo obiettivo (min:sec/km)</label>
+                            <input type="text" id="race-target-pace" class="profile-input" placeholder="es. 4:55" pattern="\d+:\d{2}">
+                            <p class="profile-hint">Il passo al quale vuoi correre la gara</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEZIONE 2: Zone FC -->
+                <div class="profile-section">
+                    <div class="profile-section-title">❤️ Zone di Frequenza Cardiaca</div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="hr-max">FC Massima (bpm)</label>
+                            <input type="number" id="hr-max" class="profile-input" placeholder="es. 190" min="140" max="230">
+                            <p class="profile-hint">La tua FC massima assoluta (opzionale)</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="hr-easy-max">Soglia Fondo Lento — max bpm</label>
+                            <input type="number" id="hr-easy-max" class="profile-input" placeholder="es. 142" min="100" max="200" required>
+                            <p class="profile-hint">FC oltre cui rallenti. Le sessioni sotto questa soglia vengono classificate come "Fondo Lento"</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="hr-tempo-min">Zona Tempo — min bpm</label>
+                            <input type="number" id="hr-tempo-min" class="profile-input" placeholder="es. 152" min="100" max="220">
+                            <p class="profile-hint">FC minima della tua zona Fondo Medio/Tempo</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="hr-tempo-max">Zona Tempo — max bpm</label>
+                            <input type="number" id="hr-tempo-max" class="profile-input" placeholder="es. 160" min="100" max="220">
+                            <p class="profile-hint">FC massima della tua zona Fondo Medio/Tempo</p>
+                        </div>
+                        <div class="col-12">
+                            <p class="profile-hint mb-1">Anteprima zone:</p>
+                            <div class="hr-preview" id="hr-preview">
+                                <div class="hr-preview-zone" style="flex:2; background:#3498db;" title="Fondo Lento (Z1-Z2)"></div>
+                                <div class="hr-preview-zone" style="flex:1; background:#f1c40f;" title="Zona Tempo"></div>
+                                <div class="hr-preview-zone" style="flex:1; background:#e74c3c;" title="Hard / Ripetute"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1" style="font-size:0.68rem; opacity:0.5;">
+                                <span id="preview-easy-label">≤ — bpm (Fondo Lento)</span>
+                                <span id="preview-tempo-label">— – — bpm (Tempo)</span>
+                                <span id="preview-hard-label">&gt; — bpm (Hard)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEZIONE 3: Passo di riferimento -->
+                <div class="profile-section">
+                    <div class="profile-section-title">🏃 Passo Fondo Lento Attuale</div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="profile-label" for="easy-pace-target">Passo FL corrente (min:sec/km)</label>
+                            <input type="text" id="easy-pace-target" class="profile-input" placeholder="es. 6:20" pattern="\d+:\d{2}">
+                            <p class="profile-hint">Il tuo passo attuale sulle uscite facili. Usato come riferimento per monitorare i miglioramenti aerobici nel tempo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SALVA -->
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <button type="submit" class="btn-save-profile" id="btn-save">💾 Salva Profilo</button>
+                    <span id="save-status" class="small opacity-60" style="display:none;"></span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <app-footer></app-footer>
+
+    <!-- Scripts -->
+    <script src="/assets/js/components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+    <script type="module">
+        import { onAuthChange } from '/assets/js/running/auth.js';
+        import { getProfile, saveProfile, parsePaceInput, formatPaceDecimal } from '/assets/js/running/profile.js';
+
+        let currentUser = null;
+        let selectedDist = 42.195;
+
+        // ── Distance selector ─────────────────────────────────────────────────
+        document.querySelectorAll('.race-dist-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.race-dist-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const dist = parseFloat(btn.dataset.dist);
+                if (!isNaN(dist)) {
+                    selectedDist = dist;
+                    document.getElementById('race-dist-custom').style.display = 'none';
+                } else {
+                    document.getElementById('race-dist-custom').style.display = '';
+                    selectedDist = 0;
+                }
+            });
+        });
+
+        document.getElementById('race-dist-custom')?.addEventListener('input', e => {
+            const v = parseFloat(e.target.value);
+            selectedDist = isNaN(v) ? 0 : v;
+        });
+
+        // ── HR preview update ─────────────────────────────────────────────────
+        function updateHRPreview() {
+            const easyMax = parseInt(document.getElementById('hr-easy-max').value) || 0;
+            const tempoMin = parseInt(document.getElementById('hr-tempo-min').value) || 0;
+            const tempoMax = parseInt(document.getElementById('hr-tempo-max').value) || 0;
+
+            document.getElementById('preview-easy-label').textContent =
+                easyMax > 0 ? `≤ ${easyMax} bpm (Fondo Lento)` : '≤ — bpm (Fondo Lento)';
+            document.getElementById('preview-tempo-label').textContent =
+                (tempoMin > 0 && tempoMax > 0) ? `${tempoMin}–${tempoMax} bpm (Tempo)` : '— – — bpm (Tempo)';
+            document.getElementById('preview-hard-label').textContent =
+                tempoMax > 0 ? `> ${tempoMax} bpm (Hard)` : '> — bpm (Hard)';
+
+            // Aggiorna proporzioni barra se abbiamo tutti i valori
+            if (easyMax > 0 && tempoMin > easyMax && tempoMax > tempoMin) {
+                const easyFlex = tempoMin - 80;
+                const tempoFlex = tempoMax - tempoMin;
+                const hardFlex = 220 - tempoMax;
+                const zones = document.querySelectorAll('.hr-preview-zone');
+                zones[0].style.flex = Math.max(1, easyFlex);
+                zones[1].style.flex = Math.max(1, tempoFlex);
+                zones[2].style.flex = Math.max(1, hardFlex);
+            }
+        }
+
+        ['hr-easy-max', 'hr-tempo-min', 'hr-tempo-max'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updateHRPreview);
+        });
+
+        // ── Populate form from existing profile ───────────────────────────────
+        function populateForm(profile) {
+            if (!profile) return;
+
+            // Gara
+            if (profile.raceDistance) {
+                selectedDist = profile.raceDistance;
+                const standardBtns = ['5', '10', '21.097', '42.195'];
+                const matchBtn = document.querySelector(`.race-dist-btn[data-dist="${profile.raceDistance}"]`);
+                if (matchBtn) {
+                    document.querySelectorAll('.race-dist-btn').forEach(b => b.classList.remove('active'));
+                    matchBtn.classList.add('active');
+                } else {
+                    // Custom distance
+                    document.querySelectorAll('.race-dist-btn').forEach(b => b.classList.remove('active'));
+                    document.getElementById('race-dist-custom').value = profile.raceDistance;
+                    document.getElementById('race-dist-custom').style.display = '';
+                }
+            }
+            if (profile.raceDate) document.getElementById('race-date').value = profile.raceDate;
+            if (profile.raceTargetPace) document.getElementById('race-target-pace').value = formatPaceDecimal(profile.raceTargetPace);
+
+            // FC
+            if (profile.hrMax) document.getElementById('hr-max').value = profile.hrMax;
+            if (profile.hrEasyMax) document.getElementById('hr-easy-max').value = profile.hrEasyMax;
+            if (profile.hrTempoMin) document.getElementById('hr-tempo-min').value = profile.hrTempoMin;
+            if (profile.hrTempoMax) document.getElementById('hr-tempo-max').value = profile.hrTempoMax;
+
+            // Passo FL
+            if (profile.easyPaceTarget) document.getElementById('easy-pace-target').value = formatPaceDecimal(profile.easyPaceTarget);
+
+            updateHRPreview();
+        }
+
+        // ── Save ──────────────────────────────────────────────────────────────
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save');
+            const status = document.getElementById('save-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Salvataggio...';
+
+            try {
+                // Validazione minima
+                const hrEasyMax = parseInt(document.getElementById('hr-easy-max').value);
+                if (!hrEasyMax || hrEasyMax < 100 || hrEasyMax > 220) {
+                    throw new Error('Imposta una soglia Fondo Lento valida (100–220 bpm)');
+                }
+                if (selectedDist <= 0) {
+                    throw new Error('Seleziona una distanza gara valida');
+                }
+
+                const customDist = parseFloat(document.getElementById('race-dist-custom').value);
+                const finalDist = document.getElementById('race-dist-custom').style.display !== 'none' && !isNaN(customDist)
+                    ? customDist : selectedDist;
+
+                const data = {
+                    raceDistance: finalDist,
+                    raceDate: document.getElementById('race-date').value || '',
+                    raceTargetPace: parsePaceInput(document.getElementById('race-target-pace').value),
+                    hrMax: parseInt(document.getElementById('hr-max').value) || 0,
+                    hrEasyMax,
+                    hrTempoMin: parseInt(document.getElementById('hr-tempo-min').value) || 0,
+                    hrTempoMax: parseInt(document.getElementById('hr-tempo-max').value) || 0,
+                    easyPaceTarget: parsePaceInput(document.getElementById('easy-pace-target').value),
+                    setupCompleted: true,
+                };
+
+                await saveProfile(currentUser.uid, data);
+
+                status.textContent = '✅ Salvato!';
+                status.style.display = '';
+                setTimeout(() => { status.style.display = 'none'; }, 3000);
+
+                // Redirect dopo primo setup
+                const isFirst = new URLSearchParams(window.location.search).get('first');
+                if (isFirst === '1') {
+                    setTimeout(() => { window.location.href = '/running/'; }, 800);
+                }
+            } catch (err) {
+                status.textContent = `❌ ${err.message}`;
+                status.style.display = '';
+                setTimeout(() => { status.style.display = 'none'; }, 4000);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '💾 Salva Profilo';
+            }
+        });
+
+        // ── Auth & init ───────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthChange(async (user) => {
+                if (!user) { window.location.href = '/running/login.html'; return; }
+                currentUser = user;
+
+                const isFirst = new URLSearchParams(window.location.search).get('first') === '1';
+                if (isFirst) {
+                    document.getElementById('first-time-banner')?.classList.remove('d-none');
+                }
+
+                const profile = await getProfile(user.uid);
+                populateForm(profile);
+
+                document.getElementById('loading-section').style.display = 'none';
+                document.getElementById('profile-section').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+
+</html>

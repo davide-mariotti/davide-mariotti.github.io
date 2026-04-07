@@ -635,3 +635,88 @@
 /* =================== ACWR values forced white =================== */
 .acwr-metric .acwr-label,
 .acwr-status { color: #ffffff; }
+
+/* =================== SESSION TYPE BADGE =================== */
+.session-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.2rem;
+}
+
+.session-type-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 50px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+}
+
+/* =================== RACE WIDGET (gara obiettivo) =================== */
+#race-widget-section { margin-bottom: 1.25rem; }
+
+.race-widget {
+    padding: 1rem 1.25rem;
+}
+
+.race-widget-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.race-widget-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.race-widget-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-secondary);
+    line-height: 1;
+}
+
+.race-widget-sub {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.15rem;
+}
+
+.race-widget-countdown {
+    margin-left: auto;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: rgba(251,191,36,0.9);
+}
+
+.race-widget-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.race-widget-meta {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.7);
+}
+
+.race-widget-meta strong {
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+/* =================== PROFILE LINK BUTTON =================== */
+.btn-profile-link {
+    font-size: 0.78rem;
+}

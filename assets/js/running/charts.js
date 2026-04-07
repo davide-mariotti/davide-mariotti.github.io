@@ -300,3 +300,162 @@ export function renderPaceTrend(sessions, canvasId = 'chart-pace') {
         }
     });
 }
+/**
+
+ * Trend FC su Fondo Lento — il grafico chiave per monitorare l'adattamento aerobico.
+ * Mostra FC media e passo medio sulle sole sessioni FL (hrAvg <= profile.hrEasyMax).
+ * Doppio asse Y: FC (sx, bpm) e Passo (dx, min/km).
+ * Se la FC scende a passo stabile → stai migliorando.
+ *
+ * @param {Array}  sessions  — tutte le sessioni
+ * @param {Object} profile   — profilo atleta (serve hrEasyMax)
+ * @param {string} canvasId
+ */
+export function renderEasyHRTrend(sessions, profile, canvasId = 'chart-easy-hr') {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx || !window.Chart) return;
+
+    const emptyEl = ctx.closest('.chart-panel')?.querySelector('.chart-empty');
+
+    if (!profile || !profile.setupCompleted || !profile.hrEasyMax) {
+        ctx.style.display = 'none';
+        if (emptyEl) { emptyEl.textContent = '⚙️ Configura il profilo per abilitare questo grafico'; emptyEl.classList.remove('d-none'); }
+        return;
+    }
+
+    // Filtra solo sessioni FL con FC registrata, ordinate cronologicamente
+    const flSessions = [...sessions]
+        .filter(s => s.hrAvg > 0 && s.hrAvg <= profile.hrEasyMax && s.paceDecimal > 0 && s.distance >= 3)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(-25); // ultime 25 sessioni FL
+
+    if (flSessions.length < 2) {
+        ctx.style.display = 'none';
+        if (emptyEl) {
+            emptyEl.textContent = `Servono almeno 2 sessioni con FC ≤ ${profile.hrEasyMax} bpm per il trend aerobico`;
+            emptyEl.classList.remove('d-none');
+        }
+        return;
+    }
+
+    // Mostra canvas, nascondi empty
+    ctx.style.display = '';
+    if (emptyEl) emptyEl.classList.add('d-none');
+
+    const labels = flSessions.map(s => {
+        const d = new Date(s.date);
+        return `${d.getDate()}/${d.getMonth() + 1}`;
+    });
+    const hrData   = flSessions.map(s => s.hrAvg);
+    const paceData = flSessions.map(s => parseFloat(s.paceDecimal.toFixed(3)));
+    const hrThreshold = new Array(labels.length).fill(profile.hrEasyMax);
+
+    if (window._chartEasyHR) window._chartEasyHR.destroy();
+
+    window._chartEasyHR = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'FC media FL',
+                    data: hrData,
+                    borderColor: 'rgba(231,76,60,0.9)',
+                    backgroundColor: 'rgba(231,76,60,0.08)',
+                    pointBackgroundColor: 'rgba(192,57,43,0.9)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'yHR',
+                    order: 1,
+                },
+                {
+                    label: 'Passo FL',
+                    data: paceData,
+                    borderColor: 'rgba(46,204,113,0.85)',
+                    backgroundColor: 'rgba(46,204,113,0.06)',
+                    pointBackgroundColor: 'rgba(34,139,34,0.9)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.3,
+                    fill: false,
+                    yAxisID: 'yPace',
+                    order: 2,
+                },
+                {
+                    label: `Soglia FL (${profile.hrEasyMax} bpm)`,
+                    data: hrThreshold,
+                    borderColor: 'rgba(231,76,60,0.3)',
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    fill: false,
+                    yAxisID: 'yHR',
+                    order: 3,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        font: { size: 10 },
+                        padding: 10,
+                        boxWidth: 10,
+                        color: 'rgba(255,255,255,0.65)',
+                        filter: item => item.datasetIndex < 2, // nasconde soglia dalla legenda
+                    }
+                },
+                tooltip: {
+                    ...TOOLTIP_STYLE,
+                    callbacks: {
+                        label: c => {
+                            if (c.datasetIndex === 0) return ` ❤️ FC: ${c.parsed.y} bpm`;
+                            if (c.datasetIndex === 1) {
+                                const min = Math.floor(c.parsed.y);
+                                const sec = Math.round((c.parsed.y - min) * 60);
+                                return ` 🏃 Passo: ${min}:${String(sec).padStart(2,'0')}/km`;
+                            }
+                            return ` Soglia: ${c.parsed.y} bpm`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: CHART_COLORS.grid },
+                    ticks: { color: CHART_COLORS.tick, font: { size: 10 } }
+                },
+                yHR: {
+                    type: 'linear',
+                    position: 'left',
+                    title: { display: true, text: 'FC (bpm)', color: 'rgba(231,76,60,0.7)', font: { size: 10 } },
+                    grid: { color: CHART_COLORS.grid },
+                    ticks: { color: 'rgba(231,76,60,0.8)', font: { size: 10 } },
+                },
+                yPace: {
+                    type: 'linear',
+                    position: 'right',
+                    reverse: true, // passo più basso = più veloce = meglio = in alto
+                    title: { display: true, text: 'Passo (min/km)', color: 'rgba(46,204,113,0.7)', font: { size: 10 } },
+                    grid: { display: false },
+                    ticks: {
+                        color: 'rgba(46,204,113,0.8)',
+                        font: { size: 10 },
+                        callback: v => {
+                            const min = Math.floor(v);
+                            const sec = Math.round((v - min) * 60);
+                            return `${min}:${String(sec).padStart(2,'0')}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}

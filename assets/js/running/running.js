@@ -1,18 +1,22 @@
 /**
- * running.js v2 — Orchestratore dashboard RunStats completo.
- * Include: auth, sessioni, upload GPX, grafici, PRs, ACWR, predittore gara, filtri, export CSV.
+ * running.js v3 — Orchestratore dashboard RunStats.
+ * Profilo atleta configurabile: classificazione sessioni, predittore intelligente,
+ * trend FC su FL, widget gara personalizzato.
  */
 
 import { onAuthChange, logout } from './auth.js';
 import { parseGPX, formatDuration, formatDate } from './parser.js';
 import { saveSession, getUserSessions, deleteSession } from './db.js';
-import { renderWeeklyVolume, renderPaceTrend, renderCadenceTrend, renderHRTrend, renderHRvsPace } from './charts.js';
+import { getProfile } from './profile.js';
+import { classifySession, SESSION_TYPE_CONFIG } from './profile.js';
+import { renderWeeklyVolume, renderPaceTrend, renderCadenceTrend, renderHRvsPace, renderEasyHRTrend } from './charts.js';
 
 // ================================================================
 //  STATO GLOBALE
 // ================================================================
 let currentUser = null;
 let sessionsCache = [];
+let userProfile = null;
 let activeFilters = { period: 'all', minDist: 0 };
 
 // ================================================================
@@ -59,7 +63,6 @@ function initFilters() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const filterType = btn.dataset.filter;
-            // Deseleziona gli altri dello stesso gruppo
             document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             if (filterType === 'period') activeFilters.period = btn.dataset.value;
@@ -75,8 +78,10 @@ function updateFilteredView() {
     renderWeeklyVolume(filtered);
     renderPaceTrend(filtered);
     renderCadenceTrend(filtered);
-    renderHRTrend(filtered);
     renderHRvsPace(filtered);
+    // Il grafico FC su FL usa SEMPRE tutte le sessioni (non filtrate per periodo)
+    // perché serve vedere il trend storico completo
+    renderEasyHRTrend(sessionsCache, userProfile);
 }
 
 // ================================================================
@@ -94,6 +99,76 @@ function renderStats(sessions) {
     document.getElementById('stat-sessions').textContent = totalCount;
     document.getElementById('stat-best-pace').textContent = bestPace ? paceStr(bestPace) : '—';
     document.getElementById('stat-week-km').textContent = weekKm.toFixed(1);
+}
+
+// ================================================================
+//  WIDGET GARA OBIETTIVO — adattivo al profilo
+// ================================================================
+function renderRaceWidget(profile) {
+    const section = document.getElementById('race-widget-section');
+    if (!section) return;
+
+    if (!profile || !profile.setupCompleted) {
+        section.classList.add('d-none');
+        return;
+    }
+
+    section.classList.remove('d-none');
+
+    // Distanza label
+    const distLabels = { 5: '5k', 10: '10k', 21.097: 'Mezza Maratona', 42.195: 'Maratona' };
+    const distLabel = distLabels[profile.raceDistance] || `${profile.raceDistance} km`;
+
+    // Countdown
+    let countdownHtml = '';
+    if (profile.raceDate) {
+        const raceDate = new Date(profile.raceDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const diffMs = raceDate - today;
+        const diffDays = Math.ceil(diffMs / 86400000);
+        if (diffDays > 0) {
+            countdownHtml = `<span class="race-widget-countdown">⏳ ${diffDays} giorni</span>`;
+        } else if (diffDays === 0) {
+            countdownHtml = `<span class="race-widget-countdown" style="color:var(--color-secondary)">🏅 Oggi!</span>`;
+        } else {
+            countdownHtml = `<span class="race-widget-countdown" style="opacity:0.5;">✅ Completata</span>`;
+        }
+    }
+
+    // Passo target + stima tempo
+    let paceHtml = '';
+    if (profile.raceTargetPace > 0) {
+        const targetTimeS = profile.raceTargetPace * 60 * profile.raceDistance;
+        const h = Math.floor(targetTimeS / 3600);
+        const m = Math.floor((targetTimeS % 3600) / 60);
+        const timeStr = h > 0 ? `${h}h ${String(m).padStart(2,'0')}'` : `${m}'`;
+        paceHtml = `<span class="race-widget-meta">🎯 ${paceStr(profile.raceTargetPace)}/km · <strong>${timeStr}</strong> obiettivo</span>`;
+    }
+
+    // Data formattata
+    let dateHtml = '';
+    if (profile.raceDate) {
+        const d = new Date(profile.raceDate);
+        dateHtml = `<span class="race-widget-meta">📅 ${d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}</span>`;
+    }
+
+    section.innerHTML = `
+        <div class="race-widget glass-panel">
+            <div class="race-widget-header">
+                <span class="race-widget-icon">🏅</span>
+                <div>
+                    <div class="race-widget-title">${distLabel}</div>
+                    <div class="race-widget-sub">Gara Obiettivo</div>
+                </div>
+                ${countdownHtml}
+            </div>
+            <div class="race-widget-details">
+                ${dateHtml}
+                ${paceHtml}
+            </div>
+        </div>
+    `;
 }
 
 // ================================================================
@@ -207,7 +282,7 @@ function renderACWR(acwr) {
 }
 
 // ================================================================
-//  PREDITTORE GARA (formula Riegel)
+//  PREDITTORE GARA — intelligente, basato su sessioni FL se profilo presente
 // ================================================================
 function predictRaceTimes(refPaceDecimal, refDistKm) {
     const refTimeSec = refPaceDecimal * refDistKm * 60;
@@ -221,17 +296,36 @@ function predictRaceTimes(refPaceDecimal, refDistKm) {
     return { '5k': riegel(5), '10k': riegel(10), '21k': riegel(21.097), '42k': riegel(42.195) };
 }
 
-function renderRacePredictor(sessions) {
+function renderRacePredictor(sessions, profile) {
     const section = document.getElementById('race-predictor-section');
     const btn = document.getElementById('btn-toggle-predictor');
     const content = document.getElementById('predictor-content');
     const ref = document.getElementById('predictor-ref');
     const results = document.getElementById('predictor-results');
+    if (!section) return;
 
-    // Usa le ultime 3 sessioni con passo valido e dist >= 5km
-    const refSessions = [...sessions]
-        .filter(s => s.paceDecimal > 0 && s.distance >= 5)
-        .slice(0, 3);
+    let refSessions;
+    let refLabel;
+
+    if (profile && profile.setupCompleted && profile.hrEasyMax) {
+        // Predittore intelligente: usa solo sessioni FL (FC sotto soglia) con dist >= 5km
+        const flCandidates = [...sessions]
+            .filter(s => s.paceDecimal > 0 && s.distance >= 5 && s.hrAvg > 0 && s.hrAvg <= profile.hrEasyMax)
+            .slice(0, 5); // ultime 5 sessioni FL
+
+        if (flCandidates.length >= 2) {
+            refSessions = flCandidates;
+            refLabel = `Basato su ${refSessions.length} sessione${refSessions.length > 1 ? 'i' : ''} Fondo Lento recente${refSessions.length > 1 ? 'i' : ''} — passo medio`;
+        } else {
+            // Fallback: qualsiasi sessione >= 5km
+            refSessions = [...sessions].filter(s => s.paceDecimal > 0 && s.distance >= 5).slice(0, 3);
+            refLabel = `Dati FL insufficienti — basato su ${refSessions.length} sessione${refSessions.length > 1 ? 'i' : ''} recente${refSessions.length > 1 ? 'i' : ''}`;
+        }
+    } else {
+        // Nessun profilo: comportamento originale
+        refSessions = [...sessions].filter(s => s.paceDecimal > 0 && s.distance >= 5).slice(0, 3);
+        refLabel = `Basato su ${refSessions.length} sessione${refSessions.length > 1 ? 'i' : ''} recente${refSessions.length > 1 ? 'i' : ''} — passo medio`;
+    }
 
     if (refSessions.length === 0) return;
     section.classList.remove('d-none');
@@ -240,31 +334,57 @@ function renderRacePredictor(sessions) {
     const avgDist = refSessions.reduce((s, x) => s + x.distance, 0) / refSessions.length;
     const predictions = predictRaceTimes(avgPace, avgDist);
 
-    ref.textContent = `Basato su ${refSessions.length} sessione${refSessions.length > 1 ? 'i' : ''} recente${refSessions.length > 1 ? 'i' : ''} — passo medio ${paceStr(avgPace)}/km`;
+    if (ref) ref.textContent = `${refLabel} ${paceStr(avgPace)}/km`;
+
+    // Se c'è un profilo, evidenzia la gara obiettivo
+    const targetDist = profile?.raceDistance;
+    const distKeys = { 5: '5k', 10: '10k', 21.097: '21k', 42.195: '42k' };
+    const targetKey = targetDist ? distKeys[targetDist] : null;
 
     results.innerHTML = [
-        raceCard('5k', predictions['5k'], ['🟢', '5.000 m']),
-        raceCard('10k', predictions['10k'], ['🔵', '10.000 m']),
-        raceCard('21k', predictions['21k'], ['🟣', 'Mezza Maratona']),
-        raceCard('42k', predictions['42k'], ['🟠', 'Maratona'])
+        raceCard('5k', predictions['5k'], ['🟢', '5.000 m'], targetKey === '5k'),
+        raceCard('10k', predictions['10k'], ['🔵', '10.000 m'], targetKey === '10k'),
+        raceCard('21k', predictions['21k'], ['🟣', 'Mezza Maratona'], targetKey === '21k'),
+        raceCard('42k', predictions['42k'], ['🟠', 'Maratona'], targetKey === '42k'),
     ].join('');
 
-    btn.addEventListener('click', () => {
-        const open = !content.classList.contains('d-none');
-        content.classList.toggle('d-none', open);
-        btn.textContent = open ? '▼ Mostra' : '▲ Nascondi';
-    });
+    if (btn && !btn.dataset.listenerAttached) {
+        btn.dataset.listenerAttached = '1';
+        btn.addEventListener('click', () => {
+            const open = !content.classList.contains('d-none');
+            content.classList.toggle('d-none', open);
+            btn.textContent = open ? '▼ Mostra' : '▲ Nascondi';
+        });
+    }
 }
 
-function raceCard(dist, time, [emoji, label]) {
+function raceCard(dist, time, [emoji, label], isTarget = false) {
+    const highlight = isTarget ? 'style="border-color:rgba(251,191,36,0.5); background:rgba(251,191,36,0.06);"' : '';
+    const targetBadge = isTarget ? '<span style="font-size:0.65rem;background:rgba(251,191,36,0.2);color:rgba(251,191,36,0.9);padding:2px 6px;border-radius:50px;margin-top:4px;display:inline-block;">🎯 Obiettivo</span>' : '';
     return `<div class="col-6 col-md-3">
-        <div class="race-card glass-panel text-center">
+        <div class="race-card glass-panel text-center" ${highlight}>
             <span class="race-icon">${emoji}</span>
             <span class="race-dist">${dist}</span>
             <span class="race-time">${time}</span>
             <span class="race-label">${label}</span>
+            ${targetBadge}
         </div>
     </div>`;
+}
+
+// ================================================================
+//  SESSION BADGE — classificazione display-only (solo con profilo)
+// ================================================================
+function buildSessionTypeBadge(session, profile) {
+    if (!profile || !profile.setupCompleted) return '';
+    const type = classifySession(session, profile);
+    const cfg = SESSION_TYPE_CONFIG[type];
+    if (!cfg || !cfg.label) return '';
+    return `<span class="session-type-badge" style="
+        background: ${cfg.bg};
+        border: 1px solid ${cfg.border};
+        color: ${cfg.color};
+    ">${cfg.emoji} ${cfg.label}</span>`;
 }
 
 // ================================================================
@@ -284,24 +404,26 @@ function renderSessionCard(session) {
     const tempStr = session.tempAvg !== null && session.tempAvg !== undefined ? `🌡️ ${session.tempAvg}°C` : '';
 
     const metas = [durationStr, paceStrFmt, hrStr, elevStr, cadStr, tempStr].filter(Boolean);
+    const typeBadge = buildSessionTypeBadge(session, userProfile);
 
     card.innerHTML = `
         <div class="session-date-col">${formatDate(session.date)}</div>
         <div class="d-flex flex-column flex-grow-1 min-w-0">
-            <div class="session-name">${session.name || 'Corsa'}</div>
+            <div class="session-name-row">
+                <span class="session-name">${session.name || 'Corsa'}</span>
+                ${typeBadge}
+            </div>
             <div class="session-meta">${metas.map(m => `<span class="meta-item">${m}</span>`).join('')}</div>
         </div>
         <div class="session-distance">${(session.distance || 0).toFixed(2)}<span> km</span></div>
         <button class="btn-delete" title="Elimina" aria-label="Elimina sessione">🗑️</button>
     `;
 
-    // Click → pagina dettaglio
     card.addEventListener('click', (e) => {
         if (e.target.closest('.btn-delete')) return;
         window.location.href = `/running/session.html?id=${session.id}`;
     });
 
-    // Delete
     card.querySelector('.btn-delete').addEventListener('click', async (e) => {
         e.stopPropagation();
         if (!confirm(`Eliminare "${session.name || 'Corsa'}"?`)) return;
@@ -345,7 +467,8 @@ async function loadAndRender() {
         renderStats(sessionsCache);
         renderPRs(computePRs(sessionsCache));
         renderACWR(computeACWR(sessionsCache));
-        renderRacePredictor(sessionsCache);
+        renderRaceWidget(userProfile);
+        renderRacePredictor(sessionsCache, userProfile);
         updateFilteredView();
     } catch (err) {
         console.error('Errore caricamento:', err);
@@ -398,7 +521,8 @@ function handleFile(file) {
             renderStats(sessionsCache);
             renderPRs(computePRs(sessionsCache));
             renderACWR(computeACWR(sessionsCache));
-            renderRacePredictor(sessionsCache);
+            renderRaceWidget(userProfile);
+            renderRacePredictor(sessionsCache, userProfile);
             updateFilteredView();
             showToast(`✅ "${session.name}" importata — ${session.distance} km`);
         } catch (err) {
@@ -434,20 +558,42 @@ document.addEventListener('DOMContentLoaded', () => {
     onAuthChange(async (user) => {
         if (!user) { window.location.href = '/running/login.html'; return; }
         currentUser = user;
+
+        // Carica profilo
+        try {
+            userProfile = await getProfile(user.uid);
+        } catch (err) {
+            console.warn('Impossibile caricare profilo:', err);
+            userProfile = null;
+        }
+
+        // Primo accesso senza profilo → redirect setup
+        if (!userProfile || !userProfile.setupCompleted) {
+            window.location.href = '/running/profile.html?first=1';
+            return;
+        }
+
         const avatar = document.getElementById('user-avatar');
         const userName = document.getElementById('user-name');
         if (avatar && user.photoURL) avatar.src = user.photoURL;
         if (userName) userName.textContent = user.displayName || user.email;
+
         document.getElementById('loading-section').style.display = 'none';
         document.getElementById('auth-section').style.display = 'block';
+
         initFilters();
         initUploadZone();
+
         document.getElementById('btn-logout')?.addEventListener('click', async () => {
             await logout(); window.location.href = '/running/login.html';
         });
         document.getElementById('btn-export-csv')?.addEventListener('click', () => {
             exportToCSV(applyFilters(sessionsCache));
         });
+        document.getElementById('btn-edit-profile')?.addEventListener('click', () => {
+            window.location.href = '/running/profile.html';
+        });
+
         await loadAndRender();
     });
 });

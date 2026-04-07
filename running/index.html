@@ -41,9 +41,13 @@
                 <div class="user-bar">
                     <img id="user-avatar" src="" alt="Avatar" class="avatar">
                     <span id="user-name" class="user-name"></span>
+                    <button id="btn-edit-profile" class="btn btn-sm btn-outline-light rounded-pill btn-profile-link">⚙️ Profilo</button>
                     <button id="btn-logout" class="btn btn-sm btn-outline-light rounded-pill px-3">🚪 Esci</button>
                 </div>
             </div>
+
+            <!-- WIDGET GARA OBIETTIVO (visibile solo se profilo configurato) -->
+            <div id="race-widget-section" class="d-none"></div>
 
             <!-- STAT CARDS -->
             <div class="row g-3 mb-4">
@@ -89,7 +93,7 @@
                 <div id="acwr-content"></div>
             </div>
 
-            <!-- GRAFICI RIGA 1 -->
+            <!-- GRAFICI RIGA 1: Volume + Passo -->
             <div class="row g-4 mb-4">
                 <div class="col-12 col-lg-6">
                     <div class="glass-panel chart-panel">
@@ -107,23 +111,23 @@
                 </div>
             </div>
 
-            <!-- GRAFICI RIGA 2 -->
+            <!-- GRAFICI RIGA 2: FC su FL (principale) + Cadenza + FC vs Passo -->
             <div class="row g-4 mb-4">
-                <div class="col-12 col-lg-4">
+                <div class="col-12 col-lg-6">
+                    <div class="glass-panel chart-panel">
+                        <h5>💓 Trend FC · Fondo Lento</h5>
+                        <p class="chart-empty d-none"></p>
+                        <canvas id="chart-easy-hr" height="180"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
                     <div class="glass-panel chart-panel">
                         <h5>🦵 Trend cadenza</h5>
                         <canvas id="chart-cadence" height="180"></canvas>
                         <p class="chart-empty d-none">Nessun dato cadenza disponibile</p>
                     </div>
                 </div>
-                <div class="col-12 col-lg-4">
-                    <div class="glass-panel chart-panel">
-                        <h5>💓 Trend FC media</h5>
-                        <canvas id="chart-hr" height="180"></canvas>
-                        <p class="chart-empty d-none">Nessun dato FC disponibile</p>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-4">
+                <div class="col-12 col-lg-3">
                     <div class="glass-panel chart-panel">
                         <h5>❤️ FC vs Passo</h5>
                         <canvas id="chart-hrpace" height="180"></canvas>

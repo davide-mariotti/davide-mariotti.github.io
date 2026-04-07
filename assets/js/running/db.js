@@ -54,3 +54,5 @@ export async function getSession(userId, sessionId) {
     return { id: snap.id, ...snap.data() };
 }
 
+// Re-export profile helpers so callers can import from either module
+export { getProfile, saveProfile } from './profile.js';
