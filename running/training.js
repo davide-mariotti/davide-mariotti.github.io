@@ -19,15 +19,16 @@ function sessionType(desc) {
   const u = desc.toUpperCase();
   if (u.startsWith('R (') || u.startsWith('R(')) return 'reps';
   if (u.startsWith('FM ')) return 'tempo';
+  if (/TEST/.test(u) || desc.startsWith('🧪')) return 'test';
   return 'easy';
 }
 
 function sessionIcon(type) {
-  return { reps: '⚡', tempo: '🔥', off: '🛌', easy: '🏃' }[type] || '🏃';
+  return { reps: '⚡', tempo: '🔥', off: '🛌', easy: '🏃', test: '🧪' }[type] || '🏃';
 }
 
 function sessionLabel(type) {
-  return { reps: 'Ripetute', tempo: 'Fondo Medio', off: 'Riposo', easy: 'Fondo Lento' }[type] || 'Fondo Lento';
+  return { reps: 'Ripetute', tempo: 'Fondo Medio', off: 'Riposo', easy: 'Fondo Lento', test: 'Test FC Max' }[type] || 'Fondo Lento';
 }
 
 function phaseName(p) {
@@ -178,18 +179,30 @@ function parseD2Splits(d2km, d2desc) {
     return { easyKm: round1(wu + cd), fastKm: 0, medioKm: round1(qualityKm) };
   }
 
-  if (type === 'reps') {
-    // Extract actual rep distance: pattern like "N×(Xm" or "N×(X.Xkm"
+  if (type === 'reps' || type === 'test') {
+    // Extract actual rep distance: pattern like "N×(Xm", "N×Xm", "RepN+N: Xm"
     let repKm = 0;
-    const repMatch = d2desc.match(/(\d+)\s*[×x]\s*\(\s*(\d+(?:\.\d+)?)\s*(m|km)/i);
+    // Standard pattern: N×(Xm or N×Xm
+    const repMatch = d2desc.match(/(\d+)\s*[×x]\s*\(?\s*(\d+(?:\.\d+)?)\s*(m|km)/i);
     if (repMatch) {
       const n = parseInt(repMatch[1]);
       const dist = parseFloat(repMatch[2]);
       const unit = repMatch[3].toLowerCase();
       repKm = round1(n * (unit === 'km' ? dist : dist / 1000));
     } else {
-      // Fallback: qualityKm = d2km - wu - cd
-      repKm = round1(Math.max(0, (d2km || 0) - wu - cd));
+      // TEST FC MAX pattern: sum Rep segments like "Rep1+2: 300m" and "Rep3+4: 300m" and "Rep5...: 300m"
+      const repSegMatches = [...d2desc.matchAll(/Rep\d+(?:[+\-]\d+)?[^:]*:\s*(\d+(?:\.\d+)?)\s*(m|km)/gi)];
+      if (repSegMatches.length > 0) {
+        for (const m of repSegMatches) {
+          const dist = parseFloat(m[1]);
+          const unit = m[2].toLowerCase();
+          repKm += unit === 'km' ? dist : dist / 1000;
+        }
+        repKm = round1(repKm);
+      } else {
+        // Fallback: qualityKm = d2km - wu - cd
+        repKm = round1(Math.max(0, (d2km || 0) - wu - cd));
+      }
     }
     const easyKm = round1(Math.max(0, (d2km || 0) - repKm));
     return { easyKm, fastKm: repKm, medioKm: 0 };
@@ -490,7 +503,7 @@ PLAN.forEach((w, idx) => {
 
       <div class="week-sessions mt-2 d-flex flex-nowrap gap-1" style="overflow:-moz-hidden-unscrollable; overflow: hidden;">
         <span class="ws-badge easy px-1" title="${w.d1desc}">🏃 ${w.d1km}</span>
-        <span class="ws-badge ${w.d2desc.startsWith('FM') ? 'tempo' : 'reps'} px-1" title="${w.d2desc}">${w.d2desc.startsWith('FM') ? '🔥' : '⚡'} ${w.d2km}</span>
+        <span class="ws-badge ${sessionType(w.d2desc) === 'tempo' ? 'tempo' : sessionType(w.d2desc) === 'test' ? 'reps' : 'reps'} px-1" title="${w.d2desc}">${sessionIcon(sessionType(w.d2desc))} ${w.d2km}</span>
         ${w.d3km > 0 ? `<span class="ws-badge easy px-1" title="${w.d3desc}">🏃 ${w.d3km}</span>` : `<span class="ws-badge off px-1" title="Riposo">💤 OFF</span>`}
         <span class="ws-badge ${longType} px-1" title="${w.d4desc}">${longIcon} ${w.d4km}</span>
       </div>
