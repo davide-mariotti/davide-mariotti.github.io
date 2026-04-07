@@ -33,24 +33,28 @@ export const profileDefaults = {
 
 /**
  * Carica il profilo di un utente da Firestore.
+ * Il profilo è salvato direttamente nel documento users/{uid} (già esistente, nessuna regola nuova).
  * @param {string} uid
  * @returns {Object|null} profilo con defaults applicati, oppure null se non esiste
  */
 export async function getProfile(uid) {
-    const ref = doc(db, 'users', uid, 'profile', 'data');
+    const ref = doc(db, 'users', uid);
     const snap = await getDoc(ref);
     if (!snap.exists()) return null;
-    // Applica defaults per campi mancanti (retrocompatibilità futura)
-    return { ...profileDefaults, ...snap.data() };
+    const data = snap.data();
+    // Il documento esiste ma non ha ancora il profilo atleta configurato
+    if (!data.setupCompleted) return null;
+    return { ...profileDefaults, ...data };
 }
 
 /**
  * Salva (upsert) il profilo di un utente su Firestore.
+ * Scrive nel documento users/{uid} con merge per non toccare displayName, email, ecc.
  * @param {string} uid
  * @param {Object} data — campi parziali o completi del profilo
  */
 export async function saveProfile(uid, data) {
-    const ref = doc(db, 'users', uid, 'profile', 'data');
+    const ref = doc(db, 'users', uid);
     await setDoc(ref, {
         ...data,
         updatedAt: serverTimestamp()
