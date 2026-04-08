@@ -90,14 +90,17 @@ function updateFilteredView() {
 function renderStats(sessions) {
     const totalKm = sessions.reduce((s, x) => s + (x.distance || 0), 0);
     const totalCount = sessions.length;
-    const validPaces = sessions.filter(s => s.paceDecimal > 0).map(s => s.paceDecimal);
-    const bestPace = validPaces.length > 0 ? Math.min(...validPaces) : null;
+    const totalSeconds = sessions.reduce((s, x) => s + (x.duration || 0), 0);
+    const totalHours = Math.floor(totalSeconds / 3600);
     const oneWeekAgo = new Date(); oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     const weekKm = sessions.filter(s => new Date(s.date) >= oneWeekAgo).reduce((a, s) => a + (s.distance || 0), 0);
 
     document.getElementById('stat-distance').textContent = totalKm.toFixed(1);
     document.getElementById('stat-sessions').textContent = totalCount;
-    document.getElementById('stat-best-pace').textContent = bestPace ? paceStr(bestPace) : '—';
+    
+    const timeEl = document.getElementById('stat-time');
+    if (timeEl) timeEl.textContent = totalHours;
+    
     document.getElementById('stat-week-km').textContent = weekKm.toFixed(1);
 }
 
@@ -177,12 +180,12 @@ function renderRaceWidget(profile) {
 function computePRs(sessions) {
     if (sessions.length === 0) return null;
     const byDist = [...sessions].sort((a, b) => b.distance - a.distance);
-    const byPace = [...sessions].filter(s => s.paceDecimal > 0).sort((a, b) => a.paceDecimal - b.paceDecimal);
+    const byDuration = [...sessions].sort((a, b) => (b.duration || 0) - (a.duration || 0));
     const byElev = [...sessions].sort((a, b) => b.elevGain - a.elevGain);
     const byCad = [...sessions].filter(s => s.cadAvg > 0).sort((a, b) => b.cadAvg - a.cadAvg);
     return {
         longestRun: byDist[0] || null,
-        bestPace: byPace[0] || null,
+        longestDuration: byDuration[0] || null,
         mostElevation: byElev[0]?.elevGain > 0 ? byElev[0] : null,
         bestCadence: byCad[0] || null
     };
@@ -192,9 +195,16 @@ function renderPRs(prs) {
     const container = document.getElementById('pr-section');
     if (!prs) { if (container) container.innerHTML = '<p class="small opacity-40 text-white">Nessun dato ancora.</p>'; return; }
 
+    const formatDur = (sec) => {
+        if (!sec) return '';
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        return h > 0 ? `${h}h ${m}m` : `${m}m`;
+    };
+
     const cards = [
         prs.longestRun ? prCard('📏', `${prs.longestRun.distance} km`, 'Corsa più lunga', prs.longestRun.date) : null,
-        prs.bestPace   ? prCard('⚡', `${prs.bestPace.paceFormatted}/km`, 'Passo migliore', prs.bestPace.date) : null,
+        prs.longestDuration ? prCard('⏱️', formatDur(prs.longestDuration.duration), 'Maggior durata', prs.longestDuration.date) : null,
         prs.mostElevation ? prCard('⬆️', `${prs.mostElevation.elevGain}m`, 'Più dislivello', prs.mostElevation.date) : null,
         prs.bestCadence ? prCard('🦵', `${prs.bestCadence.cadAvg} spm`, 'Cadenza avg migliore', prs.bestCadence.date) : null
     ].filter(Boolean);
