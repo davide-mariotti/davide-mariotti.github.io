@@ -78,13 +78,21 @@ export function classifySession(session, profile) {
 
     const hr = session.hrAvg;
     const dist = session.distance || 0;
+    const nameStr = (session.name || '').toLowerCase();
+
+    if (nameStr.includes('reps') || nameStr.includes('ripetute') || nameStr.includes('interval')) {
+        return 'hard'; // Duro/Rep
+    }
+    if (nameStr.includes('easy/tempo') || nameStr.includes('misto') || nameStr.includes('fartlek')) {
+        return 'tempo'; // Fondo Medio
+    }
 
     // Lungo: distanza ≥ 25km (indipendentemente dalla FC)
     if (dist >= 25) return 'long';
 
     if (hr && hr > 0) {
         if (hr <= profile.hrEasyMax) return 'easy';
-        if (hr >= profile.hrTempoMin && hr <= profile.hrTempoMax) return 'tempo';
+        if (hr > profile.hrEasyMax && hr <= profile.hrTempoMax) return 'tempo';
         if (hr > profile.hrTempoMax) return 'hard';
     }
 
