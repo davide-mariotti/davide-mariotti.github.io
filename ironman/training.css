@@ -1,0 +1,687 @@
+/* ================================================================
+   ironman/training.css — Piano Ironman 70.3 Cervia
+   Colori: sport (swim/bike/run/brick) + zone Z1-Z5
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Sport colors */
+  --im-swim: rgb(56, 189, 248);
+  --im-bike: rgb(74, 222, 128);
+  --im-run: rgb(245, 158, 11);
+  --im-brick: rgb(167, 139, 250);
+  --im-rest: rgb(71, 85, 105);
+  --im-core: rgb(251, 146, 60);
+
+  --bs-info-rgb: #ffffff;
+
+  /* Zone colors (Garmin Standard) */
+  --z1: rgb(166, 166, 166);
+  /* Grigio */
+  --z2: rgb(59, 151, 243);
+  /* Azzurro */
+  --z3: rgb(130, 201, 30);
+  /* Verde */
+  --z4: rgb(249, 137, 37);
+  /* Arancione */
+  --z5: rgb(211, 32, 32);
+  /* Rosso */
+
+  /* Ironman accent */
+  --im-accent: var(--color-primary, #228b22);
+  --im-accent2: var(--color-secondary, #2ecc71);
+  --im-bg: var(--color-bg-base, #020402);
+  --im-surface: var(--color-bg-surface-glass, rgba(5, 20, 10, 0.7));
+  --im-border: rgba(34, 139, 34, 0.15);
+}
+
+/* ── Bootstrap Overrides ── */
+.form-check-input:checked {
+  background-color: var(--im-accent);
+  border-color: var(--im-accent);
+}
+.form-check-input:focus {
+  border-color: var(--im-accent);
+  box-shadow: 0 0 0 0.25rem rgba(34, 139, 34, 0.25);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28255, 255, 255, 0.5%29'/%3e%3c/svg%3e");
+}
+.accordion-button:not(.collapsed) {
+  color: var(--im-accent);
+}
+.accordion-button:not(.collapsed)::after {
+  filter: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23228b22'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+/* ── Hero ── */
+.im-hero {
+  margin-bottom: 1.5rem;
+}
+
+.im-hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.im-text-gradient {
+  background: linear-gradient(135deg, var(--im-accent) 0%, var(--im-accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Stat Cards ── */
+.stat-card {
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+}
+
+.stat-icon {
+  font-size: 1.4rem;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: .72rem;
+  color: rgba(255, 255, 255, .5);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── Glass panel ── */
+.glass-panel {
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.chart-panel {
+  height: 100%;
+}
+
+.chart-panel h5 {
+  font-size: .95rem;
+  margin-bottom: .75rem;
+}
+
+/* ── Zone FC table ── */
+.zone-table td,
+.zone-table th {
+  padding: .5rem .75rem;
+  font-size: .85rem;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.zone-table th {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+/* Sport-specific zone highlights */
+.zone-run {
+  color: var(--im-run);
+}
+
+.zone-bike {
+  color: var(--im-bike);
+}
+
+.zone-swim {
+  color: var(--im-swim);
+}
+
+.z-range {
+  font-family: 'Inter', monospace;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+
+/* ── Phase filter ── */
+.filter-label {
+  color: rgba(255, 255, 255, .5);
+  font-size: .8rem;
+  font-weight: 500;
+}
+
+.filter-btn {
+  border: 1px solid rgba(255, 255, 255, .15);
+  color: rgba(255, 255, 255, .6);
+  background: transparent;
+  border-radius: 50px;
+  font-size: .78rem;
+  padding: .3rem .8rem;
+  transition: all .2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--im-accent);
+  color: var(--im-accent);
+}
+
+.filter-btn.active {
+  background: var(--im-accent);
+  border-color: var(--im-accent);
+  color: #fff;
+}
+
+/* ── Week cards ── */
+.week-card {
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 14px;
+  padding: .9rem;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.week-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  border-color: rgba(14, 165, 233, .3);
+}
+
+.week-card.is-current {
+  border-color: var(--im-accent) !important;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, .25);
+}
+
+/* Phase accents */
+.phase-recovery .phase-recovery {
+  border-left: 3px solid #eab308;
+}
+
+.phase-base .phase-base {
+  border-left: 3px solid #22c55e;
+}
+
+.phase-build .phase-build {
+  border-left: 3px solid #0ea5e9;
+}
+
+.phase-peak .phase-peak {
+  border-left: 3px solid #f97316;
+}
+
+.phase-taper .phase-taper {
+  border-left: 3px solid #a78bfa;
+}
+
+.phase-race .phase-race {
+  border-left: 3px solid #ef4444;
+}
+
+.phase-tag {
+  font-size: .62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  opacity: .6;
+}
+
+.week-number {
+  font-size: .8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .8);
+}
+
+.week-hours {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.week-hours-label {
+  font-size: .65rem;
+  color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+}
+
+.week-date-range {
+  font-size: .68rem;
+  color: rgba(255, 255, 255, .35);
+}
+
+.current-badge {
+  font-size: .6rem;
+  background: var(--im-accent);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 50px;
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+
+/* ── Sport badges (7 giorni) ── */
+.day-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 3px;
+  margin-top: .2rem;
+  width: 100%;
+}
+
+.day-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 0;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.db-day {
+  font-size: 0.55rem;
+  opacity: 0.7;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.db-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.day-badge.swim {
+  background: rgba(56, 189, 248, .2);
+  color: var(--im-swim);
+  border: 1px solid rgba(56, 189, 248, .3);
+}
+
+.day-badge.bike {
+  background: rgba(74, 222, 128, .2);
+  color: var(--im-bike);
+  border: 1px solid rgba(74, 222, 128, .3);
+}
+
+.day-badge.run {
+  background: rgba(245, 158, 11, .2);
+  color: var(--im-run);
+  border: 1px solid rgba(245, 158, 11, .3);
+}
+
+.day-badge.brick {
+  background: rgba(167, 139, 250, .2);
+  color: var(--im-brick);
+  border: 1px solid rgba(167, 139, 250, .3);
+}
+
+.day-badge.rest {
+  background: rgba(71, 85, 105, .2);
+  color: var(--im-rest);
+  border: 1px solid rgba(71, 85, 105, .3);
+}
+
+.day-badge.core {
+  background: rgba(251, 146, 60, .2);
+  color: var(--im-core);
+  border: 1px solid rgba(251, 146, 60, .3);
+}
+
+/* ── Split bar (sport) ── */
+.split-bar {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 22px;
+  background: rgba(255, 255, 255, .06);
+}
+
+.split-seg {
+  height: 100%;
+  transition: width .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+  white-space: nowrap;
+  background-image: linear-gradient(45deg,
+      rgba(0, 0, 0, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.15) 75%,
+      transparent 75%,
+      transparent);
+  background-size: 10px 10px;
+}
+
+.seg-swim {
+  background-color: var(--im-swim);
+}
+
+.seg-bike {
+  background-color: var(--im-bike);
+}
+
+.seg-run {
+  background-color: var(--im-run);
+}
+
+.seg-brick {
+  background-color: var(--im-brick);
+}
+
+/* ── Zone bar ── */
+.zone-bar {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 6px;
+  background: rgba(255, 255, 255, .06);
+}
+
+.zone-seg {
+  height: 100%;
+}
+
+.seg-z1 {
+  background: rgb(166, 166, 166);
+}
+
+.seg-z2 {
+  background: rgb(59, 151, 243);
+}
+
+.seg-z3 {
+  background: rgb(130, 201, 30);
+}
+
+.seg-z4 {
+  background: rgb(249, 137, 37);
+}
+
+.seg-z5 {
+  background: rgb(211, 32, 32);
+}
+
+/* ── Load trend badge ── */
+.load-trend-badge {
+  font-size: .62rem;
+  padding: 1px 7px;
+  border-radius: 50px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.trend-high {
+  background: rgba(239, 68, 68, .15);
+  color: #fca5a5;
+}
+
+.trend-up {
+  background: rgba(34, 197, 94, .12);
+  color: #86efac;
+}
+
+.trend-down {
+  background: rgba(100, 116, 139, .15);
+  color: #94a3b8;
+}
+
+/* ── Modal ── */
+.trn-modal-content {
+  background: #0d1825;
+  border: 1px solid rgba(14, 165, 233, .2);
+  border-radius: 16px;
+  color: #fff;
+}
+
+.modal-date-range {
+  color: rgba(255, 255, 255, .45);
+  font-size: .82rem;
+}
+
+.modal-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: .75rem;
+}
+
+.modal-stat-pill {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 50px;
+  padding: .25rem .75rem;
+  font-size: .78rem;
+}
+
+.pill-swim {
+  background: rgba(56, 189, 248, .45);
+  border-color: rgba(56, 189, 248, .3);
+}
+
+.pill-bike {
+  background: rgba(74, 222, 128, .45);
+  border-color: rgba(74, 222, 128, .3);
+}
+
+.pill-run {
+  background: rgba(245, 158, 11, .45);
+  border-color: rgba(245, 158, 11, .3);
+}
+
+.modal-stat-pill .msp-val {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Session detail blocks ── */
+.sessions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.session-detail-block {
+  background: rgba(255, 255, 255, .03);
+  border: 1px solid rgba(255, 255, 255, .07);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  flex: 1 1 calc(50% - .25rem);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.session-full {
+  flex: 1 1 100% !important;
+}
+
+.sdb-sport {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .25rem;
+  opacity: .7;
+}
+
+.sdb-title {
+  font-weight: 600;
+  font-size: .9rem;
+  color: #fff;
+}
+
+.sdb-desc {
+  font-size: .8rem;
+  opacity: .7;
+  margin: .3rem 0 0;
+  line-height: 1.5;
+}
+
+.sdb-meta {
+  font-size: .72rem;
+  opacity: .5;
+}
+
+@media (max-width: 576px) {
+  .session-detail-block {
+    flex: 1 1 100%;
+  }
+}
+
+
+/* ── Zone tags (inline in description) ── */
+.zone-tag {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1em;
+}
+
+.zone-tag.z1 {
+  background: rgb(166, 166, 166);
+  color: #fff;
+}
+
+.zone-tag.z2 {
+  background: rgb(59, 151, 243);
+  color: #fff;
+}
+
+.zone-tag.z3 {
+  background: rgb(130, 201, 30);
+  color: #fff;
+}
+
+.zone-tag.z4 {
+  background: rgb(249, 137, 37);
+  color: #fff;
+}
+
+.zone-tag.z5 {
+  background: rgb(211, 32, 32);
+  color: #fff;
+}
+
+/* ── Progress bar ── */
+.trn-progress-bar {
+  height: 5px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
+}
+
+.trn-progress-fill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, var(--im-accent), var(--im-accent2));
+  transition: width .5s;
+}
+
+/* ── Modal nav ── */
+.modal-nav-btn {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  color: rgba(255, 255, 255, .7);
+  border-radius: 8px;
+}
+
+.modal-nav-btn:hover:not(:disabled) {
+  background: rgba(14, 165, 233, .15);
+  border-color: var(--im-accent);
+  color: var(--im-accent);
+}
+
+.modal-nav-hint {
+  font-size: .72rem;
+  color: rgba(255, 255, 255, .25);
+}
+
+/* Phase modal accents */
+.phase-modal-recovery .modal-content {
+  border-color: rgba(234, 179, 8, .25);
+}
+
+.phase-modal-base .modal-content {
+  border-color: rgba(34, 197, 94, .25);
+}
+
+.phase-modal-build .modal-content {
+  border-color: rgba(14, 165, 233, .25);
+}
+
+.phase-modal-peak .modal-content {
+  border-color: rgba(249, 115, 22, .25);
+}
+
+.phase-modal-taper .modal-content {
+  border-color: rgba(167, 139, 250, .25);
+}
+
+.phase-modal-race .modal-content {
+  border-color: rgba(239, 68, 68, .35);
+}
+
+/* ── Sections hidden by filter ── */
+.weeks-grid-item.hidden {
+  display: none !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .week-hours {
+    font-size: 1.2rem;
+  }
+}
+
+/* ── Zone legend chips ── */
+.zone-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.zone-chip {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .72rem;
+  padding: .2rem .6rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.zone-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

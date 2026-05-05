@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronMarIO 70.3 — Training Plan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔱</text></svg>">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="training.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-dark text-white">
+    <div id="header-placeholder"></div>
+
+    <main class="container py-4">
+        <!-- Hero Section -->
+        <div class="im-hero text-center mb-5">
+            <h1 class="im-text-gradient mb-2">🔱 IronMarIO 70.3</h1>
+            <p class="lead text-secondary">Preparazione per Ironman 70.3 Cervia — 19 Settembre 2027</p>
+
+        </div>
+
+        <!-- Stat Cards Row 1 -->
+        <div class="row g-3 mb-3" id="stats">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">📅</span>
+                    <span class="stat-value" id="stat-weeks">41</span>
+                    <span class="stat-label">Settimane</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-value" id="stat-hours">0</span>
+                    <span class="stat-label">Ore Totali</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">⛰️</span>
+                    <span class="stat-value" id="stat-peak">0</span>
+                    <span class="stat-label">Sett. Picco (Ore)</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">🗓️</span>
+                    <span class="stat-value" id="stat-current">-</span>
+                    <span class="stat-label">Sett. Corrente</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">⏳</span>
+                    <span class="stat-value" id="stat-countdown">-</span>
+                    <span class="stat-label">Alla Gara</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">🏅</span>
+                    <span class="stat-value" style="font-size: 1rem;">19 SET 2027</span>
+                    <span class="stat-label">Data Gara</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Cards Row 2 (Distances) -->
+        <div class="row g-3 mb-5">
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-swim);">
+                    <span class="stat-icon">🏊</span>
+                    <span class="stat-value" id="stat-swim-km">0</span>
+                    <span class="stat-label">Nuoto Totale (km)</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-bike);">
+                    <span class="stat-icon">🚴</span>
+                    <span class="stat-value" id="stat-bike-km">0</span>
+                    <span class="stat-label">Bici Totale (km)</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-run);">
+                    <span class="stat-icon">🏃</span>
+                    <span class="stat-value" id="stat-run-km">0</span>
+                    <span class="stat-label">Corsa Totale (km)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Header with Toggle -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0 text-white"><i class="bi bi-graph-up me-2"></i>Andamento Piano</h4>
+            <div class="form-check form-switch d-flex align-items-center gap-2 m-0 p-0" style="padding-left: 0;">
+                <span class="text-white small fw-bold" id="label-ore">ORE</span>
+                <input class="form-check-input m-0 fs-5 mx-1" type="checkbox" role="switch" id="chartUnitToggle" onchange="toggleChartUnit()" style="cursor: pointer;">
+                <span class="text-secondary small" id="label-km">KM</span>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="glass-panel chart-panel">
+                    <h5 class="text-secondary mb-3" id="volChartTitle">Volume Settimanale</h5>
+                    <div style="height: 300px;">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="glass-panel chart-panel">
+                    <h5 class="text-secondary mb-3" id="distChartTitle">Distribuzione Sport</h5>
+                    <div style="height: 300px;">
+                        <canvas id="sportDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Heart Rate Zones Section -->
+        <div class="accordion mb-5 glass-panel p-0 overflow-hidden" id="zonesAccordion">
+            <div class="accordion-item border-0 bg-transparent">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-transparent text-secondary shadow-none" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseZones" aria-expanded="false"
+                        aria-controls="collapseZones">
+                        <h5 class="mb-0">❤️ Zone di Intensità</h5>
+                    </button>
+                </h2>
+                <div id="collapseZones" class="accordion-collapse collapse" data-bs-parent="#zonesAccordion">
+                    <div class="accordion-body p-0 border-top border-secondary border-opacity-25">
+                        <div class="table-responsive">
+                            <table class="table table-dark zone-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Zona</th>
+                                        <th class="text-center"><span class="pill-swim border rounded-pill px-2 py-1"
+                                                style="color: var(--im-swim)">🏊 Nuoto</span></th>
+                                        <th class="text-center"><span class="pill-bike border rounded-pill px-2 py-1"
+                                                style="color: var(--im-bike)">🚴 Bici</span></th>
+                                        <th class="text-center"><span class="pill-run border rounded-pill px-2 py-1"
+                                                style="color: var(--im-run)">🏃 Corsa</span></th>
+                                        <th>Descrizione</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z1">Z1</span></td>
+                                        <td class="text-center"><span class="z-range">105–115</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~2:10
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">112–122</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~21.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">120–130</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~7:00
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Riscaldamento / Recupero</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z2">Z2</span></td>
+                                        <td class="text-center"><span class="z-range">116–135</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~2:00
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">123–142</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~26.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">131–150</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~6:15
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Base Aerobica (Lungo)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z3">Z3</span></td>
+                                        <td class="text-center"><span class="z-range">136–150</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:50
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">143–157</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~31.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">151–165</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~5:15
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Aerobico / Ritmo Gara</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z4">Z4</span></td>
+                                        <td class="text-center"><span class="z-range">151–165</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:40
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">158–172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~35.0
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">166–180</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~4:15
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Soglia Lattacida</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z5">Z5</span></td>
+                                        <td class="text-center"><span class="z-range">> 165</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:30
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">> 172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~40.0
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">> 180</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~4:00
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Massimale (VO2Max)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase Filters -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mb-4 sticky-top py-2 bg-dark" style="z-index: 100;">
+            <span class="filter-label">FILTRA FASE:</span>
+            <div class="btn-group" role="group">
+                <button type="button" class="filter-btn active" onclick="filterPhase('all')">Tutte</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('recovery')">Recupero</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('base')">Base</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('build')">Build</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('peak')">Picco</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('taper')">Taper</button>
+            </div>
+        </div>
+
+        <!-- Weeks Grid -->
+        <div class="row g-3" id="weeks-grid">
+            <!-- Cards generated by training.js -->
+        </div>
+
+    </main>
+
+    <!-- Week Modal -->
+    <div class="modal fade" id="weekModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content trn-modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h4 class="modal-title fw-bold" id="modalWeekLabel">Settimana IM-W01</h4>
+                        <span class="modal-date-range" id="modalDateRange">30 nov – 06 dic</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Week Stats Pill Row -->
+                    <div class="modal-stat-row" id="modalStatRow">
+                        <!-- Pills generated by training.js -->
+                    </div>
+
+                    <!-- Zone Distribution Bar -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-end mb-1">
+                            <span class="text-secondary small fw-bold uppercase letter-spacing-1">Distribuzione Zone
+                                (Z1-Z5)</span>
+                            <span class="text-info small fw-bold" id="modalTotalMin">0h 00m</span>
+                        </div>
+                        <div class="zone-bar" id="modalZoneBar">
+                            <!-- Segments generated by training.js -->
+                        </div>
+                    </div>
+
+                    <!-- Sessions Detail -->
+                    <div id="modalSessions" class="mb-4">
+                        <!-- Session blocks generated by training.js -->
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="zone-legend mt-4 pt-3 border-top border-secondary border-opacity-10">
+                        <div class="zone-chip"><span class="zone-dot seg-z1"></span> Z1 Recupero</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z2"></span> Z2 Base</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z3"></span> Z3 Tempo</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z4"></span> Z4 Soglia</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z5"></span> Z5 VO2Max</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn modal-nav-btn" onclick="prevWeek()"><i
+                                class="bi bi-chevron-left"></i> Prev</button>
+                        <button type="button" class="btn modal-nav-btn" onclick="nextWeek()">Next <i
+                                class="bi bi-chevron-right"></i></button>
+                    </div>
+                    <span class="modal-nav-hint d-none d-sm-inline">Usa le frecce <kbd>←</kbd> <kbd>→</kbd> per
+                        navigare</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/components.js"></script>
+    <script src="training-data.js"></script>
+    <script src="training.js"></script>
+</body>
+
+</html>
