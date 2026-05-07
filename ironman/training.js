@@ -120,6 +120,9 @@ function processPlanData() {
                 totals.swimM += 1900;
                 totals.bikeKm += 90;
                 totals.runKm += 21.1;
+                day.swimM = 1900;
+                day.bikeKm = 90;
+                day.runKm = 21.1;
                 totals.z3 += (raceTotMin - transMin); // gara in Z3
                 totals.z1 += transMin; // transizioni in Z1
                 day.computedZones = { z1: transMin, z2: 0, z3: (raceTotMin - transMin), z4: 0, z5: 0 };
@@ -134,19 +137,21 @@ function processPlanData() {
             let textDist = extractTextDistance(day.desc, day.sport);
             
             if (swimM > 0) {
-                if (day.swimM) totals.swimM += day.swimM;
-                else if (day.sport === 'swim' && textDist) totals.swimM += textDist;
-                else totals.swimM += (swimM / PACE_CONFIG.swim.base * 100);
+                let sDist = day.swimM || (day.sport === 'swim' && textDist ? textDist : (swimM / PACE_CONFIG.swim.base * 100));
+                totals.swimM += sDist;
+                day.swimM = Math.round(sDist);
             }
             if (bikeM > 0) {
                 const brickDist = extractBrickDistances(day.desc);
-                if (day.bikeKm) totals.bikeKm += day.bikeKm;
-                else totals.bikeKm += brickDist.bikeKm || estimateKm(bikeM, zones, 'bike');
+                let bDist = day.bikeKm || brickDist.bikeKm || estimateKm(bikeM, zones, 'bike');
+                totals.bikeKm += bDist;
+                day.bikeKm = Math.round(bDist * 10) / 10;
             }
             if (runM > 0) {
                 const brickDist = extractBrickDistances(day.desc);
-                if (day.runKm) totals.runKm += day.runKm;
-                else totals.runKm += brickDist.runKm || estimateKm(runM, zones, 'run');
+                let rDist = day.runKm || brickDist.runKm || estimateKm(runM, zones, 'run');
+                totals.runKm += rDist;
+                day.runKm = Math.round(rDist * 10) / 10;
             }
 
             day.computedDist = textDist || day.runKm || day.swimM || day.bikeKm;
@@ -617,7 +622,7 @@ function openWeek(idx) {
             </div>
             <div class="sdb-title">${day.title}</div>
             <div class="sdb-desc">${highlightZones(day.desc)}</div>
-            ${day.swimM || day.runKm ? `<div class="mt-1 small text-info opacity-75">Distanza: ${day.swimM ? day.swimM + 'm' : day.runKm + 'km'}</div>` : ''}
+            ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 small text-info opacity-75">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
             ${day.sport === 'race' ? `
             <div class="mt-2 race-estimate-table">
                 <table class="w-100" style="font-size: 0.75rem; border-collapse: collapse;">
