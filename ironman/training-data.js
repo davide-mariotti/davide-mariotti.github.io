@@ -27,7 +27,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa Z2', desc: '☀️: Corsa 40\' Z2', durationMin: 40, runKm: 6.5 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1/Z2 / Nuoto trazione', desc: '☀️ Bici 45\' Z1/Z2 | 🌙 Nuoto 50\' Z2 — focus trazione', durationMin: 95, bikeKm: 21, swimM: 1600 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK Bici + Corsa', desc: 'Bici 90\' Z2 (percorso vallonato leggero) + brick: Corsa 10\' Z2', durationMin: 100, bikeKm: 40, runKm: 1.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (1h30 Bici + 10min Corsa)', desc: 'Bici 90\' Z2 (percorso vallonato leggero) + brick: Corsa 10\' Z2', durationMin: 100, bikeKm: 40, runKm: 1.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa domenicale', desc: 'Corsa 45\' Z2', durationMin: 45, runKm: 7 },
     ]
   },
@@ -40,7 +40,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa fartlek Z4', desc: '☀️: Corsa 50\' — 15\' wa Z2 + 10×1\' Z4 rec 1\' Z2 + 15\' cd Z2', durationMin: 50, runKm: 8 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto tecnica mista', desc: '☀️ Bici 45\' Z1 | 🌙 Nuoto 60\' Z2 — esercizi misti e tecnica', durationMin: 105, bikeKm: 20, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK Bici + Corsa', desc: 'Bici 120\' Z2 (focus posizione in sella) + brick: Corsa 15\' Z2', durationMin: 135, bikeKm: 54, runKm: 2.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h00 Bici + 15min Corsa)', desc: 'Bici 120\' Z2 + brick: Corsa 15\' Z2', durationMin: 135, bikeKm: 54, runKm: 2.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga domenicale', desc: 'Corsa 60\' Z2', durationMin: 60, runKm: 9.5 },
     ]
   },
@@ -53,7 +53,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa Z2 sciolta', desc: '☀️: Corsa 40\' Z2', durationMin: 40, runKm: 6.5 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto scioltissimo', desc: '☀️ Bici 40\' Z1 | 🌙 Nuoto 40\' Z1 — solo scioltezza', durationMin: 80, bikeKm: 17, swimM: 1200 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 1h45 (Bici + Corsa)', desc: 'Bici 93\' Z2 (passo fluido) + brick: Corsa 12\' Z2', durationMin: 105, bikeKm: 44, runKm: 2 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (1h30 Bici + 15min Corsa)', desc: 'Bici 90\' Z2 + brick: Corsa 15\' Z2', durationMin: 105, bikeKm: 44, runKm: 2 },
       { day: 'DOM', sport: 'run', title: 'Corsa domenicale Z2', desc: 'Corsa 55\' Z2', durationMin: 55, runKm: 8.5 },
     ]
   },
@@ -67,7 +67,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 5 ripetute km', desc: '☀️: Corsa 60\' variato — 15\' wa Z2 + 5×[1km Z3 + 1km Z2] + 5\' cd Z2', durationMin: 60, runKm: 10.5 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1/Z2 / Nuoto 100m', desc: '☀️ Bici 60\' Z1/Z2 | 🌙 Nuoto 60\' Z2 — lavori da 100m', durationMin: 120, bikeKm: 27, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 2h30 (Bici + Corsa)', desc: 'Bici 135\' Z2 (pianura costante) + brick: Corsa 15\' Z2', durationMin: 150, bikeKm: 67, runKm: 2.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h15 Bici + 15min Corsa)', desc: 'Bici 135\' Z2 (pianura costante) + brick: Corsa 15\' Z2', durationMin: 150, bikeKm: 67, runKm: 2.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga', desc: 'Corsa 80\' Z2', durationMin: 80, runKm: 12.5 },
     ]
   },
@@ -80,7 +80,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 6 ripetute km', desc: '☀️: Corsa 70\' variato — 15\' wa Z2 + 6×[1km Z3 + 1km Z2] + 5\' cd Z2', durationMin: 70, runKm: 12 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 200m', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 60\' Z2 — lavori da 200m continui', durationMin: 120, bikeKm: 26, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 2h45 (Bici + Corsa)', desc: 'Bici 150\' Z2 (agilità >85rpm) + brick: Corsa 15\' Z2', durationMin: 165, bikeKm: 74, runKm: 2.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h30 Bici + 15min Corsa)', desc: 'Bici 150\' Z2 (agilità >85rpm) + brick: Corsa 15\' Z2', durationMin: 165, bikeKm: 67, runKm: 2.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga', desc: 'Corsa 90\' Z2', durationMin: 90, runKm: 14 },
     ]
   },
@@ -93,7 +93,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata lungo 2km', desc: '☀️: Corsa 70\' variato — 15\' wa Z2 + 3×[2km Z3 + 1km Z2] + 5\' cd Z2', durationMin: 70, runKm: 12 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 400m', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 60\' Z2 — endurance 400m continui', durationMin: 120, bikeKm: 26, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 3h (Bici + Corsa)', desc: 'Bici 160\' Z2 (mangia e bevi in sella) + brick: Corsa 20\' Z2/Z3', durationMin: 180, bikeKm: 81, runKm: 3.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h40 Bici + 20min Corsa)', desc: 'Bici 160\' Z2 (mangia e bevi in sella) + brick: Corsa 20\' Z2/Z3', durationMin: 180, bikeKm: 86, runKm: 3.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga', desc: 'Corsa 90\' Z2', durationMin: 90, runKm: 14.5 },
     ]
   },
@@ -103,10 +103,10 @@ const IM_PLAN = [
     week: 'IM-W08', phase: 'recovery', faseLabel: 'FASE 1 – Costruzione di Base', dateRange: '18 gen – 24 gen', note: 'Scarico: volume ridotto, nessun brick il sabato. Recupero profondo prima del blocco sviluppo.', days: [
       { day: 'LUN', sport: 'swim', title: 'Corsa Z1/Z2 / Nuoto tecnica', desc: '☀️ Corsa 40\' Z1/Z2 | 🌙 Nuoto 45\' Z1 — solo tecnica', durationMin: 85, runKm: 5.5, swimM: 1350 },
       { day: 'MAR', sport: 'bike', title: 'Bici Z2', desc: '☀️: Bici 60\' Z2', durationMin: 60, bikeKm: 27 },
-      { day: 'MER', sport: 'run', title: 'Corsa passo fluido', desc: '☀️: Corsa 45\' Z2 — passo fluido', durationMin: 45, runKm: 7 },
+      { day: 'MER', sport: 'run', title: 'Corsa passo fluido', desc: '☀️: Corsa 45\' Z2', durationMin: 45, runKm: 7 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto scivolamento', desc: '☀️ Bici 45\' Z1 | 🌙 Nuoto 45\' Z2 — scivolamento', durationMin: 90, bikeKm: 20, swimM: 1500 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'bike', title: 'Bici Z2 (no brick)', desc: 'Bici 105\' Z2 — niente brick', durationMin: 105, bikeKm: 47 },
+      { day: 'SAB', sport: 'bike', title: 'Bici Z2', desc: 'Bici 105\' Z2', durationMin: 105, bikeKm: 47 },
       { day: 'DOM', sport: 'run', title: 'Corsa Z2', desc: 'Corsa 60\' Z2', durationMin: 60, runKm: 9.5 },
     ]
   },
@@ -119,7 +119,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 4×2km', desc: '☀️: Corsa 75\' variato — 15\' wa Z2 + 4×[2km Z3 + 1km Z2] + 5\' cd Z2', durationMin: 75, runKm: 13 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 800m', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 60\' Z2 — 800m continui', durationMin: 120, bikeKm: 26, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 3h15 (Bici + Corsa)', desc: 'Bici 175\' Z2 + brick: Corsa 20\' Z2', durationMin: 195, bikeKm: 88, runKm: 3 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h55 Bici + 20min Corsa)', desc: 'Bici 175\' Z2 + brick: Corsa 20\' Z2', durationMin: 195, bikeKm: 94, runKm: 3.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga', desc: 'Corsa 100\' Z2', durationMin: 100, runKm: 16 },
     ]
   },
@@ -132,7 +132,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 3×3km', desc: '☀️: Corsa 75\' variato — 15\' wa Z2 + 3×[3km Z3 + 1km Z2] + 5\' cd Z2', durationMin: 75, runKm: 13.5 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1/Z2 / Nuoto passo costante', desc: '☀️ Bici 60\' Z1/Z2 | 🌙 Nuoto 60\' Z2 — passo costante', durationMin: 120, bikeKm: 27, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 3h30 (Bici + Corsa)', desc: 'Bici 190\' Z2 + brick: Corsa 20\' (primi 10\' Z3)', durationMin: 210, bikeKm: 94, runKm: 3.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h10 Bici + 20min Corsa)', desc: 'Bici 190\' Z2 + brick: Corsa 20\' (primi 10\' Z3)', durationMin: 210, bikeKm: 100, runKm: 3.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga', desc: 'Corsa 105\' Z2', durationMin: 105, runKm: 16.5 },
     ]
   },
@@ -145,7 +145,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 3×3km', desc: '☀️: Corsa 80\' variato — 15\' wa + 3×[3km Z3 + 1km Z2] + 10\' cd', durationMin: 80, runKm: 14.5 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto endurance', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 65\' Z2 — 2200m aerobici', durationMin: 125, bikeKm: 26, swimM: 2200 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 3h35 (Bici + Corsa)', desc: 'Bici 190\' Z2 + brick: Corsa 30\' Z2/Z3', durationMin: 220, bikeKm: 95, runKm: 6 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h10 Bici + 30min Corsa)', desc: 'Bici 190\' Z2 + brick: Corsa 30\' Z2/Z3', durationMin: 220, bikeKm: 105, runKm: 6 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h40', desc: 'Corsa 100\' Z2', durationMin: 100, runKm: 16 },
     ]
   },
@@ -158,7 +158,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa Z2 con allunghi', desc: '☀️: Corsa 50\' Z2 con 4 allunghi da 100m', durationMin: 50, runKm: 8 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto tecnica pura', desc: '☀️ Bici 45\' Z1 | 🌙 Nuoto 45\' tecnica pura', durationMin: 90, bikeKm: 20, swimM: 1350 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 2h10 (Bici + Corsa)', desc: 'Bici 120\' Z2 + brick: Corsa 10\' Z2', durationMin: 130, bikeKm: 54, runKm: 1.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (2h Bici + 10min Corsa)', desc: 'Bici 120\' Z2 + brick: Corsa 10\' Z2', durationMin: 130, bikeKm: 54, runKm: 1.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa Z2', desc: 'Corsa 70\' Z2', durationMin: 70, runKm: 11 },
     ]
   },
@@ -171,7 +171,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa qualità 5×1000m Z4', desc: '☀️: Corsa 75\' qualità — 15\' wa + 5×1000m Z4 rec 2\' Z2 + 15\' cd', durationMin: 75, runKm: 12 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1/Z2 / Nuoto 3×500m gara', desc: '☀️ Bici 55\' Z1/Z2 | 🌙 Nuoto 65\' Z3 — 3×500m passo gara', durationMin: 120, bikeKm: 25, swimM: 2300 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 4h (Bici + Corsa)', desc: 'Bici 195\' Z2 (ultimi 40\' Z3) + brick: Corsa 45\' Z3', durationMin: 240, bikeKm: 92, runKm: 9 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h15 Bici + 45min Corsa)', desc: 'Bici 195\' Z2 (ultimi 40\' Z3) + brick: Corsa 45\' Z3', durationMin: 240, bikeKm: 105, runKm: 9 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h45', desc: 'Corsa 105\' Z2', durationMin: 105, runKm: 17 },
     ]
   },
@@ -184,7 +184,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 4×2km', desc: '☀️: Corsa 80\' variato — 15\' wa + 4×[2km Z3 + 1km Z2] + 10\' cd', durationMin: 80, runKm: 14 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 2×800m Z3', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 65\' Z3 — 2×800m rec 45\"', durationMin: 125, bikeKm: 27, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 3h45 (Bici + Corsa)', desc: 'Bici 190\' Z2 (ultimi 45\' Z3) + brick: Corsa 35\' Z3', durationMin: 225, bikeKm: 90, runKm: 7 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h10 Bici + 35min Corsa)', desc: 'Bici 190\' Z2 (ultimi 45\' Z3) + brick: Corsa 35\' Z3', durationMin: 225, bikeKm: 100, runKm: 7 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h35', desc: 'Corsa 95\' Z2', durationMin: 95, runKm: 15.5 },
     ]
   },
@@ -197,7 +197,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa qualità 3×2000m Z4', desc: '☀️: Corsa 80\' qualità — 15\' wa + 3×2000m Z4 rec 2\' Z2 + 15\' cd', durationMin: 80, runKm: 14 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 4×500m Z3', desc: '☀️ Bici 65\' Z1 | 🌙 Nuoto 70\' Z3 — 4×500m rec 20\"', durationMin: 135, bikeKm: 28, swimM: 2500 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 4h10 (Bici + Corsa)', desc: 'Bici 200\' Z2 (con 3×20\' Z3) + brick: Corsa 50\' Z2/Z3 controllato', durationMin: 250, bikeKm: 95, runKm: 10 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h20 Bici + 50min Corsa)', desc: 'Bici 200\' Z2 (con 3×20\' Z3) + brick: Corsa 50\' Z2/Z3 controllato', durationMin: 250, bikeKm: 95, runKm: 10 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h45', desc: 'Corsa 105\' Z2', durationMin: 105, runKm: 17 },
     ]
   },
@@ -210,7 +210,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa Z2 + allunghi', desc: '☀️: Corsa 45\' Z2 con 5 allunghi finali per sciogliere', durationMin: 45, runKm: 7 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto scioltezza', desc: '☀️ Bici 45\' Z1 | 🌙 Nuoto 45\' Z2 — scioltezza', durationMin: 90, bikeKm: 20, swimM: 1500 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 2h (Bici + Corsa)', desc: 'Bici 110\' Z2 (regolare) + brick: Corsa 10\' Z2', durationMin: 120, bikeKm: 50, runKm: 1.5 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (1h50 Bici + 10min Corsa)', desc: 'Bici 110\' Z2 (regolare) + brick: Corsa 10\' Z2', durationMin: 120, bikeKm: 50, runKm: 1.5 },
       { day: 'DOM', sport: 'run', title: 'Corsa Z2', desc: 'Corsa 75\' Z2', durationMin: 75, runKm: 12 },
     ]
   },
@@ -223,7 +223,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 3×3km', desc: '☀️: Corsa 85\' variato — 15\' wa + 3×[3km Z3 + 1km Z2] + 15\' cd', durationMin: 85, runKm: 15 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 1500m test', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 70\' Z3 — 1500m ritmo gara', durationMin: 130, bikeKm: 27, swimM: 2400 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 4h15 (Bici + Corsa)', desc: 'Bici 210\' (con 4×20\' Z3) + brick: Corsa 45\' Z3', durationMin: 255, bikeKm: 100, runKm: 9 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h30 Bici + 45min Corsa)', desc: 'Bici 210\' (con 4×20\' Z3) + brick: Corsa 45\' Z3', durationMin: 255, bikeKm: 100, runKm: 9 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h35', desc: 'Corsa 95\' Z2', durationMin: 95, runKm: 15.5 },
     ]
   },
@@ -236,7 +236,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa qualità 4×1200m Z4', desc: '☀️: Corsa 70\' — 15\' wa + 4×1200m Z4 rec 2\' Z2 + 15\' cd', durationMin: 70, runKm: 12 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1/Z2 / Nuoto 5×400m Z3', desc: '☀️ Bici 60\' Z1/Z2 | 🌙 Nuoto 75\' Z3 — 5×400m rec 15\"', durationMin: 135, bikeKm: 28, swimM: 2600 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 4h10 (Bici + Corsa)', desc: 'Bici 205\' Z2/Z3 costante (test nutrizione gara) + brick: Corsa 45\' Z3 controllato', durationMin: 250, bikeKm: 98, runKm: 9 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h25 Bici + 45min Corsa)', desc: 'Bici 205\' Z2/Z3 costante (test nutrizione gara) + brick: Corsa 45\' Z3 controllato', durationMin: 250, bikeKm: 98, runKm: 9 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h30', desc: 'Corsa 90\' Z2', durationMin: 90, runKm: 15 },
     ]
   },
@@ -249,7 +249,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa Z2 con allunghi', desc: '☀️: Corsa 60\' Z2 con 6 allunghi da 100m finali', durationMin: 60, runKm: 10 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 1000m test', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 70\' Z2/Z3 — focus passo gara', durationMin: 130, bikeKm: 27, swimM: 2500 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK 4h05 (Bici + Corsa)', desc: 'Bici 210\' Z2 costante + brick: Corsa 35\' Z2/Z3', durationMin: 245, bikeKm: 98, runKm: 7 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h30 Bici + 35min Corsa)', desc: 'Bici 210\' Z2 costante + brick: Corsa 35\' Z2/Z3', durationMin: 245, bikeKm: 98, runKm: 7 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h25', desc: 'Corsa 85\' Z2', durationMin: 85, runKm: 14 },
     ]
   },

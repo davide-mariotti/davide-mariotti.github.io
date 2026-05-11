@@ -118,8 +118,8 @@ function processPlanData() {
                 const bm = extractMin(day.desc, 'bici');
                 if (bm) { bikeM = bm; runM -= bm; }
             } else if (day.sport === 'race') {
-                // Stima tempi gara Ironman 70.3: nuoto 38min, bici 154min, corsa 105min, transizioni 15min
-                const raceSwimMin = 38, raceBikeMin = 154, raceRunMin = 105, transMin = 15;
+                // Stima tempi gara Ironman 70.3: nuoto 38min, bici 154min, corsa 108min, transizioni 15min
+                const raceSwimMin = 38, raceBikeMin = 154, raceRunMin = 108, transMin = 15;
                 const raceTotMin = raceSwimMin + raceBikeMin + raceRunMin + transMin;
                 
                 // Rimuoviamo il min originale (es. 300) e usiamo il calcolato (312)
