@@ -9,12 +9,12 @@ let sportDistChart = null;
 
 // Configurazione Sport
 const SPORT_CONFIG = {
-    'swim':  { icon: '🏊', label: 'Nuoto', color: '#38bdf8' },
-    'bike':  { icon: '🚴', label: 'Bici',  color: '#4ade80' },
-    'run':   { icon: '🏃', label: 'Corsa', color: '#f59e0b' },
+    'swim': { icon: '🏊', label: 'Nuoto', color: '#38bdf8' },
+    'bike': { icon: '🚴', label: 'Bici', color: '#4ade80' },
+    'run': { icon: '🏃', label: 'Corsa', color: '#f59e0b' },
     'brick': { icon: '🔱', label: 'Brick', color: '#a78bfa' },
-    'rest':  { icon: '🛌', label: 'Riposo', color: '#475569' },
-    'race':  { icon: '🏅', label: 'GARA',  color: '#ef4444' }
+    'rest': { icon: '🛌', label: 'Riposo', color: '#475569' },
+    'race': { icon: '🏅', label: 'GARA', color: '#ef4444' }
 };
 
 // Inizializzazione
@@ -63,7 +63,7 @@ const PACE_CONFIG = {
 function processPlanData() {
     IM_PLAN.forEach((week, idx) => {
         let totals = {
-            swimMin: 0, bikeMin: 0, runMin: 0, brickMin: 0,
+            swimMin: 0, bikeMin: 0, runMin: 0, brickMin: 0, otherMin: 0,
             totMin: 0,
             swimM: 0, bikeKm: 0, runKm: 0,
             z1: 0, z2: 0, z3: 0, z4: 0, z5: 0
@@ -84,39 +84,55 @@ function processPlanData() {
 
             // 2. Suddivisione Minuti Multi-Sport
             let swimM = 0, bikeM = 0, runM = 0;
-            
+
+            // Helper: estrae minuti di un'attività dal testo, supporta formato "Sport NN'" con separatore | e prefisso emoji
+            const extractMin = (desc, keyword) => {
+                // Cerca il pattern dopo il separatore | oppure all'inizio, tollerando emoji e prefissi vari
+                const re = new RegExp('(?:^|\\|)[^|]*' + keyword + '[^\\d]*(\\d+)[\'\'`]', 'i');
+                const m = desc.match(re);
+                return m ? parseInt(m[1]) : 0;
+            };
+
             if (day.sport === 'brick') {
                 bikeM = min * 0.8; runM = min * 0.2;
-                const bMatch = day.desc.match(/bici[^\d]*(\d+)'/i);
-                if (bMatch) bikeM = parseInt(bMatch[1]);
-                const rMatch = day.desc.match(/corsa[^\d]*(\d+)'/i);
-                if (rMatch) runM = parseInt(rMatch[1]);
+                const bm = extractMin(day.desc, 'bici');
+                if (bm) bikeM = bm;
+                const rm = extractMin(day.desc, 'corsa');
+                if (rm) runM = rm;
             } else if (day.sport === 'swim') {
                 swimM = min;
-                const rMatch = day.desc.match(/corsa[^\d]*(\d+)'/i);
-                if (rMatch) { runM = parseInt(rMatch[1]); swimM -= runM; }
-                const bMatch = day.desc.match(/bici[^\d]*(\d+)'/i);
-                if (bMatch) { bikeM = parseInt(bMatch[1]); swimM -= bikeM; }
+                const rm = extractMin(day.desc, 'corsa');
+                if (rm) { runM = rm; swimM -= rm; }
+                const bm = extractMin(day.desc, 'bici');
+                if (bm) { bikeM = bm; swimM -= bm; }
             } else if (day.sport === 'bike') {
                 bikeM = min;
-                const rMatch = day.desc.match(/corsa[^\d]*(\d+)'/i);
-                if (rMatch) { runM = parseInt(rMatch[1]); bikeM -= runM; }
-                const sMatch = day.desc.match(/nuoto[^\d]*(\d+)'/i);
-                if (sMatch) { swimM = parseInt(sMatch[1]); bikeM -= swimM; }
+                const rm = extractMin(day.desc, 'corsa');
+                if (rm) { runM = rm; bikeM -= rm; }
+                const sm = extractMin(day.desc, 'nuoto');
+                if (sm) { swimM = sm; bikeM -= sm; }
             } else if (day.sport === 'run') {
                 runM = min;
-                const sMatch = day.desc.match(/nuoto[^\d]*(\d+)'/i);
-                if (sMatch) { swimM = parseInt(sMatch[1]); runM -= swimM; }
-                const bMatch = day.desc.match(/bici[^\d]*(\d+)'/i);
-                if (bMatch) { bikeM = parseInt(bMatch[1]); runM -= bikeM; }
+                const sm = extractMin(day.desc, 'nuoto');
+                if (sm) { swimM = sm; runM -= sm; }
+                const bm = extractMin(day.desc, 'bici');
+                if (bm) { bikeM = bm; runM -= bm; }
             } else if (day.sport === 'race') {
                 // Stima tempi gara Ironman 70.3: nuoto 38min, bici 154min, corsa 105min, transizioni 15min
                 const raceSwimMin = 38, raceBikeMin = 154, raceRunMin = 105, transMin = 15;
                 const raceTotMin = raceSwimMin + raceBikeMin + raceRunMin + transMin;
+                
+                // Rimuoviamo il min originale (es. 300) e usiamo il calcolato (312)
+                totals.totMin -= min; 
                 totals.totMin += raceTotMin;
-                totals.swimMin += raceSwimMin;
-                totals.bikeMin += raceBikeMin;
-                totals.runMin += raceRunMin;
+                
+                // Assegniamo alle variabili locali per farle processare a fine loop
+                swimM = raceSwimMin;
+                bikeM = raceBikeMin;
+                runM = raceRunMin;
+                // I transMin verranno calcolati automaticamente come 'otherMin' a fine loop 
+                // perché accounted (38+154+105=297) < min (312)
+                
                 totals.swimM += 1900;
                 totals.bikeKm += 90;
                 totals.runKm += 21.1;
@@ -126,16 +142,21 @@ function processPlanData() {
                 totals.z3 += (raceTotMin - transMin); // gara in Z3
                 totals.z1 += transMin; // transizioni in Z1
                 day.computedZones = { z1: transMin, z2: 0, z3: (raceTotMin - transMin), z4: 0, z5: 0 };
-                day.durationMin = raceTotMin; // aggiorna per la visualizzazione nel modal
+                day.durationMin = raceTotMin; 
             }
 
             totals.swimMin += Math.max(0, swimM);
             totals.bikeMin += Math.max(0, bikeM);
             totals.runMin += Math.max(0, runM);
 
+            const accounted = Math.max(0, swimM) + Math.max(0, bikeM) + Math.max(0, runM);
+            if (min > accounted) {
+                totals.otherMin += (min - accounted);
+            }
+
             // 3. Calcolo Distanze (Priorità: campo esplicito > parsing testo > stima da tempo)
             let textDist = extractTextDistance(day.desc, day.sport);
-            
+
             if (swimM > 0) {
                 let sDist = day.swimM || (day.sport === 'swim' && textDist ? textDist : (swimM / PACE_CONFIG.swim.base * 100));
                 totals.swimM += sDist;
@@ -204,7 +225,7 @@ function extractBrickDistances(desc) {
  */
 function estimateKm(min, zones, sport) {
     if (min <= 0) return 0;
-    
+
     if (sport === 'bike') {
         // Media pesata velocità
         let avgSpeed = 0;
@@ -232,9 +253,26 @@ function parseZonesFromDesc(desc, totalMin, sport) {
 
     let cleanText = desc.toLowerCase().replace(/\\'/g, "'");
     
-    // Rimuove il prefisso inziale se corrisponde al totalMin (es. "Corsa 80' Z2" dove totale è 80)
-    let prefixRegex = new RegExp('(?:corsa|bici|nuoto)[^\\d]*' + totalMin + '[\'"]\\s*z2', 'i');
-    cleanText = cleanText.replace(prefixRegex, '');
+    // Normalizza "ritmo gara" (e varianti) in "Z3" per il parsing automatico
+    cleanText = cleanText.replace(/ritmo\s*gara\s*(?:70\.3)?/g, 'z3');
+    cleanText = cleanText.replace(/target\s*gara/g, 'z3');
+
+    // Rileva se l'intera sessione è dichiarata in una zona (es: "Corsa 60' Z2" o "Bici 90' ritmo gara")
+    // Se lo troviamo, assegniamo il 100% del tempo a quella zona e abbiamo finito.
+    let fullSessionRegex = new RegExp('(?:corsa|bici|nuoto|nuotata|uscita)[^\\d]*' + totalMin + '[\'"]?\\s*(?:target|ritmo)?\\s*gara?\\s*z?([1-5])', 'i');
+    let fullMatch = cleanText.match(fullSessionRegex);
+    if (!fullMatch) {
+        // Riprova senza la durata esplicita, solo se la descrizione è molto breve (es: "Corsa Z2")
+        if (cleanText.length < 25) {
+            fullMatch = cleanText.match(/(?:corsa|bici|nuoto|nuotata|uscita)[^z]*z([1-5])/i);
+        }
+    }
+    
+    if (fullMatch) {
+        let zoneNum = parseInt(fullMatch[1]);
+        zones[`z${zoneNum}`] = totalMin;
+        return zones;
+    }
 
     let sumFound = 0;
     let foundSpecific = false;
@@ -248,11 +286,11 @@ function parseZonesFromDesc(desc, totalMin, sport) {
         let workUnit = match[3];
         let workMin = workUnit === "'" ? workVal : workVal / 60;
         let workZone = parseInt(match[4]);
-        
+
         zones[`z${workZone}`] += workMin * reps;
         sumFound += workMin * reps;
         foundSpecific = true;
-        
+
         if (match[5]) { // c'è il recupero
             let recVal1 = parseInt(match[5]);
             let recUnit1 = match[6];
@@ -269,7 +307,7 @@ function parseZonesFromDesc(desc, totalMin, sport) {
             zones.z1 += recMin * reps;
             sumFound += recMin * reps;
         }
-        
+
         cleanText = cleanText.replace(match[0], ''); // evita che vengano ricalcolati
     }
 
@@ -295,9 +333,9 @@ function parseZonesFromDesc(desc, totalMin, sport) {
         let workUnit = match[2];
         let workMin = workUnit === "'" ? workVal : workVal / 60;
         let workZone = parseInt(match[3]);
-        
+
         if (workMin === totalMin) continue; // evita loop se il prefisso non è stato tolto perfettamente
-        
+
         zones[`z${workZone}`] += workMin;
         sumFound += workMin;
         foundSpecific = true;
@@ -332,7 +370,7 @@ function updateStats() {
     let totalMin = 0;
     let peakMin = 0;
     let totalSwimM = 0, totalBikeKm = 0, totalRunKm = 0;
-    
+
     IM_PLAN.forEach(w => {
         totalMin += w.totals.totMin;
         if (w.totals.totMin > peakMin) peakMin = w.totals.totMin;
@@ -343,7 +381,7 @@ function updateStats() {
 
     document.getElementById('stat-hours').textContent = Math.round(totalMin / 60) + 'h';
     document.getElementById('stat-peak').textContent = Math.round(peakMin / 60) + 'h';
-    
+
     // Nuove stat card distanze
     document.getElementById('stat-swim-km').textContent = (totalSwimM / 1000).toFixed(1);
     document.getElementById('stat-bike-km').textContent = Math.round(totalBikeKm).toLocaleString();
@@ -367,7 +405,7 @@ function getCurrentWeekIdx() {
     const diffTime = now - IM_PLAN_START;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const weekIdx = Math.floor(diffDays / 7);
-    
+
     if (weekIdx >= 0 && weekIdx < IM_PLAN.length) return weekIdx;
     return -1;
 }
@@ -377,7 +415,7 @@ function getCurrentWeekIdx() {
  */
 function renderCharts() {
     const labels = IM_PLAN.map(w => w.week.replace('IM-', ''));
-    
+
     // 1. Volume Stacked Bar Chart
     const ctxVol = document.getElementById('volumeChart').getContext('2d');
     volumeChart = new Chart(ctxVol, {
@@ -438,17 +476,17 @@ function renderCharts() {
  */
 function toggleChartUnit() {
     const isKm = document.getElementById('chartUnitToggle').checked;
-    
+
     // UI Labels
     const lblOre = document.getElementById('label-ore');
     const lblKm = document.getElementById('label-km');
-    
+
     if (isKm) {
         lblOre.classList.remove('fw-bold', 'text-white');
         lblOre.classList.add('text-secondary');
         lblKm.classList.add('fw-bold', 'text-white');
         lblKm.classList.remove('text-secondary');
-        
+
         document.getElementById('volChartTitle').innerHTML = '<i class="bi bi-bar-chart-fill me-2"></i>Volume Settimanale (km)';
         document.getElementById('distChartTitle').innerHTML = '<i class="bi bi-pie-chart-fill me-2"></i>Distribuzione Sport (km)';
     } else {
@@ -456,7 +494,7 @@ function toggleChartUnit() {
         lblKm.classList.add('text-secondary');
         lblOre.classList.add('fw-bold', 'text-white');
         lblOre.classList.remove('text-secondary');
-        
+
         document.getElementById('volChartTitle').innerHTML = '<i class="bi bi-bar-chart-fill me-2"></i>Volume Settimanale (Ore)';
         document.getElementById('distChartTitle').innerHTML = '<i class="bi bi-pie-chart-fill me-2"></i>Distribuzione Sport (Ore)';
     }
@@ -483,9 +521,9 @@ function toggleChartUnit() {
             totalRun += w.totals.runMin;
         }
     });
-    
-    sportDistChart.data.datasets[0].data = isKm 
-        ? [totalSwim.toFixed(1), totalBike.toFixed(0), totalRun.toFixed(0)] 
+
+    sportDistChart.data.datasets[0].data = isKm
+        ? [totalSwim.toFixed(1), totalBike.toFixed(0), totalRun.toFixed(0)]
         : [totalSwim, totalBike, totalRun];
     sportDistChart.update();
 }
@@ -502,10 +540,10 @@ function renderWeeksGrid() {
         const card = document.createElement('div');
         card.className = `col-12 col-sm-6 col-lg-4 col-xl-3 weeks-grid-item phase-${week.phase}`;
         card.dataset.phase = week.phase;
-        
+
         const isCurrent = idx === currentIdx;
-        const hours = (week.totals.totMin / 60).toFixed(1);
-        
+        const timeStr = formatMin(week.totals.totMin);
+
         // Estrai km per il sommario della card
         const runKm = week.totals.runKm.toFixed(0);
         const bikeKm = week.totals.bikeKm.toFixed(0);
@@ -522,8 +560,7 @@ function renderWeeksGrid() {
                 </div>
                 <div class="d-flex justify-content-between align-items-baseline mb-2">
                     <div class="d-flex align-items-baseline gap-1">
-                        <span class="week-hours">${hours}</span>
-                        <span class="week-hours-label">ore</span>
+                        <span class="week-hours">${timeStr}</span>
                     </div>
                 </div>
                 
@@ -532,16 +569,25 @@ function renderWeeksGrid() {
                     ${renderSplitSeg(week.totals.swimMin, week.totals.totMin, 'swim', swimKm > 0 ? `🏊 ${swimKm}km` : '')}
                     ${renderSplitSeg(week.totals.bikeMin, week.totals.totMin, 'bike', bikeKm > 0 ? `🚴 ${bikeKm}km` : '')}
                     ${renderSplitSeg(week.totals.runMin, week.totals.totMin, 'run', runKm > 0 ? `🏃 ${runKm}km` : '')}
+                    ${renderSplitSeg(week.totals.otherMin, week.totals.totMin, 'rest', '')}
                 </div>
 
                 <!-- Day badges icons -->
                 <div class="day-badges">
-                    ${week.days.map(d => `
+                    ${week.days.map(d => {
+            const sports = getDaySports(d);
+            const mainSport = sports[0];
+            const subSport = sports[1] || null;
+
+            return `
                         <div class="day-badge ${d.sport}" title="${d.title}">
                             <div class="db-day">${d.day.charAt(0)}</div>
-                            <div class="db-icon">${SPORT_CONFIG[d.sport].icon}</div>
-                        </div>
-                    `).join('')}
+                            <div class="db-icon">
+                                ${SPORT_CONFIG[mainSport] ? SPORT_CONFIG[mainSport].icon : '❓'}
+                                ${subSport && SPORT_CONFIG[subSport] ? '<span class="sub-icon">' + SPORT_CONFIG[subSport].icon + '</span>' : ''}
+                            </div>
+                        </div>`;
+        }).join('')}
                 </div>
             </div>
         `;
@@ -584,14 +630,14 @@ function openWeek(idx) {
     if (idx < 0 || idx >= IM_PLAN.length) return;
     currentWeekIdx = idx;
     const week = IM_PLAN[idx];
-    
+
     document.getElementById('modalWeekLabel').textContent = `Settimana ${week.week}`;
     document.getElementById('modalDateRange').textContent = `${week.dateRange} 2027`;
-    
+
     // Stats Pills
     const statsRow = document.getElementById('modalStatRow');
     statsRow.innerHTML = `
-        <div class="modal-stat-pill pill-swim"><span class="msp-label" style="color: var(--im-swim)">${SPORT_CONFIG.swim.icon}</span> <span class="msp-val">${(week.totals.swimM/1000).toFixed(1)}km</span></div>
+        <div class="modal-stat-pill pill-swim"><span class="msp-label" style="color: var(--im-swim)">${SPORT_CONFIG.swim.icon}</span> <span class="msp-val">${(week.totals.swimM / 1000).toFixed(1)}km</span></div>
         <div class="modal-stat-pill pill-bike"><span class="msp-label" style="color: var(--im-bike)">${SPORT_CONFIG.bike.icon}</span> <span class="msp-val">${week.totals.bikeKm.toFixed(0)}km</span></div>
         <div class="modal-stat-pill pill-run"><span class="msp-label" style="color: var(--im-run)">${SPORT_CONFIG.run.icon}</span> <span class="msp-val">${week.totals.runKm.toFixed(1)}km</span></div>
         <div class="modal-stat-pill"><span class="msp-label">⏱️</span> <span class="msp-val">${formatMin(week.totals.totMin)}</span></div>
@@ -622,7 +668,7 @@ function openWeek(idx) {
             </div>
             <div class="sdb-title">${day.title}</div>
             <div class="sdb-desc">${highlightZones(day.desc)}</div>
-            ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 small text-info opacity-75">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
+            ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 text-info opacity-100" style="font-size:0.85rem;">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
             ${day.sport === 'race' ? `
             <div class="mt-2 race-estimate-table">
                 <table class="w-100" style="font-size: 0.75rem; border-collapse: collapse;">
@@ -678,12 +724,37 @@ function renderZoneSeg(min, total, z) {
 function formatMin(min) {
     const h = Math.floor(min / 60);
     const m = Math.round(min % 60);
-    return `${h}h ${m.toString().padStart(2, '0')}m`;
+    if (h > 0) {
+        return `${h}h${m.toString().padStart(2, '0')}`;
+    }
+    return `${m}min`;
+}
+
+/**
+ * Estrae gli sport del giorno in ordine (mattina, sera) dalla descrizione
+ */
+function getDaySports(day) {
+    if (!day.desc || !day.desc.includes('|')) return [day.sport];
+
+    const parts = day.desc.split('|');
+    return parts.map(p => {
+        const text = p.toLowerCase();
+        if (text.includes('nuoto')) return 'swim';
+        if (text.includes('bici')) return 'bike';
+        if (text.includes('corsa')) return 'run';
+        if (text.includes('brick') || text.includes('combinato')) return 'brick';
+        if (text.includes('riposo')) return 'rest';
+        return day.sport;
+    });
 }
 
 function highlightZones(text) {
-    // Trasforma "Z1", "Z2" etc in tag colorati
-    return text.replace(/\bZ([1-5])\b/g, (match, z) => `<span class="zone-tag z${z}">${match}</span>`);
+    // Trasforma "Z1", "Z2" etc e "ritmo gara" in tag colorati
+    return text.replace(/\bZ([1-5])\b|ritmo\s*gara\s*(?:70\.3)?/gi, (match) => {
+        const zMatch = match.match(/[1-5]/);
+        const z = zMatch ? zMatch[0] : '3';
+        return `<span class="zone-tag z${z}">${match}</span>`;
+    });
 }
 
 function prevWeek() {
