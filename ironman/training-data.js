@@ -184,7 +184,7 @@ const IM_PLAN = [
       { day: 'MER', sport: 'run', title: 'Corsa variata 4×2km', desc: '☀️: Corsa 80\' variato — 15\' wa + 4×[2km Z3 + 1km Z2] + 10\' cd', durationMin: 80, runKm: 14 },
       { day: 'GIO', sport: 'swim', title: 'Bici Z1 / Nuoto 2×800m Z3', desc: '☀️ Bici 60\' Z1 | 🌙 Nuoto 65\' Z3 — 2×800m rec 45\"', durationMin: 125, bikeKm: 27, swimM: 2000 },
       { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo attivo / mobilità', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK (3h10 Bici + 35min Corsa)', desc: 'Bici 190\' Z2 (ultimi 45\' Z3) + brick: Corsa 35\' Z3', durationMin: 225, bikeKm: 100, runKm: 7 },
+      { day: 'SAB', sport: 'brick', title: 'BRICK (3h35 Bici + 35min Corsa)', desc: 'Bici 215\' Z2 - ultimi 45\' Z3 + brick: Corsa 35\' Z3', durationMin: 250, bikeKm: 112, runKm: 7 },
       { day: 'DOM', sport: 'run', title: 'Corsa lunga 1h35', desc: 'Corsa 95\' Z2', durationMin: 95, runKm: 15.5 },
     ]
   },
