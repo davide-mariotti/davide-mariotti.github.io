@@ -1,11 +1,17 @@
 /**
- * running/training.js
- * Logica per il piano Maratona
+ * assets/js/training-common.js
+ * Logica condivisa per i piani di allenamento (Ironman e Maratona)
  */
 
 let currentWeekIdx = -1;
 let volumeChart = null;
 let sportDistChart = null;
+
+// Gestione Globals per supportare entrambi i piani
+const getPlan = () => typeof IM_PLAN !== 'undefined' ? IM_PLAN : (typeof PLAN !== 'undefined' ? PLAN : []);
+const getPlanStart = () => typeof IM_PLAN_START !== 'undefined' ? IM_PLAN_START : (typeof PLAN_START !== 'undefined' ? PLAN_START : new Date());
+const getRaceDate = () => typeof IM_RACE_DATE !== 'undefined' ? IM_RACE_DATE : (typeof RACE_DATE !== 'undefined' ? RACE_DATE : new Date());
+const isIronman = () => typeof IM_PLAN !== 'undefined';
 
 // Configurazione Sport
 const SPORT_CONFIG = {
@@ -61,7 +67,9 @@ const PACE_CONFIG = {
  * Elabora i dati del piano calcolando totali, zone e distanze
  */
 function processPlanData() {
-    PLAN.forEach((week, idx) => {
+    const plan = getPlan();
+    
+    plan.forEach((week, idx) => {
         let totals = {
             swimMin: 0, bikeMin: 0, runMin: 0, brickMin: 0, otherMin: 0,
             totMin: 0,
@@ -87,7 +95,6 @@ function processPlanData() {
 
             // Helper: estrae minuti di un'attività dal testo, supporta formato "Sport NN'" con separatore | e prefisso emoji
             const extractMin = (desc, keyword) => {
-                // Cerca il pattern dopo il separatore | oppure all'inizio, tollerando emoji e prefissi vari
                 const re = new RegExp('(?:^|\\|)[^|]*' + keyword + '[^\\d]*(\\d+)[\'\'`]', 'i');
                 const m = desc.match(re);
                 return m ? parseInt(m[1]) : 0;
@@ -118,18 +125,37 @@ function processPlanData() {
                 const bm = extractMin(day.desc, 'bici');
                 if (bm) { bikeM = bm; runM -= bm; }
             } else if (day.sport === 'race') {
-                const raceTotMin = 210; // stima 3h30
-                
-                totals.totMin -= min; 
-                totals.totMin += raceTotMin;
-                
-                runM = raceTotMin;
-                
-                totals.runKm += 42.195;
-                day.runKm = 42.195;
-                totals.z3 += raceTotMin; // gara in Z3
-                day.computedZones = { z1: 0, z2: 0, z3: raceTotMin, z4: 0, z5: 0 };
-                day.durationMin = raceTotMin; 
+                if (isIronman()) {
+                    // Stima tempi gara Ironman 70.3
+                    const raceSwimMin = 38, raceBikeMin = 154, raceRunMin = 108, transMin = 15;
+                    const raceTotMin = raceSwimMin + raceBikeMin + raceRunMin + transMin;
+                    totals.totMin -= min; 
+                    totals.totMin += raceTotMin;
+                    swimM = raceSwimMin;
+                    bikeM = raceBikeMin;
+                    runM = raceRunMin;
+                    totals.swimM += 1900;
+                    totals.bikeKm += 90;
+                    totals.runKm += 21.1;
+                    day.swimM = 1900;
+                    day.bikeKm = 90;
+                    day.runKm = 21.1;
+                    totals.z3 += (raceTotMin - transMin);
+                    totals.z1 += transMin;
+                    day.computedZones = { z1: transMin, z2: 0, z3: (raceTotMin - transMin), z4: 0, z5: 0 };
+                    day.durationMin = raceTotMin; 
+                } else {
+                    // Stima tempi gara Maratona
+                    const raceTotMin = 210; // stima 3h30
+                    totals.totMin -= min; 
+                    totals.totMin += raceTotMin;
+                    runM = raceTotMin;
+                    totals.runKm += 42.195;
+                    day.runKm = 42.195;
+                    totals.z3 += raceTotMin;
+                    day.computedZones = { z1: 0, z2: 0, z3: raceTotMin, z4: 0, z5: 0 };
+                    day.durationMin = raceTotMin; 
+                }
             }
 
             totals.swimMin += Math.max(0, swimM);
@@ -141,7 +167,7 @@ function processPlanData() {
                 totals.otherMin += (min - accounted);
             }
 
-            // 3. Calcolo Distanze (Priorità: campo esplicito > parsing testo > stima da tempo)
+            // 3. Calcolo Distanze
             let textDist = extractTextDistance(day.desc, day.sport);
 
             if (swimM > 0) {
@@ -169,37 +195,26 @@ function processPlanData() {
     });
 }
 
-/**
- * Estrae km o metri dal testo o dai campi
- */
 function extractTextDistance(desc, sport) {
     const text = desc.toLowerCase();
-
-    // 1. Cerca pattern moltiplicatore: "6x1000m" o "6 x 1000 m"
     const multMatch = text.match(/(\d+)\s*[x*]\s*(\d+)\s*m/);
     if (multMatch) {
         const totalM = parseInt(multMatch[1]) * parseInt(multMatch[2]);
         return (sport === 'swim') ? totalM : totalM / 1000;
     }
-
-    // 2. Cerca km espliciti: "10 km"
     const kmMatch = text.match(/(\d+(?:[.,]\d+)?)\s*km/i);
     if (kmMatch) return parseFloat(kmMatch[1].replace(',', '.'));
-
-    // 3. Cerca metri: "1800m" o "1800 m" — usa (?!\w) per non matchare 'min', 'morbidi' ecc.
     const mMatch = text.match(/(\d{2,})\s*m(?!\w)/i);
     if (mMatch) {
         const val = parseInt(mMatch[1]);
-        if (sport === 'swim') return val; // lascia in metri
-        return val / 1000; // sempre converti in km per bici/corsa
+        if (sport === 'swim') return val;
+        return val / 1000;
     }
-
     return null;
 }
 
 function extractBrickDistances(desc) {
     const res = { bikeKm: 0, runKm: 0 };
-    // Esempio: "Bici: 90 km ... Corsa: 18 km"
     const bike = desc.match(/bici:\s*(\d+(?:[.,]\d+)?)\s*km/i);
     const run = desc.match(/corsa:\s*(\d+(?:[.,]\d+)?)\s*km/i);
     if (bike) res.bikeKm = parseFloat(bike[1].replace(',', '.'));
@@ -207,21 +222,15 @@ function extractBrickDistances(desc) {
     return res;
 }
 
-/**
- * Stima i KM in base ai minuti e alla zona dominante
- */
 function estimateKm(min, zones, sport) {
     if (min <= 0) return 0;
-
     if (sport === 'bike') {
-        // Media pesata velocità
         let avgSpeed = 0;
         if (zones.z3 > 0) avgSpeed = PACE_CONFIG.bike.z3;
         else if (zones.z2 > 0) avgSpeed = PACE_CONFIG.bike.z2;
         else avgSpeed = PACE_CONFIG.bike.z1;
         return (min / 60) * avgSpeed;
     } else {
-        // Media pesata passo (corsa)
         let avgPace = 0;
         if (zones.z4 > 0) avgPace = PACE_CONFIG.run.z4;
         else if (zones.z3 > 0) avgPace = PACE_CONFIG.run.z3;
@@ -231,25 +240,17 @@ function estimateKm(min, zones, sport) {
     }
 }
 
-/**
- * Tenta di estrarre la distribuzione delle zone dalla descrizione
- */
 function parseZonesFromDesc(desc, totalMin, sport) {
     let zones = { z1: 0, z2: 0, z3: 0, z4: 0, z5: 0 };
     if (!totalMin || totalMin <= 0) return zones;
 
     let cleanText = desc.toLowerCase().replace(/\\'/g, "'");
-    
-    // Normalizza "ritmo gara" (e varianti) in "Z3" per il parsing automatico
     cleanText = cleanText.replace(/ritmo\s*gara\s*(?:70\.3)?/g, 'z3');
     cleanText = cleanText.replace(/target\s*gara/g, 'z3');
 
-    // Rileva se l'intera sessione è dichiarata in una zona (es: "Corsa 60' Z2" o "Bici 90' ritmo gara")
-    // Se lo troviamo, assegniamo il 100% del tempo a quella zona e abbiamo finito.
     let fullSessionRegex = new RegExp('(?:corsa|bici|nuoto|nuotata|uscita)[^\\d]*' + totalMin + '[\'"]?\\s*(?:target|ritmo)?\\s*gara?\\s*z?([1-5])', 'i');
     let fullMatch = cleanText.match(fullSessionRegex);
     if (!fullMatch) {
-        // Riprova senza la durata esplicita, solo se la descrizione è molto breve (es: "Corsa Z2")
         if (cleanText.length < 25) {
             fullMatch = cleanText.match(/(?:corsa|bici|nuoto|nuotata|uscita)[^z]*z([1-5])/i);
         }
@@ -264,7 +265,6 @@ function parseZonesFromDesc(desc, totalMin, sport) {
     let sumFound = 0;
     let foundSpecific = false;
 
-    // 1. Parsing intervalli complessi con recupero: "6x3' z4 rec 3'" o "4x20" z4 rec 40""
     const intPattern = /(\d+)\s*[x×*]\s*(\d+)(['"])\s*z(\d)(?:\/z\d)?\s*(?:rec\s*(\d+)(['"])?(?:(\d+)")?)?/gi;
     let match;
     while ((match = intPattern.exec(cleanText)) !== null) {
@@ -278,12 +278,10 @@ function parseZonesFromDesc(desc, totalMin, sport) {
         sumFound += workMin * reps;
         foundSpecific = true;
 
-        if (match[5]) { // c'è il recupero
+        if (match[5]) {
             let recVal1 = parseInt(match[5]);
             let recUnit1 = match[6];
-            if (!recUnit1) {
-                recUnit1 = recVal1 > 10 ? '"' : "'";
-            }
+            if (!recUnit1) recUnit1 = recVal1 > 10 ? '"' : "'";
             let recMin = 0;
             if (recUnit1 === "'") {
                 recMin += recVal1;
@@ -294,18 +292,16 @@ function parseZonesFromDesc(desc, totalMin, sport) {
             zones.z1 += recMin * reps;
             sumFound += recMin * reps;
         }
-
-        cleanText = cleanText.replace(match[0], ''); // evita che vengano ricalcolati
+        cleanText = cleanText.replace(match[0], '');
     }
 
-    // 2. Pattern metri per il nuoto: "4x100 Z3" o "800m Z3" o "800 Z3"
     const mPattern = /(?:(\d+)\s*[x×*]\s*)?(\d{2,})\s*m?\s*z(\d)/gi;
     while ((match = mPattern.exec(cleanText)) !== null) {
         const reps = match[1] ? parseInt(match[1]) : 1;
         const dist = parseInt(match[2]);
         const z = parseInt(match[3]);
         if (z >= 1 && z <= 5 && (sport === 'swim' || cleanText.includes('nuoto'))) {
-            const m = (reps * dist) / 100 * 2; // stima minuti
+            const m = (reps * dist) / 100 * 2;
             zones[`z${z}`] += m;
             sumFound += m;
             foundSpecific = true;
@@ -313,7 +309,6 @@ function parseZonesFromDesc(desc, totalMin, sport) {
         }
     }
 
-    // 3. Parsing blocchi semplici: "20' z2" o "30" z4"
     const simplePattern = /(\d+)(['"])\s*z(\d)/gi;
     while ((match = simplePattern.exec(cleanText)) !== null) {
         let workVal = parseInt(match[1]);
@@ -321,7 +316,7 @@ function parseZonesFromDesc(desc, totalMin, sport) {
         let workMin = workUnit === "'" ? workVal : workVal / 60;
         let workZone = parseInt(match[3]);
 
-        if (workMin === totalMin) continue; // evita loop se il prefisso non è stato tolto perfettamente
+        if (workMin === totalMin) continue;
 
         zones[`z${workZone}`] += workMin;
         sumFound += workMin;
@@ -350,15 +345,13 @@ function parseZonesFromDesc(desc, totalMin, sport) {
     return zones;
 }
 
-/**
- * Aggiorna le card delle statistiche
- */
 function updateStats() {
     let totalMin = 0;
     let peakMin = 0;
     let totalSwimM = 0, totalBikeKm = 0, totalRunKm = 0;
+    const plan = getPlan();
 
-    PLAN.forEach(w => {
+    plan.forEach(w => {
         totalMin += w.totals.totMin;
         if (w.totals.totMin > peakMin) peakMin = w.totals.totMin;
         totalSwimM += w.totals.swimM;
@@ -366,54 +359,46 @@ function updateStats() {
         totalRunKm += w.totals.runKm;
     });
 
-    document.getElementById('stat-weeks').textContent = PLAN.length;
+    document.getElementById('stat-weeks').textContent = plan.length;
     document.getElementById('stat-hours').textContent = Math.round(totalMin / 60) + 'h';
     document.getElementById('stat-peak').textContent = Math.round(peakMin / 60) + 'h';
-
-    // Nuove stat card distanze
     document.getElementById('stat-swim-km').textContent = (totalSwimM / 1000).toFixed(1);
     document.getElementById('stat-bike-km').textContent = Math.round(totalBikeKm).toLocaleString();
     document.getElementById('stat-run-km').textContent = Math.round(totalRunKm).toLocaleString();
 
-    // Countdown
     const now = new Date();
-    const diff = RACE_DATE - now;
+    const diff = getRaceDate() - now;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     document.getElementById('stat-countdown').textContent = days > 0 ? days + 'd' : 'GARA!';
 
-    // Settimana corrente
     const currentIdx = getCurrentWeekIdx();
-    document.getElementById('stat-current').textContent = currentIdx >= 0 ? PLAN[currentIdx].week : 'N/A';
+    document.getElementById('stat-current').textContent = currentIdx >= 0 ? plan[currentIdx].week : 'N/A';
 }
 
 function getCurrentWeekIdx() {
     const now = new Date();
-    // Cerchiamo la settimana che contiene la data odierna
-    // Semplificazione: usiamo PLAN_START e aggiungiamo 7 giorni per ogni indice
-    const diffTime = now - PLAN_START;
+    const diffTime = now - getPlanStart();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const weekIdx = Math.floor(diffDays / 7);
+    const plan = getPlan();
 
-    if (weekIdx >= 0 && weekIdx < PLAN.length) return weekIdx;
+    if (weekIdx >= 0 && weekIdx < plan.length) return weekIdx;
     return -1;
 }
 
-/**
- * Rendering Grafici
- */
 function renderCharts() {
-    const labels = PLAN.map(w => w.week.replace('W', ''));
+    const plan = getPlan();
+    const labels = plan.map(w => w.week.replace(/IM-|W/, ''));
 
-    // 1. Volume Stacked Bar Chart
     const ctxVol = document.getElementById('volumeChart').getContext('2d');
     volumeChart = new Chart(ctxVol, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [
-                { label: 'Nuoto', data: PLAN.map(w => (w.totals.swimMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.swim.color },
-                { label: 'Bici', data: PLAN.map(w => (w.totals.bikeMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.bike.color },
-                { label: 'Corsa', data: PLAN.map(w => (w.totals.runMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.run.color },
+                { label: 'Nuoto', data: plan.map(w => (w.totals.swimMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.swim.color },
+                { label: 'Bici', data: plan.map(w => (w.totals.bikeMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.bike.color },
+                { label: 'Corsa', data: plan.map(w => (w.totals.runMin / 60).toFixed(1)), backgroundColor: SPORT_CONFIG.run.color },
             ]
         },
         options: {
@@ -429,9 +414,8 @@ function renderCharts() {
         }
     });
 
-    // 2. Sport Distribution Doughnut
     let totalSwim = 0, totalBike = 0, totalRun = 0;
-    PLAN.forEach(w => {
+    plan.forEach(w => {
         totalSwim += w.totals.swimMin;
         totalBike += w.totals.bikeMin;
         totalRun += w.totals.runMin;
@@ -459,15 +443,11 @@ function renderCharts() {
     });
 }
 
-/**
- * Toggle unit per i grafici
- */
 function toggleChartUnit() {
     const isKm = document.getElementById('chartUnitToggle').checked;
-
-    // UI Labels
     const lblOre = document.getElementById('label-ore');
     const lblKm = document.getElementById('label-km');
+    const plan = getPlan();
 
     if (isKm) {
         lblOre.classList.remove('fw-bold', 'text-white');
@@ -489,16 +469,14 @@ function toggleChartUnit() {
 
     if (!volumeChart || !sportDistChart) return;
 
-    // Update Volume Chart Data
-    volumeChart.data.datasets[0].data = isKm ? PLAN.map(w => (w.totals.swimM / 1000).toFixed(1)) : PLAN.map(w => (w.totals.swimMin / 60).toFixed(1));
-    volumeChart.data.datasets[1].data = isKm ? PLAN.map(w => w.totals.bikeKm.toFixed(1)) : PLAN.map(w => (w.totals.bikeMin / 60).toFixed(1));
-    volumeChart.data.datasets[2].data = isKm ? PLAN.map(w => w.totals.runKm.toFixed(1)) : PLAN.map(w => (w.totals.runMin / 60).toFixed(1));
+    volumeChart.data.datasets[0].data = isKm ? plan.map(w => (w.totals.swimM / 1000).toFixed(1)) : plan.map(w => (w.totals.swimMin / 60).toFixed(1));
+    volumeChart.data.datasets[1].data = isKm ? plan.map(w => w.totals.bikeKm.toFixed(1)) : plan.map(w => (w.totals.bikeMin / 60).toFixed(1));
+    volumeChart.data.datasets[2].data = isKm ? plan.map(w => w.totals.runKm.toFixed(1)) : plan.map(w => (w.totals.runMin / 60).toFixed(1));
     volumeChart.options.scales.y.title.text = isKm ? 'km' : 'Ore';
     volumeChart.update();
 
-    // Update Pie Chart Data
     let totalSwim = 0, totalBike = 0, totalRun = 0;
-    PLAN.forEach(w => {
+    plan.forEach(w => {
         if (isKm) {
             totalSwim += (w.totals.swimM / 1000);
             totalBike += w.totals.bikeKm;
@@ -516,15 +494,13 @@ function toggleChartUnit() {
     sportDistChart.update();
 }
 
-/**
- * Rendering Griglia Settimane
- */
 function renderWeeksGrid() {
     const grid = document.getElementById('weeks-grid');
     grid.innerHTML = '';
     const currentIdx = getCurrentWeekIdx();
+    const plan = getPlan();
 
-    PLAN.forEach((week, idx) => {
+    plan.forEach((week, idx) => {
         const card = document.createElement('div');
         card.className = `col-12 col-sm-6 col-lg-4 col-xl-3 weeks-grid-item phase-${week.phase}`;
         card.dataset.phase = week.phase;
@@ -532,7 +508,6 @@ function renderWeeksGrid() {
         const isCurrent = idx === currentIdx;
         const timeStr = formatMin(week.totals.totMin);
 
-        // Estrai km per il sommario della card
         const runKm = week.totals.runKm.toFixed(0);
         const bikeKm = week.totals.bikeKm.toFixed(0);
         const swimKm = (week.totals.swimM / 1000).toFixed(1);
@@ -552,7 +527,6 @@ function renderWeeksGrid() {
                     </div>
                 </div>
                 
-                <!-- Split bar -->
                 <div class="split-bar mb-2">
                     ${renderSplitSeg(week.totals.swimMin, week.totals.totMin, 'swim', swimKm > 0 ? `🏊 ${swimKm}km` : '')}
                     ${renderSplitSeg(week.totals.bikeMin, week.totals.totMin, 'bike', bikeKm > 0 ? `🚴 ${bikeKm}km` : '')}
@@ -560,7 +534,6 @@ function renderWeeksGrid() {
                     ${renderSplitSeg(week.totals.otherMin, week.totals.totMin, 'rest', '')}
                 </div>
 
-                <!-- Day badges icons -->
                 <div class="day-badges">
                     ${week.days.map(d => {
             const sports = getDaySports(d);
@@ -589,11 +562,7 @@ function renderSplitSeg(min, total, sport, kmStr = '') {
     return `<div class="split-seg seg-${sport}" style="width: ${perc}%" title="${kmStr}">${perc > 12 ? kmStr : ''}</div>`;
 }
 
-/**
- * Filtro Fasi
- */
 function filterPhase(phase) {
-    // Update buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.textContent.toLowerCase() === phase || (phase === 'all' && btn.textContent === 'Tutte')) {
@@ -601,7 +570,6 @@ function filterPhase(phase) {
         }
     });
 
-    // Filter cards
     document.querySelectorAll('.weeks-grid-item').forEach(card => {
         if (phase === 'all' || card.dataset.phase === phase) {
             card.classList.remove('hidden');
@@ -611,18 +579,16 @@ function filterPhase(phase) {
     });
 }
 
-/**
- * Modal Logica
- */
 function openWeek(idx) {
-    if (idx < 0 || idx >= PLAN.length) return;
+    const plan = getPlan();
+    if (idx < 0 || idx >= plan.length) return;
     currentWeekIdx = idx;
-    const week = PLAN[idx];
+    const week = plan[idx];
+    const year = getRaceDate().getFullYear();
 
     document.getElementById('modalWeekLabel').textContent = `Settimana ${week.week}`;
-    document.getElementById('modalDateRange').textContent = `${week.dateRange} 2026`;
+    document.getElementById('modalDateRange').textContent = `${week.dateRange} ${year}`;
 
-    // Stats Pills
     const statsRow = document.getElementById('modalStatRow');
     statsRow.innerHTML = `
         <div class="modal-stat-pill pill-swim"><span class="msp-label" style="color: var(--im-swim)">${SPORT_CONFIG.swim.icon}</span> <span class="msp-val">${(week.totals.swimM / 1000).toFixed(1)}km</span></div>
@@ -633,7 +599,6 @@ function openWeek(idx) {
 
     document.getElementById('modalTotalMin').textContent = formatMin(week.totals.totMin);
 
-    // Zone Bar
     const zoneBar = document.getElementById('modalZoneBar');
     const t = week.totals;
     zoneBar.innerHTML = `
@@ -644,20 +609,49 @@ function openWeek(idx) {
         ${renderZoneSeg(t.z5, t.totMin, 5)}
     `;
 
-    // Sessions
-    const sessionsDiv = document.getElementById('modalSessions');
-    sessionsDiv.innerHTML = `<div class="sessions-grid">${week.days.map(day => `
-        <div class="session-detail-block${day.day === 'DOM' ? ' session-full' : ''}">
-            <div class="d-flex justify-content-between align-items-start mb-1">
-                <span class="sdb-sport" style="color: ${SPORT_CONFIG[day.sport].color}">
-                    ${SPORT_CONFIG[day.sport].icon} ${SPORT_CONFIG[day.sport].label} <strong>${day.day}</strong>
-                </span>
-                <span class="sdb-meta">${day.durationMin > 0 ? formatMin(day.durationMin) : 'Riposo'}</span>
-            </div>
-            <div class="sdb-title">${day.title}</div>
-            <div class="sdb-desc">${highlightZones(day.desc)}</div>
-            ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 text-info opacity-100" style="font-size:0.85rem;">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
-            ${day.sport === 'race' ? `
+    const getRaceTableHtml = () => {
+        if (isIronman()) {
+            return `
+            <div class="mt-2 race-estimate-table">
+                <table class="w-100" style="font-size: 0.75rem; border-collapse: collapse;">
+                    <thead>
+                        <tr style="color: rgba(255,255,255,0.4); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            <th style="padding: 3px 6px; text-align: left;">Frazione</th>
+                            <th style="padding: 3px 6px; text-align: center; color: #86efac;">🎯 Ottimistico</th>
+                            <th style="padding: 3px 6px; text-align: center; color: #fcd34d;">🛡️ Conservativo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 4px 6px; color: var(--im-swim);">🏊 Nuoto 1.9km</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #86efac;">35min</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #fcd34d;">42min</td>
+                        </tr>
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 4px 6px; color: var(--im-bike);">🚴 Bici 90km</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #86efac;">2h 30m</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #fcd34d;">2h 45m</td>
+                        </tr>
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 4px 6px; color: var(--im-run);">🏃 Corsa 21.1km</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #86efac;">1h 45m</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #fcd34d;">1h 55m</td>
+                        </tr>
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 4px 6px; color: #cbd5e1;">🔄 Transizioni (T1+T2)</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #86efac;">10min</td>
+                            <td style="padding: 4px 6px; text-align: center; color: #fcd34d;">20min</td>
+                        </tr>
+                        <tr style="border-top: 2px solid rgba(255,255,255,0.12); font-weight: 700;">
+                            <td style="padding: 5px 6px;">⏱️ Totale stimato</td>
+                            <td style="padding: 5px 6px; text-align: center; color: #86efac; font-size: 0.85rem;">~5h 00m</td>
+                            <td style="padding: 5px 6px; text-align: center; color: #fcd34d; font-size: 0.85rem;">~5h 42m</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+        } else {
+            return `
             <div class="mt-2 race-estimate-table">
                 <table class="w-100" style="font-size: 0.75rem; border-collapse: collapse;">
                     <thead>
@@ -675,7 +669,23 @@ function openWeek(idx) {
                         </tr>
                     </tbody>
                 </table>
-            </div>` : ''}
+            </div>`;
+        }
+    };
+
+    const sessionsDiv = document.getElementById('modalSessions');
+    sessionsDiv.innerHTML = `<div class="sessions-grid">${week.days.map(day => `
+        <div class="session-detail-block${day.day === 'DOM' ? ' session-full' : ''}">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+                <span class="sdb-sport" style="color: ${SPORT_CONFIG[day.sport].color}">
+                    ${SPORT_CONFIG[day.sport].icon} ${SPORT_CONFIG[day.sport].label} <strong>${day.day}</strong>
+                </span>
+                <span class="sdb-meta">${day.durationMin > 0 ? formatMin(day.durationMin) : 'Riposo'}</span>
+            </div>
+            <div class="sdb-title">${day.title}</div>
+            <div class="sdb-desc">${highlightZones(day.desc)}</div>
+            ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 text-info opacity-100" style="font-size:0.85rem;">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
+            ${day.sport === 'race' ? getRaceTableHtml() : ''}
         </div>
     `).join('')}</div>`;
 
@@ -698,9 +708,6 @@ function formatMin(min) {
     return `${m}min`;
 }
 
-/**
- * Estrae gli sport del giorno in ordine (mattina, sera) dalla descrizione
- */
 function getDaySports(day) {
     if (!day.desc || !day.desc.includes('|')) return [day.sport];
 
@@ -717,7 +724,6 @@ function getDaySports(day) {
 }
 
 function highlightZones(text) {
-    // Trasforma "Z1", "Z2" etc e "ritmo gara" in tag colorati
     return text.replace(/\bZ([1-5])\b|ritmo\s*gara\s*(?:70\.3)?/gi, (match) => {
         const zMatch = match.match(/[1-5]/);
         const z = zMatch ? zMatch[0] : '3';
@@ -727,14 +733,14 @@ function highlightZones(text) {
 
 function prevWeek() {
     if (currentWeekIdx > 0) {
-        // Chiudi e riapri per refresh dati
         bootstrap.Modal.getInstance(document.getElementById('weekModal')).hide();
         setTimeout(() => openWeek(currentWeekIdx - 1), 150);
     }
 }
 
 function nextWeek() {
-    if (currentWeekIdx < PLAN.length - 1) {
+    const plan = getPlan();
+    if (currentWeekIdx < plan.length - 1) {
         bootstrap.Modal.getInstance(document.getElementById('weekModal')).hide();
         setTimeout(() => openWeek(currentWeekIdx + 1), 150);
     }

@@ -1,308 +1,312 @@
-<!doctype html>
-<html lang="it">
+<!DOCTYPE html>
+<html lang="it" data-bs-theme="dark">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RunStats | Piano Maratona</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Il tuo piano di allenamento per la maratona — 35 settimane di progressione.">
-
-    <!-- CSS -->
-    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="/assets/css/running/running.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="/running/training.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="training.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
-    <div id="loader"></div>
-    <app-header></app-header>
+<body class="bg-dark text-white">
+    <div id="header-placeholder"></div>
 
-    <div class="container py-4 mt-5">
-
-        <!-- HERO -->
-        <div class="run-hero d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-            <div>
-                <h1 class="mb-0">🏅 Piano <span class="text-gradient">MarIOtona</span></h1>
-                <p class="small mb-0 mt-1 opacity-50">35 settimane · Build progressivo verso la maratona</p>
-            </div>
-            <a href="/running/" class="btn btn-sm btn-outline-light rounded-pill">← Dashboard</a>
+    <main class="container py-4">
+        <!-- Hero Section -->
+        <div class="im-hero text-center mb-5 mt-4">
+            <h1 class="im-text-gradient mb-2">🏅 Piano MarIOtona</h1>
+            <p class="lead text-secondary">Preparazione per Maratona Firenze — 29 Novembre 2026</p>
         </div>
 
-        <!-- STAT SUMMARY CARDS -->
-        <div class="row g-3 mb-4" id="summary-cards">
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
+        <!-- Stat Cards Row 1 -->
+        <div class="row g-3 mb-3" id="stats">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
                     <span class="stat-icon">📅</span>
-                    <span class="stat-value">35</span>
-                    <span class="stat-label">Settimane totali</span>
+                    <span class="stat-value" id="stat-weeks">35</span>
+                    <span class="stat-label">Settimane</span>
                 </div>
             </div>
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
-                    <span class="stat-icon">📏</span>
-                    <span class="stat-value" id="total-km">—</span>
-                    <span class="stat-label">km pianificati</span>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-value" id="stat-hours">0</span>
+                    <span class="stat-label">Ore Totali</span>
                 </div>
             </div>
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
                     <span class="stat-icon">⛰️</span>
-                    <span class="stat-value" id="peak-km">—</span>
-                    <span class="stat-label">km settimana picco</span>
+                    <span class="stat-value" id="stat-peak">0</span>
+                    <span class="stat-label">Sett. Picco (Ore)</span>
                 </div>
             </div>
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
                     <span class="stat-icon">🗓️</span>
-                    <span class="stat-value" id="current-week-label">—</span>
-                    <span class="stat-label">settimana corrente</span>
+                    <span class="stat-value" id="stat-current">-</span>
+                    <span class="stat-label">Sett. Corrente</span>
                 </div>
             </div>
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
                     <span class="stat-icon">⏳</span>
-                    <span class="stat-value" id="marathon-countdown">—</span>
-                    <span class="stat-label">alla maratona</span>
+                    <span class="stat-value" id="stat-countdown">-</span>
+                    <span class="stat-label">Alla Gara</span>
                 </div>
             </div>
-            <div class="col-6 col-md-4">
-                <div class="stat-card glass-panel text-center">
-                    <span class="stat-icon">🏁</span>
-                    <span class="stat-value" id="marathon-target-time">—</span>
-                    <span class="stat-label">tempo obiettivo</span>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="glass-panel stat-card h-100">
+                    <span class="stat-icon">🏅</span>
+                    <span class="stat-value" style="font-size: 1rem;">29 NOV 2026</span>
+                    <span class="stat-label">Data Gara</span>
                 </div>
             </div>
         </div>
 
-        <!-- HEART RATE LIMITS -->
-        <div class="glass-panel mb-4 p-3 p-md-4">
-            <h5 class="mb-3" style="font-size: 1.1rem;">❤️ Zone di Frequenza Cardiaca (FC)</h5>
-            <div class="table-responsive">
-                <table class="table table-borderless table-sm text-white mb-0"
-                    style="--bs-table-bg: transparent; min-width: 500px;">
-                    <thead>
-                        <tr class="opacity-75" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <th class="ps-2" style="width: 25%;">Tipo Allenamento</th>
-                            <th style="width: 15%;">Range (bpm)</th>
-                            <th class="pe-2">Note Tecniche</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">🏃 <strong>FL</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Fondo Lento)</span></td>
-                            <td class="fw-bold text-success">&lt; 142</td>
-                            <td class="opacity-75 small pe-2">Se superi 142, rallenta il passo oltre i 06:20 min/km.
-                            </td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">🔥 <strong>FM</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Fondo Medio)</span></td>
-                            <td class="fw-bold text-warning">152 – 158</td>
-                            <td class="opacity-75 small pe-2">Non superare i 160 bpm; è il limite della tua efficienza
-                                attuale.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td class="ps-2 py-2">⚡ <strong>R</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Ripetute)</span></td>
-                            <td class="fw-bold text-danger">Max 172</td>
-                            <td class="opacity-75 small pe-2">Non cercare il massimale. Fermati al 91% della tua FC Max.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-2 py-2">🪨 <strong>LR</strong> <span
-                                    class="opacity-75 d-none d-sm-inline">(Lungo)</span></td>
-                            <td class="fw-bold text-info">135 – 148</td>
-                            <td class="opacity-75 small pe-2">Inizia basso e accetta una deriva massima di +10 bpm nel
-                                finale.</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Stat Cards Row 2 (Distances) -->
+        <div class="row g-3 mb-5">
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-swim);">
+                    <span class="stat-icon">🏊</span>
+                    <span class="stat-value" id="stat-swim-km">0</span>
+                    <span class="stat-label">Nuoto Totale (km)</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-bike);">
+                    <span class="stat-icon">🚴</span>
+                    <span class="stat-value" id="stat-bike-km">0</span>
+                    <span class="stat-label">Bici Totale (km)</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="glass-panel stat-card h-100" style="border-left: 3px solid var(--im-run);">
+                    <span class="stat-icon">🏃</span>
+                    <span class="stat-value" id="stat-run-km">0</span>
+                    <span class="stat-label">Corsa Totale (km)</span>
+                </div>
             </div>
         </div>
 
-        <!-- CHARTS ROW -->
-        <div class="row g-4 mb-4">
-            <!-- Volume settimanale -->
-            <div class="col-12 col-lg-8">
+        <!-- Charts Header with Toggle -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0 text-white"><i class="bi bi-graph-up me-2"></i>Andamento Piano</h4>
+            <div class="form-check form-switch d-flex align-items-center gap-2 m-0 p-0" style="padding-left: 0;">
+                <span class="text-white small fw-bold" id="label-ore">ORE</span>
+                <input class="form-check-input m-0 fs-5 mx-1" type="checkbox" role="switch" id="chartUnitToggle" onchange="toggleChartUnit()" style="cursor: pointer;">
+                <span class="text-secondary small" id="label-km">KM</span>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
                 <div class="glass-panel chart-panel">
-                    <h5>📊 Volume settimanale (km)</h5>
-                    <canvas id="chart-volume" height="130"></canvas>
+                    <h5 class="text-secondary mb-3" id="volChartTitle">Volume Settimanale</h5>
+                    <div style="height: 300px;">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <!-- Distribuzione tipi allenamento -->
-            <div class="col-12 col-lg-4">
+            <div class="col-lg-4">
                 <div class="glass-panel chart-panel">
-                    <h5>🥧 Distribuzione km</h5>
-                    <div class="d-flex align-items-center justify-content-center" style="height: calc(100% - 2rem);">
-                        <canvas id="chart-distribution" style="max-height: 200px;"></canvas>
+                    <h5 class="text-secondary mb-3" id="distChartTitle">Distribuzione Sport</h5>
+                    <div style="height: 300px;">
+                        <canvas id="sportDistributionChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- NAVIGATION: fasi -->
-        <div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
-            <span class="filter-label">Filtra fase:</span>
-            <button class="btn btn-sm filter-btn active trn-phase-btn" data-phase="all">Tutte</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="base">Base</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="build">Build</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="peak">Picco</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="recovery">Scarico</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="taper">Taper</button>
-            <button class="btn btn-sm filter-btn trn-phase-btn" data-phase="race">Gara</button>
-            <span class="ms-auto small opacity-40 text-white">Clicca una settimana per i dettagli</span>
-        </div>
-
-        <!-- WEEK CARDS GRID -->
-        <div class="row g-3 mb-5" id="weeks-grid"></div>
-
-        <!-- GYM SECTION -->
-        <div class="glass-panel p-4 mb-5">
-            <h4 class="mb-3">🏋️‍♂️ Forza e Stabilità (Routine con manubri da 10kg)</h4>
-            <p class="opacity-75 mb-4">Per un maratoneta, il peso non deve servire a "fare massa", ma a creare stabilità e resistenza muscolare. Ecco due routine da 30 minuti, mirate a correggere l'oscillazione verticale e a proteggere le ginocchia per i chilometri che verranno.</p>
-            
-            <div class="row g-4">
-                <!-- MARTEDI -->
-                <div class="col-12 col-md-6">
-                    <div class="p-3 h-100" style="background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                        <h5 class="text-info mb-3">MARTEDÌ: Stabilità e Postura</h5>
-                        <p class="small opacity-50 mb-3">Da fare dopo i 15 km di FL. L'obiettivo è lavorare sulla stabilità quando sei già in parte stanco.</p>
-                        <ul class="list-unstyled mb-0" style="font-size: 0.9rem;">
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">1. Affondi Posteriori (Reverse Lunges)</strong>
-                                <span class="d-block text-warning small mb-1">3 serie x 12 ripetizioni per gamba</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/bodyweight-reverse-lunge.gif" alt="Reverse Lunge" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">Un manubrio per mano. Fai un passo indietro e scendi. Caricano meno il ginocchio e attivano di più il gluteo.</span>
-                                </div>
-                            </li>
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">2. Stacco a una gamba (Single Leg Deadlift)</strong>
-                                <span class="d-block text-warning small mb-1">3 serie x 10 ripetizioni per gamba</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Dumbbell-Single-Leg-Deadlift.gif" alt="Single Leg Deadlift" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">È l'esercizio RE per chi ha un'alta oscillazione verticale. Un manubrio nella mano opposta alla gamba a terra. Scendi col busto mentre l'altra sale tesa.</span>
-                                </div>
-                            </li>
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">3. Plank con "Tocchi"</strong>
-                                <span class="d-block text-warning small mb-1">3 serie x 45 secondi</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/body-saw-plank.gif" alt="Plank" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">In posizione plank, tocca alternativamente un manubrio posto davanti a te senza far oscillare il bacino.</span>
-                                </div>
-                            </li>
-                            <li>
-                                <strong class="d-block mb-1">4. Calf Raise (Polpacci) su gradino</strong>
-                                <span class="d-block text-warning small mb-1">3 serie x 15 ripetizioni</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Dumbbell-Calf-Raise.gif" alt="Calf Raise" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">Un manubrio in mano, l'altra al muro. Sali sulle punte. Rinforza la caviglia per una spinta orizzontale.</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- GIOVEDI -->
-                <div class="col-12 col-md-6">
-                    <div class="p-3 h-100" style="background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                        <h5 class="text-warning mb-3">GIOVEDÌ: Forza Funzionale e Spinta</h5>
-                        <p class="small opacity-50 mb-3">Giorno OFF corsa. L'obiettivo è la qualità e la brillantezza del movimento.</p>
-                        <ul class="list-unstyled mb-0" style="font-size: 0.9rem;">
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">1. Goblet Squat</strong>
-                                <span class="d-block text-info small mb-1">3 serie x 15 ripetizioni</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Dumbbell-Goblet-Squat.gif" alt="Goblet Squat" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">Tieni un solo manubrio al petto "a coppa". Scendi profondo schiena dritta. Migliora la postura che servirà al 30° km.</span>
-                                </div>
-                            </li>
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">2. Bulgarian Split Squat</strong>
-                                <span class="d-block text-info small mb-1">3 serie x 8-10 ripetizioni / gamba</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Bulgarian-Jump-Squat.gif" alt="Bulgarian Split Squat" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">L'esercizio più efficace per la corsa. Piede posteriore su una sedia, 2 manubri. Scendi col ginocchio verso terra.</span>
-                                </div>
-                            </li>
-                            <li class="mb-3 pb-3 border-bottom border-light border-opacity-10">
-                                <strong class="d-block mb-1">3. Rematore a un braccio (One Arm Row)</strong>
-                                <span class="d-block text-info small mb-1">3 serie x 12 ripetizioni / lato</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Bent-Over-Dumbbell-Row.gif" alt="Rematore a un braccio" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">Appoggia la mano, schiena piatta, tira il manubrio all'anca. Una schiena forte sorregge le gambe.</span>
-                                </div>
-                            </li>
-                            <li>
-                                <strong class="d-block mb-1">4. Dead Bug con manubrio</strong>
-                                <span class="d-block text-info small mb-1">3 serie x 12 ripetizioni</span>
-                                <div class="d-flex gap-3 mt-2">
-                                    <img src="/running/img/Dead-Bug.gif" alt="Dead Bug" class="rounded mt-1" style="width: 80px; object-fit: cover;">
-                                    <span class="opacity-75 small align-self-center">Supino, manubrio in alto: distendi una gamba alla volta sfiorando il suolo senza inarcare mai la schiena.</span>
-                                </div>
-                            </li>
-                        </ul>
+        <!-- Heart Rate Zones Section -->
+        <div class="accordion mb-5 glass-panel p-0 overflow-hidden" id="zonesAccordion">
+            <div class="accordion-item border-0 bg-transparent">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-transparent text-secondary shadow-none" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseZones" aria-expanded="false"
+                        aria-controls="collapseZones">
+                        <h5 class="mb-0">❤️ Zone di Intensità</h5>
+                    </button>
+                </h2>
+                <div id="collapseZones" class="accordion-collapse collapse" data-bs-parent="#zonesAccordion">
+                    <div class="accordion-body p-0 border-top border-secondary border-opacity-25">
+                        <div class="table-responsive">
+                            <table class="table table-dark zone-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Zona</th>
+                                        <th class="text-center"><span class="pill-swim border rounded-pill px-2 py-1"
+                                                style="color: var(--im-swim)">🏊 Nuoto</span></th>
+                                        <th class="text-center"><span class="pill-bike border rounded-pill px-2 py-1"
+                                                style="color: var(--im-bike)">🚴 Bici</span></th>
+                                        <th class="text-center"><span class="pill-run border rounded-pill px-2 py-1"
+                                                style="color: var(--im-run)">🏃 Corsa</span></th>
+                                        <th>Descrizione</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z1">Z1</span></td>
+                                        <td class="text-center"><span class="z-range">105–115</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~2:10
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">112–122</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~21.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">120–130</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~7:00
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Riscaldamento / Recupero (FL)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z2">Z2</span></td>
+                                        <td class="text-center"><span class="z-range">116–135</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~2:00
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">123–142</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~26.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">131–142</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~6:15
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Base Aerobica (FL/Lungo)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z3">Z3</span></td>
+                                        <td class="text-center"><span class="z-range">136–150</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:50
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">143–157</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~31.5
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">151–160</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~5:15
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Aerobico / Ritmo Gara (FM)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z4">Z4</span></td>
+                                        <td class="text-center"><span class="z-range">151–165</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:40
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">158–172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~35.0
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">161–172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~4:30
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Soglia (Ripetute R)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle"><span class="zone-tag z5">Z5</span></td>
+                                        <td class="text-center"><span class="z-range">> 165</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~1:30
+                                                /100m</span></td>
+                                        <td class="text-center"><span class="z-range">> 172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~40.0
+                                                km/h</span></td>
+                                        <td class="text-center"><span class="z-range">> 172</span><br><span
+                                                class="text-secondary opacity-75" style="font-size: 0.7rem;">~4:00
+                                                /km</span></td>
+                                        <td class="text-secondary small align-middle">Massimale / Allunghi</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- CONSIGLI -->
-            <div class="mt-4 p-3 rounded" style="background: rgba(46, 204, 113, 0.1); border-left: 4px solid #2ecc71;">
-                <strong class="d-flex align-items-center text-success mb-2">💡 Consigli del Coach</strong>
-                <ul class="mb-0 small opacity-75 list-unstyled">
-                    <li class="mb-1">⏳ <strong>Recupero:</strong> 60 secondi tra le serie.</li>
-                    <li class="mb-1">⏱️ <strong>Qualità vs Quantità:</strong> Non aver fretta. Discesa controllata (3 secondi) e spinta esplosiva in salita (1 secondo).</li>
-                    <li>⬇️ <strong>Il trucco anti-oscillazione:</strong> Durante squat e affondi, immagina di muoverti in una stanza col "soffitto basso". Muoviti morbido, non "scattare" verso l'alto.</li>
-                </ul>
+        <!-- Phase Filters -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mb-4 sticky-top py-2 bg-dark" style="z-index: 100;">
+            <span class="filter-label">FILTRA FASE:</span>
+            <div class="btn-group" role="group">
+                <button type="button" class="filter-btn active" onclick="filterPhase('all')">Tutte</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('recovery')">Recupero</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('base')">Base</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('build')">Build</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('peak')">Picco</button>
+                <button type="button" class="filter-btn" onclick="filterPhase('taper')">Taper</button>
             </div>
         </div>
 
-    </div>
+        <!-- Weeks Grid -->
+        <div class="row g-3" id="weeks-grid">
+            <!-- Cards generated by training.js -->
+        </div>
 
-    <!-- WEEK DETAIL MODAL -->
-    <div class="modal fade" id="weekModal" tabindex="-1" aria-labelledby="weekModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    </main>
+
+    <!-- Week Modal -->
+    <div class="modal fade" id="weekModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content trn-modal-content">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title" id="weekModalLabel">—</h5>
+                    <div>
+                        <h4 class="modal-title fw-bold" id="modalWeekLabel">Settimana W01</h4>
+                        <span class="modal-date-range" id="modalDateRange">30 mar – 05 apr</span>
+                    </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Chiudi"></button>
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body pt-2" id="weekModalBody">
-                    <!-- Rendered by JS -->
+                <div class="modal-body">
+                    <!-- Week Stats Pill Row -->
+                    <div class="modal-stat-row" id="modalStatRow">
+                        <!-- Pills generated by training.js -->
+                    </div>
+
+                    <!-- Zone Distribution Bar -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-end mb-1">
+                            <span class="text-secondary small fw-bold uppercase letter-spacing-1">Distribuzione Zone
+                                (Z1-Z5)</span>
+                            <span class="text-info small fw-bold" id="modalTotalMin">0h 00m</span>
+                        </div>
+                        <div class="zone-bar" id="modalZoneBar">
+                            <!-- Segments generated by training.js -->
+                        </div>
+                    </div>
+
+                    <!-- Sessions Detail -->
+                    <div id="modalSessions" class="mb-4">
+                        <!-- Session blocks generated by training.js -->
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="zone-legend mt-4 pt-3 border-top border-secondary border-opacity-10">
+                        <div class="zone-chip"><span class="zone-dot seg-z1"></span> Z1 Recupero</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z2"></span> Z2 Base</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z3"></span> Z3 Tempo</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z4"></span> Z4 Soglia</div>
+                        <div class="zone-chip"><span class="zone-dot seg-z5"></span> Z5 VO2Max</div>
+                    </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
-                    <button id="modal-btn-prev" class="btn btn-sm modal-nav-btn" disabled>
-                        ← Prec.
-                    </button>
-                    <span class="modal-nav-hint">← → per navigare</span>
-                    <button id="modal-btn-next" class="btn btn-sm modal-nav-btn">
-                        Succ. →
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn modal-nav-btn" onclick="prevWeek()"><i
+                                class="bi bi-chevron-left"></i> Prev</button>
+                        <button type="button" class="btn modal-nav-btn" onclick="nextWeek()">Next <i
+                                class="bi bi-chevron-right"></i></button>
+                    </div>
+                    <span class="modal-nav-hint d-none d-sm-inline">Usa le frecce <kbd>←</kbd> <kbd>→</kbd> per
+                        navigare</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <app-footer></app-footer>
+    <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
-    <script src="/assets/js/components.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
-    <script src="/running/training-data.js"></script>
-    <script src="/running/training.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/components.js"></script>
+    <script src="training-data.js"></script>
+    <script src="../assets/js/training-common.js"></script>
 </body>
 
 </html>

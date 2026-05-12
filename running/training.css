@@ -1,944 +1,708 @@
-/* ========================================================
-   Training Schedule — training.css
-   Piano maratona 35 settimane. Mobile-first.
-   Usa le variabili da /assets/css/variables.css
-   ======================================================== */
+/* ================================================================
+   running/training.css — Piano Maratona Firenze
+   Colori: sport (swim/bike/run/brick) + zone Z1-Z5
+   ================================================================ */
 
-@import url('/assets/css/variables.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* =================== MODAL =================== */
-/* Override Bootstrap's white modal-content */
-#weekModal .modal-content,
-.trn-modal-content {
-    background: rgba(5, 15, 8, 0.97) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: var(--radius-lg) !important;
-    color: #ffffff !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7) !important;
+:root {
+  /* Sport colors */
+  --im-swim: rgb(56, 189, 248);
+  --im-bike: rgb(74, 222, 128);
+  --im-run: rgb(245, 158, 11);
+  --im-brick: rgb(167, 139, 250);
+  --im-rest: rgb(71, 85, 105);
+  --im-core: rgb(251, 146, 60);
+
+  --bs-info-rgb: #ffffff;
+
+  /* Zone colors (Garmin Standard) */
+  --z1: rgb(166, 166, 166);
+  /* Grigio */
+  --z2: rgb(59, 151, 243);
+  /* Azzurro */
+  --z3: rgb(130, 201, 30);
+  /* Verde */
+  --z4: rgb(249, 137, 37);
+  /* Arancione */
+  --z5: rgb(211, 32, 32);
+  /* Rosso */
+
+  /* Ironman accent */
+  --im-accent: var(--color-primary, #228b22);
+  --im-accent2: var(--color-secondary, #2ecc71);
+  --im-bg: var(--color-bg-base, #020402);
+  --im-surface: var(--color-bg-surface-glass, rgba(5, 20, 10, 0.7));
+  --im-border: rgba(34, 139, 34, 0.15);
 }
 
-#weekModal .modal-content *,
-.trn-modal-content * {
-    color: #ffffff !important;
+/* ── Bootstrap Overrides ── */
+.form-check-input:checked {
+  background-color: var(--im-accent);
+  border-color: var(--im-accent);
+}
+.form-check-input:focus {
+  border-color: var(--im-accent);
+  box-shadow: 0 0 0 0.25rem rgba(34, 139, 34, 0.25);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28255, 255, 255, 0.5%29'/%3e%3c/svg%3e");
+}
+.accordion-button:not(.collapsed) {
+  color: var(--im-accent);
+}
+.accordion-button:not(.collapsed)::after {
+  filter: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23228b22'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
-#weekModal .modal-header,
-#weekModal .modal-body,
-#weekModal .modal-footer {
-    background: transparent !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    color: #ffffff !important;
+/* ── Hero ── */
+.im-hero {
+  margin-bottom: 1.5rem;
 }
 
-#weekModal .modal-title {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #ffffff !important;
+.im-hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
 }
 
-/* Backdrop tint */
-#weekModal .modal-backdrop,
-.modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.75) !important;
+.im-text-gradient {
+  background: linear-gradient(135deg, var(--im-accent) 0%, var(--im-accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* =================== WEEK CARDS =================== */
+/* ── Stat Cards ── */
+.stat-card {
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+}
+
+.stat-icon {
+  font-size: 1.4rem;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: .72rem;
+  color: rgba(255, 255, 255, .5);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── Glass panel ── */
+.glass-panel {
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.chart-panel {
+  height: 100%;
+}
+
+.chart-panel h5 {
+  font-size: .95rem;
+  margin-bottom: .75rem;
+}
+
+/* ── Zone FC table ── */
+.zone-table td,
+.zone-table th {
+  padding: .5rem .75rem;
+  font-size: .85rem;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.zone-table th {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+/* Sport-specific zone highlights */
+.zone-run {
+  color: var(--im-run);
+}
+
+.zone-bike {
+  color: var(--im-bike);
+}
+
+.zone-swim {
+  color: var(--im-swim);
+}
+
+.z-range {
+  font-family: 'Inter', monospace;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+
+/* ── Phase filter ── */
+.filter-label {
+  color: rgba(255, 255, 255, .5);
+  font-size: .8rem;
+  font-weight: 500;
+}
+
+.filter-btn {
+  border: 1px solid rgba(255, 255, 255, .15);
+  color: rgba(255, 255, 255, .6);
+  background: transparent;
+  border-radius: 50px;
+  font-size: .78rem;
+  padding: .3rem .8rem;
+  transition: all .2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--im-accent);
+  color: var(--im-accent);
+}
+
+.filter-btn.active {
+  background: var(--im-accent);
+  border-color: var(--im-accent);
+  color: #fff;
+}
+
+/* ── Week cards ── */
 .week-card {
-    background: var(--color-bg-surface-glass);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: var(--radius-md);
-    padding: 1rem 1.1rem;
-    cursor: pointer;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-    animation: slideIn 0.35s ease both;
-    position: relative;
-    overflow: hidden;
-}
-
-.week-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-    transition: opacity 0.2s ease;
-}
-
-/* Phase color bars */
-.week-card.phase-base::before {
-    background: linear-gradient(90deg, #64748b, #94a3b8);
-}
-
-.week-card.phase-build::before {
-    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-}
-
-.week-card.phase-peak::before {
-    background: linear-gradient(90deg, #ea580c, #f97316);
-}
-
-.week-card.phase-recovery::before {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-}
-
-.week-card.phase-taper::before {
-    background: linear-gradient(90deg, #7c3aed, #a78bfa);
-}
-
-.week-card.phase-race::before {
-    background: linear-gradient(90deg, #d4af37, #fde047);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 14px;
+  padding: .9rem;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .week-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(34, 139, 34, 0.35);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--color-primary-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  border-color: rgba(14, 165, 233, .3);
 }
 
-.week-card.phase-base:hover {
-    border-color: rgba(100, 116, 139, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(100, 116, 139, 0.25);
-}
-
-.week-card.phase-peak:hover {
-    border-color: rgba(234, 88, 12, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(234, 88, 12, 0.25);
-}
-
-.week-card.phase-recovery:hover {
-    border-color: rgba(59, 130, 246, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.25);
-}
-
-.week-card.phase-taper:hover {
-    border-color: rgba(124, 58, 237, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(124, 58, 237, 0.25);
-}
-
-.week-card.phase-race:hover {
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.3);
-}
-
-.week-card,
-.week-card * {
-    color: #ffffff;
-}
-
-/* Current week highlight */
 .week-card.is-current {
-    border-color: var(--color-secondary) !important;
-    box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.25), 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+  border-color: var(--im-accent) !important;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, .25);
+}
+
+/* Phase accents */
+.phase-recovery .phase-recovery {
+  border-left: 3px solid #eab308;
+}
+
+.phase-base .phase-base {
+  border-left: 3px solid #22c55e;
+}
+
+.phase-build .phase-build {
+  border-left: 3px solid #0ea5e9;
+}
+
+.phase-peak .phase-peak {
+  border-left: 3px solid #f97316;
+}
+
+.phase-taper .phase-taper {
+  border-left: 3px solid #a78bfa;
+}
+
+.phase-race .phase-race {
+  border-left: 3px solid #ef4444;
+}
+
+.phase-tag {
+  font-size: .62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  opacity: .6;
+}
+
+.week-number {
+  font-size: .8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .8);
+}
+
+.week-hours {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.week-hours-label {
+  font-size: .65rem;
+  color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+}
+
+.week-date-range {
+  font-size: .68rem;
+  color: rgba(255, 255, 255, .35);
 }
 
 .current-badge {
-    display: inline-block;
-    background: var(--color-secondary);
-    color: #020402 !important;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 0.15rem 0.5rem;
-    border-radius: 50px;
-    vertical-align: middle;
-    margin-left: 0.4rem;
+  font-size: .6rem;
+  background: var(--im-accent);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 50px;
+  margin-left: .4rem;
+  vertical-align: middle;
 }
 
-/* Hidden col for phase filter */
-.weeks-grid-item.hidden {
-    display: none;
+/* ── Sport badges (7 giorni) ── */
+.day-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 3px;
+  margin-top: .2rem;
+  width: 100%;
 }
 
-/* Week header */
-.week-card .week-number {
-    font-family: var(--font-heading);
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    opacity: 0.5;
-    margin-bottom: 0.2rem;
-    display: block;
+.day-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 0;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-.week-card .week-km {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.1rem;
-    display: block;
+.db-day {
+  font-size: 0.62rem;
+  opacity: 0.8;
+  line-height: 1;
+  margin-bottom: 3px;
+  text-transform: uppercase;
 }
 
-.week-card.phase-base .week-km {
-    color: #94a3b8 !important;
+.db-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
-.week-card.phase-build .week-km {
-    color: var(--color-secondary) !important;
+.db-icon .sub-icon {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-top: -3px;
 }
 
-.week-card.phase-peak .week-km {
-    color: #f97316 !important;
+.day-badge.swim {
+  background: rgba(56, 189, 248, .2);
+  color: var(--im-swim);
+  border: 1px solid rgba(56, 189, 248, .3);
 }
 
-.week-card.phase-recovery .week-km {
-    color: #60a5fa !important;
+.day-badge.bike {
+  background: rgba(74, 222, 128, .2);
+  color: var(--im-bike);
+  border: 1px solid rgba(74, 222, 128, .3);
 }
 
-.week-card.phase-taper .week-km {
-    color: #a78bfa !important;
+.day-badge.run {
+  background: rgba(245, 158, 11, .2);
+  color: var(--im-run);
+  border: 1px solid rgba(245, 158, 11, .3);
 }
 
-.week-card.phase-race .week-km {
-    color: #fde047 !important;
+.day-badge.brick {
+  background: rgba(167, 139, 250, .2);
+  color: var(--im-brick);
+  border: 1px solid rgba(167, 139, 250, .3);
 }
 
-.week-card .week-km-label {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.45;
-    display: block;
-    margin-bottom: 0.75rem;
+.day-badge.rest {
+  background: rgba(71, 85, 105, .2);
+  color: var(--im-rest);
+  border: 1px solid rgba(71, 85, 105, .3);
 }
 
-/* Session mini-badges */
-.week-sessions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-top: 0.4rem;
+.day-badge.core {
+  background: rgba(251, 146, 60, .2);
+  color: var(--im-core);
+  border: 1px solid rgba(251, 146, 60, .3);
 }
 
-.ws-badge {
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 0.18rem 0.55rem;
-    border-radius: 50px;
-    white-space: nowrap;
-}
-
-.ws-badge.easy {
-    background: rgba(34, 139, 34, 0.2);
-    border: 1px solid rgba(34, 139, 34, 0.4);
-}
-
-.ws-badge.reps {
-    background: rgba(249, 115, 22, 0.2);
-    border: 1px solid rgba(249, 115, 22, 0.4);
-}
-
-.ws-badge.tempo {
-    background: rgba(251, 191, 36, 0.2);
-    border: 1px solid rgba(251, 191, 36, 0.45);
-}
-
-.ws-badge.long {
-    background: rgba(245, 158, 11, 0.2);
-    border: 1px solid rgba(245, 158, 11, 0.4);
-}
-
-.ws-badge.off {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.ws-badge.race {
-    background: rgba(212, 175, 55, 0.2);
-    border: 1px solid rgba(212, 175, 55, 0.4);
-}
-
-/* Phase badge top-right */
-.phase-tag {
-    position: absolute;
-    top: 0.7rem;
-    right: 0.8rem;
-    font-size: 0.58rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.65;
-}
-
-/* =================== SPLIT BAR (3-segment: easy / fast / medio) =================== */
-.km-bar-wrap {
-    margin-top: 0.65rem;
-}
-
+/* ── Split bar (sport) ── */
 .split-bar {
-    display: flex;
-    height: 5px;
-    border-radius: 50px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.06);
-    gap: 1px;
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 22px;
+  background: rgba(255, 255, 255, .06);
 }
 
 .split-seg {
-    height: 100%;
-    transition: width 0.5s ease;
+  height: 100%;
+  transition: width .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+  white-space: nowrap;
+  background-image: linear-gradient(45deg,
+      rgba(0, 0, 0, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.15) 75%,
+      transparent 75%,
+      transparent);
+  background-size: 10px 10px;
 }
 
-.seg-easy {
-    background: rgba(46, 204, 113, 0.75);
-    border-radius: 50px 0 0 50px;
+.seg-swim {
+  background-color: var(--im-swim);
 }
 
-.seg-fast {
-    background: rgba(249, 115, 22, 0.85);
+.seg-bike {
+  background-color: var(--im-bike);
 }
 
-.seg-medio {
-    background: rgba(251, 191, 36, 0.85);
-    border-radius: 0 50px 50px 0;
+.seg-run {
+  background-color: var(--im-run);
 }
 
-/* When only one segment, full radius */
-.split-bar .split-seg:only-child {
-    border-radius: 50px;
+.seg-brick {
+  background-color: var(--im-brick);
+}
+.seg-rest {
+  background-color: var(--im-rest);
 }
 
-/* =================== MODAL DETAIL =================== */
-.session-detail-block {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-md);
-    padding: 1rem 1.1rem;
-    margin-bottom: 0.75rem;
-    transition: background 0.2s;
+/* ── Zone bar ── */
+.zone-bar {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 6px;
+  background: rgba(255, 255, 255, .06);
 }
 
-.session-detail-block:hover {
-    background: rgba(255, 255, 255, 0.07);
+.zone-seg {
+  height: 100%;
 }
 
-.session-detail-block .sdb-type {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    opacity: 0.55;
-    margin-bottom: 0.3rem;
-    display: block;
+.seg-z1 {
+  background: rgb(166, 166, 166);
 }
 
-.session-detail-block .sdb-km {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.4rem;
-    display: block;
+.seg-z2 {
+  background: rgb(59, 151, 243);
 }
 
-.sdb-km.easy {
-    color: var(--color-secondary) !important;
+.seg-z3 {
+  background: rgb(130, 201, 30);
 }
 
-.sdb-km.reps {
-    color: #fb923c !important;
+.seg-z4 {
+  background: rgb(249, 137, 37);
 }
 
-.sdb-km.tempo {
-    color: #fcd34d !important;
+.seg-z5 {
+  background: rgb(211, 32, 32);
 }
 
-.sdb-km.long {
-    color: #fbbf24 !important;
+/* ── Load trend badge ── */
+.load-trend-badge {
+  font-size: .62rem;
+  padding: 1px 7px;
+  border-radius: 50px;
+  font-weight: 600;
+  display: inline-block;
 }
 
-.sdb-km.race {
-    color: #fde047 !important;
+.trend-high {
+  background: rgba(239, 68, 68, .15);
+  color: #fca5a5;
 }
 
-.session-detail-block .sdb-desc {
-    font-size: 0.82rem;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.75) !important;
-    margin: 0;
+.trend-up {
+  background: rgba(34, 197, 94, .12);
+  color: #86efac;
 }
 
-.session-detail-block .sdb-icon {
-    font-size: 1.3rem;
-    margin-right: 0.4rem;
+.trend-down {
+  background: rgba(100, 116, 139, .15);
+  color: #94a3b8;
 }
 
-/* Modal stats row */
+/* ── Modal ── */
+.trn-modal-content {
+  background: #0d1825;
+  border: 1px solid rgba(14, 165, 233, .2);
+  border-radius: 16px;
+  color: #fff;
+}
+
+.modal-date-range {
+  color: rgba(255, 255, 255, .45);
+  font-size: .82rem;
+}
+
 .modal-stat-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: .75rem;
 }
 
 .modal-stat-pill {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50px;
-    padding: 0.35rem 0.9rem;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 50px;
+  padding: .35rem .9rem;
+  font-size: .88rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.msp-label {
+  font-size: 1.1rem;
+}
+
+.pill-swim {
+  background: rgba(56, 189, 248, .45);
+  border-color: rgba(56, 189, 248, .3);
+}
+
+.pill-bike {
+  background: rgba(74, 222, 128, .45);
+  border-color: rgba(74, 222, 128, .3);
+}
+
+.pill-run {
+  background: rgba(245, 158, 11, .45);
+  border-color: rgba(245, 158, 11, .3);
 }
 
 .modal-stat-pill .msp-val {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    color: var(--color-secondary) !important;
+  font-weight: 700;
+  color: #fff;
 }
 
-/* Pace label inside detail */
-.pace-tag {
-    display: inline-block;
-    background: rgba(46, 204, 113, 0.15);
-    border: 1px solid rgba(46, 204, 113, 0.35);
-    border-radius: 50px;
-    padding: 0.1rem 0.6rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--color-secondary) !important;
-    margin: 0.1rem 0.15rem;
-    white-space: nowrap;
+/* ── Session detail blocks ── */
+.sessions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
 
-.pace-tag.orange {
-    background: rgba(249, 115, 22, 0.15);
-    border-color: rgba(249, 115, 22, 0.35);
-    color: #fdba74 !important;
+.session-detail-block {
+  background: rgba(255, 255, 255, .03);
+  border: 1px solid rgba(255, 255, 255, .07);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  flex: 1 1 calc(50% - .25rem);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-.pace-tag.amber {
-    background: rgba(251, 191, 36, 0.15);
-    border-color: rgba(251, 191, 36, 0.35);
-    color: #fcd34d !important;
+.session-full {
+  flex: 1 1 100% !important;
 }
 
-/* pace-tag.amber is now Medio, keeping red as spare if needed */
-
-.pace-tag.red {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.35);
-    color: #f87171 !important;
+.sdb-sport {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .25rem;
+  opacity: .7;
 }
 
-/* =================== PROGRESS TRACKER =================== */
-.progress-section {
-    margin-bottom: 1.5rem;
+.sdb-title {
+  font-weight: 600;
+  font-size: .9rem;
+  color: #fff;
 }
 
+.sdb-desc {
+  font-size: 0.92rem;
+  opacity: 0.9;
+  margin: .4rem 0 0;
+  line-height: 1.6;
+}
+
+.sdb-meta {
+  font-size: .72rem;
+  opacity: .5;
+}
+
+@media (max-width: 576px) {
+  .session-detail-block {
+    flex: 1 1 100%;
+  }
+}
+
+
+/* ── Zone tags (inline in description) ── */
+.zone-tag {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1em;
+}
+
+.zone-tag.z1 {
+  background: rgb(166, 166, 166);
+  color: #fff;
+}
+
+.zone-tag.z2 {
+  background: rgb(59, 151, 243);
+  color: #fff;
+}
+
+.zone-tag.z3 {
+  background: rgb(130, 201, 30);
+  color: #fff;
+}
+
+.zone-tag.z4 {
+  background: rgb(249, 137, 37);
+  color: #fff;
+}
+
+.zone-tag.z5 {
+  background: rgb(211, 32, 32);
+  color: #fff;
+}
+
+/* ── Progress bar ── */
 .trn-progress-bar {
-    height: 10px;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.08);
-    overflow: hidden;
-    margin-top: 0.5rem;
+  height: 5px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
 }
 
 .trn-progress-fill {
-    height: 100%;
-    border-radius: 50px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-    transition: width 1s ease;
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, var(--im-accent), var(--im-accent2));
+  transition: width .5s;
 }
 
-/* =================== LEGEND =================== */
-.trn-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    margin-bottom: 1rem;
-    font-size: 0.75rem;
-}
-
-.trn-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    opacity: 0.8;
-}
-
-.trn-legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-/* =================== LOAD TREND BADGE =================== */
-.load-trend-badge {
-    position: absolute;
-    right: 1rem;
-    top: 2rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 0.15rem 0.55rem;
-    border-radius: 50px;
-    margin-bottom: 0.4rem;
-    border: 1px solid transparent;
-}
-
-.load-trend-badge.trend-high {
-    background: rgba(239, 68, 68, 0.18);
-    border-color: rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
-}
-
-.load-trend-badge.trend-up {
-    background: rgba(46, 204, 113, 0.12);
-    border-color: rgba(46, 204, 113, 0.3);
-    color: #6ee7a0;
-}
-
-.load-trend-badge.trend-down {
-    background: rgba(96, 165, 250, 0.12);
-    border-color: rgba(96, 165, 250, 0.3);
-    color: #93c5fd;
-}
-
-/* Modal trend pill variant */
-.modal-trend-pill {
-    font-size: 0.8rem;
-}
-
-.modal-trend-pill.trend-high {
-    background: rgba(239, 68, 68, 0.13) !important;
-    border-color: rgba(239, 68, 68, 0.35) !important;
-}
-
-.modal-trend-pill.trend-high .msp-val {
-    color: #f87171 !important;
-}
-
-.modal-trend-pill.trend-up {
-    background: rgba(46, 204, 113, 0.10) !important;
-    border-color: rgba(46, 204, 113, 0.3) !important;
-}
-
-.modal-trend-pill.trend-up .msp-val {
-    color: #4ade80 !important;
-}
-
-.modal-trend-pill.trend-down {
-    background: rgba(96, 165, 250, 0.10) !important;
-    border-color: rgba(96, 165, 250, 0.3) !important;
-}
-
-.modal-trend-pill.trend-down .msp-val {
-    color: #93c5fd !important;
-}
-
-/* =================== WEEK DATE RANGE =================== */
-.week-date-range {
-    display: block;
-    font-size: 0.62rem;
-    letter-spacing: 0.5px;
-    opacity: 0.4;
-    margin-bottom: 0.55rem;
-    margin-top: -0.1rem;
-}
-
-/* =================== MODAL DATE + NAV =================== */
-.modal-date-range {
-    font-size: 0.78rem;
-    opacity: 0.5;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-}
-
+/* ── Modal nav ── */
 .modal-nav-btn {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    color: #ffffff !important;
-    border-radius: 50px;
-    padding: 0.3rem 1rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    transition: background 0.18s ease, border-color 0.18s ease;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  color: rgba(255, 255, 255, .7);
+  border-radius: 8px;
 }
 
 .modal-nav-btn:hover:not(:disabled) {
-    background: rgba(46, 204, 113, 0.15);
-    border-color: rgba(46, 204, 113, 0.4);
-    color: var(--color-secondary) !important;
-}
-
-.modal-nav-btn:disabled {
-    opacity: 0.28;
-    cursor: not-allowed;
+  background: rgba(14, 165, 233, .15);
+  border-color: var(--im-accent);
+  color: var(--im-accent);
 }
 
 .modal-nav-hint {
-    font-size: 0.68rem;
-    opacity: 0.3;
-    letter-spacing: 0.5px;
-    align-self: center;
+  font-size: .72rem;
+  color: rgba(255, 255, 255, .25);
 }
 
-/* =================== ANIMATIONS =================== */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Staggered animation delays for all 35 grid items */
-.weeks-grid-item:nth-child(1) {
-    animation-delay: 0.02s;
-}
-
-.weeks-grid-item:nth-child(2) {
-    animation-delay: 0.04s;
-}
-
-.weeks-grid-item:nth-child(3) {
-    animation-delay: 0.06s;
-}
-
-.weeks-grid-item:nth-child(4) {
-    animation-delay: 0.08s;
-}
-
-.weeks-grid-item:nth-child(5) {
-    animation-delay: 0.10s;
-}
-
-.weeks-grid-item:nth-child(6) {
-    animation-delay: 0.12s;
-}
-
-.weeks-grid-item:nth-child(7) {
-    animation-delay: 0.14s;
-}
-
-.weeks-grid-item:nth-child(8) {
-    animation-delay: 0.16s;
-}
-
-.weeks-grid-item:nth-child(9) {
-    animation-delay: 0.18s;
-}
-
-.weeks-grid-item:nth-child(10) {
-    animation-delay: 0.20s;
-}
-
-.weeks-grid-item:nth-child(11) {
-    animation-delay: 0.22s;
-}
-
-.weeks-grid-item:nth-child(12) {
-    animation-delay: 0.24s;
-}
-
-.weeks-grid-item:nth-child(13) {
-    animation-delay: 0.26s;
-}
-
-.weeks-grid-item:nth-child(14) {
-    animation-delay: 0.28s;
-}
-
-.weeks-grid-item:nth-child(15) {
-    animation-delay: 0.30s;
-}
-
-.weeks-grid-item:nth-child(16) {
-    animation-delay: 0.32s;
-}
-
-.weeks-grid-item:nth-child(17) {
-    animation-delay: 0.34s;
-}
-
-.weeks-grid-item:nth-child(18) {
-    animation-delay: 0.36s;
-}
-
-.weeks-grid-item:nth-child(19) {
-    animation-delay: 0.38s;
-}
-
-.weeks-grid-item:nth-child(20) {
-    animation-delay: 0.40s;
-}
-
-.weeks-grid-item:nth-child(21) {
-    animation-delay: 0.42s;
-}
-
-.weeks-grid-item:nth-child(22) {
-    animation-delay: 0.44s;
-}
-
-.weeks-grid-item:nth-child(23) {
-    animation-delay: 0.46s;
-}
-
-.weeks-grid-item:nth-child(24) {
-    animation-delay: 0.48s;
-}
-
-.weeks-grid-item:nth-child(25) {
-    animation-delay: 0.50s;
-}
-
-.weeks-grid-item:nth-child(26) {
-    animation-delay: 0.52s;
-}
-
-.weeks-grid-item:nth-child(27) {
-    animation-delay: 0.54s;
-}
-
-.weeks-grid-item:nth-child(28) {
-    animation-delay: 0.56s;
-}
-
-.weeks-grid-item:nth-child(29) {
-    animation-delay: 0.58s;
-}
-
-.weeks-grid-item:nth-child(30) {
-    animation-delay: 0.60s;
-}
-
-.weeks-grid-item:nth-child(31) {
-    animation-delay: 0.62s;
-}
-
-.weeks-grid-item:nth-child(32) {
-    animation-delay: 0.64s;
-}
-
-.weeks-grid-item:nth-child(33) {
-    animation-delay: 0.66s;
-}
-
-.weeks-grid-item:nth-child(34) {
-    animation-delay: 0.68s;
-}
-
-.weeks-grid-item:nth-child(35) {
-    animation-delay: 0.70s;
-}
-
-/* ========================================================
-   VISUAL & CSS IMPROVEMENTS
-   ======================================================== */
-
-/* =================== PHASE MODAL ACCENT =================== */
-/*
- * Colored border-top + ambient glow on the modal content,
- * matching the phase of the selected training week.
- */
-.trn-modal-content.phase-modal-base {
-    border-top: 3px solid #94a3b8 !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
-        0 0 60px rgba(100, 116, 139, 0.08),
-        inset 0 1px 0 rgba(100, 116, 139, 0.2) !important;
-}
-
-.trn-modal-content.phase-modal-build {
-    border-top: 3px solid var(--color-secondary) !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
-        0 0 60px rgba(46, 204, 113, 0.08),
-        inset 0 1px 0 rgba(46, 204, 113, 0.2) !important;
-}
-
-.trn-modal-content.phase-modal-peak {
-    border-top: 3px solid #f97316 !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
-        0 0 60px rgba(234, 88, 12, 0.08),
-        inset 0 1px 0 rgba(234, 88, 12, 0.2) !important;
-}
-
-.trn-modal-content.phase-modal-recovery {
-    border-top: 3px solid #3b82f6 !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
-        0 0 60px rgba(59, 130, 246, 0.08),
-        inset 0 1px 0 rgba(59, 130, 246, 0.2) !important;
-}
-
-.trn-modal-content.phase-modal-taper {
-    border-top: 3px solid #a78bfa !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75),
-        0 0 60px rgba(167, 139, 250, 0.1),
-        inset 0 1px 0 rgba(167, 139, 250, 0.2) !important;
-}
-
-.trn-modal-content.phase-modal-race {
-    border-top: 3px solid #d4af37 !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
-        0 0 80px rgba(212, 175, 55, 0.12),
-        inset 0 1px 0 rgba(212, 175, 55, 0.25) !important;
-}
-
-/* Modal title color tinting per phase */
-.phase-modal-base #weekModalLabel {
-    color: #94a3b8 !important;
-}
-
-.phase-modal-build #weekModalLabel {
-    color: var(--color-secondary) !important;
-}
-
-.phase-modal-peak #weekModalLabel {
-    color: #f97316 !important;
-}
-
-.phase-modal-recovery #weekModalLabel {
-    color: #93c5fd !important;
-}
-
-.phase-modal-taper #weekModalLabel {
-    color: #c4b5fd !important;
-}
-
-.phase-modal-race #weekModalLabel {
-    color: #fde047 !important;
-}
-
-/* =================== SESSION BLOCK ENTRANCE ANIMATION =================== */
-@keyframes sessionFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#weekModalBody .session-detail-block {
-    animation: sessionFadeIn 0.28s ease both;
+/* Phase modal accents */
+.phase-modal-recovery .modal-content {
+  border-color: rgba(234, 179, 8, .25);
 }
 
-/* Stagger each of the 4 session blocks */
-#weekModalBody .row.g-3>div:nth-child(1) .session-detail-block {
-    animation-delay: 0.05s;
+.phase-modal-base .modal-content {
+  border-color: rgba(34, 197, 94, .25);
 }
 
-#weekModalBody .row.g-3>div:nth-child(2) .session-detail-block {
-    animation-delay: 0.10s;
+.phase-modal-build .modal-content {
+  border-color: rgba(14, 165, 233, .25);
 }
 
-#weekModalBody .row.g-3>div:nth-child(3) .session-detail-block {
-    animation-delay: 0.15s;
+.phase-modal-peak .modal-content {
+  border-color: rgba(249, 115, 22, .25);
 }
 
-#weekModalBody .row.g-3>div:nth-child(4) .session-detail-block {
-    animation-delay: 0.20s;
+.phase-modal-taper .modal-content {
+  border-color: rgba(167, 139, 250, .25);
 }
 
-/* =================== PROGRESS BAR SHIMMER =================== */
-@keyframes shimmer {
-    0% {
-        background-position: -200% center;
-    }
-
-    100% {
-        background-position: 200% center;
-    }
-}
-
-.trn-progress-fill {
-    background: linear-gradient(90deg,
-            var(--color-primary) 0%,
-            var(--color-secondary) 40%,
-            #a8f5c6 50%,
-            var(--color-secondary) 60%,
-            var(--color-primary) 100%) !important;
-    background-size: 200% auto !important;
-    animation: shimmer 2.5s linear infinite;
-}
-
-/* =================== FILTER BUTTONS — enhanced =================== */
-.filter-btn {
-    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.15s ease;
-}
-
-.filter-btn:hover:not(.active) {
-    transform: translateY(-1px);
+.phase-modal-race .modal-content {
+  border-color: rgba(239, 68, 68, .35);
 }
 
-/* Phase-sensitive active colors for the filter pill */
-.filter-btn[data-phase="build"].active {
-    background: rgba(46, 204, 113, 0.25) !important;
-    border-color: rgba(46, 204, 113, 0.55) !important;
-    color: var(--color-secondary) !important;
+/* ── Sections hidden by filter ── */
+.weeks-grid-item.hidden {
+  display: none !important;
 }
 
-.filter-btn[data-phase="recovery"].active {
-    background: rgba(251, 191, 36, 0.2) !important;
-    border-color: rgba(251, 191, 36, 0.5) !important;
-    color: #fbbf24 !important;
-}
-
-.filter-btn[data-phase="taper"].active {
-    background: rgba(167, 139, 250, 0.2) !important;
-    border-color: rgba(167, 139, 250, 0.5) !important;
-    color: #c4b5fd !important;
-}
-
-.filter-btn[data-phase="race"].active {
-    background: rgba(248, 113, 113, 0.2) !important;
-    border-color: rgba(248, 113, 113, 0.5) !important;
-    color: #fca5a5 !important;
-}
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .stat-value {
+    font-size: 1.3rem;
+  }
 
-/* =================== WEEK CARD FOCUS RING =================== */
-.week-card:focus-visible {
-    outline: 2px solid rgba(46, 204, 113, 0.6);
-    outline-offset: 3px;
+  .week-hours {
+    font-size: 1.2rem;
+  }
 }
-
-/* =================== MOBILE MODAL POLISH =================== */
-@media (max-width: 767px) {
-
-    /* Session labels slightly smaller on mobile */
-    #weekModalBody .session-detail-block .sdb-km {
-        font-size: 1.1rem;
-    }
-
-    /* Tighten gap between session blocks on small screens */
-    #weekModalBody .row.g-3 {
-        --bs-gutter-y: 0.5rem;
-    }
 
-    /* Modal nav hint hidden on very small screens */
-    .modal-nav-hint {
-        display: none;
-    }
+/* ── Zone legend chips ── */
+.zone-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
 }
 
-/* =================== CHART PANEL HOVER GLOW =================== */
-.chart-panel {
-    transition: box-shadow 0.25s ease;
+.zone-chip {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .72rem;
+  padding: .2rem .6rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, .08);
 }
 
-.chart-panel:hover {
-    box-shadow: 0 0 0 1px rgba(46, 204, 113, 0.18), 0 12px 40px rgba(0, 0, 0, 0.4);
+.zone-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }

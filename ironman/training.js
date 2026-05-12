@@ -379,6 +379,7 @@ function updateStats() {
         totalRunKm += w.totals.runKm;
     });
 
+    document.getElementById('stat-weeks').textContent = IM_PLAN.length;
     document.getElementById('stat-hours').textContent = Math.round(totalMin / 60) + 'h';
     document.getElementById('stat-peak').textContent = Math.round(peakMin / 60) + 'h';
 
