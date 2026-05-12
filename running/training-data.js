@@ -194,15 +194,15 @@ const PLAN = [
   // ─── FASE 2 — PROGRESSIONE (W13 — Scarico + Gara Test) ──────────────
   {
     week: 'W13', phase: 'recovery', faseLabel: 'FASE 2 – Progressione', dateRange: '22 giu – 28 giu',
-    note: 'Settimana di scarico con 🏅 GARA TEST 10km domenica. Nessun brick pesante: gambe fresche per la gara.',
+    note: 'Trasferta ven/sab/dom. 🏅 GARA TEST 10km anticipata a mercoledì per salvare il test.',
     days: [
       { day: 'LUN', sport: 'swim', title: 'Nuoto leggero', desc: '🌙 Nuoto 35\' Z1 — solo scioltezza, respiro controllato', durationMin: 35, swimM: 800 },
-      { day: 'MAR', sport: 'run',  title: '12km FL', desc: '12km FL — tutto @ 6\'20"/km, <142bpm', durationMin: 75, runKm: 12 },
-      { day: 'MER', sport: 'run',  title: 'R (400m leggero)', desc: "R (400m): 2km WU / 6×(400m @4'25\" + 200m rest @6'00\") / 1.4km CD", durationMin: 50, runKm: 7 },
+      { day: 'MAR', sport: 'run',  title: '10km FL', desc: '10km FL — scarico pre-test @ 6\'20"/km', durationMin: 65, runKm: 10 },
+      { day: 'MER', sport: 'run',  title: '🏅 GARA TEST 10km', desc: "🏅 GARA TEST (10km): 15km totali (3km WU + 10km @ 4'20\" all-out + 2km CD)", durationMin: 90, runKm: 15 },
       { day: 'GIO', sport: 'swim', title: 'Nuoto leggero', desc: '🌙 Nuoto 35\' Z1 — recupero, tecnica morbida', durationMin: 35, swimM: 800 },
-      { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto', desc: 'Riposo completo pre-gara', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK Leggero (60min Bici + 15min Corsa)', desc: 'Bici 60\' Z1/Z2 — scioltezza pre-gara | Corsa 15\' Z1 attivazione', durationMin: 75, bikeKm: 26, runKm: 2.5 },
-      { day: 'DOM', sport: 'run',  title: '🏅 GARA TEST 10km', desc: "🏅 GARA TEST (10km): 15km totali (3km WU + 10km @ 4'20\" all-out + 2km CD) | Niente bici oggi", durationMin: 90, runKm: 15 },
+      { day: 'VEN', sport: 'rest', title: 'Riposo Assoluto (Trasferta)', desc: 'Riposo completo in trasferta', durationMin: 0 },
+      { day: 'SAB', sport: 'rest', title: 'Riposo (Trasferta)', desc: 'Riposo o corsetta 20\' Z1 leggerissima (opzionale)', durationMin: 0 },
+      { day: 'DOM', sport: 'rest', title: 'Riposo Assoluto (Trasferta)', desc: 'Riposo completo in trasferta', durationMin: 0 },
     ]
   },
 
@@ -224,15 +224,15 @@ const PLAN = [
   // ─── FASE 3 — BUILD (W15 — Scarico/Viaggio) ─────────────────────────
   {
     week: 'W15', phase: 'recovery', faseLabel: 'FASE 3 – Build', dateRange: '06 lug – 12 lug',
-    note: 'Scarico con contesto viaggio. Volume ridotto. Il lungo domenicale tiene solo 17km (incluse 7km sera post-volo).',
+    note: 'Trasferta ven/sab. Riposo nei giorni di viaggio e lungo spostato a domenica sera al rientro.',
     days: [
       { day: 'LUN', sport: 'swim', title: 'Nuoto leggero', desc: '🌙 Nuoto 35\' Z1 — tecnica, nessuna fatica', durationMin: 35, swimM: 800 },
       { day: 'MAR', sport: 'run',  title: '13km FL', desc: '13km FL — tutto @ 6\'25"/km, <142bpm', durationMin: 82, runKm: 13 },
       { day: 'MER', sport: 'run',  title: 'R (Allunghi)', desc: "R (Allunghi): 7km FL / 8×(100m @4'20\" + 100m rest @6'15\") / 1.4km CD", durationMin: 65, runKm: 10 },
       { day: 'GIO', sport: 'swim', title: 'Nuoto leggero', desc: '🌙 Nuoto 35\' Z1 — recupero in acqua', durationMin: 35, swimM: 800 },
-      { day: 'VEN', sport: 'rest', title: 'Riposo / Viaggio', desc: 'Riposo completo o viaggio', durationMin: 0 },
-      { day: 'SAB', sport: 'brick', title: 'BRICK Scarico (60min Bici + 15min Corsa)', desc: 'Bici 60\' Z1/Z2 — scioltezza | Corsa 15\' Z2', durationMin: 75, bikeKm: 26, runKm: 2.5 },
-      { day: 'DOM', sport: 'run',  title: 'Lungo ridotto + Bici Z2', desc: "17km totali (giovedì context) + 7km FL (domenica sera post-volo) — 24km totali | 🌙 Bici 60' Z2 a sciogliere", durationMin: 210, runKm: 24, bikeKm: 26 },
+      { day: 'VEN', sport: 'rest', title: 'Riposo (Trasferta)', desc: 'Riposo completo in trasferta', durationMin: 0 },
+      { day: 'SAB', sport: 'rest', title: 'Riposo (Trasferta)', desc: 'Riposo completo in trasferta', durationMin: 0 },
+      { day: 'DOM', sport: 'run',  title: 'Lungo serale', desc: "🏃 Lungo serale (rientro): 24km totali @ 6'20\" | Niente bici post-corsa", durationMin: 152, runKm: 24 },
     ]
   },
 
