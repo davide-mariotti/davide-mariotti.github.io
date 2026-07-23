@@ -1,9 +1,39 @@
-/* - - - - - - - - - - */
-/* - - Custom Font - - */
-/* - - - - - - - - - - */
+/* Design System Variables */
+:root {
+  /* Typographic Grid */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@400;700;800&display=swap');
-@import url('./variables.css');
+  /* Color Palette - Deep Forest & Emerald */
+  --color-bg-base: #020402;
+  /* Very dark green-black */
+  --color-bg-surface: #0a100c;
+  --color-bg-surface-glass: rgba(5, 20, 10, 0.7);
+  /* Darker glass for better contrast */
+
+  --color-primary: #228b22;
+  /* Forest Green */
+  --color-primary-dim: #1a6b1a;
+  /* Darker Forest */
+  --color-primary-glow: rgba(34, 139, 34, 0.4);
+
+  --color-secondary: #2ecc71;
+  /* Cohesive lighter green accent */
+
+  --color-text-main: #ffffff;
+
+  /* Glassmorphism Tokens */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  /* Stronger shadow */
+  --glass-blur: blur(16px);
+
+  /* Spacing & Layout */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
 
 /* - - - - - - - - - - */
 /* - - Generic Style - */
@@ -657,11 +687,7 @@ ul.Bug-list li:nth-child(4)::before {
 }
 
 /* Force white text for everything inside glass panels, except buttons on hover and the WCAG calculator preview */
-.glass-panel *:not(.btn):not(.btn *):not(#wcag-contrast-calculator *),
-.glass-panel p:not(#wcag-contrast-calculator p),
-.glass-panel h1:not(#wcag-contrast-calculator h1),
-.glass-panel h2:not(#wcag-contrast-calculator h2),
-.glass-panel h3:not(#wcag-contrast-calculator h3) {
+.glass-panel *:not(.btn):not(.btn *):not(#wcag-contrast-calculator *) {
   color: #ffffff !important;
 }
 

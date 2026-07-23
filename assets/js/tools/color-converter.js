@@ -77,19 +77,8 @@ const copyText = async (id) => {
     const input = document.getElementById(id);
     if (!input || !input.value) return;
 
-    try {
-        await navigator.clipboard.writeText(input.value);
-
-        const btn = input.parentElement.querySelector('.copy-btn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '✅';
-        btn.style.color = 'var(--color-primary)';
-
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.color = '';
-        }, 1500);
-    } catch (err) {
-        console.error('Failed to copy: ', err);
-    }
+    const btn = input.parentElement.querySelector('.copy-btn');
+    if (btn) btn.style.color = 'var(--color-primary)';
+    await copyWithFeedback(input.value, btn, { message: '✅', duration: 1500 });
+    if (btn) setTimeout(() => { btn.style.color = ''; }, 1500);
 };

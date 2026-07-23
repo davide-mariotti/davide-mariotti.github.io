@@ -4,7 +4,6 @@
  */
 
 const STORAGE_KEY = 'weather_api_key';
-const DEFAULT_KEY = 'b2ed72738688945eaabeec6c00645e54'; // Fallback key
 
 document.addEventListener("DOMContentLoaded", () => {
     // Load saved key if exists
@@ -25,7 +24,7 @@ const saveApiKey = () => {
         getWeather(); // Refresh with new key
     } else {
         localStorage.removeItem(STORAGE_KEY);
-        alert('API Key cleared. Using default key.');
+        alert('API Key cleared.');
         getWeather();
     }
 };
@@ -35,9 +34,17 @@ async function getWeather() {
     const weatherArea = document.getElementById('weather-display-area');
     const statusMsg = document.getElementById('weather-status-msg');
 
-    // Priority: 1. Input Field (unsaved), 2. LocalStorage, 3. Default (hardcoded)
-    const apiKey = document.getElementById('api-key-input').value.trim() || localStorage.getItem(STORAGE_KEY) || DEFAULT_KEY;
+    // Priority: 1. Input field (unsaved), 2. LocalStorage
+    const apiKey = document.getElementById('api-key-input').value.trim() || localStorage.getItem(STORAGE_KEY) || '';
     const city = cityInput.value.trim() || 'Fucecchio';
+
+    if (!apiKey) {
+        statusMsg.innerHTML = '<p class="text-danger">⚠️ Please enter your OpenWeatherMap API key below to see live weather.</p>';
+        statusMsg.style.display = 'block';
+        weatherArea.style.display = 'none';
+        const apiCollapse = new bootstrap.Collapse(document.getElementById('apiConfig'), { show: true });
+        return;
+    }
 
     statusMsg.innerHTML = '<div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading weather...</p>';
     statusMsg.style.display = 'block';

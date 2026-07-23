@@ -1,7 +1,20 @@
 /**
  * Password Generator Logic
- * Modernized with ES6, Crypto API (optional but simplified), and Clipboard API
+ * Modernized with ES6, Crypto API, and Clipboard API
  */
+
+// Cryptographically secure random integer in [0, max)
+const randInt = (max) => crypto.getRandomValues(new Uint32Array(1))[0] % max;
+
+// Fisher-Yates shuffle using the same secure source
+const secureShuffle = (str) => {
+    const arr = str.split('');
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = randInt(i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.join('');
+};
 
 const getElements = () => ({
     length: document.getElementById("length"),
@@ -36,7 +49,7 @@ const generatePassword = () => {
     }
 
     let password = "";
-    // Using simple Math.random for now to keep it lightweight, but ensuring at least one of each selected charset
+    // Ensure at least one char from each selected charset, using a CSPRNG throughout
     const chosenCharsets = [];
     if (el.uppercase.checked) chosenCharsets.push(charsets.upper);
     if (el.lowercase.checked) chosenCharsets.push(charsets.lower);
@@ -45,16 +58,16 @@ const generatePassword = () => {
 
     // Initial password with one char from each category to ensure coverage
     chosenCharsets.forEach(set => {
-        password += set.charAt(Math.floor(Math.random() * set.length));
+        password += set.charAt(randInt(set.length));
     });
 
     // Fill the rest
     for (let i = password.length; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
+        password += charset.charAt(randInt(charset.length));
     }
 
     // Shuffle result
-    password = password.split('').sort(() => 0.5 - Math.random()).join('');
+    password = secureShuffle(password);
 
     el.password.value = password;
     checkPasswordSecurity(password);
@@ -83,18 +96,8 @@ const copyToClipboard = async () => {
     const password = el.password.value;
     if (!password || password.includes("Select")) return;
 
-    try {
-        await navigator.clipboard.writeText(password);
-
-        const copyBtn = document.querySelector('button[onclick="copyToClipboard()"]');
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '✅ Copied!';
-        setTimeout(() => {
-            copyBtn.innerHTML = originalText;
-        }, 2000);
-    } catch (err) {
-        console.error('Failed to copy: ', err);
-    }
+    const copyBtn = document.querySelector('button[onclick="copyToClipboard()"]');
+    await copyWithFeedback(password, copyBtn);
 };
 
 // Initial call

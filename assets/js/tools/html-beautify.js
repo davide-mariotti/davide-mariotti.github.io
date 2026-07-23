@@ -40,16 +40,6 @@ const copyToClipboard = async () => {
     const text = output.textContent;
     if (!text || text.includes("Result will appear here")) return;
 
-    try {
-        await navigator.clipboard.writeText(text);
-
-        const btn = document.querySelector('.copy-btn-small');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '✅ Copied!';
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-        }, 2000);
-    } catch (err) {
-        console.error('Failed to copy: ', err);
-    }
+    const btn = document.querySelector('.copy-btn-small');
+    await copyWithFeedback(text, btn);
 };

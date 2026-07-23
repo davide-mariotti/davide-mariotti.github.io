@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://davide-mariotti.github.io/sitemap.xml

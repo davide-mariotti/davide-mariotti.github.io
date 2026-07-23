@@ -96,7 +96,7 @@ const optimizeImage = async () => {
                     // Trigger Download
                     const originalName = file.name.substring(0, file.name.lastIndexOf('.'));
                     const extension = file.name.split('.').pop();
-                    const downloadName = `${originalName}_optimized_${Math.round(quality * 100)}% .${extension}`;
+                    const downloadName = `${originalName}_optimized_${Math.round(quality * 100)}pct.${extension}`;
 
                     const link = document.createElement('a');
                     link.href = url;

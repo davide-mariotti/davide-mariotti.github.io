@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoader();
   initTyping();
   initMatrix();
-  // Navbar toggler logic is now handled by Bootstrap or needs a check after load
-  // Active menu logic needs to be called after menu load
+  markActiveNavLink();
+  initMobileNavIcon();
+  initFooter();
 });
 
 /* - - - Stars - - - */
@@ -145,35 +146,51 @@ function initMatrix() {
   setInterval(draw, 50);
 }
 
-/* - - - Active Menu Helper - - - */
-// Call this function AFTER the menu HTML is injected
-window.highlightActiveMenu = function () {
+/* - - - Active Nav Link - - - */
+function markActiveNavLink() {
   const currentUrl = window.location.pathname;
-  // Handle root / -> /index.html mapping roughly
-  // Or just exact match
-  const menuItems = document.querySelectorAll(".navbar-nav .nav-item");
-
-  menuItems.forEach(item => {
+  document.querySelectorAll(".navbar-nav .nav-item").forEach(item => {
     const link = item.querySelector("a");
-    if (link) {
-      const menuItemUrl = link.getAttribute("href");
-      // Simple check: is contained?
-      if (currentUrl.endsWith(menuItemUrl) || (currentUrl === '/' && menuItemUrl === 'index.html')) {
-        item.classList.add("active");
-        link.classList.add("active");
-      }
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (currentUrl === href || (currentUrl === '/' && href === '/') ||
+      (currentUrl.endsWith(href) && href !== '/')) {
+      item.classList.add("active");
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
     }
   });
+}
 
-  // Re-initialize navbar toggler if needed (standard Bootstrap usually handles delegation, but checking logic)
+/* - - - Mobile Nav Icon - - - */
+function initMobileNavIcon() {
   const navbarToggler = document.querySelector(".navbar-toggler");
   const animatedIcon = document.querySelector(".animated-icon2");
   if (navbarToggler && animatedIcon) {
-    // Remove old listeners to avoid duplicates if re-run
-    const newToggler = navbarToggler.cloneNode(true);
-    navbarToggler.parentNode.replaceChild(newToggler, navbarToggler);
-    newToggler.addEventListener("click", function () {
+    navbarToggler.addEventListener("click", () => {
       animatedIcon.classList.toggle("open");
     });
   }
-};
+}
+
+/* - - - Footer Copyright & Clock - - - */
+function initFooter() {
+  const yearSpan = document.getElementById("CopyrightYear");
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+  const todayDataElement = document.getElementById("todayData");
+  if (!todayDataElement) return;
+
+  const update = () => {
+    const currentDate = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = currentDate.toLocaleDateString('en-US', options);
+    const formattedTime = currentDate.getHours().toString().padStart(2, '0') + ":" +
+      currentDate.getMinutes().toString().padStart(2, '0') + ":" +
+      currentDate.getSeconds().toString().padStart(2, '0');
+    todayDataElement.textContent = formattedDate + " " + formattedTime;
+  };
+
+  update();
+  setInterval(update, 1000);
+}

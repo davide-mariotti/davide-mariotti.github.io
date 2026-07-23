@@ -21,8 +21,6 @@
     /* Cohesive lighter green accent */
 
     --color-text-main: #ffffff;
-    --color-text-muted: #ffffff;
-    /* Lighter gray for better visibility */
 
     /* Glassmorphism Tokens */
     --glass-border: 1px solid rgba(255, 255, 255, 0.1);

@@ -33,6 +33,7 @@ class AppHeader extends HTMLElement {
                     (currentUrl.endsWith(menuItemUrl) && menuItemUrl !== '/')) {
                     item.classList.add("active");
                     link.classList.add("active");
+                    link.setAttribute("aria-current", "page");
                 }
             }
         });

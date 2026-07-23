@@ -93,21 +93,8 @@ const convertToTextForUpload = () => {
 
 const copyToClipboard = async () => {
     const { output } = getElements();
-    if (!output.value) return;
-
-    try {
-        await navigator.clipboard.writeText(output.value);
-
-        // Visual feedback
-        const copyBtn = document.querySelector('button[onclick="copyToClipboard()"]');
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<span class="me-2">✅</span> Copied!';
-        setTimeout(() => {
-            copyBtn.innerHTML = originalText;
-        }, 2000);
-    } catch (err) {
-        console.error('Failed to copy: ', err);
-    }
+    const copyBtn = document.querySelector('button[onclick="copyToClipboard()"]');
+    await copyWithFeedback(output.value, copyBtn, { message: '<span class="me-2">✅</span> Copied!' });
 };
 
 const resetText = () => {

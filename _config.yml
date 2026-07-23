@@ -1,3 +1,13 @@
+title: Davide Mariotti
+description: Portfolio of Davide Mariotti, a creative developer building fast, accessible web experiences, tools, and games.
+url: "https://davide-mariotti.github.io"
+image: /assets/img/haker.webp
+author:
+  name: Davide Mariotti
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
 exclude:
   - node_modules
-  - games/drafta/functions/node_modules

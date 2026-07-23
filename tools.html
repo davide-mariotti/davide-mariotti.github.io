@@ -1,24 +1,17 @@
+---
+title: Tools
+description: Free browser-based utilities by Davide Mariotti — password generator, color converter, image optimizer, and more.
+---
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>Davide Mariotti | Tools</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSS -->
-    <link href="/assets/css/main.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Icons -->
-    <link rel="icon" href="/assets/icons/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+{% include head.html %}
 </head>
 
 <body>
     <div id="loader"></div>
-    <app-header></app-header>
+    {% include menu.html %}
 
     <div class="container py-5 mt-5">
         <div class="row mb-5">
@@ -33,8 +26,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/case-converter.svg" alt="Case Converter" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Case <span class="text-gradient">Converter</span></h3>
+                        width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Case <span class="text-gradient">Converter</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Transform text to various case styles.
                         efficient text manipulation.</p>
                     <a href="/tools/case-converter" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -44,8 +37,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/psw-generator.svg" alt="Psw Generator" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Psw <span class="text-gradient">Generator</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Psw <span class="text-gradient">Generator</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Create secure passwords instantly with
                         custom settings.</p>
                     <a href="/tools/psw-generator" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -55,8 +48,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/scrap-seo.svg" alt="Scrap Seo" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Scrap <span class="text-gradient">Seo</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Scrap <span class="text-gradient">Seo</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Fetch and display Google Custom Search
                         results.</p>
                     <a href="/tools/scrap-seo" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -65,9 +58,9 @@
 
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
-                    <img src="/assets/icons/color-vonverter.svg" alt="Color Converter" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Color <span class="text-gradient">Converter</span></h3>
+                    <img src="/assets/icons/color-converter.svg" alt="Color Converter" class="mx-auto mb-3"
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Color <span class="text-gradient">Converter</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Convert colors between HEX, RGB, HSL, and
                         CMYK.</p>
                     <a href="/tools/color-converter" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -77,8 +70,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/wcag-contrast-calculator.svg" alt="WCAG Calculator" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">WCAG <span class="text-gradient">Calculator</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">WCAG <span class="text-gradient">Calculator</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Check color contrast against accessibility
                         standards.</p>
                     <a href="/tools/wcag-contrast-calculator" class="btn btn-sm btn-outline-light rounded-pill">Open
@@ -89,8 +82,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/img-optimization.svg" alt="IMG Optimizer" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">IMG <span class="text-gradient">Optimizer</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">IMG <span class="text-gradient">Optimizer</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Compress and enhance images locally in
                         browser.</p>
                     <a href="/tools/img-optimization" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -100,8 +93,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/html-beautify.svg" alt="HTML Beautifier" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">HTML <span class="text-gradient">Beautifier</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">HTML <span class="text-gradient">Beautifier</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Format unorganized HTML code instantly.</p>
                     <a href="/tools/html-beautify" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
@@ -110,8 +103,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/weather-app.svg" alt="Weather App" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Weather <span class="text-gradient">App</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Weather <span class="text-gradient">App</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Real-time weather data for any city.</p>
                     <a href="/tools/weather-app" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
                 </div>
@@ -120,8 +113,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="glass-panel h-100 p-4 d-flex flex-column text-center">
                     <img src="/assets/icons/img-extractor.svg" alt="Image Extractor" class="mx-auto mb-3"
-                        style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
-                    <h3 class="h5 fw-bold mb-3 text-white">Image <span class="text-gradient">Extractor</span></h3>
+                        loading="lazy" width="60" height="60" style="width: 60px; height: 60px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" />
+                    <h2 class="h5 fw-bold mb-3 text-white">Image <span class="text-gradient">Extractor</span></h2>
                     <p class="small opacity-75 mb-4 flex-grow-1 text-white">Extract and download all images from any
                         webpage.</p>
                     <a href="/tools/img-extractor" class="btn btn-sm btn-outline-light rounded-pill">Open Tool</a>
@@ -130,13 +123,9 @@
         </div>
     </div>
 
-    <app-footer></app-footer>
+    {% include footer.html %}
 
-    <script src="/assets/js/components.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+{% include scripts.html %}
 </body>
 
 </html>
