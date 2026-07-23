@@ -118,18 +118,16 @@ function processPlanData() {
                 const bm = extractMin(day.desc, 'bici');
                 if (bm) { bikeM = bm; runM -= bm; }
             } else if (day.sport === 'race') {
-                const raceTotMin = 210; // stima 3h30
-                
-                totals.totMin -= min; 
-                totals.totMin += raceTotMin;
+                // Usa la distanza reale dal dato (es. 23.1km per mezza, 42.195km per maratona)
+                const raceKm = day.runKm || 42.195;
+                const raceTotMin = day.durationMin || 210;
                 
                 runM = raceTotMin;
                 
-                totals.runKm += 42.195;
-                day.runKm = 42.195;
+                totals.runKm += raceKm;
+                day.runKm = raceKm;
                 totals.z3 += raceTotMin; // gara in Z3
                 day.computedZones = { z1: 0, z2: 0, z3: raceTotMin, z4: 0, z5: 0 };
-                day.durationMin = raceTotMin; 
             }
 
             totals.swimMin += Math.max(0, swimM);
@@ -155,7 +153,7 @@ function processPlanData() {
                 totals.bikeKm += bDist;
                 day.bikeKm = Math.round(bDist * 10) / 10;
             }
-            if (runM > 0) {
+            if (runM > 0 && day.sport !== 'race') {
                 const brickDist = extractBrickDistances(day.desc);
                 let rDist = day.runKm || brickDist.runKm || estimateKm(runM, zones, 'run');
                 totals.runKm += rDist;
@@ -657,7 +655,7 @@ function openWeek(idx) {
             <div class="sdb-title">${day.title}</div>
             <div class="sdb-desc">${highlightZones(day.desc)}</div>
             ${(day.swimM || day.bikeKm || day.runKm) ? '<div class="mt-1 text-info opacity-100" style="font-size:0.85rem;">Distanza: ' + [day.swimM ? '🏊 ' + day.swimM + 'm' : null, day.bikeKm ? '🚴 ' + day.bikeKm + 'km' : null, day.runKm ? '🏃 ' + day.runKm + 'km' : null].filter(Boolean).join(' &nbsp;|&nbsp; ') + '</div>' : ''}
-            ${day.sport === 'race' ? `
+            ${day.sport === 'race' && day.runKm >= 42 ? `
             <div class="mt-2 race-estimate-table">
                 <table class="w-100" style="font-size: 0.75rem; border-collapse: collapse;">
                     <thead>
@@ -669,7 +667,7 @@ function openWeek(idx) {
                     </thead>
                     <tbody>
                         <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                            <td style="padding: 4px 6px; color: var(--im-run);">🏃 Corsa 42.195km</td>
+                            <td style="padding: 4px 6px; color: var(--im-run);">🏃 Corsa ${day.runKm}km</td>
                             <td style="padding: 4px 6px; text-align: center; color: #86efac;">3h 15m</td>
                             <td style="padding: 4px 6px; text-align: center; color: #fcd34d;">3h 30m</td>
                         </tr>

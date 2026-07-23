@@ -1,0 +1,332 @@
+[
+    {
+        "settimana": "SETTIMANA 1 (IM-W01)",
+        "date": "30 nov – 06 dic",
+        "fase": "FASE 0 – Recupero e Transizione",
+        "note": "Scarico post-maratona. Nessuna fretta: solo tecnica, scioglimento e ascolto del corpo.",
+        "giorni": {
+            "Lunedì": "Riposo / Nuoto tecnica - ☀️ riposo | 🌙 Nuoto 45' Z1 — solo tecnica e scivolamento [Durata prevista: 45 min, Nuoto: 1350m]",
+            "Martedì": "Bici agilità - ☀️: Bici 45' Z1 — agilità pura >90rpm per sciogliere le gambe [Durata prevista: 45 min, Bici: 20km]",
+            "Mercoledì": "Riposo / Camminata - ☀️: riposo o camminata 30' [Durata prevista: 30 min]",
+            "Giovedì": "Riposo / Nuoto respirazione - ☀️ riposo | 🌙 Nuoto 45' Z1/Z2 — esercizi respirazione e pull buoy [Durata prevista: 45 min, Nuoto: 1400m]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "Bici pianura Z1/Z2 - Bici 60' Z1/Z2 — pianura, focus agilità [Durata prevista: 60 min, Bici: 26km]",
+            "Domenica": "Corsa test articolazioni - Corsa 20' Z1 — corsa/camminata leggerissima per testare le articolazioni [Durata prevista: 20 min, Corsa: 2.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 2 (IM-W02)",
+        "date": "07 dic – 13 dic",
+        "fase": "FASE 0 – Recupero e Transizione",
+        "note": "Ripresa strutturata: volumi bassi ma regolarità su tutti e tre gli sport.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto frazionati - ☀️ Corsa 30' Z2 | 🌙 Nuoto 50' Z2 — frazionati brevi con ampio recupero [Durata prevista: 80 min, Nuoto: 1600m, Corsa: 4.5km]",
+            "Martedì": "Bici agilità costante - ☀️: Bici 60' Z2 — agilità costante [Durata prevista: 60 min, Bici: 27km]",
+            "Mercoledì": "Corsa Z2 - ☀️: Corsa 40' Z2 [Durata prevista: 40 min, Corsa: 6.5km]",
+            "Giovedì": "Bici Z1/Z2 / Nuoto trazione - ☀️ Bici 45' Z1/Z2 | 🌙 Nuoto 50' Z2 — focus trazione [Durata prevista: 95 min, Nuoto: 1600m, Bici: 21km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (1h30 Bici + 10min Corsa) - Bici 90' Z2 (percorso vallonato leggero) + brick: Corsa 10' Z2 [Durata prevista: 100 min, Bici: 40km, Corsa: 1.5km]",
+            "Domenica": "Corsa domenicale - Corsa 45' Z2 [Durata prevista: 45 min, Corsa: 7km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 3 (IM-W03)",
+        "date": "14 dic – 20 dic",
+        "fase": "FASE 0 – Recupero e Transizione",
+        "note": "Terza settimana di recupero: si introducono i primi stimoli Z3 ma il volume rimane basso.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto blocchi 100m - ☀️ Corsa 45' Z2 | 🌙 Nuoto 60' Z2 — blocchi da 100m [Durata prevista: 105 min, Nuoto: 2000m, Corsa: 7km]",
+            "Martedì": "Bici Z3 intervalli - ☀️: Bici 75' Z3 — 15' wa Z2 + 4×8' Z3 rec 2' Z2 + 20' cd Z2 [Durata prevista: 75 min, Bici: 34km]",
+            "Mercoledì": "Corsa fartlek Z4 - ☀️: Corsa 45' — 15' wa Z2 + 6×1' Z4 rec 2' Z2 + 10' cd Z2 [Durata prevista: 45 min, Corsa: 7km]",
+            "Giovedì": "Bici Z1 / Nuoto tecnica mista - ☀️ Bici 45' Z1 | 🌙 Nuoto 60' Z2 — esercizi misti e tecnica [Durata prevista: 105 min, Nuoto: 2000m, Bici: 20km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h00 Bici + 15min Corsa) - Bici 120' Z2 + brick: Corsa 15' Z2 [Durata prevista: 135 min, Bici: 54km, Corsa: 2.5km]",
+            "Domenica": "Corsa lunga domenicale - Corsa 60' Z2 [Durata prevista: 60 min, Corsa: 9.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 4 (IM-W04)",
+        "date": "21 dic – 27 dic",
+        "fase": "FASE 0 – Recupero e Transizione",
+        "note": "Scarico pre-Fase 1: volume ridotto a ~7h. Corpo fresco per il primo blocco di costruzione.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto tecnica - ☀️ Corsa 35' Z2 | 🌙 Nuoto 45' Z2 — tecnica, nessuna fretta [Durata prevista: 80 min, Nuoto: 1400m, Corsa: 5.5km]",
+            "Martedì": "Bici Z2 agilità - ☀️: Bici 55' Z2 — agilità pura [Durata prevista: 55 min, Bici: 24km]",
+            "Mercoledì": "Corsa Z2 sciolta - ☀️: Corsa 40' Z2 [Durata prevista: 40 min, Corsa: 6.5km]",
+            "Giovedì": "Bici Z1 / Nuoto scioltissimo - ☀️ Bici 40' Z1 | 🌙 Nuoto 40' Z1 — solo scioltezza [Durata prevista: 80 min, Nuoto: 1200m, Bici: 17km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (1h30 Bici + 15min Corsa) - Bici 90' Z2 + brick: Corsa 15' Z2 [Durata prevista: 105 min, Bici: 44km, Corsa: 2km]",
+            "Domenica": "Corsa domenicale Z2 - Corsa 55' Z2 [Durata prevista: 55 min, Corsa: 8.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 5 (IM-W05)",
+        "date": "28 dic – 03 gen",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Costruzione 1: primo blocco di carico strutturato. Lunga in sella il sabato con mangiare e bere in movimento.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto pull buoy - ☀️ Corsa 45' Z2 | 🌙 Nuoto 60' Z2 — 1500m totali con pull buoy [Durata prevista: 105 min, Nuoto: 1500m, Corsa: 7km]",
+            "Martedì": "Bici Z3 intervalli 10min - ☀️: Bici 75' Z3 — 15' wa Z2 + 4×10' Z3 rec 3' Z2 + 10' cd Z2 [Durata prevista: 75 min, Bici: 35km]",
+            "Mercoledì": "Corsa variata 5 ripetute km - ☀️: Corsa 60' variato — 15' wa Z2 + 5×[1km Z3 + 1km Z2] + 5' cd Z2 [Durata prevista: 60 min, Corsa: 10.5km]",
+            "Giovedì": "Bici Z1/Z2 / Nuoto 100m - ☀️ Bici 60' Z1/Z2 | 🌙 Nuoto 60' Z2 — lavori da 100m [Durata prevista: 120 min, Nuoto: 2000m, Bici: 27km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h15 Bici + 15min Corsa) - Bici 135' Z2 (pianura costante) + brick: Corsa 15' Z2 [Durata prevista: 150 min, Bici: 67km, Corsa: 2.5km]",
+            "Domenica": "Corsa lunga - Corsa 80' Z2 [Durata prevista: 80 min, Corsa: 12.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 6 (IM-W06)",
+        "date": "04 gen – 10 gen",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Costruzione 2: si allunga la bici del sabato e si introduce la palette in vasca.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto palette - ☀️ Corsa 45' Z2 | 🌙 Nuoto 60' Z2 — 1600m totali, introduzione palette [Durata prevista: 105 min, Nuoto: 1600m, Corsa: 7km]",
+            "Martedì": "Bici Z3 intervalli 15min - ☀️: Bici 75' Z3 — 15' wa Z2 + 3×15' Z3 rec 4' Z2 + 10' cd Z2 [Durata prevista: 75 min, Bici: 36km]",
+            "Mercoledì": "Corsa variata 6 ripetute km - ☀️: Corsa 70' variato — 15' wa Z2 + 6×[1km Z3 + 1km Z2] + 5' cd Z2 [Durata prevista: 70 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1 / Nuoto 200m - ☀️ Bici 60' Z1 | 🌙 Nuoto 60' Z2 — lavori da 200m continui [Durata prevista: 120 min, Nuoto: 2000m, Bici: 26km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h30 Bici + 15min Corsa) - Bici 150' Z2 (agilità >85rpm) + brick: Corsa 15' Z2 [Durata prevista: 165 min, Bici: 67km, Corsa: 2.5km]",
+            "Domenica": "Corsa lunga - Corsa 90' Z2 [Durata prevista: 90 min, Corsa: 14km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 7 (IM-W07)",
+        "date": "11 gen – 17 gen",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Costruzione 3 – Carico: introdotto Z4 bici ma con gestione più conservativa della corsa.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto progressioni - ☀️ Corsa 50' Z2 | 🌙 Nuoto 60' Z2/Z3 — 1800m totali con progressioni [Durata prevista: 110 min, Nuoto: 1800m, Corsa: 8km]",
+            "Martedì": "Bici Z4 intervalli 8min - ☀️: Bici 80' Z4 — 20' wa Z2 + 4×8' Z4 rec 3' Z1 + 15' cd Z2 [Durata prevista: 80 min, Bici: 37km]",
+            "Mercoledì": "Corsa variata lungo 2km - ☀️: Corsa 70' variato — 15' wa Z2 + 3×[2km Z3 + 1km Z2] + 5' cd Z2 [Durata prevista: 70 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1 / Nuoto 400m - ☀️ Bici 60' Z1 | 🌙 Nuoto 60' Z2 — endurance 400m continui [Durata prevista: 120 min, Nuoto: 2000m, Bici: 26km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h40 Bici + 20min Corsa) - Bici 160' Z2 (mangia e bevi in sella) + brick: Corsa 20' Z2/Z3 [Durata prevista: 180 min, Bici: 86km, Corsa: 3.5km]",
+            "Domenica": "Corsa lunga - Corsa 90' Z2 [Durata prevista: 90 min, Corsa: 14.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 8 (IM-W08)",
+        "date": "18 gen – 24 gen",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Scarico: volume ridotto, nessun brick il sabato. Recupero profondo prima del blocco sviluppo.",
+        "giorni": {
+            "Lunedì": "Corsa Z1/Z2 / Nuoto tecnica - ☀️ Corsa 40' Z1/Z2 | 🌙 Nuoto 45' Z1 — solo tecnica [Durata prevista: 85 min, Nuoto: 1350m, Corsa: 5.5km]",
+            "Martedì": "Bici Z2 - ☀️: Bici 60' Z2 [Durata prevista: 60 min, Bici: 27km]",
+            "Mercoledì": "Corsa passo fluido - ☀️: Corsa 45' Z2 [Durata prevista: 45 min, Corsa: 7km]",
+            "Giovedì": "Bici Z1 / Nuoto scivolamento - ☀️ Bici 45' Z1 | 🌙 Nuoto 45' Z2 — scivolamento [Durata prevista: 90 min, Nuoto: 1500m, Bici: 20km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "Bici Z2 - Bici 105' Z2 [Durata prevista: 105 min, Bici: 47km]",
+            "Domenica": "Corsa Z2 - Corsa 60' Z2 [Durata prevista: 60 min, Corsa: 9.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 9 (IM-W09)",
+        "date": "25 gen – 31 gen",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Sviluppo Base 1: intervalli Z3 da 20min in bici, ripetute 2km in corsa, 800m continui in vasca.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto forza palette - ☀️ Corsa 45' Z2 | 🌙 Nuoto 60' Z2/Z3 — 1800m, focus forza con palette [Durata prevista: 105 min, Nuoto: 1800m, Corsa: 7km]",
+            "Martedì": "Bici Z3 intervalli 20min - ☀️: Bici 80' Z3 — 15' wa Z2 + 2×20' Z3 rec 5' Z2 + 15' cd Z2 [Durata prevista: 80 min, Bici: 37km]",
+            "Mercoledì": "Corsa variata 4×2km - ☀️: Corsa 75' variato — 15' wa Z2 + 4×[2km Z3 + 1km Z2] + 5' cd Z2 [Durata prevista: 75 min, Corsa: 13km]",
+            "Giovedì": "Bici Z1 / Nuoto 800m - ☀️ Bici 60' Z1 | 🌙 Nuoto 60' Z2 — 800m continui [Durata prevista: 120 min, Nuoto: 2000m, Bici: 26km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h55 Bici + 20min Corsa) - Bici 175' Z2 + brick: Corsa 20' Z2 [Durata prevista: 195 min, Bici: 94km, Corsa: 3.5km]",
+            "Domenica": "Corsa lunga - Corsa 100' Z2 [Durata prevista: 100 min, Corsa: 16km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 10 (IM-W10)",
+        "date": "01 feb – 07 feb",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Sviluppo Base 2: Z4 in bici, ripetute 3km in corsa, bici del sabato 3h30 con brick progressivo.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto 200m - ☀️ Corsa 50' Z2 | 🌙 Nuoto 65' Z2 — 2000m, blocchi da 200m [Durata prevista: 115 min, Nuoto: 2000m, Corsa: 8km]",
+            "Martedì": "Bici Z4 intervalli 6min - ☀️: Bici 85' Z4 — 20' wa Z2 + 5×6' Z4 rec 3' Z1 + 15' cd Z2 [Durata prevista: 85 min, Bici: 39km]",
+            "Mercoledì": "Corsa variata 2×3km - ☀️: Corsa 70' variato — 15' wa Z2 + 2×[3km Z3 + 1km Z2] + 10' cd Z2 [Durata prevista: 70 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1/Z2 / Nuoto passo costante - ☀️ Bici 60' Z1/Z2 | 🌙 Nuoto 60' Z2 — passo costante [Durata prevista: 120 min, Nuoto: 2000m, Bici: 27km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h10 Bici + 20min Corsa) - Bici 190' Z2 + brick: Corsa 20' (primi 10' Z3) [Durata prevista: 210 min, Bici: 100km, Corsa: 3.5km]",
+            "Domenica": "Corsa lunga - Corsa 105' Z2 [Durata prevista: 105 min, Corsa: 16.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 11 (IM-W11)",
+        "date": "08 feb – 14 feb",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Volume più specifico 70.3: ridotta la corsa lunga per limitare fatica residua.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto forza Z3 - ☀️ Corsa 45' Z2 | 🌙 Nuoto 65' Z3 — 2100m forza con palette [Durata prevista: 110 min, Nuoto: 2100m, Corsa: 7.5km]",
+            "Martedì": "Bici Z3 intervalli 15min x3 - ☀️: Bici 80' Z3 — 15' wa + 3×15' Z3 rec 4' Z1 + 10' cd [Durata prevista: 80 min, Bici: 36km]",
+            "Mercoledì": "Corsa variata 3×2km - ☀️: Corsa 75' variato — 15' wa + 3×[2km Z3 + 1km Z2] + 10' cd [Durata prevista: 75 min, Corsa: 13km]",
+            "Giovedì": "Bici Z1 / Nuoto endurance - ☀️ Bici 60' Z1 | 🌙 Nuoto 65' Z2 — 2200m aerobici [Durata prevista: 125 min, Nuoto: 2200m, Bici: 26km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h10 Bici + 30min Corsa) - Bici 190' Z2 + brick: Corsa 30' Z2/Z3 [Durata prevista: 220 min, Bici: 105km, Corsa: 6km]",
+            "Domenica": "Corsa lunga 1h40 - Corsa 100' Z2 [Durata prevista: 100 min, Corsa: 16km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 12 (IM-W12)",
+        "date": "15 feb – 21 feb",
+        "fase": "FASE 1 – Costruzione di Base",
+        "note": "Scarico pre-Macro 2: volume −30%, intensità minima. 4 allunghi brevi mercoledì per mantenere la reattività.",
+        "giorni": {
+            "Lunedì": "Corsa Z1 / Nuoto Z1/Z2 - ☀️ Corsa 40' Z1 | 🌙 Nuoto 45' Z1/Z2 [Durata prevista: 85 min, Nuoto: 1450m, Corsa: 5km]",
+            "Martedì": "Bici Z2 - ☀️: Bici 60' Z2 [Durata prevista: 60 min, Bici: 27km]",
+            "Mercoledì": "Corsa Z2 con allunghi - ☀️: Corsa 50' Z2 con 4 allunghi da 100m [Durata prevista: 50 min, Corsa: 8km]",
+            "Giovedì": "Bici Z1 / Nuoto tecnica pura - ☀️ Bici 45' Z1 | 🌙 Nuoto 45' tecnica pura [Durata prevista: 90 min, Nuoto: 1350m, Bici: 20km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (2h Bici + 10min Corsa) - Bici 120' Z2 + brick: Corsa 10' Z2 [Durata prevista: 130 min, Bici: 54km, Corsa: 1.5km]",
+            "Domenica": "Corsa Z2 - Corsa 70' Z2 [Durata prevista: 70 min, Corsa: 11km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 13 (IM-W13)",
+        "date": "22 feb – 28 feb",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Build più specifico 70.3: ridotto il lungo run e aumentata la specificità del brick.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto tecnica - ☀️ Corsa 40' Z2 | 🌙 Nuoto 65' Z2 — Focus bracciata [Durata prevista: 105 min, Nuoto: 2200m, Corsa: 6.5km]",
+            "Martedì": "Bici Z3 alta 4×8min - ☀️: Bici 75' Z3 alta — 20' wa + 4×8' Z3+ rec 3' Z2 + 10' cd [Durata prevista: 75 min, Bici: 35km]",
+            "Mercoledì": "Corsa qualità 5×1000m Z4 - ☀️: Corsa 75' qualità — 15' wa + 5×1000m Z4 rec 2' Z2 + 15' cd [Durata prevista: 75 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1/Z2 / Nuoto 3×500m gara - ☀️ Bici 55' Z1/Z2 | 🌙 Nuoto 65' Z3 — 3×500m passo gara [Durata prevista: 120 min, Nuoto: 2300m, Bici: 25km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h15 Bici + 45min Corsa) - Bici 195' Z2 (ultimi 40' Z3) + brick: Corsa 45' Z3 [Durata prevista: 240 min, Bici: 105km, Corsa: 9km]",
+            "Domenica": "Corsa lunga 1h45 - Corsa 105' Z2 [Durata prevista: 105 min, Corsa: 17km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 14 (IM-W14)",
+        "date": "01 mar – 07 mar",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Incremento carichi Sabato/Domenica. Martedì e Mercoledì compatti.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto palette - ☀️ Corsa 45' Z2 | 🌙 Nuoto 70' Z2 — Aerobico [Durata prevista: 115 min, Nuoto: 2200m, Corsa: 7km]",
+            "Martedì": "Bici Z3/Z4 3×12min - ☀️: Bici 80' Z3/Z4 — 20' wa + 3×12' Z3 alta rec 4' Z2 + 10' cd [Durata prevista: 80 min, Bici: 37km]",
+            "Mercoledì": "Corsa variata 4×2km - ☀️: Corsa 80' variato — 15' wa + 4×[2km Z3 + 1km Z2] + 10' cd [Durata prevista: 80 min, Corsa: 14km]",
+            "Giovedì": "Bici Z1 / Nuoto 2×800m Z3 - ☀️ Bici 60' Z1 | 🌙 Nuoto 65' Z3 — 2×800m rec 45\" [Durata prevista: 125 min, Nuoto: 2000m, Bici: 27km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h35 Bici + 35min Corsa) - Bici 215' Z2 - ultimi 45' Z3 + brick: Corsa 35' Z3 [Durata prevista: 250 min, Bici: 112km, Corsa: 7km]",
+            "Domenica": "Corsa lunga 1h35 - Corsa 95' Z2 [Durata prevista: 95 min, Corsa: 15.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 15 (IM-W15)",
+        "date": "08 mar – 14 mar",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Picco controllato: più focus sul brick lungo e meno corsa residua.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto 2400m - ☀️ Corsa 50' Z2 | 🌙 Nuoto 75' Z2 — Endurance [Durata prevista: 125 min, Nuoto: 2600m, Corsa: 8km]",
+            "Martedì": "Bici Z4 4×8min - ☀️: Bici 80' Z4 — 20' wa + 4×8' Z4 rec 5' Z1 + 15' cd [Durata prevista: 80 min, Bici: 38km]",
+            "Mercoledì": "Corsa qualità 3×2000m Z4 - ☀️: Corsa 80' qualità — 15' wa + 3×2000m Z4 rec 2' Z2 + 15' cd [Durata prevista: 80 min, Corsa: 14km]",
+            "Giovedì": "Bici Z1 / Nuoto 4×500m Z3 - ☀️ Bici 65' Z1 | 🌙 Nuoto 70' Z3 — 4×500m rec 20\" [Durata prevista: 135 min, Nuoto: 2500m, Bici: 28km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h20 Bici + 50min Corsa) - Bici 200' Z2 (con 3×20' Z3) + brick: Corsa 50' Z2/Z3 controllato [Durata prevista: 250 min, Bici: 105km, Corsa: 10km]",
+            "Domenica": "Corsa lunga 1h45 - Corsa 105' Z2 [Durata prevista: 105 min, Corsa: 17km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 16 (IM-W16)",
+        "date": "15 mar – 21 mar",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Scarico intermedio: volume ridotto, intensità minima. 5 allunghi finali mercoledì per mantenere la reattività.",
+        "giorni": {
+            "Lunedì": "Corsa Z1 / Nuoto tecnica pura - ☀️ Corsa 40' Z1 | 🌙 Nuoto 45' Z1 — tecnica pura [Durata prevista: 85 min, Nuoto: 1350m, Corsa: 5km]",
+            "Martedì": "Bici Z2 agilità - ☀️: Bici 60' Z2 — agilità senza forzare [Durata prevista: 60 min, Bici: 27km]",
+            "Mercoledì": "Corsa Z2 + allunghi - ☀️: Corsa 45' Z2 con 5 allunghi finali per sciogliere [Durata prevista: 45 min, Corsa: 7km]",
+            "Giovedì": "Bici Z1 / Nuoto scioltezza - ☀️ Bici 45' Z1 | 🌙 Nuoto 45' Z2 — scioltezza [Durata prevista: 90 min, Nuoto: 1500m, Bici: 20km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (1h50 Bici + 10min Corsa) - Bici 110' Z2 (regolare) + brick: Corsa 10' Z2 [Durata prevista: 120 min, Bici: 50km, Corsa: 1.5km]",
+            "Domenica": "Corsa Z2 - Corsa 75' Z2 [Durata prevista: 75 min, Corsa: 12km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 17 (IM-W17)",
+        "date": "22 mar – 28 mar",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Transizione al picco: Inseriti test ritmo gara in vasca. Infrasettimanali max 85 min.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto forza - ☀️ Corsa 50' Z2 | 🌙 Nuoto 70' Z2 — 2400m forza braccia [Durata prevista: 120 min, Nuoto: 2400m, Corsa: 8km]",
+            "Martedì": "Bici Z3 alta 2×20min - ☀️: Bici 85' Z3 alta — 15' wa + 2×20' Z3 alta rec 5' Z1 + 25' cd [Durata prevista: 85 min, Bici: 39km]",
+            "Mercoledì": "Corsa variata 3×3km - ☀️: Corsa 85' variato — 15' wa + 3×[3km Z3 + 1km Z2] + 15' cd [Durata prevista: 85 min, Corsa: 15km]",
+            "Giovedì": "Bici Z1 / Nuoto 1500m test - ☀️ Bici 60' Z1 | 🌙 Nuoto 70' Z3 — 1500m ritmo gara [Durata prevista: 130 min, Nuoto: 2400m, Bici: 27km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h30 Bici + 45min Corsa) - Bici 210' (con 4×20' Z3) + brick: Corsa 45' Z3 [Durata prevista: 255 min, Bici: 108km, Corsa: 9km]",
+            "Domenica": "Corsa lunga 1h35 - Corsa 95' Z2 [Durata prevista: 95 min, Corsa: 15.5km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 18 (IM-W18)",
+        "date": "29 mar – 04 apr",
+        "fase": "FASE 2 – Sviluppo e Combinati",
+        "note": "Picco specifico 70.3: mantenuta alta la bici, ridotta la corsa lunga.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto 2500m qualità - ☀️ Corsa 50' Z2 | 🌙 Nuoto 75' Z2/Z3 — lavori qualità e tecnica continua [Durata prevista: 125 min, Nuoto: 2500m, Corsa: 8.5km]",
+            "Martedì": "Bici Z4 5×6min - ☀️: Bici 85' Z4 — 20' wa + 5×6' Z4 rec 3' Z1 + 25' cd [Durata prevista: 85 min, Bici: 40km]",
+            "Mercoledì": "Corsa qualità 4×1200m Z4 - ☀️: Corsa 70' — 15' wa + 4×1200m Z4 rec 2' Z2 + 15' cd [Durata prevista: 70 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1/Z2 / Nuoto 5×400m Z3 - ☀️ Bici 60' Z1/Z2 | 🌙 Nuoto 75' Z3 — 5×400m rec 15\" [Durata prevista: 135 min, Nuoto: 2600m, Bici: 28km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h25 Bici + 45min Corsa) - Bici 205' Z2/Z3 costante (test nutrizione gara) + brick: Corsa 45' Z3 controllato [Durata prevista: 240 min, Bici: 100km, Corsa: 9km]",
+            "Domenica": "Corsa lunga 1h30 - Corsa 90' Z2 [Durata prevista: 90 min, Corsa: 15km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 19 (IM-W19)",
+        "date": "05 apr – 11 apr",
+        "fase": "FASE 2 – Transizione al Picco",
+        "note": "Transizione specifica: ridotto il carico run per preservare brillantezza e recupero.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto aerobico - ☀️ Corsa 45' Z2 | 🌙 Nuoto 70' Z2 — 2500m sciolti [Durata prevista: 115 min, Nuoto: 2500m, Corsa: 8km]",
+            "Martedì": "Bici Z2/Z3 progressiva / Nuoto recupero - ☀️ Bici 85' Z2/Z3 — 30' Z2 + 40' Z3 + 15' cd | 🌙 Nuoto 35' Z1/Z2 — 1200m sciolti con tecnica e respirazione [Durata prevista: 120 min, Nuoto: 1200m, Bici: 40km]",
+            "Mercoledì": "Corsa Z2 con allunghi - ☀️: Corsa 60' Z2 con 6 allunghi da 100m finali [Durata prevista: 60 min, Corsa: 10km]",
+            "Giovedì": "Bici Z1 / Nuoto 1000m test - ☀️ Bici 60' Z1 | 🌙 Nuoto 70' Z2/Z3 — focus passo gara [Durata prevista: 130 min, Nuoto: 2500m, Bici: 27km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK (3h30 Bici + 35min Corsa) - Bici 210' Z2 costante + brick: Corsa 35' Z2/Z3 [Durata prevista: 245 min, Bici: 98km, Corsa: 7km]",
+            "Domenica": "Corsa lunga 1h25 - Corsa 85' Z2 [Durata prevista: 85 min, Corsa: 14km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 20 (IM-W20)",
+        "date": "12 apr – 18 apr",
+        "fase": "FASE 3 – Specificità e Tapering",
+        "note": "Week di Picco Specifico: Volume ridotto (-15%) ma intensità massima su ritmo gara.",
+        "giorni": {
+            "Lunedì": "Corsa Z2 / Nuoto acque libere - ☀️ Corsa 40' Z2 | 🌙 Nuoto 65' Z2/Z3 — simulazione sighting [Durata prevista: 105 min, Nuoto: 2500m, Corsa: 6.5km]",
+            "Martedì": "Bici Z3 ritmo gara 3×15min - ☀️: Bici 75' Z3 — 15' wa + 3×15' ritmo 70.3 rec 5' Z2 + 10' cd [Durata prevista: 75 min, Bici: 35km]",
+            "Mercoledì": "Corsa 8km ritmo gara - ☀️: Corsa 65' — 15' wa + 8km ritmo gara + 10' cd [Durata prevista: 65 min, Corsa: 12km]",
+            "Giovedì": "Bici Z1 / Nuoto 1900m test - ☀️ Bici 50' Z1 | 🌙 Nuoto 60' Z3 — 1900m ritmo gara [Durata prevista: 110 min, Nuoto: 1900m, Bici: 22km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "SIMULAZIONE: 80km Bici + 15min Corsa - Bici 180' (80km ritmo gara) + brick: Corsa 15' ritmo gara [Durata prevista: 210 min, Bici: 80km, Corsa: 3km]",
+            "Domenica": "Corsa aerobica - Corsa 60' Z2 [Durata prevista: 60 min, Corsa: 10km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 21 (IM-W21)",
+        "date": "19 apr – 25 apr",
+        "fase": "FASE 3 – Specificità e Tapering",
+        "note": "Tapering Reale: Volume -40%. Brillantezza e recupero.",
+        "giorni": {
+            "Lunedì": "Corsa Z1 / Nuoto sciolto - ☀️ Corsa 30' Z1 | 🌙 Nuoto 50' Z2 — tecnica [Durata prevista: 80 min, Nuoto: 1800m, Corsa: 4.5km]",
+            "Martedì": "Bici Z3 ritmo gara 3×8min - ☀️: Bici 60' — 20' wa + 3×8' ritmo gara rec 3' Z1 + 15' cd [Durata prevista: 60 min, Bici: 28km]",
+            "Mercoledì": "Corsa 4×1000m ritmo gara - ☀️: Corsa 45' — 15' wa + 4×1000m ritmo gara rec 2' Z1 + 10' cd [Durata prevista: 45 min, Corsa: 7.5km]",
+            "Giovedì": "Bici Z1 / Nuoto 4×200m - ☀️ Bici 40' Z1 | 🌙 Nuoto 45' Z3 — 4×200m ritmo gara [Durata prevista: 85 min, Nuoto: 1600m, Bici: 18km]",
+            "Venerdì": "Riposo Assoluto - Riposo attivo / mobilità",
+            "Sabato": "BRICK Soft - Bici 75' Z2 (con 20' ritmo gara) + brick: Corsa 15' ritmo gara [Durata prevista: 90 min, Bici: 35km, Corsa: 3km]",
+            "Domenica": "Corsa Z2 breve - Corsa 45' Z2 [Durata prevista: 45 min, Corsa: 7km]"
+        }
+    },
+    {
+        "settimana": "SETTIMANA 22 (IM-W22)",
+        "date": "26 apr – 02 mag",
+        "fase": "FASE 3 – Specificità e Tapering",
+        "note": "Race Week: Solo attivazione. Carico carboidrati e relax.",
+        "giorni": {
+            "Lunedì": "Nuoto scioltissimo - 🌙 Nuoto 35' Z1 — 1000m sciolti [Durata prevista: 35 min, Nuoto: 1000m]",
+            "Martedì": "Bici attivazione - ☀️: Bici 45' — 30' Z1 + 3×1' ritmo gara [Durata prevista: 45 min, Bici: 20km]",
+            "Mercoledì": "Corsa attivazione - ☀️: Corsa 30' — 20' Z1 + 4 allunghi 30\" [Durata prevista: 30 min, Corsa: 4km]",
+            "Giovedì": "Nuoto progressivi - 🌙 Nuoto 30' — 4×50m progressivi [Durata prevista: 30 min, Nuoto: 600m]",
+            "Venerdì": "Riposo — Logistica - Riposo completo e viaggio",
+            "Sabato": "Check pre-gara - Bici 15' + Corsa 5' — Check meccanico e attivazione gambe [Durata prevista: 20 min, Bici: 5km, Corsa: 1km]",
+            "Domenica": "🏅 GARA: Ironman 70.3 Jesolo - Dajeeee! [Durata prevista: 330 min]"
+        }
+    }
+]
