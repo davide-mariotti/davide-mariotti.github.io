@@ -12,19 +12,24 @@ e per le icone di Arti Ramas/Armi/Oggetti nella creazione del personaggio.
   Oggetti, e il motivo della scelta del formato quadrato 1:1. Leggilo prima
   di generare qualsiasi immagine, e aggiornalo se decidi di cambiare stile
   in futuro (poi rigenera i prompt).
-- `riferimenti/` — 12 ritratti di riferimento: Lupo Solitario, le 6 creature
+- `riferimenti/` — 22 ritratti di riferimento: Lupo Solitario, le 6 creature
   del bestiario "storico" dal Libro 1 (Kraan, Giak, Vordak, Drakkar, Gurgaz,
-  Tigerwolf), e le 5 new-entry del Libro 2 (Helghast, Zlanbeast, Vonotar,
-  Rhygar, Lord Axim). **Generali PRIMA di tutto il resto**: sono pensati per
-  essere riusati come immagine-guida quando generi le scene che contengono
-  quel soggetto, così il suo aspetto resta coerente da un'immagine
-  all'altra E tra un libro e il successivo (Vonotar, ad esempio, ricorre
-  anche nel Libro 3).
+  Tigerwolf), le 5 new-entry del Libro 2 (Helghast, Zlanbeast, Vonotar,
+  Rhygar, Lord Axim), le 6 new-entry del Libro 3 (Barbaro dei Ghiacci,
+  Kalkoth, Baknar, Demone di Ghiaccio, Akraa'Neonor, Loi-Kymar) e le 4
+  new-entry del Libro 4 (Barraka, Capitano D'Val, Elix, Madelon).
+  **Generali PRIMA di tutto il resto**: sono pensati per essere riusati come
+  immagine-guida quando generi le scene che contengono quel soggetto, così
+  il suo aspetto resta coerente da un'immagine all'altra E tra un libro e il
+  successivo (Vonotar, ad esempio, introdotto nel Libro 2, ricompare anche
+  nel Libro 3 con lo stesso identico ritratto — Helghast idem).
 - `book01/` — 55 prompt pronti per il Libro 1 (Fuga dalle Tenebre).
 - `book02/` — 50 prompt pronti per il Libro 2 (Fuoco sulle Acque).
-  Entrambe le cartelle: un file per sezione, già completo (riga "Base da
-  riutilizzare" + stile + personaggio/bestiario pertinenti + scena), più un
-  `_indice.md` con lo stato (sostituzione di un'immagine esistente o
+- `book03/` — 50 prompt pronti per il Libro 3 (Le Caverne di Kalte).
+- `book04/` — 50 prompt pronti per il Libro 4 (Il Baratro della Perdizione).
+  Tutte e quattro le cartelle: un file per sezione, già completo (riga "Base
+  da riutilizzare" + stile + personaggio/bestiario pertinenti + scena), più
+  un `_indice.md` con lo stato (sostituzione di un'immagine esistente o
   aggiunta nuova) e quali ritratti di riferimento servono per ciascuna.
 - `creazione-personaggio/arti-ramas/` — 10 icone, una per Arte Ramas
   (Mimetismo, Caccia, Sesto Senso, Orientamento, Guarigione, Scherma,
@@ -51,13 +56,14 @@ e per le icone di Arti Ramas/Armi/Oggetti nella creazione del personaggio.
    riferimento anche dopo che li hai usati — non vanno rigenerati/rilanciati
    una seconda volta solo perché esiste il file. Prima di lanciare un
    ritratto, controlla cosa hai già come immagine salvata: se hai già fatto
-   Lupo Solitario e il bestiario del Libro 1/2, quando arrivi a un libro
+   Lupo Solitario e il bestiario dei Libri 1-4, quando arrivi a un libro
    nuovo dovrai generare solo i ritratti delle creature/personaggi
    VERAMENTE nuovi che quel libro introduce (vedi "Estendere ad altri
    libri" sotto).
-2. Apri `book01/_indice.md` o `book02/_indice.md` e scegli quale sezione
-   generare (o falle tutte in ordine). La colonna "Riferimenti da usare" ti
-   dice quali ritratti servono per quella scena.
+2. Apri `book01/_indice.md`, `book02/_indice.md`, `book03/_indice.md` o
+   `book04/_indice.md` e scegli quale sezione generare (o falle tutte in
+   ordine). La colonna "Riferimenti da usare" ti dice quali ritratti servono
+   per quella scena.
 3. Apri il file `.txt` della sezione e copia **l'intero contenuto** nel
    generatore. Se lo strumento supporta testo+immagine (Nano Banana/Gemini
    sì), allega anche i ritratti di riferimento indicati nella prima riga
@@ -98,18 +104,20 @@ bestiario pertinenti + scena specifica).
 
 ## Estendere ad altri libri
 
-Per il Libro 3, 4, ecc.: crea una cartella `bookNN/`, riusa lo stesso
+Per il Libro 5, 6, ecc.: crea una cartella `bookNN/`, riusa lo stesso
 `00-stile-base.md` e gli stessi ritratti in `riferimenti/` (Lupo Solitario e
-il bestiario già esistente restano gli stessi in tutta la serie — Book 2 ha
-già dimostrato che questo funziona: Vonotar, introdotto lì, ricompare anche
-nel Libro 3 con lo stesso identico ritratto). Se un libro introduce nuove
-creature/personaggi ricorrenti (appaiono in 3+ scene scelte):
+il bestiario già esistente restano gli stessi in tutta la serie — i Libri
+2-4 hanno già dimostrato che questo funziona: Vonotar, introdotto nel Libro
+2, ricompare nel Libro 3 con lo stesso identico ritratto; Helghast idem). Se
+un libro introduce nuove creature/personaggi ricorrenti (appaiono in 3+
+scene scelte):
 1. Aggiungi la voce del bestiario in `00-stile-base.md`.
 2. Genera il suo ritratto di riferimento in `riferimenti/`.
 3. Scrivi i prompt di scena del nuovo libro con la riga "Base da
-   riutilizzare" che lo include, esattamente come fatto per `book01/`/`book02/`.
+   riutilizzare" che lo include, esattamente come fatto per gli altri libri.
 
 Personaggi umani nominati che compaiono SOLO in quel libro (es. Rhygar, Lord
-Axim nel Libro 2) meritano comunque un ritratto se ricorrono spesso — non
-serve che tornino in libri futuri per giustificarlo, basta la coerenza
-interna al libro stesso su più illustrazioni.
+Axim nel Libro 2; Barraka, Capitano D'Val, Madelon nel Libro 4) meritano
+comunque un ritratto se ricorrono spesso — non serve che tornino in libri
+futuri per giustificarlo, basta la coerenza interna al libro stesso su più
+illustrazioni.

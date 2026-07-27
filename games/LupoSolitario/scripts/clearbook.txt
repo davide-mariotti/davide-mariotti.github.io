@@ -25,3 +25,4 @@ I file si trovano nella cartella corrente. La struttura dei file è identica a q
 - In `errata.htm`: rimuovi la frase nell'introduzione che invita a contattare lo staff di Project Aon in caso di errori ("If you see anything that needs correction, please contact the Project Aon Staff.").
 
 Ti prego di non chiedere conferme per ogni singolo file, ma procedi direttamente eseguendo i tool o gli script necessari, comunicandomi poi il riepilogo a fine lavoro.
+non creare nessun file di riepilogo, e se lo crei, cancellalo alla fine dei tuoi processi

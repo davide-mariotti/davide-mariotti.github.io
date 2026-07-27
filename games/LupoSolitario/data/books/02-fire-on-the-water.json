@@ -8,7 +8,7 @@
  "sections": {
   "1": {
    "text": "<p>Il Capitano D'Val e le sue guardie ti scortano fino al cancello della cittadella dove ti attende un piccolo carro coperto. Non appena sali a bordo, i cancelli si spalancano e vieni condotto in fretta attraverso le strade affollate di Holmgard. Dopo un viaggio breve ma scomodo, il carro si ferma e il cocchiere apre il telone.</p><p>«Questo e il molo, mio signore. Ecco la vostra nave, la Scettro Verde.» Mentre parla, il cocchiere indica dall'altra parte del molo un'elegante caravella da trasporto ancorata vicino al muro del porto.</p><p>«Il nome del primo ufficiale e Ronan. Lo troverai ad attenderti dall'altra parte della piazza, alla locanda Buon Umore.» Poi il cocchiere ti saluta e scompare rapidamente tra la folla brulicante.</p><p>Raggiungi la locanda e trovi le porte d'ingresso chiuse a chiave e le imposte delle finestre sbarrate. Stai cercando di decidere cosa fare quando una mano ti afferra il braccio e vieni trascinato nell'oscurita.</p>",
-   "image": "public/img/book02/sec1.png",
+   "image": "public/img/book02/sec001.png",
    "choices": [
     {
      "text": "Se vuoi estrarre l'arma e attaccare il tuo aggressore sconosciuto",
@@ -51,7 +51,7 @@
   },
   "4": {
    "text": "<p>La taverna e piena di briganti e ubriaconi, gli equipaggi buoni a nulla delle navi mercantili ormeggiate al molo, tutti a cantare e bere mentre alcuni mettono alla prova la loro forza a braccio di ferro. Sono tutti cosi presi che nessuno nota il tuo ingresso. In un angolo lontano, vedi i pescatori che ti hanno derubato. Sono seduti a un tavolo rotondo coperto di boccali di birra vuoti. Sai che se vuoi raggiungere Durenor in tempo, devi recuperare il Sigillo di Hammerdal e il tuo oro.</p>",
-   "image": "public/img/book02/sec4.png",
+   "image": "public/img/book02/sec004.png",
    "choices": [
     {
      "text": "Se vuoi affrontare i pescatori",
@@ -85,7 +85,6 @@
   },
   "6": {
    "text": "<p>Il ragazzo si e accorto che lo stavi seguendo. Una volta fuori, si volta e corre verso sud. Ti lanci all'inseguimento ma presto scompare nel labirinto di vicoli e magazzini che costeggiano il lungomare.</p><p>Svolti a est in Oxyoke Way e cammini oltre un altro ingresso dell'emporio commerciale. Poco piu avanti, noti un'insegna sopra la porta di un piccolo negozio:</p>",
-   "image": "public/img/book02/sec6.png",
    "choices": [
     {
      "text": "Se vuoi entrare nell'armeria",
@@ -99,6 +98,7 @@
   },
   "7": {
    "text": "<p>Dorier si alza di scatto dal tavolo ed estrae la spada. In un istante, suo fratello Ganon gli e accanto. Devi combatterli entrambi come un unico nemico.</p><p>Grazie alla sorpresa del tuo attacco, aggiungi 2 punti alla tua Combattivita solo per il primo round di questo combattimento. Grazie alla loro forza di volonta combinata, un'abilita sviluppata durante il loro addestramento da cavalieri, sono immuni al Psicolaser.</p>",
+   "image": "public/img/book02/sec007.png",
    "combat": {
     "name": "Dorier + Ganon",
     "combattivita": 28,
@@ -119,7 +119,7 @@
   },
   "9": {
    "text": "<p>E la mattina presto del quindicesimo giorno della tua missione quando apri gli occhi davanti allo spettacolo mozzafiato di Hammerdal, la citta di montagna. La capitale di Durenor, a differenza delle altre citta delle Terre Ultime, non necessita di fortificazioni costruite dall'uomo. Le vette che la circondano, la Catena di Hammerdal, offrono una protezione molto piu sicura al popolo che vi abita.</p><p>Il carro sfreccia attraverso le rigogliose terre coltivate che circondano la citta, con le sue numerose torri e ampie strade. Su una collina nel cuore di Hammerdal si erge la Torre del Re, una magnifica struttura di vetro e pietra. Mentre il carro si ferma ai cancelli della torre, ti rendi improvvisamente conto per la prima volta che, come portatore della Spada del Sole, il tuo destino e diventare parte della piu antica leggenda delle Terre Ultime.</p>",
-   "image": "public/img/book02/sec9.png",
+   "image": "public/img/book02/sec009.png",
    "choices": [
     {
      "text": "Prosegui",
@@ -154,7 +154,6 @@
   },
   "12": {
    "text": "<p>Il Capitano Kelman apre una vetrinetta e ne estrae una scacchiera da Samor. Le pedine finemente intagliate sono gia disposte quando la posa con cura sul tavolo.</p><p>Dopo aver accettato, un po' riluttante, una scommessa di 10 Corone, iniziate la partita.</p><p>Pesca un numero dalla Tabella del Destino. Se possiedi l'Arte Ramas del Sesto Senso, puoi aggiungere 2 a questo numero.</p>",
-   "image": "public/img/book02/sec12.png",
    "choices": [
     {
      "text": "Numero 0-3",
@@ -216,6 +215,7 @@
   },
   "17": {
    "text": "<p>Ti sei tirato a meta attraverso il ponte quando la porta della stiva sottostante si spalanca. Uno Helghast corre verso di te urlando. Non riesci a sfuggire in tempo e ti ferisce gravemente alle gambe con la sua spada nera. Perdi 5 punti Resistenza e cadi nella stiva. Devi combattere questa creatura fino alla morte.</p><p>E una creatura non-morta, quindi ricorda di raddoppiare tutti i punti Resistenza che perde in questo combattimento grazie al potere della Spada del Sole. Questa creatura e immune al Psicolaser.</p>",
+   "image": "public/img/book02/sec017.png",
    "effects": {
     "loseEndurance": 5
    },
@@ -235,7 +235,6 @@
   },
   "18": {
    "text": "<p>La strada davanti a te e completamente bloccata da carri che vengono scaricati su una nave mercantile. Segui la strada mentre svolta a est in Oxyoke Way. Alla tua sinistra c'e un altro ingresso dell'Emporio Commerciale di Ragadorn. Oltre quello, noti un negozio piu piccolo con un'insegna sopra la porta.</p>",
-   "image": "public/img/book02/sec18.png",
    "choices": [
     {
      "text": "Se vuoi entrare nell'emporio commerciale",
@@ -345,7 +344,7 @@
   },
   "26": {
    "text": "<p>Stai fissando le orbite vuote di un cadavere ambulante. Per quanto sia contorto e sfigurato, riconosci il Capitano Kelman. In realta ti trovi sul ponte della Scettro Verde, affondata durante la tempesta ventotto giorni fa, e che e stata sollevata dalla sua tomba melmosa proprio questa mattina per unirsi alla flotta di navi-carogna.</p><p>Il capitano morto protende verso di te una mano spezzata e una voce spettrale ti supplica di deporre la Spada del Sole: Deponi la tua spada e la mia anima sara risparmiata da questo tormento.</p>",
-   "image": "public/img/book02/sec26.png",
+   "image": "public/img/book02/sec026.png",
    "choices": [
     {
      "text": "Se vuoi posare la Spada del Sole sul ponte",
@@ -412,7 +411,7 @@
   },
   "31": {
    "text": "<p>Il tuo primo incontro con il Luogotenente e in qualche modo uno shock. Ti aspettavi forse, almeno in parte, un vecchio servile, come gli inviati delle terre del sud che affliggono la corte del tuo Re con le loro delegazioni. L'uomo vestito di pesante cotta di maglia che ti sta davanti non e ne vecchio ne servile. Presto scoprirai che il Luogotenente Rhygar e un uomo eccezionale.</p><p>Nato da padre Sommlending e madre Durenese, e diventato una sorta di leggenda in questa citta. Nell'ultimo decennio ha condotto un'alleanza delle nazioni alla vittoria contro l'invasione dei Barbari di Ghiaccio di Kalte. Saggio in pace, feroce in guerra, non avresti potuto desiderare compagnia migliore per la tua ricerca della Spada del Sole.</p><p>Rhygar ordina che venga servito un pasto sontuoso. E di gran lunga il cibo migliore che tu abbia assaggiato da quando e iniziata la guerra. Durante il banchetto, ripensi agli eventi che ti hanno condotto a Port Bax, e rifletti sull'ardua sfida che ancora ti attende. Dopo il pasto, Rhygar manda a chiamare il suo medico, che si prende cura delle tue ferite. Le sue pozioni ti restituiscono 6 punti Resistenza. Poi ti consiglia di dormire, poiche partirai con il Luogotenente per Hammerdal al mattino.</p><p>Il mattino seguente di buon'ora, vieni condotto in un giardino recintato sul retro del consolato, dove Rhygar e tre dei suoi migliori soldati ti attendono a cavallo. Saranno la tua scorta e le tue guide nel viaggio di 230 miglia fino a Hammerdal. Le strade di Port Bax stanno appena iniziando ad animarsi mentre attraversi la citta a cavallo. Varcando il cancello cittadino ricoperto di muschio, ora ti senti fiducioso che la tua missione avra successo. (Se non possiedi uno Zaino, puoi considerare che Rhygar te ne fornisca uno.)</p>",
-   "image": "public/img/book02/sec31.png",
+   "image": "public/img/book02/sec031.png",
    "effects": {
     "restoreEndurance": 6
    },
@@ -515,7 +514,6 @@
   },
   "37": {
    "text": "<p>All'interno della diligenza fa caldo ed e asciutto. Scuotendo la pioggia dal tuo mantello Ramas, noti altri tre passeggeri a bordo: due donne e un uomo che russa rumorosamente. Una delle donne alza lo sguardo e sorride.</p><p>Dovremmo raggiungere Ragadorn tra sei ore, dice, posando il cesto sul pavimento in modo che tu possa sederti accanto a lei. Scopri che vive a Ragadorn e ti racconta qualcosa sul porto.</p><p>Da quando il Signore Killean e morto tre anni fa, Ragadorn e governata da Lachlan, il suo malvagio figlio. Lui e i suoi mercenari non sono altro che pirati. Dissanguano la gente con tasse pesanti, e se qualcuno si lamenta, viene fatto sparire in silenzio. E una situazione deplorevole. Se vuoi un consiglio, lascia Ragadorn il prima possibile.</p><p>Durante il viaggio devi consumare un Pasto, altrimenti perderai 3 punti Resistenza.</p><p>Poi, in lontananza, senti rintoccare una campana. Guardi fuori dal finestrino e vedi le mura cittadine di Ragadorn. La diligenza attraversa la porta ovest e si ferma. Non appena scendi a terra, vieni accolto dall'odore terribile di questo squallido porto di mare. Un cartello arrugginito inchiodato a un muro recita Benvenuti a Ragadorn.</p><p>La donna ti dice che puoi salire su una diligenza per Port Bax alla stazione vicino alla porta est della citta.</p>",
-   "image": "public/img/book02/sec37.png",
    "effects": {
     "mustEatOrLoseEndurance": 3
    },
@@ -585,7 +583,6 @@
   },
   "41": {
    "text": "<p>Sei fortunato, poiche la barca ha visto il tuo segnale di soccorso e sta venendo verso di te. E un piccolo peschereccio proveniente dal porto di Ragadorn. I pescatori sono un gruppo dall'aspetto rude, ma ti avvolgono in una coperta calda e ti offrono del cibo. Il capitano ti suggerisce di dormire, poiche ci vorranno due o tre ore prima che facciano ritorno a Ragadorn.</p>",
-   "image": "public/img/book02/sec41.png",
    "choices": [
     {
      "text": "Se vuoi seguire il suo consiglio",
@@ -738,7 +735,6 @@
   },
   "55": {
    "text": "<p>Un uomo grande e grosso, vestito con un grembiule di cuoio, sta affilando con cura una splendida spada. È seduto davanti a una mola che manda scintille in alto ogni volta che vi accosta la lama. Ti augura la buonasera e ti offre la spada.</p><p>«È una bella lama, forgiata in acciaio di Durenor. Può essere tua per sole 12 Corone d'Oro.»</p><p>Se vuoi acquistare questa spada, segnala sul tuo Registro di Guerra.</p>",
-   "image": "public/img/book02/sec55.png",
    "effects": {
     "canAddWeapon": "Spada"
    },
@@ -830,7 +826,6 @@
   },
   "62": {
    "text": "<p>Entri in una grande stanza piena di registri e incartamenti. Un uomo in uniforme da ufficiale della marina di Durenor siede di fronte a te, dietro un'ampia scrivania. Ti scruta con aria indagatrice da dietro un enorme libro e dice: «Dovete avere affari urgenti nel quadrante navale per richiedere un lasciapassare rosso a quest'ora tarda. Dovrò vedere i vostri documenti d'accesso e la prova dell'autorizzazione del vostro comandante.»</p>",
-   "image": "public/img/book02/sec62.png",
    "choices": [
     {
      "text": "Se non hai i documenti richiesti, o non vuoi mostrarglieli, rischia di mostrargli il Sigillo di Hammerdal, se lo possiedi",
@@ -934,7 +929,6 @@
   },
   "69": {
    "text": "<p>Uno degli sconosciuti avvolti nei mantelli estrae un bastone nero da sotto le vesti e lo solleva in alto. Una fiamma blu si accende sulla punta di ferro contorto, e una folgore di energia incandescente scatta verso di te. Un fragore assordante risuona quando il colpo viene deviato dallo scudo di Rhygar.</p><p>«Nessuna pietà» grida il Luogotenente mentre attacca il portatore di bastone incappucciato. La sua spada trafigge da parte a parte lo sconosciuto avvolto nel mantello, ma questi resta illeso. Capisci all'improvviso perché non sanguina: lui e i suoi sinistri compagni sono Helghast, temibili capitani dei Signori delle Tenebre. Hanno la capacità di assumere forma umana, ma sono invulnerabili alle armi normali. Lo Helghast emette un grido orrendo che ti lacera la mente. Accecato dal dolore improvviso, inciampi e cadi nel fitto sottobosco del pendio boscoso. Se non possiedi l'Arte dello Psicoschermo, perdi 2 punti Resistenza per questo attacco della Forza Mentale dello Helghast.</p>",
-   "image": "public/img/book02/sec69.png",
    "effects": {
     "loseEndurance": 2,
     "psicoschermoPreventsLoss": true
@@ -1004,7 +998,6 @@
   },
   "73": {
    "text": "<p>La scalata è molto difficile, perché hai una sola mano libera: l'altra impugna l'elsa luminosa della Spada del Sole.</p><p>Alla fine raggiungi il bordo della torre e agganci rapidamente una gamba sopra lo stretto cornicione. Stai per balzare dentro la torre e attaccare quando una voce sottile ti fa gelare il sangue.</p><p>«Quanto mi delizerà l'ironia della tua morte, Lupo Solitario.»</p><p>Lo stregone è in piedi nell'angolo più lontano della torre, la mano sinistra puntata verso la tua testa. «La tua missione è fallita, Lupo Solitario. Ora devi morire!»</p><p>Un lampo accecante di fiamma arancione scatta dalla sua mano verso il tuo viso.</p>",
-   "image": "public/img/book02/sec73.png",
    "choices": [
     {
      "text": "Continua",
@@ -1084,7 +1077,6 @@
   },
   "79": {
    "text": "<p>Il potere che scorre nel tuo corpo sopraffa a tal punto i tuoi sensi che diventi ignaro di cio che ti circonda. Sollevi istintivamente la lama sopra la testa, dove un raggio di sole ne coglie improvvisamente la punta e inonda la camera di un bagliore bianco accecante. In quel momento ti viene rivelato il vero potere della Spada del Sole.</p><p>Quest'arma fu forgiata molto prima che i Sommlending, i Durenesi o i Signori delle Tenebre abitassero le Terre Ultime. I suoi artefici appartenevano a una razza che gli uomini oggi chiamerebbero dei. Per liberare il potere che contiene, solo un cavaliere Ramas puo impugnarla. Se venisse usata in combattimento da chiunque non sia un cavaliere Ramas, il suo potere svanirebbe e andrebbe perduto per sempre.</p><p>Quando viene usata in combattimento, la Spada del Sole aggiunge 8 punti alla tua Combattivita (10 punti se possiedi l'Arte di Scherma con le spade; questo bonus di +10 non si somma agli 8 concessi dalla spada, ma li combina con i +2 dati dalla Scherma con Spada Corta, Spada o Spadone, poiche ciascuna di queste conferisce padronanza anche con la Spada del Sole - in combattimento trattala comunque come un'arma a una mano, indipendentemente dal bonus di Scherma). Ha la capacita di assorbire qualsiasi magia usata contro chi la porta, e raddoppia il totale dei punti Resistenza persi dai nemici non-morti (ad esempio gli Helghast) in combattimento. E l'unica arma in tutto il Magnamund capace di uccidere un Signore delle Tenebre, e per questo motivo i Signori delle Tenebre sono determinati a contrastare la tua missione.</p><p>Ora ti rendi conto di possedere l'unico potere in Magnamund capace di salvare il tuo popolo. Lentamente la luce inizia ad affievolirsi e senti la mano di Lord Axim posarsi sulla tua spalla.</p><p>«Vieni, Lupo Solitario, c'e molto da preparare per il tuo ritorno a Sommerlund.»</p><p>Riponi la Spada del Sole nel suo fodero ingioiellato e segui Lord Axim mentre lascia la camera del Re.</p><p>Effettua ora gli aggiustamenti necessari alla tua Combattivita ora che possiedi la Spada del Sole. Annota i poteri della spada nella sezione Oggetti Speciali del tuo Registro di Guerra.</p>",
-   "image": "public/img/book02/sec79.png",
    "choices": [
     {
      "text": "Prosegui",
@@ -1126,7 +1118,6 @@
   },
   "82": {
    "text": "<p>Quando sei certo che la folla infuriata sia passata, salti giu dal carro di fieno e corri furtivamente lungo la strada, schivando da un'ombra all'altra. Alla tua sinistra c'e un negozio con un'insegna sopra la porta.</p><p>C'e una luce alla finestra e la porta e aperta.</p>",
-   "image": "public/img/book02/sec82.png",
    "choices": [
     {
      "text": "Se vuoi entrare in questo negozio",
@@ -1313,7 +1304,6 @@
   },
   "95": {
    "text": "<p>Spingi il tuo cavallo attraverso il groviglio di alberi finche non raggiungi una piccola radura. Sei Szall saltellano eccitati intorno al corpo contorto di un uomo a terra. Una lancia intagliata in modo strano gli e conficcata nel petto, e giace morto accanto a lui il corpo di un Cavaliere della Montagna Bianca. Le creature si urlano a vicenda e sembrano indifferenti all'evidente agonia dell'uomo.</p>",
-   "image": "public/img/book02/sec95.png",
    "choices": [
     {
      "text": "Se possiedi l'Arte della Guarigione, una pozione curativa o dell'erba di Laumspur e vuoi tentare di salvare la vita dell'uomo",
@@ -1371,7 +1361,6 @@
   },
   "100": {
    "text": "<p>Un velo di nebbia marina si e steso sull'oceano immobile, proveniente dalla spina dorsale spezzata di terra nota come Isole Kirlundin. Strane forme scure si celano in questa foschia. Stanno crescendo, e lentamente i contorni distinti di navi diventano visibili.</p><p>«Preparatevi alla battaglia!» Il grido dell'ammiraglio si ripete lungo i molti ponti della flotta Durenese.</p><p>«Tutti gli uomini in coperta!»</p><p>Mentre le navi nere si avvicinano nella nebbia, un'immagine orrenda si rivela ai tuoi occhi. Sono relitti della morte, navi affondate con equipaggi di cadaveri viventi di marinai annegati. Sono stati evocati in superficie da una grande stregoneria, e si stanno avvicinando per la battaglia. Improvvisamente la nebbia svanisce, e ora puoi vedere che i relitti della morte sbarrano l'ingresso al Golfo di Holm. Al centro della linea si trova la loro sinistra nave ammiraglia. Veloce, naviga verso di te, un enorme sperone che sporge dalla sua prua nera. Mentre squarcia lo scafo della Durenor, senti l'ultimo ordine disperato dell'ammiraglio.</p><p>«Abbandonate la nave!»</p><p>Ora ti trovi nel bel mezzo della flotta nemica e la Durenor sta affondando rapidamente.</p>",
-   "image": "public/img/book02/sec100.png",
    "choices": [
     {
      "text": "Se vuoi saltare sul ponte della nave ammiraglia dei relitti della morte",
@@ -1511,7 +1500,6 @@
   },
   "109": {
    "text": "<p>Sbattendo le palpebre per liberare gli occhi dall'acqua putrida, riesci a vedere che l'ammiraglia della flotta dei relitti mortali è ormai in fiamme. Fumo nero si leva dai ponti, e lingue di fuoco arancioni e gialle guizzano dal suo scafo nero e marcio.</p><p>All'improvviso, avverti il battito d'ali direttamente sopra di te. Con orrore vedi un Kraan librarsi in volo, cercando di afferrarti con i suoi artigli affilati. I suoi artigli uncinati agganciano il tuo mantello e all'improvviso vieni strappato in aria. Ma sarà un volo breve. Sguaini la Spada del Sole e la affondi nel ventre molle della creatura. Con uno strillo d'agonia, essa allenta la presa e tu cadi. Preghi che la fortuna sia dalla tua parte e che tu possa atterrare sano e salvo.</p>",
-   "image": "public/img/book02/sec109.png",
    "choices": [
     {
      "text": "Prosegui",
@@ -1651,7 +1639,6 @@
   },
   "118": {
    "text": "<p>Saluti Rhygar ed entri a Tarnalin. Alto e largo oltre cento piedi, il tunnel corre fino alla capitale sul lato opposto della Catena di Hammerdal, ed è illuminato da torce per tutta la sua lunghezza. La strada maestra attraverso la montagna è di solito animata dal traffico di mercanti in transito da e verso Port Bax, eppure ora l'ingresso e l'interno sono deserti, a eccezione di un carro di frutta rovesciato. Mentre cammini più in profondità in Tarnalin, un dubbio ti assale. Sono arrivati prima gli Helghast?</p><p>Cammini da mezz'ora quando scorgi una strana creatura sopra un carro sulla strada davanti a te. È alta circa sessanta centimetri e assomiglia a un topo di palude ingigantito. Pensi che sia una sorta di roditore delle gallerie, finché non noti che indossa una splendida giacca di cuoio rattoppato e porta quella che sembra una lancia. Man mano che ti avvicini, si volta improvvisamente verso di te. Il suo naso baffuto annusa l'aria e i suoi occhi neri e brillanti scrutano nell'oscurità. Ti vede e scappa nell'oscurità di un tunnel più piccolo alla tua sinistra.</p>",
-   "image": "public/img/book02/sec118.png",
    "choices": [
     {
      "text": "Se possiedi l'Arte Ramas dell'Affinità animale",
@@ -1755,7 +1742,6 @@
   },
   "127": {
    "text": "<p>Ti svegli all'alba al suono di una pioggia battente che cade sulle strade acciottolate all'esterno.</p><p>Sono passati sei giorni da quando hai lasciato Holmgard, e devi fare un Pasto qui, altrimenti perdi 3 punti di Resistenza. Raccogli il tuo equipaggiamento e lasci la stanza. Mentre scendi la scala scricchiolante, vedi il locandiere che pulisce il pavimento con secchio e straccio.</p>",
-   "image": "public/img/book02/sec127.png",
    "effects": {
     "mustEatOrLoseEndurance": 3
    },
@@ -1864,7 +1850,6 @@
   },
   "134": {
    "text": "<p>Improvvisamente, dall'oscurità si leva un grido agghiacciante. Ti ritrovi a fissare gli occhi luminescenti di uno Helghast. Mentre cerca di stringere le dita intorno alla tua gola, urli di terrore e cadi a terra. La creatura orrenda lacera la tua tunica, squarciando il tessuto con i suoi artigli neri.</p>",
-   "image": "public/img/book02/sec134.png",
    "choices": [
     {
      "text": "Se hai una Lancia Magica",
@@ -1919,7 +1904,6 @@
   },
   "138": {
    "text": "<p>Cammini da quasi due ore quando raggiungi la cima di una collina e vedi la Foresta di Durenor stendersi davanti a te. La strada piega a est ed entra tra gli alberi in un punto dove è stata costruita una grande torre di legno. Riesci a scorgere la sagoma di un soldato di guardia.</p>",
-   "image": "public/img/book02/sec138.png",
    "choices": [
     {
      "text": "Prosegui verso la torre di guardia",
@@ -1999,7 +1983,6 @@
   },
   "144": {
    "text": "<p>Un grosso Noodnic, avvolto in un mantello variopinto fatto di seta a toppe, ordina a diversi dei suoi di armarsi e cacciarti fuori dalla sala. Ma quando parli loro nella loro stessa lingua, un silenzio stupito riempie la caverna. Non avevano mai incontrato prima un essere umano capace di parlare davvero il loro idioma. Per alcuni di loro è troppo da comprendere, e ti fissano a bocca aperta, le braccine pelose che penzolano molli lungo i fianchi.</p><p>Poi il grosso Noodnic ti si rivolge, dicendo di essere il capo di questa colonia. Il suo nome è Gashgiss, e ti dà il benvenuto invitandoti a raggiungerlo su una piattaforma rialzata al centro della caverna.</p><p>«Voi non essere uomo di Durenor, eh? Da dove voi venire, eh?» chiede Gashgiss, con il suo strano accento noodnic.</p><p>Gli dici di essere un Sommlending diretto a Hammerdal. Ti guarda nervosamente, poi chiede: «Voi non essere Urlanera, eh?» Capisci che gli «Urlanera» di cui parla Gashgiss sono gli Helghast. Vieni a sapere che due di loro sono arrivati a Tarnalin più di due ore fa, seminando il panico nel tunnel principale. Gashgiss sa dove si nascondono in agguato, in attesa che tu compaia.</p><p>«Io mostrare voi strada per evitarli, eh?» offre. Annuisci in segno d'assenso e lo segui giù dai gradini della piattaforma, fino alla sala sottostante.</p><p>I Noodnic sembrano essersi ripresi dallo shock, e ora si comportano con te come se fossi uno di loro. Prima che tu parta, una graziosa femmina Noodnic ti offre del cibo per il viaggio che ti attende: abbastanza per due Pasti. La ringrazi per la sua generosità e poi segui Gashgiss lungo uno dei tanti passaggi che portano fuori dalla caverna. Dopo un'ora di cammino nel buio, si ferma e indica un raggio di luce che filtra da una crepa in lontananza. «Voi andare a sinistra, voi essere salvi», dice.</p><p>Ringrazi Gashgiss per il suo aiuto e ringrazi silenziosamente i tuoi maestri Ramas che ti insegnarono l'Arte dell'Affinità Animale. I lunghi anni di addestramento ti hanno probabilmente salvato la vita. Ti infili in una fessura nella parete rocciosa e scendi di un metro circa fino al sentiero sottostante. Stai ancora pensando a quanto sono stati gentili i Noodnic, quando scopri che ti hanno rubato tutto l'oro! Dovrai segnarlo sul tuo Registro di Guerra.</p>",
-   "image": "public/img/book02/sec144.png",
    "effects": {
     "canAddMeals": 2,
     "removeGold": 9999
@@ -2025,7 +2008,6 @@
   },
   "146": {
    "text": "<p>Avevi ragione. La nube è formata da enormi Zlanbeast e numerosi Kraan, una specie più piccola ma altrettanto letale. Appese sotto i loro ventri neri ci sono reti piene di Giak. Mentre gli Zlanbeast scendono in picchiata sullo Scettro Verde, una rete di Giak urlanti si schianta sul ponte alle tue spalle. Alcuni restano schiacciati nella caduta, ma molti altri sono sopravvissuti e non perdono tempo ad attaccarti. Devi combatterli come se fossero un unico nemico.</p>",
-   "image": "public/img/book02/sec146.png",
    "combat": {
     "name": "Giak",
     "combattivita": 15,
@@ -2087,7 +2069,6 @@
   },
   "150": {
    "text": "<p>Speroni il cavallo lungo la tortuosa strada del villaggio, attraversi un ponte di legno e risali un sentiero ripido verso la cresta dell'insenatura. Alla luce della luna, scorgi appena un cartello che indica la direzione est.</p><p>Cavalchi tutta la notte senza dormire. Quando spunta l'alba, ti accoglie un sorprendente cambiamento del paesaggio. Le brulle Terre Selvagge hanno lasciato il posto a brughiere e paludi acquitrinose. E un'ombra scura corre lungo tutto l'orizzonte orientale, a perdita d'occhio. Questa è la Foresta di Durenor, il confine naturale del regno montano dove esso confina con le indomite Terre Selvagge. È davvero una vista gradita.</p><p>Non sei a più di un giorno di cavallo da Port Bax, ma sei stanco dopo la cavalcata notturna e devi fare un Pasto, altrimenti perdi 3 punti di Resistenza. Se possiedi l'Arte della Caccia, puoi usare questa abilità per catturare un ratto di brughiera o un uccello di palude selvatico per colazione. (Stai lasciando le Terre Selvagge per entrare nella Foresta di Durenor, e puoi di nuovo usare la Caccia per procurarti cibo.)</p><p>Dopo un'ora di cavalcata giungi a un bivio nella strada. Non c'è alcun cartello.</p>",
-   "image": "public/img/book02/sec150.png",
    "effects": {
     "mustEatOrLoseEndurance": 3
    },
@@ -2216,7 +2197,6 @@
    "isDeathSection": true
   },
   "160": {
-   "image": "public/img/book02/sec160.png",
    "text": "<p>«Perdonami, mio signore, non volevo spaventarti.» L'uomo sembra nervoso, e la mano aperta che ti porge trema visibilmente.</p><p>Con una certa cautela accetti il gesto di amicizia e ti siedi con l'uomo a un tavolo della taverna. Il locale è deserto, a parte un paio di topi che rosicchiano un grosso pezzo di formaggio.</p><p>«Il Capitano Kelman mi ha incaricato di condurti alla Scettro Verde, ma solo se sono certo che tu sia il Ramas chiamato Lupo Solitario. Puoi dimostrarmi la tua identità?» Decidi che devi dimostrare la padronanza di una delle tue Arti Ramas.</p>",
    "choices": [
     {
@@ -2324,7 +2304,6 @@
    ]
   },
   "166": {
-   "image": "public/img/book02/sec166.png",
    "text": "<p>Sali una rampa di scale e raggiungi il ponte affollato. Una furiosa battaglia infuria tutt'intorno a te, mentre la flotta di Durenor viene travolta dall'assalto di spettrali navi-carcasse della morte. Improvvisamente un lampo di fiamma incandescente scaturisce da una torre sul retro della nave-carcassa su cui ti trovi, ed esplode contro il fianco di una nave da guerra di Durenor a meno di cinquanta iarde di distanza. Guardi con orrore i soldati che si gettano dal ponte, con i vestiti e i capelli in fiamme.</p>",
    "choices": [
     {
@@ -2419,7 +2398,6 @@
    ]
   },
   "173": {
-   "image": "public/img/book02/sec173.png",
    "text": "<p>Entri in un magnifico emporio in cui sono esposte alcune delle merci più pregiate del nord di Magnamund. Anche a quest'ora tarda, l'emporio brulica di attività, mentre capitani e ricchi mercanti contrattano la vendita o lo scambio dei loro carichi. Il proprietario dell'emporio sembra essere un giovane guerriero, che presiede all'asta delle merci seduto su una sedia ornata, sospesa da quattro possenti catene. I suoi uomini indossano tutti un'armatura nera, e sui loro scudi portano l'emblema di una nave nera su fondo rosso.</p><p>Poi, per caso, noti un ragazzino rubare una borsa di monete dalla cintura di un mercante e infilarsela nello stivale.</p>",
    "choices": [
     {
@@ -2460,7 +2438,6 @@
   },
   "176": {
    "text": "<p>Per tre giorni e tre notti hai cavalcato lungo la strada che risale la valle del fiume Durenon. In lontananza si stagliano le vette dei Monti Hammerdal, una delle catene più alte di tutto Magnamund. La capitale sorge proprio al centro di quelle montagne.</p><p>È ormai la mattina del quattordicesimo giorno della tua missione. Hai posto il campo vicino a una cascata dove il rapido Durenon precipita per oltre 35 metri. Stai per ripartire quando un gruppo di sei cavalieri incappucciati appare sulla strada forestale sopra di te, bloccando l'uscita dal campo.</p><p>Il luogotenente Rhygar intima loro di lasciarvi passare, aggiungendo che porti un dispaccio reale. In Durenor è reato di tradimento ostacolare un messaggero del Re, ma sfortunatamente i cavalieri incappucciati non sembrano impressionati dall'avvertimento, e restano dove sono.</p><p>«Se la ragione non vi basta, forse le nostre spade convinceranno le vostre code a girare» dice Rhygar. Sguaina la spada e ordina ai suoi uomini di attaccare.</p>",
-   "image": "public/img/book02/sec176.png",
    "choices": [
     {
      "text": "Utilizza l'Arte del Sesto Senso",
@@ -2529,7 +2506,6 @@
   },
   "181": {
    "text": "<p>Questa strada sembra più sporca e maleodorante di quella che hai appena percorso. La vetrina ingombra di una bottega alla tua sinistra attira la tua attenzione. Nella vetrina ci sono molti oggetti utili, ognuno con il proprio cartellino del prezzo.</p><p>Puoi entrare e acquistare uno qualsiasi di questi oggetti. Ricordati di segnarli sul tuo Registro di Guerra. Terminati gli acquisti, prosegui lungo Sage Street, verso il Ponte di Ragadorn. Questo ponte è l'unico collegamento tra il lato est e il lato ovest del porto, e ti fai strada tra la folla di gente e carretti. Ti ritrovi in un viale ingombro di rifiuti conosciuto come East Trade Lane.</p><p>[7] Secondo la Newsletter n. 12 del Lone Wolf Club: «In pratica puoi indossare un solo Zaino alla volta, e portare al massimo otto Oggetti nello Zaino (gli Oggetti Speciali non sono inclusi).»</p>",
-   "image": "public/img/book02/sec181.png",
    "choices": [
     {
      "text": "Prosegui",
@@ -2645,7 +2621,6 @@
   },
   "191": {
    "text": "<p>In fondo al viale, la strada acciottolata svolta bruscamente a destra. Di fronte a questo punto sorge un alto edificio in pietra bianca con una targa sopra la porta.</p><p>Vedi che la strada acciottolata termina contro un alto muro di pietra. In questo muro c'è un grande cancello rosso sorvegliato da due soldati. Oltre il cancello, riesci a distinguere gli alberi maestri delle navi ormeggiate nel porto.</p>",
-   "image": "public/img/book02/sec191.png",
    "choices": [
     {
      "text": "Entra nella torre di guardia del porto",
@@ -2779,7 +2754,6 @@
   },
   "200": {
    "text": "<p>Quando raggiungi il bar, gli altri sono già tutti seduti a un grande tavolo ad attendere il tuo arrivo. Avvicinandoti al tavolo, ti rendi conto di aver trovato il tuo aspirante assassino. Dovrai attaccare senza dare alcun preavviso al tuo nemico, quindi osserva attentamente i tuoi compagni di viaggio e poi prendi la tua decisione.</p>",
-   "image": "public/img/book02/sec200.png",
    "choices": [
     {
      "text": "Attacca il Cavaliere della Montagna Bianca chiamato Dorier",
@@ -2818,7 +2792,6 @@
   },
   "202": {
    "text": "<p>Il soldato saluta e ti permette di oltrepassare il cancello rosso. Entri in una piazza aperta illuminata dagli alti fari che costeggiano il molo. Con sollievo, scorgi le colonne di marmo del Consolato di Sommerlund, e la familiare bandiera del sole del tuo paese che sventola sopra di esso nella fresca brezza notturna.</p><p>Mentre sali i gradini di pietra, vieni riconosciuto dalle guardie sommlending di turno alla porta principale. Scompaiono all'interno e tornano rapidamente in compagnia di un alto funzionario dai capelli grigi. La sua espressione angosciata si trasforma improvvisamente in un sorriso di gioia quando scorge il tuo logoro mantello e la tua tunica da Ramas.</p><p>«Speranza oltre ogni speranza! Ringraziate gli dei che siete vivo, Ramas. Le scarse notizie che ci sono giunte da ovest ci hanno causato grande allarme.»</p><p>Vieni fatto entrare e condotto immediatamente dall'inviato di Sommerlund, il Luogotenente Rhygar.</p>",
-   "image": "public/img/book02/sec202.png",
    "choices": [
     {
      "text": "Continua",
@@ -2932,7 +2905,6 @@
   },
   "215": {
    "text": "<p>Trenta metri più avanti, sul lato sinistro della strada, senti il suono di allegria che proviene da un grande edificio malconcio. Sopra la porta c'è un'insegna scricchiolante.</p>",
-   "image": "public/img/book02/sec215.png",
    "choices": [
     {
      "text": "Vuoi entrare nella taverna",
@@ -3020,7 +2992,6 @@
   },
   "222": {
    "text": "<p>Dopo aver avuto cura di chiudere la porta, il capitano apre il misterioso involto e rovescia il contenuto sul tavolo della cabina. Una grande brocca di terracotta carbonizzata e diversi stracci anneriti cadono in un mucchio. Emanano uno strano odore oleoso.</p><p>«Non è stato un incendio accidentale» dice con tono grave. «È stato un atto di sabotaggio. La stiva di prua è un magazzino di viveri, eppure trovo questa brocca d'olio e questi stracci imbevuti sul pavimento. Qualcuno su questa nave è disposto a rischiare la vita pur di impedirci di raggiungere Durenor.»</p><p>Restate entrambi a fissare gli stracci bruciati, come se contenessero la risposta alle vostre domande. Improvvisamente un grido dal ponte spezza il silenzio.</p><p>«Nave in vista! Nave al traverso di babordo!»</p><p>Afferrando spada e cannocchiale, il capitano scompare oltre la porta e sale la scaletta verso il ponte superiore.</p>",
-   "image": "public/img/book02/sec222.png",
    "choices": [
     {
      "text": "Vuoi seguirlo",
@@ -3123,7 +3094,6 @@
   },
   "230": {
    "text": "<p>Segui la strada finché non svolta bruscamente verso est in Vicolo dei Mendicanti. Puoi capire perché questa via porta questo nome, poiché ci sono decine di uomini, donne e bambini cenciosi accovacciati negli androni, tutti con le ciotole tese per l'elemosina.</p><p>Mentre cammini verso l'incrocio in fondo alla strada, vieni assalito da ogni parte da suppliche di oro.</p>",
-   "image": "public/img/book02/sec230.png",
    "choices": [
     {
      "text": "Se vuoi dare parte del tuo oro a questi mendicanti",
@@ -3267,7 +3237,6 @@
   },
   "238": {
    "text": "<p>Di fronte alla stazione delle carrozze c'è una stradina stretta che conduce a una casa da gioco con un'insegna all'esterno.</p><p>Sei elettrizzato dalla possibilità di vincere dell'oro e vi entri rapidamente. Qualsiasi Arma tu possieda deve essere lasciata a una guardia sulla porta. Potrai riavere le tue Armi quando deciderai di andartene (non cancellarle dal tuo Registro di Guerra). Ti viene consegnato un gettone d'argento del valore di 1 Corona d'Oro, utilizzabile solo in questa casa da gioco. (Ricevi il gettone d'argento gratuito una sola volta, indipendentemente da quante volte tu possa entrare nella casa da gioco.)</p><p>L'atrio si apre in un'enorme sala dove sono in corso molti giochi d'azzardo. Uno che ti attira l'attenzione si chiama «Ruota». A un'estremità di un lungo tavolo, un'attraente giovane donna fa girare un piatto nero diviso in dieci sezioni numerate da 0 a 9. Mentre il piatto gira, lei lascia cadere una piccola pallina d'argento che alla fine si ferma in una delle sezioni numerate. Diversi mercanti sono seduti intorno al tavolo e scommettono pesantemente sulla caduta della pallina d'argento.</p><p>Per giocare a «Ruota», devi prima decidere il numero su cui vuoi puntare e quante Corone d'Oro vuoi scommettere. Annota questi numeri e poi scegli un numero dalla Tabella del Destino. Se scegli esattamente lo stesso numero, vinci 8 Corone d'Oro per ogni Corona d'Oro che scommetti. Se il numero che scegli è immediatamente prima o dopo quello corretto, vinci 5 Corone d'Oro per ogni Corona d'Oro puntata. (Nota che nella Ruota lo 0 si trova tra il 9 e l'1.) C'è un limite a quanto puoi vincere a questo tavolo: 40 Corone d'Oro.</p><p>Puoi giocare tutti i round di «Ruota» che vuoi, finché non perdi tutte le tue Corone d'Oro oppure decidi di ritirare le tue vincite (massimo 40 Corone d'Oro).</p>",
-   "image": "public/img/book02/sec238.png",
    "choices": [
     {
      "text": "Se hai perso tutte le tue Corone d'Oro",
@@ -3297,7 +3266,6 @@
   },
   "240": {
    "text": "<p>Dopo tre giorni tranquilli in mare, la vita di bordo ti sembra piuttosto monotona. Se hai l'Arte Ramas della Guarigione, tutti i punti Resistenza che potresti aver perso nella tua avventura finora vengono ripristinati. Questo riporterà il tuo punteggio di Resistenza a quello originale. Se non possiedi quest'Arte, recuperi metà dei punti persi in combattimento.</p><p>Nel pomeriggio del quarto giorno, stai parlando con un marinaio ferito sul ponte quando senti l'odore di fumo che filtra dalla stiva.</p>",
-   "image": "public/img/book02/sec240.png",
    "choices": [
     {
      "text": "Se vuoi entrare nella stiva",
@@ -3368,7 +3336,6 @@
   },
   "245": {
    "text": "<p>Svolti a est in Via Oxyoke e noti un'insegna sopra la porta di un piccolo negozio alla tua sinistra.</p>",
-   "image": "public/img/book02/sec245.png",
    "choices": [
     {
      "text": "Se vuoi curiosare nell'armeria",
@@ -3415,7 +3382,6 @@
   },
   "249": {
    "text": "<p>Nel corso del viaggio pomeridiano, chiacchieri con i tuoi compagni di viaggio e apprendi qualcosa sul loro passato.</p><p>Seduti di fronte a te ci sono due fratelli di nome Ganon e Dorier. Sono cavalieri dell'Ordine della Montagna Bianca, signori guerrieri di Durenor che hanno giurato fedeltà nel proteggere il paese dalle incursioni dei banditi delle Terre Selvagge. Possiedono un castello e delle terre vicino a Port Bax. Accanto a loro siede il mercante Halvorc. Ha il naso gonfio e il volto pesantemente livido, per gentile concessione di Lachlan, il Signore Supremo di Ragadorn. Un piccolo malinteso sulle tasse portuali gli è costato il carico e la maggior parte del suo oro. Seduto vicino alla porta opposta c'è un sacerdote di nome Parsion. Come te, è un Sommlending che ha attraversato le Terre Selvagge in carrozza diretto a Port Bax. Accanto a te siede una giovane donna di nome Viveka. È un'avventuriera mercenaria che guadagna il suo oro combattendo, e vende i propri servigi al miglior offerente. Sta tornando a Port Bax dopo aver riscosso il pagamento per un'avventura conclusa con successo a Ragadorn.</p><p>Non volendo rivelare la tua vera identità, ti sei finto un semplice contadino. I viaggiatori sembrano ignari della guerra che ora infuria a Sommerlund.</p>",
-   "image": "public/img/book02/sec249.png",
    "choices": [
     {
      "text": "Continua",
@@ -3513,7 +3479,6 @@
    ]
   },
   "257": {
-   "image": "public/img/book02/sec257.png",
    "text": "<p>Questa strada acciottolata e ingombra di rifiuti corre tra file di case e negozi fatiscenti e corrosi dal marciume. I pochi abitanti di Ragadorn che incontri sembrano una masnaglia priva di gioia, i volti smunti e tirati. Si trascinano nella penombra, incurvati contro la pioggia battente, gli occhi fissi sui ciottoli ai loro piedi. Poi raggiungi un incrocio dove Axe Lane curva verso nord e un'altra strada si dirige a est.</p>",
    "choices": [
     {
@@ -3663,7 +3628,6 @@
   },
   "268": {
    "text": "<p>«Sei davvero un Ramas» dice il marinaio, ma lo stupore sul suo volto si trasforma rapidamente in uno sgradevole ghigno.</p><p>«O dovrei dire che lo eri!»</p><p>Mentre parla, una porta si spalanca dietro di te e ti volti per vedere tre bulli del porto avanzare verso di te. Ognuno è armato di scimitarra e non hai altra scelta che affrontarli tutti e tre come un unico nemico.</p>",
-   "image": "public/img/book02/sec268.png",
    "combat": {
     "name": "Bulli del Porto",
     "combattivita": 16,
@@ -3765,7 +3729,6 @@
   },
   "276": {
    "text": "<p>Un marinaio dall'aspetto torvo sta sfidando chiunque a un braccio di ferro. È così sicuro di vincere che pagherà 5 Corone d'Oro a chiunque riesca a batterlo. Mentre ti avvicini al suo tavolo, una cameriera ti sussurra all'orecchio: «Sta' attento, straniero: è un uomo malvagio. Spezza le braccia a chi perde, e uccide chi lo batte».</p><p>Mentre ti siedi di fronte al marinaio, in tutta la taverna fioccano le scommesse.</p><p>Se non possiedi questa Arte, conduci la sfida di braccio di ferro come se fosse un combattimento. Il primo che scende a 0 punti Resistenza perde la sfida.</p><p>Quando la sfida è terminata, ripristina i tuoi punti Resistenza allo stesso totale che avevi prima di iniziare.</p>",
-   "image": "public/img/book02/sec276.png",
    "combat": {
     "name": "Marinaio",
     "combattivita": 18,
@@ -3882,7 +3845,6 @@
   },
   "284": {
    "text": "<p>Cautamente, i soldati ti circondano e ti prendono Armi e Zaino. (Non è necessario modificare il tuo Registro di Guerra.) Il cavaliere fa un passo avanti e solleva la visiera dell'elmo.</p><p>«Chi sei? Qual è il tuo scopo a Tarnalin?» chiede con voce burbera.</p><p>Gli dici di essere un Ramas di Sommerlund in missione urgente presso re Alin. Non sembra convinto dalle tue parole finché non gli mostri il Sigillo di Hammerdal. Allora, senza esitare, ordina ai suoi uomini di restituirti i tuoi averi e ti fa passare attraverso il muro di carri. Oltre, vedi una carrozza trainata da cavalli ad attenderti al centro del tunnel affollato.</p><p>«Torna subito a Hammerdal» ordina al cocchiere, e vieni sbalzato indietro sul sedile mentre la carrozza parte a velocità vertiginosa.</p><p>Scopri presto che il cavaliere è Lord Axim di Ryme, comandante della guardia personale di re Alin. Era diretto a Port Bax quando gli Helghast sono entrati nel Tarnalin. Lui e dieci soldati sono stati gli unici a sopravvivere a un mortale scontro con quelle creature malvagie.</p><p>Durante il viaggio attraverso il Tarnalin, devi mangiare un Pasto o perdere 3 punti Resistenza. Il viaggio verso la capitale durerà cinque ore e Lord Axim ti consiglia di riposare un po'. Mentre scivoli lentamente nel sonno, inizi a sognare la Spada del Sole. Immagini un trionfale ritorno a Holmgard e la sconfitta dell'assedio dei Signori delle Tenebre. Forse è un buon presagio di ciò che verrà?</p>",
-   "image": "public/img/book02/sec284.png",
    "effects": {
     "mustEatOrLoseEndurance": 3
    },
@@ -4096,7 +4058,6 @@
   },
   "300": {
    "text": "<p>Mentre remi verso l'elegante caravella mercantile, noti con sorpresa che la scaletta d'imbarco viene tirata su. Un marinaio dall'aria torva si sporge dalla murata e ti impreca contro. Sembra pensare che tu sia un profugo che cerca di imbarcarsi clandestinamente. Ma quando gridi di essere Lupo Solitario e di essere stato teso un'imboscata da un impostore alla taverna, la scaletta viene subito riabbassata. Mentre scavalchi la murata della nave, ti accoglie un uomo alto in un'uniforme gallonata d'oro. Il suo volto è quasi interamente coperto da una folta capigliatura rossa e da una vistosa barba rossa.</p><p>«Salpa l'ancora!» tuona. L'equipaggio scatta in azione come se le loro stesse vite ne dipendessero.</p><p>Il capitano ti conduce sottocoperta, nella sua cabina, dove versa due bicchieri di wanlo, un liquore forte. Il suo volto mostra preoccupazione mentre gli racconti quanto accaduto.</p><p>«C'è un tradimento malvagio all'opera, e il nemico ha già predisposto piani per ostacolare la tua missione» comincia una volta ascoltato il tuo racconto. «Sembra che tu abbia perso l'elemento sorpresa, e io ho perso un coraggioso primo ufficiale. Speriamo solo che il viaggio verso Durenor sia rapido e sicuro.»</p><p>Lo lasci per salire in coperta, giusto in tempo per vedere il profilo di Holmgard all'orizzonte. Con sentimenti contrastanti di orgoglio e apprensione, scendi la scaletta verso la tua cabina mentre l'ultima guglia della capitale scompare alla vista.</p><p>Pesca un numero dalla Tabella del Destino.</p>",
-   "image": "public/img/book02/sec300.png",
    "choices": [
     {
      "text": "Numero 0-1",
@@ -4143,7 +4104,6 @@
    ]
   },
   "303": {
-   "image": "public/img/book02/sec303.png",
    "text": "<p>Su questo tratto del lungomare si ammucchiano cumuli di rifiuti in decomposizione, che emanano un fetore così nauseabondo da costringerti a coprirti bocca e naso con il mantello. Più avanti, alla tua sinistra, noti il bagliore di una torcia che filtra da una porta aperta. Sopra la porta c'è un'insegna.</p>",
    "choices": [
     {
@@ -4267,7 +4227,6 @@
    ]
   },
   "314": {
-   "image": "public/img/book02/sec314.png",
    "text": "<p>Il locandiere è un vecchio magro con un solo occhio. Ti porge una chiave e indica un balcone di fronte. «Numero due, la porta rossa» dice.</p><p>Gli altri viaggiatori pagano ciascuno la propria Corona, ritirano una chiave e attraversano il pavimento affollato della taverna verso le scale.</p><p>«Dobbiamo fare progetti per domani» dice Dorier. Gli altri annuiscono tutti. «Propongo di incontrarci qui al bar tra un'ora per decidere cosa fare.»</p><p>Mentre chiudi la porta rossa della tua stanza, per qualche motivo ti tornano in mente le parole del Capitano Kelman quando hai lasciato il porto di Holmgard: «C'è un tradimento all'opera, e il nemico ha già messo in atto piani per ostacolare la tua missione.»</p><p>È passata quasi un'ora quando i tuoi pensieri vengono interrotti da un colpo alla porta. È il locandiere, e porta un vassoio di cibo caldo.</p><p>«Con i complimenti di uno dei tuoi amici» dice, e se ne va prima che tu possa chiedere di chi si tratti. Non hai mangiato nulla oggi, e il cibo ha un profumo davvero invitante.</p>",
    "choices": [
     {
@@ -4441,7 +4400,6 @@
   },
   "326": {
    "text": "<p>Il capitano ordina all'equipaggio di spiegare tutte le vele nel tentativo di seminare l'imbarcazione, ma la nave dei pirati è veloce e sta cercando di tagliare la rotta dello Scettro Verde di prua. Uno scontro sembra ormai inevitabile.</p><p>«Preparatevi allo speronamento!» grida il capitano, mentre la fiancata della nave da guerra dalle vele rosse incombe proprio davanti alla prua. Si sente un tremendo schianto di legno in frantumi quando lo Scettro Verde apre una grossa falla nel fianco della nave pirata, e vieni scaraventato sul ponte per il contraccolpo.</p><p>Mentre i pirati si arrampicano a bordo, con orrore scorgi tra loro la sagoma vestita di nero di un guerriero Drakkar. Ti ha individuato e avanza verso di te, con una grande spada a due mani sollevata sopra la testa. Devi combatterlo fino alla morte.</p>",
-   "image": "public/img/book02/sec326.png",
    "combat": {
     "name": "Drakkar",
     "combattivita": 15,
@@ -4588,7 +4546,6 @@
   },
   "335": {
    "text": "<p>Noti un'insegna appesa fuori da un piccolo negozio.</p>",
-   "image": "public/img/book02/sec335.png",
    "choices": [
     {
      "text": "Se vuoi entrare in questo negozio e chiedere come raggiungere Durenor",
@@ -4702,7 +4659,6 @@
   },
   "342": {
    "text": "<p>È una montagna d'uomo, completamente calvo, con grandi anelli d'oro che gli pendono da ogni orecchio. Ti guarda con sospetto e dice: «La birra costa una Corona d'oro, un letto per la notte due. Cosa vuoi?»</p>",
-   "image": "public/img/book02/sec342.png",
    "choices": [
     {
      "text": "Se vuoi comprare della birra, paga all'oste 1 Corona d'oro",
@@ -4822,7 +4778,6 @@
   },
   "350": {
    "text": "<p>Holmgard ha sofferto molto dalla tua partenza. Molti dei negozi e delle case che ricordi di aver visto lungo la strada per la banchina non sono ormai che cumuli di cenere. L'esercito dei Signori delle Tenebre, con le sue malvagie macchine da guerra, circonda le mura, e gli archi fiammeggianti delle palle di fuoco che solcano l'aria illuminano senza sosta il cielo notturno mentre piovono sulle strade sottostanti. La gente combatte gli incendi come meglio può, ma è affamata, sfinita e vicina alla resa. Dapprima, mentre entra nel porto, la flotta viene scambiata per il nemico, e grida di disperazione si levano lungo tutta la banchina. Ma non appena i primi soldati mettono piede in città e spiegano lo stemma reale di Durenor, la notizia del tuo ritorno si diffonde rapidamente. Le grida di disperazione si trasformano in un coro di acclamazioni: «Il Ramas è tornato!»</p><p>Sei in piedi in cima alla grande torre di guardia, alta sopra la porta principale della città, quando la prima luce dell'alba striscia lentamente sull'orizzonte. Migliaia su migliaia di nemici vestiti di nero sono ammassati intorno alle mura della città, rannicchiati come scarafaggi nelle trincee che ricoprono la pianura. Nel mezzo di questa orda è stata eretta una grande tenda rossa che reca il simbolo di un teschio spezzato. È il vessillo di Zagarna, Signore di Kaag, un Signore delle Tenebre di Helgedad. La sua grande ambizione è la distruzione di Holmgard; il suo desiderio più feroce è guidare il suo esercito alla vittoria sulla Casa di Ulnar e conquistare Sommerlund per sé.</p><p>Ma la vittoria non sarà sua, oggi. Sollevando la Spada del Sole sopra la testa, un raggio di luce dell'alba coglie la punta della lama dorata e un lampo abbagliante di fiamma bianca percorre l'intera lunghezza della lama. Il potere della Spada del Sole ti attraversa come una scarica. I tuoi sensi vacillano e ora il tuo corpo reagisce d'istinto. Abbassi la Spada del Sole e punti la lama verso la tenda di Zagarna. Si leva un ruggito possente mentre il potere della spada del sole si scatena in un raggio bianco e incandescente. La tenda esplode e una fiammata accecante di fuoco bianco si solleva verso il cielo come un fungo. Un grido lungo e terribile lacera l'aria. È Zagarna. Il condottiero del malvagio esercito non è più.</p><p>Preso dal panico e dal terrore, il vasto esercito nero si solleva e fugge nel caos dalle mura della città. È accaduto l'impossibile: il loro invincibile signore è stato ucciso. Ancora una volta la Spada del Sole è tornata a sconfiggerli. L'esercito e gli alleati di Durenor escono a cavallo dalle porte della città all'inseguimento del nemico in preda al panico, mentre fugge ciecamente verso le Montagne di Durncrag. La vittoria è tua. Holmgard è salva e l'assassinio dei Ramas è stato finalmente vendicato.</p><p>Ma per te, Lupo Solitario, una vita di grandi avventure è appena cominciata. Una nuova sfida attende te e la Spada del Sole nel Libro Terzo della serie di Lupo Solitario:</p><p>Le Caverne di Kalte</p>",
-   "image": "public/img/book02/sec350.png",
    "choices": [],
    "isVictory": true
   }

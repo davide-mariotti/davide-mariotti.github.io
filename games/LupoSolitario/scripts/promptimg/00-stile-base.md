@@ -94,6 +94,58 @@ officer's cloak, sword and shield at the ready.
 Lord Axim (Libro 2): a stern, battle-scarred Durenese noble commander with
 grey-streaked hair, wearing ornate plate armor and bearing a dented
 heraldic shield.
+
+Ice Barbarian / Barbaro dei Ghiacci (Libro 3): a large, powerfully built
+human warrior of Kalte, swathed in thick white-and-grey furs and crude
+bone-plate armour, wielding serrated bone swords, spears, or scimitars.
+His eyes are entirely white, without visible pupils, giving him a blank,
+almost possessed stare.
+
+Kalkoth (Libro 3): a savage four-legged reptilian predator of Kalte's ice
+caverns, roughly wolf-sized but heavier and squatter, with mottled
+grey-white scaled hide, blazing red eyes, and a wide fanged maw housing a
+long, barbed, venomous tongue used to snatch and paralyse prey.
+
+Baknar (Libro 3): a huge, shaggy white-furred carnivore native to Kalte's
+coasts and mountains, bear-like in bulk with a broad hunched frame, thick
+clawed paws, and a snarling muzzle full of teeth.
+
+Ice Demon / Demone di Ghiaccio (Libro 3): a shapeless elemental spirit
+imprisoned inside a smooth white stone statue in an ancient ice temple;
+once its stone shell is cracked, it manifests as a shrieking, howling
+small cyclone of wind, ice shards and grit.
+
+Akraa'Neonor (Libro 3): an enormous undead horror summoned from a moat:
+its deformed head is a writhing mass of black tentacles and suckers
+oozing dark slime, centred on one huge glaring yellow eye, with no
+visible torso or limbs beyond the tentacles it drags itself forward on.
+
+Loi-Kymar (Libro 3): an elderly, frail Sommlending wizard of the
+Magicians' Guild of Toran, imprisoned for years: gaunt and stooped, with a
+long grey beard, wild unkempt hair, and tattered blue robes embroidered
+with faded crescent moons and stars, gripping a small crystal-star
+pendant and a wooden Guildstaff.
+
+Barraka, the Renegade Lord (Libro 4): a lean, hawk-faced Vassagonian
+warlord with dark tanned skin and long black hair swept back, dressed in
+black-and-blood-red robes over dark leather armor, an exotic dark
+reptile-hide cloak draped from his shoulders, wielding a curved
+mirror-bright scimitar and the black twisted Dagger of Vashna sheathed at
+his hip, its edge licked by a sickly blue flame.
+
+Capitano D'Val / Captain D'Val (Libro 4): a rugged, battle-worn
+Sommlending Royal Guard officer in his late thirties, weathered stern
+face, a dented steel helm, chainmail beneath a white-and-gold
+sun-emblazoned Royal Guard cloak, armed with a longsword and a longbow
+slung across his back.
+
+Elix (Libro 4): a huge, muscular feline predator bred as a guard-beast —
+mottled grey-brown hide, powerful clawed paws, a wide hissing maw lined
+with needle-thin fangs, eyes burning with an eerie green fire.
+
+Madelon (Libro 4): a young Sommlending noblewoman with pale ivory skin and
+long dark hair unbound, wearing a flowing pale ceremonial gown, usually
+shown in an entranced, sleep-like trance.
 ```
 
 ## Dimensione scelta
@@ -112,14 +164,17 @@ Nessuno strumento (ChatGPT, Nano Banana) garantisce da solo la stessa
 identica "faccia" di un personaggio/creatura da un prompt all'altro con il
 solo testo. Per questo, PRIMA di generare le scene, genera un ritratto di
 riferimento per ogni soggetto ricorrente — sono già pronti in
-`riferimenti/`: `ritratto-lupo-solitario.txt`, uno per ciascuna creatura del
-bestiario "storico" (Kraan, Giak, Vordak, Drakkar, Gurgaz, Tigerwolf, dal
-Libro 1) e uno per ciascuna new-entry del Libro 2 (Helghast, Zlanbeast,
-Vonotar, Rhygar, Lord Axim). Sono inquadrature "a figura intera", pose
-neutre e ben illuminate, pensate per essere riutilizzate come immagine-
-guida, non come illustrazione finale.
+`riferimenti/` (22 in totale): `ritratto-lupo-solitario.txt`, uno per
+ciascuna creatura del bestiario "storico" (Kraan, Giak, Vordak, Drakkar,
+Gurgaz, Tigerwolf, dal Libro 1), uno per ciascuna new-entry del Libro 2
+(Helghast, Zlanbeast, Vonotar, Rhygar, Lord Axim), e uno per ciascuna
+new-entry dei Libri 3 e 4 (Barbaro dei Ghiacci, Kalkoth, Baknar, Demone di
+Ghiaccio, Akraa'Neonor, Loi-Kymar, Barraka, Capitano D'Val, Elix, Madelon).
+Sono inquadrature "a figura intera", pose neutre e ben illuminate, pensate
+per essere riutilizzate come immagine-guida, non come illustrazione
+finale.
 
-Ogni prompt di scena in `book01/`/`book02/` inizia con una riga
+Ogni prompt di scena in `book01/`/`book02/`/`book03/`/`book04/` inizia con una riga
 **"Base da riutilizzare: ..."** che elenca quali ritratti servono per quella
 scena specifica. Se il tuo strumento supporta l'input "testo + immagine"
 (Nano Banana/Gemini lo supporta), allega i ritratti indicati insieme al
@@ -164,14 +219,15 @@ border or frame, no UI elements.
   peso da nessuna parte).
 - `riferimenti/ritratto-*.txt` → un ritratto di riferimento per Lupo
   Solitario e per ogni creatura del bestiario. Generali per primi.
-- `book01/_indice.md`, `book02/_indice.md` → elenco di tutte le sezioni
-  scelte per quel libro, con stato (sostituzione di un'immagine esistente o
-  aggiunta nuova), quali ritratti di riferimento usare, e descrizione breve
-  in italiano.
-- `book01/NNN-slug.txt`, `book02/NNN-slug.txt` → un file per immagine,
-  **pronto da copiare e incollare per intero** nel generatore (riga "Base da
-  riutilizzare" + stile base + personaggio/bestiario pertinenti + scena
-  specifica già uniti). Non serve assemblare nulla a mano.
+- `book01/_indice.md`, `book02/_indice.md`, `book03/_indice.md`,
+  `book04/_indice.md` → elenco di tutte le sezioni scelte per quel libro, con
+  stato (sostituzione di un'immagine esistente o aggiunta nuova), quali
+  ritratti di riferimento usare, e descrizione breve in italiano.
+- `book01/NNN-slug.txt`, `book02/NNN-slug.txt`, `book03/NNN-slug.txt`,
+  `book04/NNN-slug.txt` → un file per immagine, **pronto da copiare e
+  incollare per intero** nel generatore (riga "Base da riutilizzare" + stile
+  base + personaggio/bestiario pertinenti + scena specifica già uniti). Non
+  serve assemblare nulla a mano.
 - `creazione-personaggio/arti-ramas/*.txt`, `creazione-personaggio/armi/*.txt`,
   `creazione-personaggio/oggetti/*.txt` → un'icona per ogni Arte Ramas, Arma
   e Oggetto Speciale/da Zaino nominato, stile icona dedicato (vedi sopra),
