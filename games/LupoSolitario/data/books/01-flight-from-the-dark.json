@@ -144,7 +144,8 @@
      "text": "Altrimenti",
      "section": 292
     }
-   ]
+   ],
+   "image": "public/img/book01/sec009.png"
   },
   "10": {
    "text": "<p>Stai sudando, e le gambe ti dolgono. Poco lontano vedi un gruppo di capanne.</p>",
@@ -228,7 +229,8 @@
      "text": "Vai a sud",
      "section": 35
     }
-   ]
+   ],
+   "image": "public/img/book01/sec015.png"
   },
   "16": {
    "text": "<p>Riesci a sciogliere uno dei cavalli legati al carrozzone. È spaventato dall'odore dei Tigerwolf, e dalle urla dei loro malvagi cavalieri, i Giak. Con la tua Arma in pugno inciti il cavallo verso le belve che avanzano. Sono a meno di cinquanta metri, e si precipitano verso di te con le lance abbassate. State per arrivare allo scontro frontale.</p>",
@@ -437,7 +439,7 @@
    ]
   },
   "29": {
-   "image": "public/img/book01/old/sec172.png",
+   "image": "public/img/book01/sec029.png",
    "text": "<p>Ti avvicini alla riva e ti prepari al combattimento. Il Kraan e il suo cavaliere ti vedono e si lanciano attraverso il lago volando a pochi centimetri sul pelo dell'acqua. Il cavaliere emette un urlo che ti gela il sangue. È uno dei Vordak, i feroci ufficiali dei Signori delle Tenebre. Oramai ti è addosso, e devi combatterlo. Togli due punti dalla tua Combattività, a meno che tu non abbia lo Psicoschermo; il nemico ti sta attaccando anche con il suo Psicolaser, non solo con la sua mazza.</p>",
    "combat": {
     "name": "Vordak",
@@ -598,7 +600,7 @@
    ]
   },
   "41": {
-   "image": "public/img/book01/old/sec41.png",
+   "image": "public/img/book01/sec041.png",
    "text": "<p>Tre Rangers passano al galoppo sulla riva del fiume, inseguiti da vicino dai Giak sui loro ringhiosi Tigerwolf. La sponda è alta, e vieni subito visto dal capo dei Giak, che ordina a cinque dei suoi di colpirti con gli archi. Sei sotto una pioggia di frecce nere.</p>",
    "choices": [
     {
@@ -633,7 +635,7 @@
    ]
   },
   "43": {
-   "image": "public/img/book01/old/sec43.png",
+   "image": "public/img/book01/sec043.png",
    "text": "<p>Da dietro la roccia compare un enorme orso nero. Si avvicina lentamente, con la bocca aperta e il muso contratto per la rabbia e il dolore. Vedi che è gravemente ferito e sta sanguinando dal collo e dalla schiena. Devi combatterlo.</p>",
    "combat": {
     "name": "Orso nero",
@@ -782,7 +784,8 @@
   "53": {
    "text": "<p>Un dolore lancinante attanaglia la tua gamba destra, storta e schiacciata sotto il peso del tuo corpo, mentre rotoli giù, e finisci in una fossa ai piedi della Collina. Il colpo è tale che ti manca il respiro, e perdi conoscenza. Vieni svegliato dal dolore acuto di qualcosa che ti preme contro il petto. È la punta di una lancia Giak. La prima cosa che vedi è il ghigno sinistro di quello che la impugna mentre ti blocca a terra il braccio sinistro. Istintivamente vorresti afferrare la tua Arma, ma questa non c'è più. In balia del crudele Giak, l'ultima cosa che vedi prima che la tua luce si spenga per sempre è la lama affilata della lancia che scende sulla tua gola. La tua missione finisce qui.</p>",
    "isDeathSection": true,
-   "choices": []
+   "choices": [],
+   "image": "public/img/book01/sec053.png"
   },
   "54": {
    "text": "<p>Sembra che il cielo non abbia sentito la tua preghiera. Una lancia sibila vicino alla tua testa e si pianta nel collo del cavallo. Con un nitrito straziante la bestia cade in avanti e finite entrambi a rotolare sulla strada. Tramortito e bloccato sotto il peso del tuo cavallo morto, l'ultima cosa che vedi sono le punte acuminate delle lance dei Giak. La tua missione è fallita.</p>",
@@ -1140,7 +1143,8 @@
      "text": "Continua",
      "section": 235
     }
-   ]
+   ],
+   "image": "public/img/book01/sec082.png"
   },
   "83": {
    "text": "<p>Hai corso per due chilometri quando tre soldati compaiono da sotto un ponticello. Ti ordinano di fermarti e di lasciar cadere le armi e l'equipaggiamento. Sono macchiati di sangue, sporchi e malandati. Il loro capo porta la tunica dei soldati della guarnigione di Toran.</p>",
@@ -1211,7 +1215,7 @@
    ]
   },
   "87": {
-   "image": "public/img/book01/old/sec87.png",
+   "image": "public/img/book01/sec087.png",
    "text": "<p>Concentrando i tuoi poteri sulla serratura tenti di visualizzare il meccanismo interno. Pian piano l'immagine si concretizza sullo schermo della tua mente. È vecchia e arrugginita ma funziona ancora. Stai per perdere la concentrazione quando un leggero scatto ti dice che il tuo sforzo non è stato vano. Con lo spillo la cosa è più semplice. Lentamente si sfila dalla serratura finché cade sul pavimento. La porta di granito si apre verso di te ruotando su dei cardini nascosti e la luce fioca del Cimitero penetra nella tomba. L'uscita è completamente coperta da piante di Necranto, che ti tagliuzzano la faccia e le mani mentre ti apri a stento la strada verso la superficie. Ti spaventa un improvviso rumore. Ti giri e vicino a un cadavere vedi una testa mozza che ti sorride. In preda al panico fuggi attraverso la sinistra necropoli verso l'uscita a sud.</p>",
    "choices": [
     {
@@ -1349,7 +1353,8 @@
      "text": "Scappa nella foresta",
      "section": 306
     }
-   ]
+   ],
+   "image": "public/img/book01/sec097.png"
   },
   "98": {
    "text": "<p>Sembra che le guardie credano alla tua storia e si inchinano con rispetto davanti al tuo titolo di Ramas. Uno di loro tira una corda nascosta e le enormi porte cominciano ad aprirsi. Entri, e le porte si chiudono dietro di te.</p>",
@@ -1385,7 +1390,8 @@
      "text": "Cerca un'uscita",
      "section": 257
     }
-   ]
+   ],
+   "image": "public/img/book01/sec100.png"
   },
   "101": {
    "text": "<p>Il rumore della battaglia si affievolisce, ma il silenzio è presto rotto da una voce dentro di te che ti accusa di essere un codardo e di aver abbandonato nel pericolo un altro essere umano. Tenti di liberarti dall'insistente voce della coscienza dicendoti che la tua missione è molto più importante, e che non solo la vita del giovane mago, ma la vita di tutti i tuoi compatrioti è in pericolo se non raggiungi vivo la capitale. Improvvisamente la vista di una pattuglia di Giak ti costringe a nasconderti. Ma è troppo tardi: ti hanno individuato e devi correr via velocemente.</p>",

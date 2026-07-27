@@ -28,8 +28,8 @@
 
 .kai-arts-list,
 .weapons-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
     gap: var(--spacing-xs);
 }
 
@@ -46,8 +46,12 @@
     color: var(--color-danger);
 }
 
-/* Remove Item Button */
+/* Remove Item Button - sits as a small overlay in the corner of the icon
+   card (see .inventory-item in main.css, which is position: relative) */
 .btn-remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
     background: rgba(239, 68, 68, 0.2);
     color: var(--color-danger);
     border: none;
@@ -56,7 +60,6 @@
     height: 20px;
     font-size: 14px;
     cursor: pointer;
-    margin-left: 0.5rem;
     transition: all var(--transition-fast);
 }
 

@@ -1,7 +1,7 @@
 // Character Sheet Component - Always visible character display
 import { gameState } from '../game-state.js';
 import { UIHelpers } from '../utils/ui-helpers.js';
-import { KAI_ARTS, weaponIconHTML } from './character-creator.js';
+import { KAI_ARTS, WEAPON_IMAGES, ITEM_IMAGES } from './character-creator.js';
 
 export class CharacterSheet {
   constructor() {
@@ -72,9 +72,10 @@ export class CharacterSheet {
         <div class="section">
           <h4>🧙 Arti Kai</h4>
           <div class="kai-arts-list">
-            ${character.artiRamas.map(art => `
-              <span class="inventory-item">${this.getArtIconHTML(art)} ${art}</span>
-            `).join('')}
+            ${character.artiRamas.map(art => {
+      const artData = KAI_ARTS.find(a => a.name === art);
+      return this.itemCardHTML({ imgSrc: artData?.image, emoji: '✨', label: art });
+    }).join('')}
           </div>
         </div>
 
@@ -82,12 +83,12 @@ export class CharacterSheet {
         <div class="section">
           <h4>⚔️ Armi (${character.armi.length}/2)</h4>
           <div class="weapons-list">
-            ${character.armi.map((weapon, index) => `
-              <div class="inventory-item">
-                ${weaponIconHTML(weapon)} ${weapon}
-                <button class="btn-remove" data-type="weapon" data-index="${index}">×</button>
-              </div>
-            `).join('')}
+            ${character.armi.map((weapon, index) => this.itemCardHTML({
+      imgSrc: WEAPON_IMAGES[weapon],
+      emoji: '⚔️',
+      label: weapon,
+      removeButtonHTML: `<button class="btn-remove" data-type="weapon" data-index="${index}">×</button>`
+    })).join('')}
             ${character.armi.length < 2 ? '<div class="inventory-item-empty">Slot vuoto</div>' : ''}
           </div>
         </div>
@@ -96,12 +97,12 @@ export class CharacterSheet {
         <div class="section">
           <h4>🎒 Zaino (${character.zaino.length}/8)</h4>
           <div class="inventory-grid">
-            ${character.zaino.map((item, index) => `
-              <div class="inventory-item">
-                ${item}
-                <button class="btn-remove" data-type="zaino" data-index="${index}">×</button>
-              </div>
-            `).join('')}
+            ${character.zaino.map((item, index) => this.itemCardHTML({
+      imgSrc: ITEM_IMAGES[item],
+      emoji: '🎒',
+      label: item,
+      removeButtonHTML: `<button class="btn-remove" data-type="zaino" data-index="${index}">×</button>`
+    })).join('')}
             ${Array(8 - character.zaino.length).fill(0).map(() =>
       '<div class="inventory-item-empty">Vuoto</div>'
     ).join('')}
@@ -113,12 +114,12 @@ export class CharacterSheet {
           <div class="section">
             <h4>✨ Oggetti Speciali</h4>
             <div class="inventory-grid">
-              ${character.oggettiSpeciali.map((item, index) => `
-                <div class="inventory-item">
-                  ${item}
-                  <button class="btn-remove" data-type="special" data-index="${index}">×</button>
-                </div>
-              `).join('')}
+              ${character.oggettiSpeciali.map((item, index) => this.itemCardHTML({
+      imgSrc: ITEM_IMAGES[item],
+      emoji: '✨',
+      label: item,
+      removeButtonHTML: `<button class="btn-remove" data-type="special" data-index="${index}">×</button>`
+    })).join('')}
             </div>
           </div>
         ` : ''}
@@ -161,10 +162,20 @@ export class CharacterSheet {
     return 'health-danger';
   }
 
-  getArtIconHTML(artName) {
-    const art = KAI_ARTS.find(a => a.name === artName);
-    if (!art) return '✨';
-    return `<img class="weapon-icon-small" src="${art.image}" alt="${artName}">`;
+  // A compact icon-on-top, label-below card used for every inventory row
+  // (Kai Arts, Weapons, Backpack, Special Items) - falls back to a generic
+  // emoji for the many narrative item names that have no dedicated artwork.
+  itemCardHTML({ imgSrc, emoji, label, removeButtonHTML = '' }) {
+    const icon = imgSrc
+      ? `<img class="inventory-item-icon" src="${imgSrc}" alt="${label}">`
+      : `<span class="inventory-item-icon inventory-item-icon-emoji">${emoji}</span>`;
+    return `
+      <div class="inventory-item">
+        ${removeButtonHTML}
+        ${icon}
+        <span class="inventory-item-label">${label}</span>
+      </div>
+    `;
   }
 
   async removeItem(type, index) {

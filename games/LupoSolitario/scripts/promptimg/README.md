@@ -28,6 +28,14 @@ e per le icone di Arti Ramas/Armi nella creazione del personaggio.
   schermata di creazione del personaggio.
 - `creazione-personaggio/armi/` — 10 icone, una per arma (Pugnale, Daga,
   Lancia, Mazza, Martello, Spada, Spada Corta, Ascia, Asta, Spadone).
+- `creazione-personaggio/oggetti/` — 9 icone per gli Oggetti Speciali/da
+  Zaino nominati concessi dalla creazione del personaggio e dalle
+  transizioni tra libri (Elmo, Cotta di Maglia, Scudo, Giubba di Cuoio
+  Imbottito, Mappa, Sigillo di Hammerdal, Pozione Magica, Pozione Curativa,
+  Pozione di Laumspur). Non copre i tantissimi oggetti unici che compaiono
+  nel testo narrativo dei tre libri: per quelli l'app mostra un'emoji
+  generica di riserva (🎒 nello Zaino, ✨ negli Oggetti Speciali) finché non
+  vengono generate icone dedicate.
 - `bookNN/` — stessa struttura di `book01/` per i libri successivi, quando
   li genererai.
 

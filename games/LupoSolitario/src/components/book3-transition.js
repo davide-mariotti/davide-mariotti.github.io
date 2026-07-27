@@ -6,7 +6,7 @@
 import { getRandomDestinyNumber } from './destiny-table.js';
 import { gameState } from '../game-state.js';
 import { UIHelpers } from '../utils/ui-helpers.js';
-import { KAI_ARTS, WEAPONS, weaponIconHTML } from './character-creator.js';
+import { KAI_ARTS, WEAPONS, weaponIconHTML, itemIconHTML } from './character-creator.js';
 
 const BOOK3_EQUIPMENT = [
   { type: 'weapon', name: 'Spada' },
@@ -139,7 +139,7 @@ export class Book3Transition {
       <style>
         .kai-arts-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
           gap: 1rem;
           margin-top: 1rem;
         }
@@ -161,7 +161,7 @@ export class Book3Transition {
           border-color: var(--color-primary);
           box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
         }
-        .kai-art-emoji { display: block; width: 64px; height: 64px; object-fit: contain; margin: 0 auto 0.5rem; border-radius: 8px; }
+        .kai-art-emoji { display: block; width: 110px; height: 110px; object-fit: contain; margin: 0 auto 0.75rem; border-radius: 12px; }
         .kai-art-name { font-weight: 700; margin-bottom: 0.5rem; }
         .kai-art-desc { font-size: 0.875rem; color: var(--text-muted); }
       </style>
@@ -202,11 +202,11 @@ export class Book3Transition {
 
   equipmentLabel(item) {
     if (item.type === 'meal') return `🍖 Pasti (x${item.count})`;
-    if (item.type === 'potion') return `🧪 ${item.name}`;
+    if (item.type === 'potion') return `${itemIconHTML(item.name) || '🧪'} ${item.name}`;
     if (item.type === 'special') {
       const bonusKey = Object.keys(item.bonus)[0];
       const bonusLabel = bonusKey === 'resistenza' ? 'Resistenza' : 'Combattività';
-      return `✨ ${item.name} (+${item.bonus[bonusKey]} ${bonusLabel})`;
+      return `${itemIconHTML(item.name) || '✨'} ${item.name} (+${item.bonus[bonusKey]} ${bonusLabel})`;
     }
     return `${weaponIconHTML(item.name)} ${item.name}`;
   }
@@ -240,7 +240,7 @@ export class Book3Transition {
 
           <h4 style="margin-top: 2rem;">✨ Oggetti Speciali</h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-            ${c.oggettiSpeciali.map(item => `<span class="inventory-item">${item}</span>`).join('')}
+            ${c.oggettiSpeciali.map(item => `<span class="inventory-item">${itemIconHTML(item) || '✨'} ${item}</span>`).join('')}
           </div>
 
           <button class="btn btn-success btn-large btn-block" id="begin-book3" style="margin-top: 2rem;">

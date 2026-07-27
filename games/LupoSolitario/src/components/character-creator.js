@@ -92,6 +92,32 @@ export function weaponIconHTML(weaponName) {
   return src ? `<img class="weapon-icon-small" src="${src}" alt="${weaponName}">` : '';
 }
 
+// Maps a Backpack/Special Item's display name to its icon. Only the items
+// actually granted during character creation and book transitions have real
+// artwork - the game also has hundreds of one-off narrative item names (found
+// deep in the books) that fall back to a generic icon wherever this is used.
+export const ITEM_IMAGES = {
+  'Elmo': 'public/img/oggetti/elmo.png',
+  'Cotta di Maglia': 'public/img/oggetti/cotta-di-maglia.png',
+  'Scudo': 'public/img/oggetti/scudo.png',
+  'Giubba di Cuoio Imbottito': 'public/img/oggetti/giubba-di-cuoio-imbottito.png',
+  'Mappa di Sommerlund': 'public/img/oggetti/mappa.png',
+  'Mappa': 'public/img/oggetti/mappa.png',
+  'Mappa di Kalte': 'public/img/oggetti/mappa.png',
+  'Sigillo di Hammerdal': 'public/img/oggetti/sigillo-di-hammerdal.png',
+  'Pozione Magica': 'public/img/oggetti/pozione-magica.png',
+  'Pozione Curativa': 'public/img/oggetti/pozione-curativa.png',
+  'Pozione di Laumspur': 'public/img/oggetti/pozione-di-laumspur.png'
+};
+
+// <img> tag for a known item icon, or '' if this item has no dedicated
+// artwork (the vast majority of narrative item names - callers should fall
+// back to a generic emoji in that case).
+export function itemIconHTML(itemName) {
+  const src = ITEM_IMAGES[itemName];
+  return src ? `<img class="weapon-icon-small" src="${src}" alt="${itemName}">` : '';
+}
+
 const STARTING_ITEMS = [
   { type: 'weapon', name: 'Spada' },
   { type: 'special', name: 'Elmo', bonus: { resistenza: 2 } },
@@ -235,7 +261,7 @@ export class CharacterCreator {
       <style>
         .kai-arts-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
           gap: 1rem;
           margin-top: 1rem;
         }
@@ -259,11 +285,11 @@ export class CharacterCreator {
         }
         .kai-art-emoji {
           display: block;
-          width: 64px;
-          height: 64px;
+          width: 110px;
+          height: 110px;
           object-fit: contain;
-          margin: 0 auto 0.5rem;
-          border-radius: 8px;
+          margin: 0 auto 0.75rem;
+          border-radius: 12px;
         }
         .kai-art-name {
           font-weight: 700;
@@ -296,7 +322,7 @@ export class CharacterCreator {
 
       return `
                 <div style="padding: 0.25rem 0.5rem; background: rgba(255,255,255,0.05); border-radius: 4px;">
-                  <strong style="color: var(--color-primary);">${idx}</strong>: ${item.type === 'weapon' ? weaponIconHTML(name) + ' ' : ''}${name}
+                  <strong style="color: var(--color-primary);">${idx}</strong>: ${item.type === 'weapon' ? weaponIconHTML(name) + ' ' : itemIconHTML(name) + ' '}${name}
                   ${item.count ? `(x${item.count})` : ''}
                   ${item.amount ? `(${item.amount})` : ''}
                   ${item.bonus ? `(+${Object.values(item.bonus)[0]})` : ''}
@@ -365,7 +391,7 @@ export class CharacterCreator {
             <h4 style="margin-top: 2rem;">🎒 Zaino</h4>
             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
               ${this.character.zaino.map(item =>
-      `<span class="inventory-item">${item}</span>`
+      `<span class="inventory-item">${itemIconHTML(item) || '🎒'} ${item}</span>`
     ).join('')}
             </div>
           ` : ''}
@@ -374,7 +400,7 @@ export class CharacterCreator {
             <h4 style="margin-top: 2rem;">✨ Oggetti Speciali</h4>
             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
               ${this.character.oggettiSpeciali.map(item =>
-      `<span class="inventory-item">${item}</span>`
+      `<span class="inventory-item">${itemIconHTML(item) || '✨'} ${item}</span>`
     ).join('')}
             </div>
           ` : ''}
@@ -588,7 +614,7 @@ export class CharacterCreator {
           if (item.bonus.resistenza) {
             this.character.resistenza += item.bonus.resistenza;
             this.character.resistenzaMax += item.bonus.resistenza;
-            resultHTML += `<h3>✨ ${item.name}</h3><p>+${item.bonus.resistenza} Resistenza bonus!</p>`;
+            resultHTML += `<h3>${itemIconHTML(item.name)} ${item.name}</h3><p>+${item.bonus.resistenza} Resistenza bonus!</p>`;
           }
         }
       } else if (item.type === 'meal') {
@@ -596,7 +622,7 @@ export class CharacterCreator {
         resultHTML += `<h3>🍖 ${item.count} Pasti</h3><p>Aggiunti al tuo zaino!</p>`;
       } else if (item.type === 'potion') {
         this.character.zaino.push(item.name);
-        resultHTML += `<h3>🧪 ${item.name}</h3><p>Aggiunta allo zaino!</p>`;
+        resultHTML += `<h3>${itemIconHTML(item.name)} ${item.name}</h3><p>Aggiunta allo zaino!</p>`;
       } else if (item.type === 'gold') {
         this.character.corone += item.amount;
         resultHTML += `<h3>💰 ${item.amount} Corone d'Oro</h3><p>Totale: ${this.character.corone}</p>`;
