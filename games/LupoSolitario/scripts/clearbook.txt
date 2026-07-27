@@ -1,0 +1,27 @@
+Agisci come un programmatore esperto. Devo ripulire un progetto web (una trasposizione di un librogame) da tutti i riferimenti relativi ai diritti d'autore, al copyright, alle licenze e ai ringraziamenti a "Project Aon". 
+
+I file si trovano nella cartella corrente. La struttura dei file è identica a quella dei libri precedenti. Esegui le seguenti operazioni in sequenza, utilizzando script (es. PowerShell/Bash) per le modifiche di massa e strumenti di modifica file per i file singoli:
+
+1. **Rimozione dei File Inutili**
+- Elimina fisicamente i file `license.htm` e `acknwldg.htm`.
+- Elimina fisicamente il file immagine `palogo.png` (il logo di Project Aon).
+
+2. **Pulizia di Massa su tutti i file `.htm`**
+- Cerca e rimuovi completamente il blocco `<div id="license">...</div>` (e tutto il suo contenuto interno) presente in fondo alla stragrande maggioranza dei file HTML.
+- Cerca e rimuovi il tag `<img alt="" src="palogo.png" id="project-aon-logo"/>` (il logo) in tutti i file HTML in cui è presente (generalmente nell'header).
+
+3. **Pulizia del Foglio di Stile (`main.css`)**
+- Rimuovi tutte le regole CSS che fanno riferimento a `#license` e `#license p`.
+- Rimuovi tutte le regole CSS che fanno riferimento a `#project-aon-logo`.
+- Dove c'è la regola combinata `#logo, #project-aon-logo`, lasciala valida solo per `#logo`.
+
+4. **Correzione della Navigazione (Rimozione link ad Acknowledgements)**
+- In `toc.htm`, rimuovi l'elemento di lista `<li>` che contiene il link ad `acknwldg.htm`.
+- In `dedicate.htm`, aggiorna la navigazione a fondo pagina: invece di puntare ad `acknwldg.htm`, il link "avanti" deve saltare direttamente a `tssf.htm` (The Story So Far).
+- In `tssf.htm`, aggiorna la navigazione a fondo pagina: invece di puntare "indietro" ad `acknwldg.htm`, il link deve puntare direttamente a `dedicate.htm`.
+
+5. **Rimozione Riferimenti Testuali (Copyright e Ringraziamenti)**
+- In `title.htm`: rimuovi i paragrafi finali che iniziano con "In late 1999, Joe gave his readers his millennium gift...", "When asked, Gary generously...", "Internet Edition published by Project Aon..." e "Text © 1984 Joe Dever...". Lascia invece inalterata la biografia degli autori originale.
+- In `errata.htm`: rimuovi la frase nell'introduzione che invita a contattare lo staff di Project Aon in caso di errori ("If you see anything that needs correction, please contact the Project Aon Staff.").
+
+Ti prego di non chiedere conferme per ogni singolo file, ma procedi direttamente eseguendo i tool o gli script necessari, comunicandomi poi il riepilogo a fine lavoro.

@@ -5,8 +5,9 @@ import { saveManager } from '../save-manager.js';
 import { getRandomDestinyNumber } from './destiny-table.js';
 
 export class StoryReader {
-  constructor(bookData) {
+  constructor(bookData, onContinueNextBook = null) {
     this.bookData = bookData;
+    this.onContinueNextBook = onContinueNextBook;
   }
 
   render() {
@@ -47,10 +48,14 @@ export class StoryReader {
       html += this.renderCombat(combatState);
     }
 
-    // Show choices, Destiny Test, or Death Message
+    // Show choices, Destiny Test, or Death/Victory Message
     if (!inCombat) {
       if (section.isDeathSection) {
         html += this.renderDeathSection();
+      } else if (section.isFailureEnding) {
+        html += this.renderFailureEndingSection();
+      } else if (section.isVictory) {
+        html += this.renderVictorySection(state.bookNumber, this.onContinueNextBook && state.bookNumber < 3);
       } else if (section.choices && section.choices.length > 0) {
         if (this.isDestinyTest(section.choices)) {
           html += this.renderDestinyTest();
@@ -73,7 +78,8 @@ export class StoryReader {
     choiceBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const nextSection = parseInt(btn.dataset.section);
-        this.navigateToSection(nextSection, section);
+        const choice = section.choices[parseInt(btn.dataset.index)];
+        this.navigateToSection(nextSection, section, choice);
       });
     });
 
@@ -95,6 +101,13 @@ export class StoryReader {
       destinyBtn.addEventListener('click', () => this.handleDestinyRoll(container, section));
     }
 
+    const continueNextBookBtn = container.querySelector('#continue-next-book-btn');
+    if (continueNextBookBtn) {
+      continueNextBookBtn.addEventListener('click', () => {
+        if (this.onContinueNextBook) this.onContinueNextBook();
+      });
+    }
+
     const restartBtn = container.querySelector('#restart-btn');
     if (restartBtn) {
       restartBtn.addEventListener('click', async () => {
@@ -108,7 +121,7 @@ export class StoryReader {
 
   }
 
-  async navigateToSection(sectionNumber, currentSection) {
+  async navigateToSection(sectionNumber, currentSection, choice = null) {
     // Handle section effects (items, stat changes, etc.)
     if (currentSection.effects) {
       try {
@@ -119,29 +132,67 @@ export class StoryReader {
       }
     }
 
+    // Some choices carry their own effects (e.g. "roll 0-4: you fall, -2 Resistenza")
+    if (choice && choice.effects) {
+      try {
+        await this.applyEffects(choice.effects);
+      } catch (error) {
+        console.error('Error applying choice effects:', error);
+        UIHelpers.showToast('⚠️ Errore nell\'applicare gli effetti', 'warning');
+      }
+    }
+
     // Check for combat
     const nextSection = this.bookData.sections[sectionNumber];
     if (nextSection && nextSection.combat) {
-      // Start combat
-      combatManager.startCombat(nextSection.combat);
+      // Some sections apply a combat bonus/penalty (terrain, surprise, etc.)
+      // to the whole encounter rather than to a specific enemy - fold it into
+      // every enemy in the fight so combatManager only has one mechanism to handle.
+      let combatData = nextSection.combat;
+      if (nextSection.playerCombatBonus) {
+        const bonus = nextSection.playerCombatBonus;
+        const applyBonus = (enemy) => ({ ...enemy, playerCombatBonus: (enemy.playerCombatBonus || 0) + bonus });
+        combatData = Array.isArray(combatData) ? combatData.map(applyBonus) : applyBonus(combatData);
+      }
+      if (nextSection.playerCombatPenalty) {
+        const penalty = nextSection.playerCombatPenalty;
+        const applyPenalty = (enemy) => ({ ...enemy, playerCombatPenalty: (enemy.playerCombatPenalty || 0) + penalty });
+        combatData = Array.isArray(combatData) ? combatData.map(applyPenalty) : applyPenalty(combatData);
+      }
+      combatManager.startCombat(combatData);
     }
 
     gameState.goToSection(sectionNumber);
   }
 
+  // All keys present on a requirements object must pass (AND, not "first match
+  // wins") - a choice can combine e.g. a Kai Discipline AND an item at once.
   checkRequirements(requirements, state) {
     if (!requirements) return true;
 
-    // Check various requirements
-    if (requirements.kaiArt) {
-      return state.character.artiRamas.includes(requirements.kaiArt);
+    if (requirements.kaiArt !== undefined) {
+      if (!state.character.artiRamas.includes(requirements.kaiArt)) return false;
     }
-    if (requirements.item) {
-      return state.character.zaino.includes(requirements.item) ||
-        state.character.oggettiSpeciali.includes(requirements.item);
+    if (requirements.item !== undefined) {
+      const has = state.character.zaino.includes(requirements.item) ||
+        state.character.oggettiSpeciali.includes(requirements.item) ||
+        state.character.armi.includes(requirements.item);
+      if (!has) return false;
     }
-    if (requirements.minGold) {
-      return state.character.corone >= requirements.minGold;
+    if (requirements.minGold !== undefined) {
+      if (state.character.corone < requirements.minGold) return false;
+    }
+    // Gate a choice on how the combat that just ended actually went
+    if (requirements.maxRounds !== undefined) {
+      if (!state.lastCombatSummary || state.lastCombatSummary.rounds > requirements.maxRounds) return false;
+    }
+    if (requirements.minRounds !== undefined) {
+      if (!state.lastCombatSummary || state.lastCombatSummary.rounds < requirements.minRounds) return false;
+    }
+    if (requirements.tookDamage !== undefined) {
+      if (!state.lastCombatSummary) return false;
+      const took = state.lastCombatSummary.damageTaken > 0;
+      if (took !== requirements.tookDamage) return false;
     }
 
     return true;
@@ -200,19 +251,29 @@ export class StoryReader {
       UIHelpers.showToast(`💰 Spese ${effects.removeGold} Corone d'oro`, 'warning');
     }
 
-    // Direct endurance loss
+    // Direct endurance loss (sometimes waived entirely by a Kai Discipline, e.g.
+    // "lose 2 Endurance unless you have Mindshield")
     if (effects.loseEndurance) {
-      gameState.takeDamage(effects.loseEndurance);
-      UIHelpers.showToast(`💔 Persi ${effects.loseEndurance} punti Resistenza`, 'error');
-      await this.checkDeath();
+      const prevented = effects.psicoschermoPreventsLoss && gameState.hasKaiArt('Psicoschermo');
+      if (!prevented) {
+        gameState.takeDamage(effects.loseEndurance);
+        UIHelpers.showToast(`💔 Persi ${effects.loseEndurance} punti Resistenza`, 'error');
+        await this.checkDeath();
+      }
+    }
+
+    // Erase an item from the Action Chart (e.g. handing over a Special Item)
+    if (effects.removeItem) {
+      gameState.removeItem(effects.removeItem);
+      UIHelpers.showToast(`📜 Rimosso dal Registro di Guerra: ${effects.removeItem}`, 'info');
     }
 
     // Must eat or lose endurance
     if (effects.mustEatOrLoseEndurance) {
-      // Check for Caccia (Hunting)
-      // TODO: Check if current section is in a "Wasteland" where Hunting doesn't work.
-      // For now, assuming it works everywhere.
-      if (gameState.hasKaiArt('Caccia')) {
+      // Check for Caccia (Hunting) - doesn't work in Book 3 (Kalte is an icy
+      // wasteland, per the book's own equipment rules), but works everywhere else.
+      const huntingWorks = gameState.getState().bookNumber !== 3;
+      if (huntingWorks && gameState.hasKaiArt('Caccia')) {
         UIHelpers.showToast('🏹 Caccia: Hai procurato del cibo e non devi consumare un Pasto.', 'success');
         const state = gameState.getState();
         const currentSection = state.currentSection;
@@ -255,11 +316,37 @@ export class StoryReader {
       UIHelpers.showToast(`💚 Recuperati ${effects.health} punti Resistenza`, 'success');
     }
 
+    // Full or partial endurance restore (e.g. "riposo presso un guaritore")
+    if (effects.restoreEndurance) {
+      const state = gameState.getState();
+      const amount = effects.restoreEndurance === 'full'
+        ? state.character.resistenzaMax
+        : effects.restoreEndurance;
+      gameState.heal(amount);
+      UIHelpers.showToast('💚 Resistenza completamente recuperata!', 'success');
+    }
+
     // Damage
     if (effects.damage) {
       gameState.takeDamage(effects.damage);
       UIHelpers.showToast(`💔 Subiti ${effects.damage} danni`, 'error');
       await this.checkDeath();
+    }
+
+    // Lose all weapons only (backpack, if any, is kept)
+    if (effects.loseAllWeapons) {
+      gameState.clearWeapons();
+      UIHelpers.showToast('⚔️ Hai perso tutte le tue armi!', 'error');
+    }
+
+    // Lose a single random weapon (e.g. a weapon breaks)
+    if (effects.loseRandomWeapon) {
+      const weapons = gameState.getState().character.armi;
+      if (weapons.length > 0) {
+        const lostWeapon = weapons[Math.floor(Math.random() * weapons.length)];
+        gameState.removeWeapon(lostWeapon);
+        UIHelpers.showToast(`⚔️ La tua arma si è spezzata: ${lostWeapon}`, 'error');
+      }
     }
 
     // Automatic items (e.g. from Loot)
@@ -327,48 +414,60 @@ export class StoryReader {
     // Force update
     this.update(document.getElementById('story-reader'), gameState.getState());
 
+    if (result === 'next-enemy') {
+      // One enemy down, another already engaged by combatManager - keep fighting
+      return;
+    }
+
     if (result === 'victory') {
       setTimeout(() => {
         combatManager.endCombat('victory');
         UIHelpers.showAlert('🎉 Hai vinto il combattimento!', 'Vittoria!');
 
-        // Auto-navigate to victory section if possible
+        // endCombat() already triggered a reactive re-render showing this
+        // section's choices (correctly enabled/disabled per their requirements,
+        // e.g. how many rounds the fight took). Only auto-advance when there's
+        // truly a single way forward - "fuggi" choices only make sense mid-combat.
         const state = gameState.getState();
         const currentSection = this.bookData.sections[state.currentSection];
-        const fleeSection = currentSection.combat ? currentSection.combat.fleeSection : -1;
+        const fleeSection = (currentSection.combat && !Array.isArray(currentSection.combat))
+          ? currentSection.combat.fleeSection
+          : undefined;
+        const nonFleeChoices = currentSection.choices.filter(c => c.section !== fleeSection);
 
-        // Find choices that are NOT the flee section
-        const victoryChoices = currentSection.choices.filter(c => c.section !== fleeSection);
-
-        if (victoryChoices.length === 1) {
-          this.navigateToSection(victoryChoices[0].section, currentSection);
-        } else if (victoryChoices.length > 0) {
-          // If multiple victory paths, just refresh to show them (but filtering logic currently in render might show flee too)
-          // Best to render choices here or rely on standard render but we can't hide flee easily without logic update
-          // For now, auto-nav if 1 choice is safest
-          this.navigateToSection(victoryChoices[0].section, currentSection);
+        if (nonFleeChoices.length === 1) {
+          this.navigateToSection(nonFleeChoices[0].section, currentSection);
         }
       }, 1000);
     } else if (result === 'defeat') {
       setTimeout(async () => {
         combatManager.endCombat('defeat');
-        await UIHelpers.showAlert('💀 Sei stato sconfitto... L\'avventura finisce qui.', 'Game Over');
-
-        // Reset game and reload
-        await saveManager.deleteSave('autosave');
-        gameState.resetGame();
-        window.location.reload();
+        await this.endGame('💀 Sei stato sconfitto... L\'avventura finisce qui.', 'Game Over');
       }, 1000);
     }
   }
 
-  fleeCombat() {
+  // Ends the run immediately (death or an unrecoverable failure) without
+  // navigating to any section - used both after a lost combat and for the rare
+  // Destiny Test branch whose outcome is death with no "turn to" target at all.
+  async endGame(message, title) {
+    await UIHelpers.showAlert(message, title);
+    await saveManager.deleteSave('autosave');
+    gameState.resetGame();
+    window.location.reload();
+  }
+
+  async fleeCombat() {
     if (!combatManager.canPlayerFlee()) {
       UIHelpers.showToast('Non puoi ancora fuggire!', 'warning');
       return;
     }
 
     if (combatManager.flee()) {
+      // Fleeing can still cost enough Resistenza to kill the hero
+      const died = await this.checkDeath();
+      if (died) return;
+
       const state = gameState.getState();
       const currentSection = this.bookData.sections[state.currentSection];
 
@@ -385,11 +484,11 @@ export class StoryReader {
 
   renderStandardChoices(choices, state) {
     let html = `<div class="choices">`;
-    choices.forEach(choice => {
+    choices.forEach((choice, index) => {
       const canChoose = this.checkRequirements(choice.requirements, state);
       html += `
-          <button class="btn btn-secondary btn-large choice-btn" 
-                  data-section="${choice.section}"
+          <button class="btn btn-secondary btn-large choice-btn"
+                  data-section="${choice.section}" data-index="${index}"
                   ${!canChoose ? 'disabled' : ''}>
             ${choice.text}
           </button>
@@ -400,10 +499,24 @@ export class StoryReader {
   }
 
   isDestinyTest(choices) {
-    // Detect if ALL choices look like "Numero X-Y:" or similar pattern
-    const rangeRegex = /(?:Numero|Se esce|Esca)\s*(\d)-(\d)/i;
-    // Also support single number checks if needed, but usually ranges
-    return choices.length > 1 && choices.every(c => rangeRegex.test(c.text));
+    // Detect if ALL choices describe a Destiny Table range ("Numero X-Y",
+    // "Numero da X a Y", "Da X a Y", or a single "numero è N")
+    return choices.length > 1 && choices.every(c => this.parseDestinyRange(c.text) !== null);
+  }
+
+  // Extract the {min, max} roll range a choice text refers to, or null if it
+  // doesn't describe one. Handles the several phrasings used across the book.
+  parseDestinyRange(text) {
+    let match = text.match(/(\d+)\s*-\s*(\d+)/);
+    if (match) return { min: parseInt(match[1]), max: parseInt(match[2]) };
+
+    match = text.match(/\bda\s*(\d+)\s*a\s*(\d+)\b/i);
+    if (match) return { min: parseInt(match[1]), max: parseInt(match[2]) };
+
+    match = text.match(/numero\s*(?:è|e)\s*(\d+)/i);
+    if (match) return { min: parseInt(match[1]), max: parseInt(match[1]) };
+
+    return null;
   }
 
   renderDestinyTest() {
@@ -441,6 +554,43 @@ export class StoryReader {
     `;
   }
 
+  renderFailureEndingSection() {
+    return `
+      <div class="death-container" style="text-align: center; margin-top: 2rem;">
+        <div class="card" style="border-color: var(--color-warning); background: rgba(217, 119, 6, 0.1);">
+          <h3 style="color: var(--color-warning);">⚠️ MISSIONE FALLITA</h3>
+          <p>Sei sopravvissuto, ma non sei riuscito a completare la tua missione.</p>
+          <button class="btn btn-danger btn-large btn-block" id="restart-btn" style="margin-top: 1.5rem;">
+            🔄 Ricomincia l'avventura
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderVictorySection(bookNumber, canContinueToNextBook) {
+    const nextBookLabels = {
+      1: '🌊 Continua nel Libro 2: Fuoco sulle Acque',
+      2: '❄️ Continua nel Libro 3: Le Caverne di Kalte'
+    };
+    return `
+      <div class="death-container" style="text-align: center; margin-top: 2rem;">
+        <div class="card" style="border-color: var(--color-success); background: rgba(16, 185, 129, 0.1);">
+          <h3 style="color: var(--color-success);">🏆 VITTORIA!</h3>
+          <p>Hai completato con successo la tua avventura!</p>
+          ${canContinueToNextBook ? `
+            <button class="btn btn-primary btn-large btn-block" id="continue-next-book-btn" style="margin-top: 1.5rem;">
+              ${nextBookLabels[bookNumber]}
+            </button>
+          ` : ''}
+          <button class="btn btn-success btn-large btn-block" id="restart-btn" style="margin-top: 1rem;">
+            🔄 Ricomincia l'avventura
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
   async handleDestinyRoll(container, section) {
     const btn = container.querySelector('#destiny-roll-btn');
     if (btn) btn.disabled = true;
@@ -461,22 +611,22 @@ export class StoryReader {
         display.textContent = roll;
 
         // Find matching choice
-        const rangeRegex = /(?:Numero|Se esce|Esca)\s*(\d)-(\d)/i;
         const matchedChoice = section.choices.find(choice => {
-          const match = choice.text.match(rangeRegex);
-          if (match) {
-            const min = parseInt(match[1]);
-            const max = parseInt(match[2]);
-            return roll >= min && roll <= max;
-          }
-          return false;
+          const range = this.parseDestinyRange(choice.text);
+          return range && roll >= range.min && roll <= range.max;
         });
 
         if (matchedChoice) {
           message.innerHTML = `<span style="color: var(--color-success); font-weight: bold;">Risultato: ${roll}</span>. ${matchedChoice.text}`;
 
           setTimeout(() => {
-            this.navigateToSection(matchedChoice.section, section);
+            // Rare case: the roll's outcome is death narrated inline, with no
+            // other section to "turn to" (e.g. Book 3 section 94, drowning).
+            if (matchedChoice.section === null && matchedChoice.isDeathSection) {
+              this.endGame('💀 ' + matchedChoice.text, 'Game Over');
+            } else {
+              this.navigateToSection(matchedChoice.section, section, matchedChoice);
+            }
           }, 2000);
         } else {
           message.textContent = "Errore: Nessuna corrispondenza trovata.";
@@ -488,10 +638,7 @@ export class StoryReader {
   async checkDeath() {
     const state = gameState.getState();
     if (state.character.resistenza <= 0) {
-      await UIHelpers.showAlert('💀 Sei morto per le ferite riportate... L\'avventura finisce qui.', 'Game Over');
-      await saveManager.deleteSave('autosave');
-      gameState.resetGame();
-      window.location.reload();
+      await this.endGame('💀 Sei morto per le ferite riportate... L\'avventura finisce qui.', 'Game Over');
       return true;
     }
     return false;

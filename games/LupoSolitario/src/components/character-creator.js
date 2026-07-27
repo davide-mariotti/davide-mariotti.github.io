@@ -2,63 +2,95 @@
 import { getRandomDestinyNumber } from './destiny-table.js';
 import { gameState } from '../game-state.js';
 
-const KAI_ARTS = [
+export const KAI_ARTS = [
   {
     name: 'Mimetismo',
     emoji: '🎭',
+    image: 'public/img/arti-ramas/mimetismo.png',
     description: 'Ti permette di adattarti all\'ambiente circostante e nasconderti'
   },
   {
     name: 'Caccia',
     emoji: '🏹',
+    image: 'public/img/arti-ramas/caccia.png',
     description: 'Ti permette di procurarti cibo in natura. Non devi consumare Pasti quando richiesto.'
   },
   {
     name: 'Sesto Senso',
     emoji: '👁️',
+    image: 'public/img/arti-ramas/sesto-senso.png',
     description: 'Ti avverte di pericoli imminenti e rivela la natura di oggetti strani'
   },
   {
     name: 'Orientamento',
     emoji: '🧭',
+    image: 'public/img/arti-ramas/orientamento.png',
     description: 'Ti permette di scegliere sempre il percorso giusto'
   },
   {
     name: 'Guarigione',
     emoji: '💊',
+    image: 'public/img/arti-ramas/guarigione.png',
     description: 'Recuperi 1 punto Resistenza per ogni sezione senza combattimento'
   },
   {
     name: 'Scherma',
     emoji: '⚔️',
+    image: 'public/img/arti-ramas/scherma.png',
     description: 'Maestria con un\'arma specifica: +2 Combattività quando la usi'
   },
   {
     name: 'Psicoschermo',
     emoji: '🛡️',
+    image: 'public/img/arti-ramas/psicoschermo.png',
     description: 'Protegge dagli attacchi Psicolaser dei nemici'
   },
   {
-    name: 'Psicol aser',
+    name: 'Psicolaser',
     emoji: '⚡',
+    image: 'public/img/arti-ramas/psicolaser.png',
     description: 'Attacca i nemici con la forza della mente: +2 Combattività'
   },
   {
     name: 'Affinità animale',
     emoji: '🐺',
+    image: 'public/img/arti-ramas/affinita-animale.png',
     description: 'Comunica con gli animali e comprendi le loro intenzioni'
   },
   {
     name: 'Telecinesi',
     emoji: '🔮',
+    image: 'public/img/arti-ramas/telecinesi.png',
     description: 'Muovi piccoli oggetti con la concentrazione mentale'
   }
 ];
 
-const WEAPONS = [
+export const WEAPONS = [
   'Pugnale', 'Lancia', 'Mazza', 'Daga', 'Martello',
   'Spada', 'Ascia', 'Spada', 'Asta', 'Spadone'
 ];
+
+// Maps a weapon's display name to its icon - used anywhere a weapon is shown
+// with an image instead of (or alongside) the generic ⚔️ emoji.
+export const WEAPON_IMAGES = {
+  'Pugnale': 'public/img/weapon/pugnale.png',
+  'Daga': 'public/img/weapon/daga.png',
+  'Lancia': 'public/img/weapon/lancia.png',
+  'Mazza': 'public/img/weapon/mazza.png',
+  'Martello': 'public/img/weapon/martello.png',
+  'Spada': 'public/img/weapon/spada.png',
+  'Spada Corta': 'public/img/weapon/spada-corta.png',
+  'Ascia': 'public/img/weapon/ascia.png',
+  'Asta': 'public/img/weapon/asta.png',
+  'Spadone': 'public/img/weapon/spadone.png'
+};
+
+// <img> tag for a weapon icon, or '' if the weapon has no known icon (safe to
+// splice directly into a template string).
+export function weaponIconHTML(weaponName) {
+  const src = WEAPON_IMAGES[weaponName];
+  return src ? `<img class="weapon-icon-small" src="${src}" alt="${weaponName}">` : '';
+}
 
 const STARTING_ITEMS = [
   { type: 'weapon', name: 'Spada' },
@@ -185,9 +217,9 @@ export class CharacterCreator {
         </div>
         <div class="kai-arts-grid">
           ${KAI_ARTS.map((art, index) => `
-            <div class="kai-art-card ${this.character.artiRamas.includes(art.name) ? 'selected' : ''}" 
+            <div class="kai-art-card ${this.character.artiRamas.includes(art.name) ? 'selected' : ''}"
                  data-art="${art.name}">
-              <div class="kai-art-emoji">${art.emoji}</div>
+              <img class="kai-art-emoji" src="${art.image}" alt="${art.name}">
               <div class="kai-art-name">${art.name}</div>
               <div class="kai-art-desc">${art.description}</div>
             </div>
@@ -226,8 +258,12 @@ export class CharacterCreator {
           box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
         }
         .kai-art-emoji {
-          font-size: 3rem;
-          margin-bottom: 0.5rem;
+          display: block;
+          width: 64px;
+          height: 64px;
+          object-fit: contain;
+          margin: 0 auto 0.5rem;
+          border-radius: 8px;
         }
         .kai-art-name {
           font-weight: 700;
@@ -260,8 +296,8 @@ export class CharacterCreator {
 
       return `
                 <div style="padding: 0.25rem 0.5rem; background: rgba(255,255,255,0.05); border-radius: 4px;">
-                  <strong style="color: var(--color-primary);">${idx}</strong>: ${name} 
-                  ${item.count ? `(x${item.count})` : ''} 
+                  <strong style="color: var(--color-primary);">${idx}</strong>: ${item.type === 'weapon' ? weaponIconHTML(name) + ' ' : ''}${name}
+                  ${item.count ? `(x${item.count})` : ''}
                   ${item.amount ? `(${item.amount})` : ''}
                   ${item.bonus ? `(+${Object.values(item.bonus)[0]})` : ''}
                 </div>
@@ -314,14 +350,14 @@ export class CharacterCreator {
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
             ${this.character.artiRamas.map(art => {
       const artData = KAI_ARTS.find(a => a.name === art);
-      return `<span class="inventory-item">${artData?.emoji} ${art}</span>`;
+      return `<span class="inventory-item"><img class="weapon-icon-small" src="${artData?.image}" alt="${art}"> ${art}</span>`;
     }).join('')}
           </div>
 
           <h4 style="margin-top: 2rem;">⚔️ Armi</h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
             ${this.character.armi.map(weapon =>
-      `<span class="inventory-item">⚔️ ${weapon}</span>`
+      `<span class="inventory-item">${weaponIconHTML(weapon)} ${weapon}</span>`
     ).join('')}
           </div>
 
@@ -487,7 +523,7 @@ export class CharacterCreator {
                  </div>
                  <p>In quale arma sei maestro? (+2 Combattività quando la usi)</p>
                  <div class="weapon-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 1rem;">
-                    ${WEAPONS.map((w, i) => `<button class="btn btn-outline weapon-select-btn" data-weapon="${w}">${w}</button>`).join('')}
+                    ${WEAPONS.map((w, i) => `<button class="btn btn-outline weapon-select-btn" data-weapon="${w}">${weaponIconHTML(w)} ${w}</button>`).join('')}
                  </div>
                </div>
              `;
@@ -545,7 +581,7 @@ export class CharacterCreator {
 
       if (item.type === 'weapon') {
         this.character.armi.push(item.name);
-        resultHTML += `<h3>⚔️ ${item.name}</h3><p>Aggiunta alle tue armi!</p>`;
+        resultHTML += `<h3>${weaponIconHTML(item.name)} ${item.name}</h3><p>Aggiunta alle tue armi!</p>`;
       } else if (item.type === 'special') {
         this.character.oggettiSpeciali.push(item.name);
         if (item.bonus) {

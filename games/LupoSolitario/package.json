@@ -1,0 +1,9 @@
+{
+  "name": "lupo-solitario",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-test-module-mocks --test tests/*.test.mjs",
+    "validate-book": "node scripts/validate-book.mjs"
+  }
+}

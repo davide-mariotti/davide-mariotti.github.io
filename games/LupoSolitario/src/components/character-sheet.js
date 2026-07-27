@@ -1,6 +1,7 @@
 // Character Sheet Component - Always visible character display
 import { gameState } from '../game-state.js';
 import { UIHelpers } from '../utils/ui-helpers.js';
+import { KAI_ARTS, weaponIconHTML } from './character-creator.js';
 
 export class CharacterSheet {
   constructor() {
@@ -72,7 +73,7 @@ export class CharacterSheet {
           <h4>🧙 Arti Kai</h4>
           <div class="kai-arts-list">
             ${character.artiRamas.map(art => `
-              <span class="inventory-item">${this.getArtEmoji(art)} ${art}</span>
+              <span class="inventory-item">${this.getArtIconHTML(art)} ${art}</span>
             `).join('')}
           </div>
         </div>
@@ -83,7 +84,7 @@ export class CharacterSheet {
           <div class="weapons-list">
             ${character.armi.map((weapon, index) => `
               <div class="inventory-item">
-                ⚔️ ${weapon}
+                ${weaponIconHTML(weapon)} ${weapon}
                 <button class="btn-remove" data-type="weapon" data-index="${index}">×</button>
               </div>
             `).join('')}
@@ -160,20 +161,10 @@ export class CharacterSheet {
     return 'health-danger';
   }
 
-  getArtEmoji(artName) {
-    const emojis = {
-      'Mimetismo': '🎭',
-      'Caccia': '🏹',
-      'Sesto Senso': '👁️',
-      'Orientamento': '🧭',
-      'Guarigione': '💊',
-      'Scherma': '⚔️',
-      'Psicoschermo': '🛡️',
-      'Psicolaser': '⚡',
-      'Affinità animale': '🐺',
-      'Telecinesi': '🔮'
-    };
-    return emojis[artName] || '✨';
+  getArtIconHTML(artName) {
+    const art = KAI_ARTS.find(a => a.name === artName);
+    if (!art) return '✨';
+    return `<img class="weapon-icon-small" src="${art.image}" alt="${artName}">`;
   }
 
   async removeItem(type, index) {

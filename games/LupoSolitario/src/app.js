@@ -6,6 +6,8 @@ import { bookLoader } from './book-loader.js';
 import { CharacterCreator } from './components/character-creator.js';
 import { CharacterSheet } from './components/character-sheet.js';
 import { StoryReader } from './components/story-reader.js';
+import { Book2Transition } from './components/book2-transition.js';
+import { Book3Transition } from './components/book3-transition.js';
 import { ScreenManager } from './utils/screen-manager.js';
 import { MenuManager } from './utils/menu-manager.js';
 import { UIHelpers } from './utils/ui-helpers.js';
@@ -86,6 +88,11 @@ class App {
     try {
       const saveData = await saveManager.loadGame('autosave');
       if (saveData) {
+        // The save may belong to a different book than the one loaded at startup
+        // (e.g. the player continued into Book 2 before saving).
+        if (saveData.bookId && saveData.bookId !== this.bookData.bookId) {
+          this.bookData = await bookLoader.loadBook(saveData.bookId);
+        }
         gameState.loadState(saveData);
         this.showGameScreen();
       } else {
@@ -157,6 +164,74 @@ class App {
     });
   }
 
+  async showBook2Transition() {
+    this.screenManager.showLoadingScreen('Caricamento Libro 2...');
+
+    try {
+      const book2Data = await bookLoader.loadBook('02-fire-on-the-water');
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="app-header">
+          <div class="container">
+            <h1 style="margin: 0;">🐺 Lupo Solitario</h1>
+          </div>
+        </div>
+        <div class="app-main">
+          <div class="container">
+            <div id="book2-transition-container"></div>
+          </div>
+        </div>
+      `;
+
+      const transition = new Book2Transition(() => {
+        this.bookData = book2Data;
+        gameState.switchBook('02-fire-on-the-water', 2, 1);
+        this.showGameScreen();
+      });
+
+      const container = document.getElementById('book2-transition-container');
+      container.appendChild(transition.render());
+    } catch (error) {
+      console.error('Error loading Book 2:', error);
+      this.screenManager.showErrorScreen('Errore nel caricamento del Libro 2');
+    }
+  }
+
+  async showBook3Transition() {
+    this.screenManager.showLoadingScreen('Caricamento Libro 3...');
+
+    try {
+      const book3Data = await bookLoader.loadBook('03-the-caverns-of-kalte');
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="app-header">
+          <div class="container">
+            <h1 style="margin: 0;">🐺 Lupo Solitario</h1>
+          </div>
+        </div>
+        <div class="app-main">
+          <div class="container">
+            <div id="book3-transition-container"></div>
+          </div>
+        </div>
+      `;
+
+      const transition = new Book3Transition(() => {
+        this.bookData = book3Data;
+        gameState.switchBook('03-the-caverns-of-kalte', 3, 1);
+        this.showGameScreen();
+      });
+
+      const container = document.getElementById('book3-transition-container');
+      container.appendChild(transition.render());
+    } catch (error) {
+      console.error('Error loading Book 3:', error);
+      this.screenManager.showErrorScreen('Errore nel caricamento del Libro 3');
+    }
+  }
+
   showGameScreen() {
     const app = document.getElementById('app');
     app.innerHTML = this.screenManager.showGameHeader() + `
@@ -182,8 +257,13 @@ class App {
     const sheetContainer = document.getElementById('character-sheet-container');
     sheetContainer.appendChild(this.characterSheet.render());
 
-    // Create story reader
-    this.storyReader = new StoryReader(this.bookData);
+    // Create story reader - the "continue to next book" hook depends on which
+    // book is currently active (Book 1 -> 2, Book 2 -> 3; Book 3 has no sequel yet)
+    const bookNumber = gameState.getState().bookNumber;
+    const onContinueNextBook = bookNumber === 1 ? () => this.showBook2Transition()
+      : bookNumber === 2 ? () => this.showBook3Transition()
+      : null;
+    this.storyReader = new StoryReader(this.bookData, onContinueNextBook);
     const storyContainer = document.getElementById('story-container');
     storyContainer.appendChild(this.storyReader.render());
 

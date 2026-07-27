@@ -80,7 +80,8 @@ export class ScreenManager {
         this.app.querySelector('#logout-btn').addEventListener('click', onLogout);
     }
 
-    showGameHeader(onSave, onMenu) {
+    // Buttons are wired up by the caller (app.js) after inserting this HTML
+    showGameHeader() {
         return `
       <div class="app-header">
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">

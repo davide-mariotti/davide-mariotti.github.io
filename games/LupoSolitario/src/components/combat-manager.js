@@ -2,6 +2,9 @@
 import { getRandomDestinyNumber } from './destiny-table.js';
 import { gameState } from '../game-state.js';
 
+// Sword-type weapons that grant Sommerswerd proficiency via Scherma (Weaponskill)
+const SOMMERSWERD_SWORD_TYPES = ['Spada Corta', 'Spada', 'Spadone'];
+
 // Combat results table (from original fight.js)
 const COMBAT_TABLE = {
     '-11': [
@@ -102,11 +105,21 @@ export class CombatManager {
     constructor() {
         this.combatLog = [];
         this.canFlee = false;
+        this.enemyQueue = [];
     }
 
-    // Start a new combat
-    startCombat(enemyData) {
+    // Start a new combat. Some sections pit the hero against multiple enemies
+    // fought one after another (combat is an array in the book data) instead
+    // of a single enemy (combat is an object) - normalize to a queue either way.
+    startCombat(combatData) {
         this.combatLog = [];
+        this.enemyQueue = Array.isArray(combatData) ? [...combatData] : [combatData];
+        this.engageNextEnemy();
+    }
+
+    // Pull the next enemy off the queue and start fighting it
+    engageNextEnemy() {
+        const enemyData = this.enemyQueue.shift();
         this.combatData = enemyData;
         this.canFlee = enemyData.canFlee || false;
 
@@ -115,7 +128,14 @@ export class CombatManager {
             combattivita: enemyData.combattivita,
             resistenza: enemyData.resistenza,
             immuneToPsicolaser: enemyData.immuneToPsicolaser || false,
-            mindblast: enemyData.mindblast || false
+            psicolaserBonusOverride: enemyData.psicolaserBonusOverride,
+            mindblast: enemyData.mindblast || false,
+            playerCombatBonus: enemyData.playerCombatBonus || 0,
+            playerCombatPenalty: enemyData.playerCombatPenalty || 0,
+            playerPenaltyNoItem: enemyData.playerPenaltyNoItem || null,
+            psicoschermoPreventsLoss: enemyData.psicoschermoPreventsLoss || false,
+            undead: enemyData.undead || false,
+            combatModifiers: enemyData.combatModifiers || []
         });
 
         this.log(`⚔️ Combattimento contro ${enemyData.name}!`);
@@ -129,25 +149,22 @@ export class CombatManager {
 
         let heroCombattivita = character.combattivita;
 
-        // Add Psicolaser bonus if applicable
+        // Add Psicolaser bonus if applicable (some enemies are only partially
+        // immune and grant a reduced bonus instead of the usual +2)
         if (character.artiRamas.includes('Psicolaser') && !enemy.immuneToPsicolaser) {
-            heroCombattivita += 2;
+            heroCombattivita += (enemy.psicolaserBonusOverride ?? 2);
         }
 
-        // Add weapon mastery bonus
-        // The character object stores selected mastery in 'weaponMastery' if 'Scherma' is known
-        // OR we can check if it was added to special items or similar.
-        // Based on my change in character-creator.js, I need to ensure `weaponMastery` is saved to state.
-        // Let's assume character-creator saves it to the character object.
-        // Wait, character-creator.js saves it to `this.character`? 
-        // In toggleKaiArt: `this.weaponMastery = btn.dataset.weapon;` 
-        // But in `getSummaryHTML` or `begin-adventure` we need to ensure it's merged.
-        // Let's check `getSummaryHTML` later.
-        // For now, assume state.character.weaponMastery exists.
-
-        if (character.artiRamas.includes('Scherma') && character.weaponMastery) {
-            // Check if user has this weapon equipped or in possession? Rules say "when using a weapon".
-            // We simplify it: if you have the weapon in your 'armi' list.
+        // Sommerswerd (Spada del Sole): while wielding it, it IS the weapon in hand,
+        // replacing the normal Scherma/weapon-equipped check below. +8 COMBAT SKILL,
+        // or +10 total if Scherma mastery is in a sword-type weapon (per the book's
+        // errata this +10 is a combined total, not an additional +2 on top of it).
+        if (this.hasSommerswerd(character)) {
+            const swordMastery = character.artiRamas.includes('Scherma') &&
+                SOMMERSWERD_SWORD_TYPES.includes(character.weaponMastery);
+            heroCombattivita += swordMastery ? 10 : 8;
+        } else if (character.artiRamas.includes('Scherma') && character.weaponMastery) {
+            // Add weapon mastery bonus (Scherma): +2 when the mastered weapon is equipped
             if (character.armi.includes(character.weaponMastery)) {
                 heroCombattivita += 2;
             }
@@ -156,8 +173,6 @@ export class CombatManager {
         // Enemy Mindblast (Psicoattacco)
         if (enemy.mindblast && !character.artiRamas.includes('Psicoschermo')) {
             heroCombattivita -= 2;
-            // Ideally notify user, but we are in a calculation loop perhaps.
-            // rely on log? We don't log here.
         }
 
         // Add temporary combat bonus/penalty
@@ -165,7 +180,46 @@ export class CombatManager {
             heroCombattivita += enemy.playerCombatBonus;
         }
 
+        // Penalty applied only while the hero lacks a specific item (e.g. fighting
+        // blind without a Torcia)
+        if (enemy.playerPenaltyNoItem) {
+            const { item, penalty } = enemy.playerPenaltyNoItem;
+            const hasItem = character.zaino.includes(item) ||
+                character.oggettiSpeciali.includes(item) ||
+                character.armi.includes(item);
+            if (!hasItem) {
+                heroCombattivita += penalty;
+            }
+        }
+
+        // Fixed combat penalty (e.g. fatigue, terrain), sometimes waived by Psicoschermo
+        if (enemy.playerCombatPenalty) {
+            const waived = enemy.psicoschermoPreventsLoss && character.artiRamas.includes('Psicoschermo');
+            if (!waived) {
+                heroCombattivita -= enemy.playerCombatPenalty;
+            }
+        }
+
+        // Per-round conditional modifiers (surprise bonus on round 1, ongoing
+        // penalty for lacking a specific Kai Discipline, etc.)
+        const roundIndex = state.combatState.rounds.length;
+        for (const mod of (enemy.combatModifiers || [])) {
+            if (mod.type === 'firstRound' && roundIndex === 0) {
+                heroCombattivita += mod.value;
+            }
+            if (mod.type === 'noKaiArt' && !character.artiRamas.includes(mod.name)) {
+                const appliesThisRound = mod.rounds === 'subsequent' ? roundIndex >= 1 : true;
+                if (appliesThisRound) heroCombattivita += mod.value;
+            }
+        }
+
         return heroCombattivita - enemy.combattivita;
+    }
+
+    // Whether the character currently possesses the Sommerswerd (Spada del Sole)
+    hasSommerswerd(character) {
+        return character.zaino.includes('Spada del Sole') ||
+            character.oggettiSpeciali.includes('Spada del Sole');
     }
 
     // Check if player can currently flee
@@ -201,7 +255,19 @@ export class CombatManager {
             return null;
         }
 
-        const [enemyDamage, heroDamage] = COMBAT_TABLE[ratioKey][destinyNumber];
+        let [enemyDamage, heroDamage] = COMBAT_TABLE[ratioKey][destinyNumber];
+
+        // Sommerswerd doubles ENDURANCE lost by undead enemies (e.g. Helghast), but never
+        // the 999 "instant kill" sentinel value, which isn't an ENDURANCE point count.
+        if (combat.undead && enemyDamage !== 999 && this.hasSommerswerd(state.character)) {
+            enemyDamage *= 2;
+        }
+
+        // "Surprised" enemy that can't hurt the hero for its first few rounds
+        const noLossMod = (combat.combatModifiers || []).find(m => m.type === 'noPlayerLossRounds');
+        if (noLossMod && combat.rounds.length < noLossMod.rounds && heroDamage !== 999) {
+            heroDamage = 0;
+        }
 
         // Apply damage
         const newEnemyResistenza = combat.currentEnemyResistenza - enemyDamage;
@@ -241,12 +307,18 @@ export class CombatManager {
             this.log(`🛡️ Lupo Solitario: Nessun danno!`);
         }
 
-        // Check for combat end
-        if (newEnemyResistenza <= 0 || enemyDamage === 999) {
-            return 'victory';
-        }
+        // Check for combat end (defeat takes priority over a simultaneous kill)
         if (newHeroResistenza <= 0 || heroDamage === 999) {
             return 'defeat';
+        }
+        if (newEnemyResistenza <= 0 || enemyDamage === 999) {
+            const defeatedName = combat.enemy;
+            if (this.enemyQueue.length > 0) {
+                this.log(`🎉 ${defeatedName} sconfitto! Il prossimo nemico avanza...`);
+                this.engageNextEnemy();
+                return 'next-enemy';
+            }
+            return 'victory';
         }
 
         return 'ongoing';
@@ -269,6 +341,7 @@ export class CombatManager {
         gameState.takeDamage(heroDamage);
 
         this.log(`🏃 Fuga! Hai subito ${heroDamage} danni mentre scappavi.`);
+        this.enemyQueue = [];
         gameState.endCombat();
         return true;
     }
@@ -281,6 +354,7 @@ export class CombatManager {
             this.log('💀 SCONFITTA...');
         }
 
+        this.enemyQueue = [];
         gameState.endCombat();
     }
 

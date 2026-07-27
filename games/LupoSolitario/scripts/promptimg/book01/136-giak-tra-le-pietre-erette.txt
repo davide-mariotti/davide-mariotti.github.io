@@ -1,0 +1,7 @@
+Base da riutilizzare: ritratto di riferimento del Giak (riferimenti/ritratto-giak.txt)
+
+Dark-fantasy digital painting, painterly brushwork with visible textured strokes, semi-realistic illustrative style (not photographic, not flat vector, not anime, not comic-book line art). Moody, cinematic lighting with strong chiaroscuro contrast: one dominant light source (firelight, torchlight, cold overcast daylight, or a magical glow) cutting through heavy shadow. Desaturated, cold base palette (charcoal grey, iron blue, bone white, deep mossy green) accented by pockets of warm color (ember orange, blood red, torch gold) concentrated at the focal point. Atmospheric depth via fog, smoke, dust, or mist layers separating foreground and background. Epic, grim, foreboding mood — melancholic heroism, dark fantasy, not gratuitously gory, suitable for a teen-and-up audience. Dynamic cinematic composition, rule-of-thirds framing, slightly low or dramatic camera angle, single clear focal action. Square 1:1 aspect ratio, high detail, no text, no logos, no watermarks, no captions, no speech bubbles, no comic panel borders, no UI elements, no modern objects anywhere in the image.
+
+Giak: a small, hunched goblin-orc soldier with sallow greenish-grey skin, crude black leather-and-iron armor, wielding a serrated spear or crude blade.
+
+Scene: Two Giak crouch low, ready to spring, serrated spear tips raised, atop a windswept hilltop ringed by ancient standing stones under a heavy, storm-grey sky.

@@ -26,6 +26,7 @@ class GameState {
             },
             inCombat: false,
             combatState: null,
+            lastCombatSummary: null,
             flags: {}
         };
     }
@@ -102,6 +103,18 @@ class GameState {
         this.updateStats({ zaino });
     }
 
+    // Remove a named item from wherever it currently lives (Zaino or Oggetti
+    // Speciali) - used when the story hands an item over/erases it from the
+    // Action Chart (e.g. surrendering the Seal of Hammerdal to the King).
+    removeItem(item) {
+        if (this.state.character.zaino.includes(item)) {
+            this.removeFromZaino(item);
+        } else if (this.state.character.oggettiSpeciali.includes(item)) {
+            const oggettiSpeciali = this.state.character.oggettiSpeciali.filter(i => i !== item);
+            this.updateStats({ oggettiSpeciali });
+        }
+    }
+
     addWeapon(weapon) {
         if (this.state.character.armi.length >= 2) {
             return false; // Already have 2 weapons
@@ -116,11 +129,20 @@ class GameState {
         this.updateStats({ armi });
     }
 
+    clearWeapons() {
+        this.updateStats({ armi: [] });
+    }
+
     clearEquipment() {
         this.updateStats({
             armi: [],
             zaino: []
         });
+    }
+
+    addOggettoSpeciale(item) {
+        const oggettiSpeciali = [...this.state.character.oggettiSpeciali, item];
+        this.updateStats({ oggettiSpeciali });
     }
 
     addCorone(amount) {
@@ -231,15 +253,39 @@ class GameState {
     }
 
     endCombat() {
+        // Keep a small summary of the fight just ended (rounds, damage taken) around
+        // after combatState is cleared, so post-victory choices can be gated on it.
+        const combat = this.state.combatState;
+        const lastCombatSummary = combat ? {
+            rounds: combat.rounds.length,
+            damageTaken: combat.rounds.reduce((sum, r) => sum + (r.heroDamage || 0), 0)
+        } : this.state.lastCombatSummary;
+
         this.setState({
             inCombat: false,
-            combatState: null
+            combatState: null,
+            lastCombatSummary
         });
     }
 
     resetGame() {
         this.state = this.getInitialState();
         this.notifyListeners();
+    }
+
+    // Switch to a different book, keeping the character (stats/disciplines/equipment)
+    // exactly as it is - used for the Book 1 -> Book 2 continuation flow.
+    switchBook(bookId, bookNumber, startSection) {
+        this.setState({
+            bookId,
+            bookNumber,
+            currentSection: startSection,
+            history: [startSection],
+            inCombat: false,
+            combatState: null,
+            lastCombatSummary: null,
+            flags: {}
+        });
     }
 
     // Get current state
