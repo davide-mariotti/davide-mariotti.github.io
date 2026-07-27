@@ -55,9 +55,16 @@ export class StoryReader {
       } else if (section.isFailureEnding) {
         html += this.renderFailureEndingSection();
       } else if (section.isVictory) {
-        html += this.renderVictorySection(state.bookNumber, this.onContinueNextBook && state.bookNumber < 3);
+        html += this.renderVictorySection(state.bookNumber, this.onContinueNextBook && state.bookNumber < 4);
       } else if (section.choices && section.choices.length > 0) {
         if (this.isDestinyTest(section.choices)) {
+          // A "bypass" choice (e.g. "if you possess the Sommerswerd, turn to
+          // X") can sit alongside a real Destiny Table roll - show it as a
+          // normal button; if its requirements don't pass, the player just
+          // uses the roll below instead. handleDestinyRoll already ignores
+          // non-range choices when matching the result, so this is safe.
+          const bypassChoices = section.choices.filter(c => this.parseDestinyRange(c.text) === null);
+          if (bypassChoices.length > 0) html += this.renderStandardChoices(bypassChoices, state);
           html += this.renderDestinyTest();
         } else {
           html += this.renderStandardChoices(section.choices, state);
@@ -167,20 +174,58 @@ export class StoryReader {
 
   // All keys present on a requirements object must pass (AND, not "first match
   // wins") - a choice can combine e.g. a Kai Discipline AND an item at once.
+  // Use `anyOf: [requirements, ...]` for OR - passes if ANY alternative object
+  // passes (each alternative can itself combine multiple ANDed keys).
   checkRequirements(requirements, state) {
     if (!requirements) return true;
+    const character = state.character;
 
+    if (requirements.anyOf !== undefined) {
+      if (!requirements.anyOf.some(alt => this.checkRequirements(alt, state))) return false;
+    }
+    if (requirements.not !== undefined) {
+      if (this.checkRequirements(requirements.not, state)) return false;
+    }
     if (requirements.kaiArt !== undefined) {
-      if (!state.character.artiRamas.includes(requirements.kaiArt)) return false;
+      if (!character.artiRamas.includes(requirements.kaiArt)) return false;
     }
     if (requirements.item !== undefined) {
-      const has = state.character.zaino.includes(requirements.item) ||
-        state.character.oggettiSpeciali.includes(requirements.item) ||
-        state.character.armi.includes(requirements.item);
+      const has = character.zaino.includes(requirements.item) ||
+        character.oggettiSpeciali.includes(requirements.item) ||
+        character.armi.includes(requirements.item);
       if (!has) return false;
     }
+    // All of these items must be held at once (e.g. "if you have a Torch AND
+    // a Tinderbox") - `item` above only ever checks a single name.
+    if (requirements.items !== undefined) {
+      const hasAll = requirements.items.every(item =>
+        character.zaino.includes(item) ||
+        character.oggettiSpeciali.includes(item) ||
+        character.armi.includes(item)
+      );
+      if (!hasAll) return false;
+    }
     if (requirements.minGold !== undefined) {
-      if (state.character.corone < requirements.minGold) return false;
+      if (character.corone < requirements.minGold) return false;
+    }
+    // Kai rank is derived from how many Disciplines you know, not tracked
+    // separately - see levels.htm: 5 at start (Initiate), +1 per book
+    // completed (Aspirant=6, Guardian=7, Warmarn=8, Savant=9, Master=10).
+    if (requirements.minDisciplines !== undefined) {
+      if (character.artiRamas.length < requirements.minDisciplines) return false;
+    }
+    if (requirements.minResistenza !== undefined) {
+      if (character.resistenza < requirements.minResistenza) return false;
+    }
+    if (requirements.maxResistenza !== undefined) {
+      if (character.resistenza >= requirements.maxResistenza) return false;
+    }
+    // "Kai Discipline of Weaponskill WITH the weapon you are now using" -
+    // Scherma only helps while the mastered weapon is actually equipped.
+    if (requirements.weaponMasteryEquipped !== undefined) {
+      const equipped = character.artiRamas.includes('Scherma') &&
+        !!character.weaponMastery && character.armi.includes(character.weaponMastery);
+      if (equipped !== requirements.weaponMasteryEquipped) return false;
     }
     // Gate a choice on how the combat that just ended actually went
     if (requirements.maxRounds !== undefined) {
@@ -196,6 +241,27 @@ export class StoryReader {
     }
 
     return true;
+  }
+
+  // Sum every applicable entry's value (they stack independently - e.g. Book 3
+  // section 284 adds 2 for Caccia AND separately deducts 2 when badly wounded).
+  // Each entry's `requirements` (or `anyOf` inside it) is checked with the same
+  // checkRequirements used for choices, so "Discipline A OR B OR C" etc. all work.
+  calculateDestinyModifier(section, state) {
+    if (!section.destinyModifier) return 0;
+    return section.destinyModifier.reduce((total, mod) => {
+      return total + (this.checkRequirements(mod.requirements, state) ? mod.value : 0);
+    }, 0);
+  }
+
+  // Pure computation shared by effects.loseEnduranceFromRoll and
+  // effects.addGoldFromRoll - kept separate from the gameState/UIHelpers side
+  // effects in applyEffects so it's unit-testable.
+  resolveModifiedRoll(spec, roll, state) {
+    const adjustedRoll = (spec.zeroMeansTen && roll === 0) ? 10 : roll;
+    const modifier = (spec.modifiers || []).reduce((sum, mod) =>
+      sum + (this.checkRequirements(mod.requirements, state) ? mod.value : 0), 0);
+    return { total: Math.max(0, adjustedRoll + modifier), modifier };
   }
 
   async applyEffects(effects) {
@@ -251,6 +317,15 @@ export class StoryReader {
       UIHelpers.showToast(`💰 Spese ${effects.removeGold} Corone d'oro`, 'warning');
     }
 
+    // Gold gain equal to a Destiny Table roll (see resolveModifiedRoll) - e.g.
+    // "pick a number and add 5, that's how many Crowns you win"
+    if (effects.addGoldFromRoll) {
+      const roll = getRandomDestinyNumber();
+      const { total, modifier } = this.resolveModifiedRoll(effects.addGoldFromRoll, roll, gameState.getState());
+      gameState.addCorone(total);
+      UIHelpers.showToast(`🎲 Tabella del Destino: ${roll}${modifier ? ` (${modifier > 0 ? '+' : ''}${modifier})` : ''} - guadagni ${total} Corone d'Oro`, 'success');
+    }
+
     // Direct endurance loss (sometimes waived entirely by a Kai Discipline, e.g.
     // "lose 2 Endurance unless you have Mindshield")
     if (effects.loseEndurance) {
@@ -260,6 +335,18 @@ export class StoryReader {
         UIHelpers.showToast(`💔 Persi ${effects.loseEndurance} punti Resistenza`, 'error');
         await this.checkDeath();
       }
+    }
+
+    // Endurance loss equal to a Destiny Table roll, adjusted by the same
+    // requirements-based modifiers as calculateDestinyModifier (e.g. "pick a
+    // number - if you have Hunting, subtract 2 - lose that much Resistenza").
+    // zeroMeansTen matches the book's own "(0 = 10)" notation on some rolls.
+    if (effects.loseEnduranceFromRoll) {
+      const roll = getRandomDestinyNumber();
+      const { total, modifier } = this.resolveModifiedRoll(effects.loseEnduranceFromRoll, roll, gameState.getState());
+      gameState.takeDamage(total);
+      UIHelpers.showToast(`🎲 Tabella del Destino: ${roll}${modifier ? ` (${modifier > 0 ? '+' : ''}${modifier})` : ''} - perdi ${total} punti Resistenza`, 'error');
+      await this.checkDeath();
     }
 
     // Erase an item from the Action Chart (e.g. handing over a Special Item)
@@ -499,9 +586,18 @@ export class StoryReader {
   }
 
   isDestinyTest(choices) {
-    // Detect if ALL choices describe a Destiny Table range ("Numero X-Y",
-    // "Numero da X a Y", "Da X a Y", or a single "numero è N")
-    return choices.length > 1 && choices.every(c => this.parseDestinyRange(c.text) !== null);
+    const rangeChoices = choices.filter(c => this.parseDestinyRange(c.text) !== null);
+    const nonRangeChoices = choices.filter(c => this.parseDestinyRange(c.text) === null);
+    // A pure Destiny Table roll: 2+ choices describing a range ("Numero X-Y",
+    // "Numero da X a Y", "Da X a Y", or a single "numero è N") and nothing else.
+    if (nonRangeChoices.length === 0) return rangeChoices.length > 1;
+    // A roll with bypass choice(s) mixed in (e.g. "if you possess the
+    // Sommerswerd, turn to X" skips the roll entirely) - only treat it this
+    // way when EVERY non-range choice is actually gated by `requirements`,
+    // proving it's an intentional shortcut and not just an oddly-phrased
+    // range the parser failed to recognize (which should fall back to
+    // rendering as plain buttons, unchanged, rather than risk misreading it).
+    return rangeChoices.length > 1 && nonRangeChoices.every(c => !!c.requirements);
   }
 
   // Extract the {min, max} roll range a choice text refers to, or null if it
@@ -510,10 +606,23 @@ export class StoryReader {
     let match = text.match(/(\d+)\s*-\s*(\d+)/);
     if (match) return { min: parseInt(match[1]), max: parseInt(match[2]) };
 
-    match = text.match(/\bda\s*(\d+)\s*a\s*(\d+)\b/i);
+    // Min bound may be negative once a destinyModifier deduction is in play
+    // (e.g. "da -3 a 3") - the max bound is never negative in practice.
+    match = text.match(/\bda\s*(-?\d+)\s*a\s*(\d+)\b/i);
     if (match) return { min: parseInt(match[1]), max: parseInt(match[2]) };
 
-    match = text.match(/numero\s*(?:è|e)\s*(\d+)/i);
+    // Broadened from requiring "numero è N" - also catches the shortened
+    // follow-up phrasing used when a range choice earlier in the same list
+    // already established context (e.g. "Se è 0" right after "Se è da 6 a 9").
+    // Note: JS regex \b treats accented letters like "è" as non-word chars,
+    // so it can't anchor on "è" itself - anchor on the surrounding whitespace
+    // instead (è/e is always its own separate word in this phrasing).
+    match = text.match(/(?:^|\s)(?:è|e)\s+(-?\d+)\b/i);
+    if (match) return { min: parseInt(match[1]), max: parseInt(match[1]) };
+
+    // Bare "Numero N" with no è/e connector at all (e.g. "Numero 0" alongside
+    // "Numero 1-4" / "Numero 5-9" in the same choice list).
+    match = text.match(/\bnumero\s+(-?\d+)\b/i);
     if (match) return { min: parseInt(match[1]), max: parseInt(match[1]) };
 
     return null;
@@ -571,7 +680,8 @@ export class StoryReader {
   renderVictorySection(bookNumber, canContinueToNextBook) {
     const nextBookLabels = {
       1: '🌊 Continua nel Libro 2: Fuoco sulle Acque',
-      2: '❄️ Continua nel Libro 3: Le Caverne di Kalte'
+      2: '❄️ Continua nel Libro 3: Le Caverne di Kalte',
+      3: '⛰️ Continua nel Libro 4: Il Baratro della Perdizione'
     };
     return `
       <div class="death-container" style="text-align: center; margin-top: 2rem;">
@@ -606,18 +716,24 @@ export class StoryReader {
       if (count > 10) {
         clearInterval(interval);
 
-        // Final roll
+        // Final roll, adjusted by any applicable Kai Discipline/rank/Endurance
+        // modifier this section declares (see calculateDestinyModifier)
         const roll = getRandomDestinyNumber();
+        const modifier = this.calculateDestinyModifier(section, gameState.getState());
+        const total = roll + modifier;
         display.textContent = roll;
 
         // Find matching choice
         const matchedChoice = section.choices.find(choice => {
           const range = this.parseDestinyRange(choice.text);
-          return range && roll >= range.min && roll <= range.max;
+          return range && total >= range.min && total <= range.max;
         });
 
         if (matchedChoice) {
-          message.innerHTML = `<span style="color: var(--color-success); font-weight: bold;">Risultato: ${roll}</span>. ${matchedChoice.text}`;
+          const totalLabel = modifier !== 0
+            ? `Risultato: ${roll} ${modifier > 0 ? '+' : ''}${modifier} = ${total}`
+            : `Risultato: ${roll}`;
+          message.innerHTML = `<span style="color: var(--color-success); font-weight: bold;">${totalLabel}</span>. ${matchedChoice.text}`;
 
           setTimeout(() => {
             // Rare case: the roll's outcome is death narrated inline, with no

@@ -576,15 +576,31 @@
    "text": "<p>Sali oltre cinquanta gradini prima di raggiungere l'arcata. Mentre riprendi fiato, noti un velo di nebbia ondeggiante che copre completamente l'arco, nascondendo ciò che si trova oltre. Ti accorgi all'improvviso che la temperatura attorno a questa arcata è molto più fredda.</p>",
    "choices": [
     {
-     "text": "Se hai l'Arte Ramas del Sesto Senso",
-     "section": 124,
+     "text": "Se hai l'Arte Ramas del Sesto Senso e hai raggiunto il rango Ramas di Guardiano (conosci sette Arti Ramas)",
+     "section": 341,
      "requirements": {
-      "kaiArt": "Sesto Senso"
+      "kaiArt": "Sesto Senso",
+      "minDisciplines": 7
      }
     },
     {
-     "text": "Se non possiedi l'Arte Ramas del Sesto Senso, preparati all'attacco e attraversa l'arcata",
-     "section": 264
+     "text": "Se hai l'Arte Ramas del Sesto Senso ma non hai ancora raggiunto il rango di Guardiano",
+     "section": 124,
+     "requirements": {
+      "kaiArt": "Sesto Senso",
+      "not": {
+       "minDisciplines": 7
+      }
+     }
+    },
+    {
+     "text": "Se non possiedi questa Arte Ramas, preparati all'attacco e attraversa l'arcata",
+     "section": 264,
+     "requirements": {
+      "not": {
+       "kaiArt": "Sesto Senso"
+      }
+     }
     }
    ]
   },
@@ -821,6 +837,21 @@
     {
      "text": "Se il tuo punteggio totale è ora da 5 a 12",
      "section": 268
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 3,
+     "requirements": {
+      "anyOf": [
+       {
+        "kaiArt": "Telecinesi"
+       },
+       {
+        "kaiArt": "Psicolaser"
+       }
+      ]
+     }
     }
    ]
   },
@@ -1261,6 +1292,14 @@
     {
      "text": "Se il tuo totale è da 8 a 12",
      "section": 194
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 3,
+     "requirements": {
+      "weaponMasteryEquipped": true
+     }
     }
    ]
   },
@@ -2201,6 +2240,24 @@
      "text": "Da 5 a 11",
      "section": 333
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "anyOf": [
+       {
+        "kaiArt": "Orientamento"
+       },
+       {
+        "kaiArt": "Caccia"
+       },
+       {
+        "kaiArt": "Sesto Senso"
+       }
+      ]
+     }
+    }
    ]
   },
   "150": {
@@ -2698,6 +2755,14 @@
     {
      "text": "Se il totale è ora da 4 a 11",
      "section": 215
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Caccia"
+     }
     }
    ]
   },
@@ -3694,7 +3759,27 @@
      "text": "Se sei ancora vivo, aggiorna il tuo Registro di Guerra",
      "section": 63
     }
-   ]
+   ],
+   "effects": {
+    "loseEnduranceFromRoll": {
+     "zeroMeansTen": true,
+     "modifiers": [
+      {
+       "value": -2,
+       "requirements": {
+        "anyOf": [
+         {
+          "kaiArt": "Caccia"
+         },
+         {
+          "kaiArt": "Sesto Senso"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
   },
   "259": {
    "text": "<p>Fenor si alza di scatto e afferra la spada. «È un Kalkoth. Presto, armatevi o siamo perduti.» Gli altri cercano a tentoni le proprie armi mentre Fenor scompare nella neve. Quasi subito, si ode un urlo straziante di agonia e qualcosa viene scagliato contro la tenda. La tenda crolla e ti ritrovi faccia a faccia con il corpo mutilato di Fenor.</p><p>Preso da paura e panico improvvisi, ti districhi dal groviglio di stoffa e sfoderi la tua Arma. La forma orrenda di un grande mostro a quattro zampe balza su di te. I suoi occhi rossi ardono come carboni ardenti e la sua bocca dentata è spalancata per rivelare una lunga lingua uncinata. È ormai su di te e devi combatterlo fino alla morte.</p>",
@@ -3926,7 +4011,10 @@
    "choices": [
     {
      "text": "Se possiedi la Spada del Sole",
-     "section": 213
+     "section": 213,
+     "requirements": {
+      "item": "Spada del Sole"
+     }
     },
     {
      "text": "Numero da 0 a 3",
@@ -4096,18 +4184,40 @@
      "text": "Se il tuo totale è ora da 8 a 12",
      "section": 113
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 3,
+     "requirements": {
+      "kaiArt": "Caccia"
+     }
+    }
    ]
   },
   "284": {
    "text": "<p>Dopo poche centinaia di metri, ti ritrovi in un'enorme caverna che si estende in ogni direzione a perdita d'occhio. Sei entrato nelle caverne di Kalte e stai osservando un mondo inesplorato che pochi Sommlending hanno mai visto. Questo immenso labirinto sotterraneo fu costruito dagli Antichi molte ere prima che i Sommlending mettessero piede su Magnamund. I suoi ampi viali, templi e arene un tempo risuonavano dei suoni di una razza di creature per cui il ghiaccio era un ambiente naturale. Le coppe di M'lare pendono ancora dal soffitto, illuminando le caverne con la loro luce eterna.</p><p>Cammini a passo costante verso nord per quasi sei ore, finché non giungi sulla riva di un fiume di acqua di disgelo dalla corrente impetuosa. Sulla sponda opposta vedi un tunnel che si perde in lontananza. Non trovi alcun modo apparente di attraversare le acque profonde, se non usando le lastre di ghiaccio che galleggiano sulla superficie. Saltando da una lastra all'altra potresti raggiungere la sponda opposta, ma non sarà facile: dovrai saltare almeno tre di queste lastre gelate per arrivare dall'altra parte.</p><p>Pesca un numero dalla Tabella del Destino. Se hai l'Arte Ramas della Caccia, puoi aggiungere 2 al numero pescato. Se il totale della tua Resistenza attuale è inferiore a 8, sottrai 2 dal numero pescato.</p>",
    "choices": [
     {
-     "text": "Se il tuo punteggio totale è ora da -2 a +3",
+     "text": "Se il tuo punteggio totale è ora da -2 a 3",
      "section": 94
     },
     {
      "text": "Se il tuo punteggio totale è ora da 4 a 11",
      "section": 176
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Caccia"
+     }
+    },
+    {
+     "value": -2,
+     "requirements": {
+      "maxResistenza": 8
+     }
     }
    ]
   },
@@ -4156,15 +4266,34 @@
    "text": "<p>Riesci a rimuovere gran parte della cera indurita che ricopre il tappo, e allenti il sigillo riluttante dal fragile stelo di vetro.</p>",
    "choices": [
     {
-     "text": "Se hai l'Arte Ramas dell'Affinità Animale, oppure se hai raggiunto il rango Ramas di Aspirante (conosci sei Arti Ramas) o superiore",
+     "text": "Se hai l'Arte Ramas dell'Affinità animale, oppure se hai raggiunto il rango Ramas di Aspirante (conosci sei Arti Ramas) o superiore",
      "section": 156,
      "requirements": {
-      "kaiArt": "Affinità Animale"
+      "anyOf": [
+       {
+        "kaiArt": "Affinità animale"
+       },
+       {
+        "minDisciplines": 6
+       }
+      ]
      }
     },
     {
      "text": "Se non possiedi questa Arte Ramas né hai raggiunto il rango richiesto, diffidi del puzzo rancido e ammuffito di questo liquido: posi rapidamente la Fiala e torni al 10 a scegliere la tua prossima mossa",
-     "section": 10
+     "section": 10,
+     "requirements": {
+      "not": {
+       "anyOf": [
+        {
+         "kaiArt": "Affinità animale"
+        },
+        {
+         "minDisciplines": 6
+        }
+       ]
+      }
+     }
     }
    ]
   },
@@ -4176,19 +4305,28 @@
      "text": "Se hai l'Arte Ramas del Sesto Senso e hai raggiunto il rango Ramas di Guardiano (conosci sette Arti Ramas)",
      "section": 341,
      "requirements": {
-      "kaiArt": "Sesto Senso"
+      "kaiArt": "Sesto Senso",
+      "minDisciplines": 7
      }
     },
     {
      "text": "Se hai l'Arte Ramas del Sesto Senso ma non hai ancora raggiunto il rango di Guardiano",
      "section": 124,
      "requirements": {
-      "kaiArt": "Sesto Senso"
+      "kaiArt": "Sesto Senso",
+      "not": {
+       "minDisciplines": 7
+      }
      }
     },
     {
      "text": "Se non possiedi l'Arte Ramas del Sesto Senso, ti prepari a combattere e attraversi il varco nebbioso",
-     "section": 264
+     "section": 264,
+     "requirements": {
+      "not": {
+       "kaiArt": "Sesto Senso"
+      }
+     }
     }
    ]
   },
@@ -4382,6 +4520,14 @@
     {
      "text": "Da 8 a 11",
      "section": 243
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Sesto Senso"
+     }
     }
    ]
   },
@@ -4994,6 +5140,14 @@
     {
      "text": "Se il totale ottenuto è da 4 a 11",
      "section": 232
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Caccia"
+     }
     }
    ]
   },

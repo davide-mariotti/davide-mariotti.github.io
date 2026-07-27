@@ -18,11 +18,26 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REQUIREMENT_FIELDS = {
   kaiArt: 'string',
   item: 'string',
+  items: 'string[]', // ALL of these must be held at once (AND) - `item` above only checks one
   minGold: 'number',
+  minDisciplines: 'number', // Kai rank is derived from this: 5=Initiate(start), 6=Aspirant, 7=Guardian, 8=Warmarn, 9=Savant, 10=Master
+  minResistenza: 'number',
+  maxResistenza: 'number',
+  weaponMasteryEquipped: 'boolean', // Scherma AND the mastered weapon currently equipped
   maxRounds: 'number',
   minRounds: 'number',
-  tookDamage: 'boolean'
+  tookDamage: 'boolean',
+  anyOf: 'object[]', // OR: passes if ANY nested requirements object here passes
+  not: 'object' // negates a nested requirements object (e.g. "does NOT have this Kai Discipline yet")
 };
+
+// Must match KAI_ARTS in src/components/character-creator.js exactly (including
+// accents/casing) - a mismatched string here means the choice can NEVER pass,
+// silently, because the engine does an exact string match against artiRamas.
+const KAI_ART_NAMES = new Set([
+  'Mimetismo', 'Caccia', 'Sesto Senso', 'Orientamento', 'Guarigione',
+  'Scherma', 'Psicoschermo', 'Psicolaser', 'Affinità animale', 'Telecinesi'
+]);
 
 const EFFECT_FIELDS = {
   addItem: 'string',
@@ -31,8 +46,10 @@ const EFFECT_FIELDS = {
   canAddMeals: 'number',
   addGold: 'number',
   removeGold: 'number',
+  addGoldFromRoll: 'object', // { modifiers?: [{value, requirements}] } - see Book 2 section 116
   removeItem: 'string',
   loseEndurance: 'number',
+  loseEnduranceFromRoll: 'object', // { zeroMeansTen?, modifiers?: [{value, requirements}] } - see Book 3 section 258
   psicoschermoPreventsLoss: 'boolean',
   mustEatOrLoseEndurance: 'number',
   restoreEndurance: 'number|full',
@@ -47,6 +64,46 @@ function checkCombatModifiers(modifiers, path, errors) {
   modifiers.forEach((mod, i) => {
     if (!COMBAT_MODIFIER_TYPES.has(mod.type)) {
       errors.push(`${path}[${i}]: unknown combatModifiers type "${mod.type}"`);
+    }
+  });
+}
+
+// Validates a requirements object AND recurses into anyOf alternatives (which
+// are themselves full requirements objects) so a typo inside an OR-branch is
+// still caught, not just at the top level.
+function checkRequirementsObject(reqObj, path, errors) {
+  checkFields(reqObj, REQUIREMENT_FIELDS, path, errors);
+  if (typeof reqObj.kaiArt === 'string' && !KAI_ART_NAMES.has(reqObj.kaiArt)) {
+    errors.push(`${path}.kaiArt: "${reqObj.kaiArt}" does not match any of the 10 canonical Kai Discipline names (typo, wrong accent, or wrong casing? this choice can never pass)`);
+  }
+  if (Array.isArray(reqObj.anyOf)) {
+    reqObj.anyOf.forEach((alt, i) => checkRequirementsObject(alt, `${path}.anyOf[${i}]`, errors));
+  }
+  if (reqObj.not && typeof reqObj.not === 'object') {
+    checkRequirementsObject(reqObj.not, `${path}.not`, errors);
+  }
+}
+
+function checkEffects(effects, path, errors) {
+  checkFields(effects, EFFECT_FIELDS, path, errors);
+  if (effects.loseEnduranceFromRoll && Array.isArray(effects.loseEnduranceFromRoll.modifiers)) {
+    checkDestinyModifiers(effects.loseEnduranceFromRoll.modifiers, `${path}.loseEnduranceFromRoll.modifiers`, errors);
+  }
+  if (effects.addGoldFromRoll && Array.isArray(effects.addGoldFromRoll.modifiers)) {
+    checkDestinyModifiers(effects.addGoldFromRoll.modifiers, `${path}.addGoldFromRoll.modifiers`, errors);
+  }
+}
+
+// destinyModifier: [{ value: number, requirements: {...} }, ...] - each entry
+// whose requirements pass adds `value` to the Destiny Table roll (see
+// calculateDestinyModifier in story-reader.js). Entries stack independently.
+function checkDestinyModifiers(modifiers, path, errors) {
+  modifiers.forEach((mod, i) => {
+    if (typeof mod.value !== 'number') {
+      errors.push(`${path}[${i}].value: expected number, got ${typeOf(mod.value)}`);
+    }
+    if (mod.requirements !== undefined) {
+      checkRequirementsObject(mod.requirements, `${path}[${i}].requirements`, errors);
     }
   });
 }
@@ -90,7 +147,8 @@ const SECTION_FIELDS = {
   isFailureEnding: 'boolean', // "you survive but fail the mission" - distinct from death, see Book 3 section 61
   // navigateToSection() folds these onto every enemy in the fight before combat starts
   playerCombatBonus: 'number',
-  playerCombatPenalty: 'number'
+  playerCombatPenalty: 'number',
+  destinyModifier: 'object[]' // adjusts a Destiny Table roll before it's matched against choice ranges
 };
 
 function typeOf(value) {
@@ -172,7 +230,8 @@ function validateBook(filePath) {
       }
     }
 
-    if (section.effects) checkFields(section.effects, EFFECT_FIELDS, `${path}.effects`, errors);
+    if (section.effects) checkEffects(section.effects, `${path}.effects`, errors);
+    if (section.destinyModifier) checkDestinyModifiers(section.destinyModifier, `${path}.destinyModifier`, errors);
 
     const combats = Array.isArray(section.combat) ? section.combat : (section.combat ? [section.combat] : []);
     combats.forEach((c, i) => {
@@ -198,8 +257,8 @@ function validateBook(filePath) {
       } else if (choice.section !== undefined && choice.section !== null) {
         checkSectionRef(choice.section, `${path}.choices[${i}].section`);
       }
-      if (choice.requirements) checkFields(choice.requirements, REQUIREMENT_FIELDS, `${path}.choices[${i}].requirements`, errors);
-      if (choice.effects) checkFields(choice.effects, EFFECT_FIELDS, `${path}.choices[${i}].effects`, errors);
+      if (choice.requirements) checkRequirementsObject(choice.requirements, `${path}.choices[${i}].requirements`, errors);
+      if (choice.effects) checkEffects(choice.effects, `${path}.choices[${i}].effects`, errors);
     });
   }
 

@@ -8,6 +8,7 @@ import { CharacterSheet } from './components/character-sheet.js';
 import { StoryReader } from './components/story-reader.js';
 import { Book2Transition } from './components/book2-transition.js';
 import { Book3Transition } from './components/book3-transition.js';
+import { Book4Transition } from './components/book4-transition.js';
 import { ScreenManager } from './utils/screen-manager.js';
 import { MenuManager } from './utils/menu-manager.js';
 import { UIHelpers } from './utils/ui-helpers.js';
@@ -232,6 +233,40 @@ class App {
     }
   }
 
+  async showBook4Transition() {
+    this.screenManager.showLoadingScreen('Caricamento Libro 4...');
+
+    try {
+      const book4Data = await bookLoader.loadBook('04-the-chasm-of-doom');
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="app-header">
+          <div class="container">
+            <h1 style="margin: 0;">🐺 Lupo Solitario</h1>
+          </div>
+        </div>
+        <div class="app-main">
+          <div class="container">
+            <div id="book4-transition-container"></div>
+          </div>
+        </div>
+      `;
+
+      const transition = new Book4Transition(() => {
+        this.bookData = book4Data;
+        gameState.switchBook('04-the-chasm-of-doom', 4, 1);
+        this.showGameScreen();
+      });
+
+      const container = document.getElementById('book4-transition-container');
+      container.appendChild(transition.render());
+    } catch (error) {
+      console.error('Error loading Book 4:', error);
+      this.screenManager.showErrorScreen('Errore nel caricamento del Libro 4');
+    }
+  }
+
   showGameScreen() {
     const app = document.getElementById('app');
     app.innerHTML = this.screenManager.showGameHeader() + `
@@ -262,6 +297,7 @@ class App {
     const bookNumber = gameState.getState().bookNumber;
     const onContinueNextBook = bookNumber === 1 ? () => this.showBook2Transition()
       : bookNumber === 2 ? () => this.showBook3Transition()
+      : bookNumber === 3 ? () => this.showBook4Transition()
       : null;
     this.storyReader = new StoryReader(this.bookData, onContinueNextBook);
     const storyContainer = document.getElementById('story-container');

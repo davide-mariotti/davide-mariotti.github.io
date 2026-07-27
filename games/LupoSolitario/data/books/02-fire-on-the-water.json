@@ -168,6 +168,14 @@
      "text": "Numero 7-11",
      "section": 329
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Sesto Senso"
+     }
+    }
    ]
   },
   "13": {
@@ -293,7 +301,7 @@
      "text": "Se possiedi l'Arte Ramas dell'Affinita animale",
      "section": 144,
      "requirements": {
-      "kaiArt": "Affinita animale"
+      "kaiArt": "Affinità animale"
      }
     },
     {
@@ -1596,7 +1604,14 @@
   "116": {
    "text": "<p>Grazie alla tua Arte Ramas, riesci a capire sotto quale bicchiere si nasconde la biglia, poiché per te l'argilla è trasparente come il vetro (nessuna delle due Arti ti dà davvero la capacità di vedere attraverso l'argilla, ma la tua percezione affinata ti permette comunque di intuire la posizione corretta).</p><p>Pesca un numero dalla Tabella del Destino e aggiungi 5. Questo è il numero di Corone che vinci prima che il furfante sospetti che qualcosa non va e ponga fine al gioco.</p><p>Con l'oro di nuovo nella tua borsa, torni al bancone e consegni 1 Corona per una stanza.</p>",
    "effects": {
-    "removeGold": 1
+    "addGoldFromRoll": {
+     "modifiers": [
+      {
+       "value": 5,
+       "requirements": {}
+      }
+     ]
+    }
    },
    "choices": [
     {
@@ -1642,7 +1657,7 @@
      "text": "Se possiedi l'Arte Ramas dell'Affinità animale",
      "section": 279,
      "requirements": {
-      "kaiArt": "Affinita animale"
+      "kaiArt": "Affinità animale"
      }
     },
     {

@@ -104,6 +104,7 @@ export const ITEM_IMAGES = {
   'Mappa di Sommerlund': 'public/img/oggetti/mappa.png',
   'Mappa': 'public/img/oggetti/mappa.png',
   'Mappa di Kalte': 'public/img/oggetti/mappa.png',
+  'Mappa delle Terre del Sud': 'public/img/oggetti/mappa.png',
   'Sigillo di Hammerdal': 'public/img/oggetti/sigillo-di-hammerdal.png',
   'Pozione Magica': 'public/img/oggetti/pozione-magica.png',
   'Pozione Curativa': 'public/img/oggetti/pozione-curativa.png',

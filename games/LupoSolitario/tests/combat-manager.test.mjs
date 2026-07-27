@@ -134,6 +134,19 @@ test('calculateForceRatio: combatModifiers "firstRound" bonus only applies to ro
   assert.equal(combatManager.calculateForceRatio(), 5);
 });
 
+test('calculateForceRatio: combatModifiers "firstRound" with rounds:N applies for the first N rounds, not just round 1', () => {
+  mockRollQueue = [5, 5, 5];
+  resetGameState({ combattivita: 20 });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 999, combatModifiers: [{ type: 'firstRound', value: -4, rounds: 2 }] });
+  assert.equal(combatManager.calculateForceRatio(), 1, 'round 1 (index 0) is still penalized');
+
+  combatManager.fightRound();
+  assert.equal(combatManager.calculateForceRatio(), 1, 'round 2 (index 1) is also penalized');
+
+  combatManager.fightRound();
+  assert.equal(combatManager.calculateForceRatio(), 5, 'round 3 (index 2) is no longer penalized');
+});
+
 test('calculateForceRatio: combatModifiers "noKaiArt" penalty respects the "subsequent" rounds option', () => {
   mockRollQueue = [5];
   resetGameState({ combattivita: 20 });

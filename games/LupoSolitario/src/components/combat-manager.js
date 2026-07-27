@@ -204,7 +204,9 @@ export class CombatManager {
         // penalty for lacking a specific Kai Discipline, etc.)
         const roundIndex = state.combatState.rounds.length;
         for (const mod of (enemy.combatModifiers || [])) {
-            if (mod.type === 'firstRound' && roundIndex === 0) {
+            // "firstRound" covers "for the first N rounds" - rounds defaults to
+            // 1 (just the opening round) when omitted, matching prior behaviour.
+            if (mod.type === 'firstRound' && roundIndex < (mod.rounds || 1)) {
                 heroCombattivita += mod.value;
             }
             if (mod.type === 'noKaiArt' && !character.artiRamas.includes(mod.name)) {

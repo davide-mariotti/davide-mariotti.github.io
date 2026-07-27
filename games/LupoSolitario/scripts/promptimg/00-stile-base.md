@@ -72,6 +72,28 @@ frame, dwelling in marshland.
 
 Tigerwolf: a huge striped wolf-like beast used as a mount and hunting
 predator by Darklord forces.
+
+Helghast (Libro 2+): a gaunt undead Darklord agent capable of disguising as
+human, but in its true form showing ash-grey withered skin, glowing red
+eyes, a fanged mouth, and black clawed hands, wielding a black sword that
+leaves cold, bloodless wounds.
+
+Zlanbeast (Libro 2+): an enormous black-scaled flying reptilian beast with a
+long serpentine neck and wide leathery wings, used by the Darklords to
+airlift netted squads of Giak into battle.
+
+Vonotar the Traitor / Vonotar il Traditore (Libro 2+, ricorre anche nel
+Libro 3): a hunched renegade sorcerer, gaunt and sallow-faced, wearing
+crimson robes and a tall curved headdress marked with a serpent emblem,
+gripping a black iron staff that flares with blue-white flame.
+
+Rhygar (Libro 2): a grizzled, middle-aged warrior-lieutenant with a
+weathered, stern face, clad in heavy chainmail beneath a Sommerlund
+officer's cloak, sword and shield at the ready.
+
+Lord Axim (Libro 2): a stern, battle-scarred Durenese noble commander with
+grey-streaked hair, wearing ornate plate armor and bearing a dented
+heraldic shield.
 ```
 
 ## Dimensione scelta
@@ -90,12 +112,14 @@ Nessuno strumento (ChatGPT, Nano Banana) garantisce da solo la stessa
 identica "faccia" di un personaggio/creatura da un prompt all'altro con il
 solo testo. Per questo, PRIMA di generare le scene, genera un ritratto di
 riferimento per ogni soggetto ricorrente — sono già pronti in
-`riferimenti/`: `ritratto-lupo-solitario.txt` e uno per ciascuna creatura
-del bestiario (Kraan, Giak, Vordak, Drakkar, Gurgaz, Tigerwolf). Sono
-inquadrature "a figura intera", pose neutre e ben illuminate, pensate per
-essere riutilizzate come immagine-guida, non come illustrazione finale.
+`riferimenti/`: `ritratto-lupo-solitario.txt`, uno per ciascuna creatura del
+bestiario "storico" (Kraan, Giak, Vordak, Drakkar, Gurgaz, Tigerwolf, dal
+Libro 1) e uno per ciascuna new-entry del Libro 2 (Helghast, Zlanbeast,
+Vonotar, Rhygar, Lord Axim). Sono inquadrature "a figura intera", pose
+neutre e ben illuminate, pensate per essere riutilizzate come immagine-
+guida, non come illustrazione finale.
 
-Ogni prompt di scena in `book01/` inizia con una riga
+Ogni prompt di scena in `book01/`/`book02/` inizia con una riga
 **"Base da riutilizzare: ..."** che elenca quali ritratti servono per quella
 scena specifica. Se il tuo strumento supporta l'input "testo + immagine"
 (Nano Banana/Gemini lo supporta), allega i ritratti indicati insieme al
@@ -140,22 +164,21 @@ border or frame, no UI elements.
   peso da nessuna parte).
 - `riferimenti/ritratto-*.txt` → un ritratto di riferimento per Lupo
   Solitario e per ogni creatura del bestiario. Generali per primi.
-- `book01/_indice.md` → elenco di tutte le sezioni scelte per il Libro 1,
-  con stato (sostituzione di un'immagine esistente o aggiunta nuova), quali
-  ritratti di riferimento usare, e descrizione breve in italiano.
-- `book01/NNN-slug.txt` → un file per immagine, **pronto da copiare e
-  incollare per intero** nel generatore (riga "Base da riutilizzare" +
-  stile base + personaggio/bestiario pertinenti + scena specifica già
-  uniti). Non serve assemblare nulla a mano.
-- `creazione-personaggio/arti-ramas/*.txt` e `creazione-personaggio/armi/*.txt`
-  → un'icona per ogni Arte Ramas e ogni Arma, stile icona dedicato (vedi
-  sopra), pronte da copiare e incollare.
+- `book01/_indice.md`, `book02/_indice.md` → elenco di tutte le sezioni
+  scelte per quel libro, con stato (sostituzione di un'immagine esistente o
+  aggiunta nuova), quali ritratti di riferimento usare, e descrizione breve
+  in italiano.
+- `book01/NNN-slug.txt`, `book02/NNN-slug.txt` → un file per immagine,
+  **pronto da copiare e incollare per intero** nel generatore (riga "Base da
+  riutilizzare" + stile base + personaggio/bestiario pertinenti + scena
+  specifica già uniti). Non serve assemblare nulla a mano.
+- `creazione-personaggio/arti-ramas/*.txt`, `creazione-personaggio/armi/*.txt`,
+  `creazione-personaggio/oggetti/*.txt` → un'icona per ogni Arte Ramas, Arma
+  e Oggetto Speciale/da Zaino nominato, stile icona dedicato (vedi sopra),
+  pronte da copiare e incollare. Queste SONO già collegate nel codice
+  (`ITEM_IMAGES`/`WEAPON_IMAGES` in `character-creator.js`) - appena il file
+  immagine esiste al percorso giusto, appare automaticamente in-app.
 - Dopo aver generato un'immagine di sezione, salvala come
-  `public/img/book01/secNNN.png` (sostituendo l'eventuale file esistente)
-  e verifica che il campo `"image"` della sezione corrispondente in
-  `data/books/01-flight-from-the-dark.json` punti a quel percorso. Le icone
-  di Arti Ramas/Armi non hanno ancora un punto di aggancio nel codice (il
-  componente `character-creator.js` oggi usa solo emoji) — se vuoi che
-  vengano mostrate davvero in-app, va aggiunto un riferimento al file
-  immagine in `character-creator.js`/`book2-transition.js`/`book3-transition.js`
-  al posto (o affianco) dell'emoji.
+  `public/img/book0N/secNNN.png` (sostituendo l'eventuale file esistente) e
+  verifica che il campo `"image"` della sezione corrispondente in
+  `data/books/0N-*.json` punti a quel percorso.

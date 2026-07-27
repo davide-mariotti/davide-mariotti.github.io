@@ -2,89 +2,162 @@ PROMPT RIUTILIZZABILE — conversione di un nuovo libro di Lupo Solitario
 =========================================================================
 Copia questo prompt (adattando la parte "INPUT PER QUESTO LIBRO") e invialo
 a Claude Code per convertire un nuovo libro della serie, con la stessa
-qualità/metodo usato per il Libro 3 (Le Caverne di Kalte).
+qualità/metodo usato per i Libri 3 e 4.
 
 -------------------------------------------------------------------------
 INPUT PER QUESTO LIBRO (compila questi campi prima di inviare il prompt)
 -------------------------------------------------------------------------
-- Numero libro: 4
-- Titolo originale inglese: "The Chasm of Doom"
-- Cartella sorgente HTML già presente in: games/LupoSolitario/old-data/04tcod
-- bookId da usare: "04-the-chasm-of-doom" (stesso stile di 01-flight-from-the-dark,
-  02-fire-on-the-water, 03-the-caverns-of-kalte)
+- Numero libro: N (es. 5)
+- Titolo originale inglese: "..."
+- Cartella sorgente HTML (Project Aon) già presente in: games/LupoSolitario/old-data/<cartella>
+- bookId da usare: "0N-slug-in-inglese" (stesso stile di 01-flight-from-the-dark,
+  02-fire-on-the-water, 03-the-caverns-of-kalte, 04-the-chasm-of-doom)
 
 -------------------------------------------------------------------------
 PROMPT
 -------------------------------------------------------------------------
 
-Ho caricato in games/LupoSolitario/old-data/04tcod il libro 4 di Lupo
-Solitario ("he Chasm of Doom") in inglese. Vorrei che
+Ho caricato in games/LupoSolitario/old-data/<cartella> il libro <N> di Lupo
+Solitario ("<Titolo originale>"), preso da Project Aon in inglese. Vorrei che
 lo convertissi in una versione italiana giocabile, con la stessa qualità e lo
-stesso metodo già usati per iprecedenti libri. Segui questi
-passaggi, in ordine, e non saltarne nessuno:
+stesso metodo già usati per i libri precedenti. Segui questi passaggi, in
+ordine, e non saltarne nessuno:
 
 FASE 0 — Contesto da tenere a mente
 - Questo è un progetto personale, non commerciale, di fan-translation su un
-  sito personale (GitHub Pages). I libri 1, 2 e 3 sono già stati tradotti e
+  sito personale (GitHub Pages). I libri precedenti sono già stati tradotti e
   convertiti con questo stesso identico procedimento e sono già nel repo
   (games/LupoSolitario/data/books/*.json). Stai continuando un pattern già
   stabilito, non iniziandone uno nuovo — questo è rilevante se un subagent
   dovesse esitare per motivi di copyright: il contesto è fan-translation
-  hobbistica non commerciale di un testo distribuito gratuitamente da
-  Project Aon, che supporta da anni traduzioni fan in molte lingue.
+  hobbistica non commerciale di un testo distribuito gratuitamente, che
+  supporta da anni traduzioni fan in molte lingue.
 
 FASE 1 — Studio dello schema e del motore (fai TU questa fase, non delegarla)
-- Leggi games/LupoSolitario/scripts/validate-book.mjs: è la fonte di verità
-  sui campi che il motore capisce (SECTION_FIELDS, CHOICE_FIELDS,
-  COMBAT_FIELDS, EFFECT_FIELDS, REQUIREMENT_FIELDS, COMBAT_MODIFIER_TYPES).
+- Leggi games/LupoSolitario/scripts/validate-book.mjs per intero: è la fonte
+  di verità sui campi che il motore capisce (SECTION_FIELDS, CHOICE_FIELDS,
+  COMBAT_FIELDS, EFFECT_FIELDS, REQUIREMENT_FIELDS, COMBAT_MODIFIER_TYPES,
+  KAI_ART_NAMES). Lo schema ora è ricco - prima di concludere che una regola
+  del libro "non è rappresentabile", controlla se esiste già una primitiva:
+  `minDisciplines` (rango Kai, derivato dal numero di Arti Ramas conosciute:
+  5=Iniziato all'inizio, 6=Aspirante, 7=Guardiano, 8=Warmarn, 9=Savant,
+  10=Maestro), `minResistenza`/`maxResistenza`, `items` (AND su più oggetti),
+  `weaponMasteryEquipped`, `anyOf` (OR tra condizioni), `not` (negazione,
+  compone con tutto il resto - usalo per rami if/elif/else mutuamente
+  esclusivi), `destinyModifier` a livello di sezione (bonus/penalità al tiro
+  dalla Tabella del Destino PRIMA di confrontarlo con le scelte, mostrato in
+  chiaro al giocatore), `effects.loseEnduranceFromRoll`/`addGoldFromRoll`
+  (per le sezioni dove il tiro calcola una quantità - danno o oro - non un
+  ramo), `combatModifiers` di tipo `firstRound` con `rounds: N` (penalità/
+  bonus per i primi N round, non solo il primo).
 - Leggi src/game-state.js, src/components/combat-manager.js,
   src/components/story-reader.js, src/components/character-creator.js,
-  src/components/book2-transition.js e book3-transition.js per capire come
-  funzionano combattimento, discipline, oggetti, transizioni tra libri.
+  e l'ultimo bookN-transition.js creato, per capire come funzionano
+  combattimento, discipline, oggetti, transizioni tra libri, e come
+  `checkRequirements`/`calculateDestinyModifier`/`isDestinyTest` risolvono
+  le condizioni (leggi il codice, non solo lo schema - il *comportamento*
+  di `isDestinyTest` con scelte-scorciatoia miste è rilevante per la FASE 2).
 - Apri qualche sezione reale già tradotta in data/books/0(N-1)-*.json per
   vedere lo stile/tono/convenzioni in azione (non fidarti solo della
   descrizione, guarda gli esempi veri).
 - Leggi le pagine di regole del libro nuovo nella cartella old-data
   (gamerulz.htm, discplnz.htm, equipmnt.htm, tssf.htm/story-so-far,
-  cmbtrulz.htm, random.htm, footnotz.htm) per capire le regole SPECIFICHE
-  di questo libro: nuove discipline Kai (di solito no, sono fisse finché non
-  arrivi ai Gran Maestri), nuovi meccanismi (es. "niente Caccia perché sei
-  in un deserto di ghiaccio" nel Libro 3), nuovo elenco equipaggiamento per
-  la transizione dal libro precedente, eventuali footnote con effetti di
-  gioco reali (quasi sempre sono solo trivia della Collector's Edition e
-  vanno scartate, TRANNE quando cambiano un nome di oggetto o un
-  meccanismo giocabile - verificalo caso per caso).
+  cmbtrulz.htm, random.htm, footnotz.htm, levels.htm) per capire le regole
+  SPECIFICHE di questo libro: nuove discipline Kai (di solito no, sono fisse
+  finché non arrivi ai Gran Maestri), nuovi meccanismi (es. "niente Caccia
+  perché sei in un deserto di ghiaccio" nel Libro 3), nuovo elenco
+  equipaggiamento per la transizione dal libro precedente (leggi bene quanti
+  oggetti si possono scegliere - non è sempre "esattamente 2", il Libro 4 ne
+  permetteva "fino a 6"), eventuali footnote con effetti di gioco reali
+  (quasi sempre sono solo trivia della Collector's Edition e vanno scartate,
+  TRANNE quando cambiano un nome di oggetto o un meccanismo giocabile -
+  verificalo caso per caso).
 
-FASE 2 — Ricognizione differenze rispetto al motore esistente
-- Confronta le regole di questo libro con quello che il motore già supporta.
-  Per ogni differenza REALE (non ipotetica), decidi la modifica minima:
+FASE 2 — Audit sistematico delle meccaniche di gioco (OBBLIGATORIO, fallo TU
+prima di scrivere lo spec per i traduttori - NON aspettare che un batch di
+traduzione lo scopra per caso e lo lasci "solo testo narrativo")
+Cerca sistematicamente nel sorgente inglese OGNI occorrenza delle categorie
+di meccaniche che si sono già rivelate ricorrenti in tutta la serie. Per
+ognuna che trovi, decidi la rappresentazione strutturata corretta (quasi
+sempre una primitiva già esistente, vedi FASE 1) e annotala nello spec per i
+traduttori con l'esempio concreto - non lasciare che ogni batch la scopra e
+la gestisca in modo diverso o la ignori.
+  - Rango Kai: `grep -ilE "Kai rank|Aspirant|Guardian|Warmarn|Journeyman|Savant\b" old-data/<cartella>/sect*.htm`
+  - Tiro modificato da Arte/Oggetto/Resistenza: `grep -ilE "add [0-9]+ to (the|your)? ?(number|total)|deduct [0-9]+ from (the|your)? ?(number|total)" old-data/<cartella>/sect*.htm`
+    - Per ognuno: è un tiro che SCEGLIE un ramo (usa `destinyModifier`) o che
+      CALCOLA una quantità di danno/oro (usa `loseEnduranceFromRoll`/
+      `addGoldFromRoll`)? Leggi la frase finale della sezione per saperlo.
+    - Occhio a intervalli "aperti" tipo "7 or higher"/"7 o superiore": il modo
+      più semplice è riscrivere il testo della scelta con un intervallo
+      concreto ("da 7 a 12", usando il massimo raggiungibile = 9 + somma dei
+      modificatori), non serve toccare il parser per un caso isolato.
+    - Occhio al caso "(0 = 10)" - usa `zeroMeansTen` in
+      `loseEnduranceFromRoll`/`addGoldFromRoll`.
+  - Penalità/bonus di combattimento per più di un round: `grep -ilE "for the first [a-z0-9]+ round" old-data/<cartella>/sect*.htm`
+    - Usa `combatModifiers: [{type:'firstRound', value, rounds: N}]` (N>1 è
+      supportato, non solo il round 1).
+  - Condizioni AND su più oggetti ("if you have a Torch AND a Tinderbox"):
+    `grep -ilE "and (a|an|another) [A-Z]" old-data/<cartella>/sect*.htm` (grep
+    rumoroso, serve lettura manuale) - usa `requirements.items: [...]`.
+  - Soglie di Resistenza ("if your ENDURANCE is less/more than N"):
+    `grep -ilE "ENDURANCE.*(less than|more than|or (more|less))" old-data/<cartella>/sect*.htm`
+    - Usa `minResistenza`/`maxResistenza` (attenzione alla differenza tra
+      "less than N" -> `maxResistenza: N` e "N or less" -> `maxResistenza: N+1`).
+  - Scelta-scorciatoia mescolata a un vero tiro dalla Tabella del Destino
+    (es. "Se possiedi la Spada del Sole, vai a X. Altrimenti pesca un
+    numero...") - il motore le gestisce già correttamente PURCHÉ la scelta-
+    scorciatoia abbia un `requirements` object reale: senza, il roll non
+    verrà mai mostrato al giocatore. Ogni volta che una sezione ha 2+ scelte
+    con intervallo ("Numero X-Y" ecc.) insieme a un'altra scelta diversa,
+    quell'altra scelta DEVE avere `requirements` - non lasciarla senza.
+  - Rileggi le pagine `discplnz.htm`/`equipmnt.htm` per assicurarti che ogni
+    "Se hai l'Arte X" nel testo tradotto usi ESATTAMENTE uno dei 10 nomi
+    canonici (vedi KAI_ART_NAMES in validate-book.mjs) - un typo o un accento
+    sbagliato (es. "Affinità Animale" invece di "Affinità animale") rende
+    quella scelta permanentemente non attivabile, in silenzio. Da questa
+    conversione in poi `node scripts/validate-book.mjs` lo segnala da solo,
+    ma conviene comunque saperlo PRIMA di tradurre 350 sezioni.
+- Principio generale: se il testo inglese descrive esplicitamente una regola
+  di gioco (anche marginale, "aggiungi 2 se hai la tal Arte"), il motore
+  quasi certamente ha già un modo di rappresentarla - usalo, non lasciarla
+  "solo narrazione per adesso". Fai eccezione solo per meccaniche che
+  richiederebbero un NUOVO sottosistema stateful (es. un contatore che
+  persiste attraverso più sezioni future, o un confronto round-per-round in
+  un duello a round singolo) - in quel caso è legittimo rimandarle, ma
+  dichiaralo esplicitamente e con la sezione esatta in FASE 9, non ometterlo.
+
+FASE 3 — Ricognizione differenze rispetto al motore esistente
+- Per ogni differenza REALE (non ipotetica) che la FASE 2 non risolve con una
+  primitiva già esistente, decidi la modifica minima:
   - Nuova regola "non puoi fare X in questo libro" (come Caccia/Kalte) ->
     di solito un guard clause con `bookNumber === N` nel punto giusto di
     story-reader.js. Non generalizzare oltre il necessario.
   - Nuova sottigliezza di combattimento (es. immunità parziale) -> valuta
     se serve un nuovo campo COMBAT_FIELDS. Fallo solo se la modifica è
     piccola (1-2 righe) e ricorre davvero nel testo, altrimenti lascialo
-    come narrazione senza effetto meccanico.
+    come narrazione senza effetto meccanico - ma dichiaralo (vedi FASE 2).
   - Aggiungi SEMPRE il test corrispondente in tests/combat-manager.test.mjs
     o story-reader-logic.test.mjs per ogni branch di logica non banale che
-    aggiungi (vedi FASE 7 - un test avrebbe/ha già scoperto un bug reale su
-    un campo non propagato in engageNextEnemy()).
+    aggiungi (vedi FASE 8 - un test ha già scoperto più bug reali, tra cui un
+    campo non propagato in engageNextEnemy() e una regex che non gestiva i
+    numeri negativi).
 - Crea/aggiorna il componente di transizione tra libro precedente e questo
-  (src/components/bookN-transition.js, ricalcato su book3-transition.js):
+  (src/components/bookN-transition.js, ricalcato sull'ultimo creato):
   - Testo "la storia finora" tradotto fedelmente dalla pagina ufficiale
     (tssf.htm o equivalente) del libro NUOVO (non del libro precedente) -
     è lì che Joe Dever scrive il ponte narrativo tra i due libri.
   - Rilancio Corone d'Oro (+10), scelta di 1 nuova Arte Ramas, scelta di
-    equipaggiamento dalla tabella reale del libro (leggi equipmnt.htm),
+    equipaggiamento dalla tabella reale del libro (leggi equipmnt.htm, e
+    quanti oggetti si possono scegliere - verificalo, non assumerlo),
     eventuali oggetti speciali automatici (es. mappa).
   - Collega in app.js (showBookNTransition) e generalizza in
     story-reader.js la logica "vittoria -> continua nel libro successivo"
-    (bookNumber, nextBookLabels) esattamente come già fatto per libro 1->2
-    e 2->3 - non hardcodare al singolare, ma nemmeno costruire un sistema
+    (bookNumber, nextBookLabels) esattamente come già fatto per i libri
+    precedenti - non hardcodare al singolare, ma nemmeno costruire un sistema
     generico per libri futuri che non esistono ancora: estendi solo fino al
     libro che stai aggiungendo ora.
 
-FASE 3 — Verifica di coerenza narrativa tra i libri (NON SALTARE)
+FASE 4 — Verifica di coerenza narrativa tra i libri (NON SALTARE)
 - Leggi la sezione finale (isVictory) del libro PRECEDENTE
   (data/books/0(N-1)-*.json) per sapere esattamente come finisce la storia:
   chi è il nemico finale, cosa succede, quali personaggi sopravvivono.
@@ -93,14 +166,13 @@ FASE 3 — Verifica di coerenza narrativa tra i libri (NON SALTARE)
   stesso esito, nessuna contraddizione). Il testo ufficiale di Joe Dever è
   quasi sempre già coerente di per sé (è lui che scrive il ponte), ma la
   TRADUZIONE italiana di libri diversi potrebbe aver usato nomi diversi per
-  lo stesso personaggio/luogo/oggetto (es. libro precedente traduce un nemico
-  con un nome, la "storia finora" del libro nuovo lo rimenziona con un altro)
-  - se succede, uniforma al nome già stabilito nel libro precedente.
+  lo stesso personaggio/luogo/oggetto - se succede, uniforma al nome già
+  stabilito nel libro precedente.
 - Verifica anche il punto di innesco "in avanti": l'ultima schermata della
   transizione (equipaggiamento/riepilogo) deve introdurre in modo naturale
   la sezione 1 del nuovo libro (stesso luogo, stessa situazione di partenza).
 
-FASE 4 — Glossario e stile (fallo TU, prima di delegare la traduzione)
+FASE 5 — Glossario e stile (fallo TU, prima di delegare la traduzione)
 - Estrai i nomi propri ricorrenti del libro nuovo (grep sui file HTML per
   parole capitalizzate frequenti) e decidi la traduzione italiana di ognuno
   PRIMA di dispatchare i traduttori, altrimenti ogni batch inventa un nome
@@ -109,25 +181,28 @@ FASE 4 — Glossario e stile (fallo TU, prima di delegare la traduzione)
   concetti fissi (Lupo Solitario, cavaliere/i Ramas, Arte/i Ramas, Registro
   di Guerra, Tabella del Destino, Combattività, Resistenza, Corona/e d'Oro,
   Zaino, Oggetto/i Speciale/i, Signori delle Tenebre, Spada del Sole, nomi
-  delle 10 discipline Kai con la relativa elisione dell'articolo). Verificalo
-  con grep sui json già tradotti, non fidarti della memoria.
-- Scrivi tutto questo (schema + glossario + convenzioni di stile + esempi
-  concreti presi VERBATIM dai json già tradotti + policy sulle footnote) in
-  un unico file spec (es. nella cartella scratchpad di sessione, tipo
-  "book<N>-spec.md") che ogni agente di traduzione dovrà leggere per primo.
-  Non ripetere il testo intero in ogni prompt: fai leggere il file.
+  delle 10 discipline Kai con la relativa elisione dell'articolo - vedi
+  KAI_ART_NAMES in validate-book.mjs per la forma esatta). Verificalo con
+  grep sui json già tradotti, non fidarti della memoria.
+- Scrivi tutto questo (schema + risultati della FASE 2 con l'esempio di come
+  rappresentare ogni pattern trovato + glossario + convenzioni di stile +
+  esempi concreti presi VERBATIM dai json già tradotti + policy sulle
+  footnote) in un unico file spec (es. nella cartella scratchpad di sessione,
+  tipo "book<N>-spec.md") che ogni agente di traduzione dovrà leggere per
+  primo. Non ripetere il testo intero in ogni prompt: fai leggere il file.
 
-FASE 5 — Traduzione e strutturazione in parallelo
+FASE 6 — Traduzione e strutturazione in parallelo
 - Conta le sezioni totali del libro (di solito 350, ma verifica sempre con
   un controllo sui file sectN.htm - numero minimo, massimo, eventuali buchi).
 - Dividi in batch da ~25 sezioni consecutive (es. 350 sezioni -> 14 batch).
 - Per ogni batch, lancia un Agent (subagent_type: general-purpose) con un
   prompt self-contained che:
-  - include il percorso assoluto del file spec (FASE 4) da leggere per primo
+  - include il percorso assoluto del file spec (FASE 5) da leggere per primo
   - specifica il range esatto di sezioni assegnate
   - specifica i percorsi assoluti dei file sorgente old-data/<cartella>/sectN.htm
   - segnala eventuali sezioni speciali note in anticipo che cadono in quel
-    range (finali multiple, footnote con effetti reali, nemici particolari)
+    range (finali multiple, footnote con effetti reali, nemici particolari,
+    pattern della FASE 2 che cadono in questo range con l'esempio già pronto)
   - specifica il percorso di output esatto (un file JSON per batch, con le
     sole sezioni di quel range, nella cartella scratchpad, NON dentro il
     repo - evita di sporcare git con file intermedi)
@@ -136,19 +211,24 @@ FASE 5 — Traduzione e strutturazione in parallelo
 - Se un batch si rifiuta per motivi di copyright: NON forzare lo stesso
   identico prompt. Ririlancialo aggiungendo esplicitamente il contesto della
   FASE 0 (progetto personale, non commerciale, libri precedenti già nel
-  repo con lo stesso metodo, fonte Project Aon). Nella mia esperienza risolve
+  repo con lo stesso metodo). Nella mia esperienza risolve
   il problema nella quasi totalità dei casi, perché il subagent semplicemente
   non aveva il contesto per giudicare correttamente.
+- Se un batch si interrompe per un limite di sessione a metà: verifica SEMPRE
+  che il suo file di output esista e sia JSON valido (un batch interrotto può
+  aver scritto un file troncato o con virgolette non escapate) prima di
+  considerarlo completo - ririlancialo se necessario.
 
-FASE 6 — Merge e validazione automatica
+FASE 7 — Merge e validazione automatica
 - Scrivi un piccolo script Node che unisce tutti i chunk in un unico oggetto
   "sections", verifica che non ci siano duplicati o buchi (1..totale sezioni),
   e scrive il file finale data/books/0N-slug.json con l'header
   (bookId, bookNumber, title, originalTitle, author, illustrator, sections).
 - Esegui `node scripts/validate-book.mjs data/books/0N-slug.json` e correggi
-  ogni errore riportato prima di andare avanti.
+  ogni errore riportato prima di andare avanti (ora controlla anche i nomi
+  delle Arti Ramas contro l'elenco canonico).
 
-FASE 7 — Controlli di qualità e coerenza (obbligatori, non opzionali)
+FASE 8 — Controlli di qualità e coerenza (obbligatori, non opzionali)
 1. Raggiungibilità: scrivi ed esegui uno script che fa BFS dalla sezione 1
    seguendo choices[].section e combat.fleeSection, e verifica che TUTTE le
    sezioni siano raggiungibili. Ogni sezione irraggiungibile è quasi
@@ -157,8 +237,11 @@ FASE 7 — Controlli di qualità e coerenza (obbligatori, non opzionali)
    href="sectNNN.htm" dal file HTML originale e confrontali con i link
    effettivamente presenti nel JSON tradotto (choices + fleeSection). Ogni
    discrepanza va capita e giustificata esplicitamente (es. un ramo
-   condizionato su un meccanismo che il motore non supporta, come un rango
-   Kai) - non lasciarla silenziosa.
+   condizionato su un meccanismo che il motore non supporta) - non lasciarla
+   silenziosa. Con le primitive della FASE 2 disponibili, ormai la maggior
+   parte di queste discrepanze dovrebbe essere risolvibile invece di
+   approssimata: prova a risolverla davvero prima di accettarla come
+   scostamento intenzionale.
 3. Consistenza nomi oggetti: estrai tutte le stringhe usate in addItem,
    canAddItems, canAddWeapon, removeItem e requirements.item in tutto il
    libro, ordina ed elenca le uniche. Cerca varianti quasi identiche dello
@@ -172,41 +255,102 @@ FASE 7 — Controlli di qualità e coerenza (obbligatori, non opzionali)
    quantità/spazio-zaino scritti nel nome (spesso non necessario, il motore
    non applica comunque un limite di spazio reale per stringa), oggetti con
    bonus incorporato nel nome (va bene se consistente ovunque compaia).
-4. Nessun "softlock": verifica che ogni sezione abbia scelte OPPURE uno dei
+4. Sezioni con scelta-scorciatoia + vero tiro dalla Tabella del Destino nello
+   stesso array di scelte: scrivi ed esegui uno script che, per ogni sezione,
+   conta quante scelte hanno un testo che assomiglia a un intervallo
+   ("da X a Y", "Numero N", "Se è N") e quante no; se sono 2+ intervalli
+   insieme ad altre scelte, verifica che quelle altre scelte abbiano tutte un
+   `requirements` reale (altrimenti il tiro interattivo non verrà mai
+   mostrato al giocatore - vedi isDestinyTest in story-reader.js).
+5. Nessun "softlock": verifica che ogni sezione abbia scelte OPPURE uno dei
    flag isDeathSection/isVictory/isFailureEnding - mai nessuno dei due.
-5. Lettura a campione: apri e leggi per intero almeno la sezione 1, la
+6. Lettura a campione: apri e leggi per intero almeno la sezione 1, la
    sezione finale (isVictory), eventuali finali speciali (isFailureEnding
-   o altri), 2-3 sezioni di combattimento con meccaniche particolari, per
-   controllare tono/fedeltà/naturalezza della traduzione con i tuoi occhi,
-   non solo con gli script.
-6. Coerenza narrativa tra libri: rileggi la FASE 3 e confermala esplicitamente
+   o altri), 2-3 sezioni di combattimento con meccaniche particolari, e le
+   sezioni identificate nella FASE 2 come casi speciali, per controllare
+   tono/fedeltà/naturalezza della traduzione e la correttezza dei campi
+   strutturati con i tuoi occhi, non solo con gli script.
+7. Coerenza narrativa tra libri: rileggi la FASE 4 e confermala esplicitamente
    ora che il libro è completo (non solo sulla base del testo ufficiale di
    transizione, ma controllando che l'inizio effettivo del libro nuovo -
    sezione 1 - segua in modo fluido dall'ultima schermata della transizione).
 
-FASE 8 — Test automatici
+FASE 9 — Prompt immagini per il libro nuovo
+- Leggi per intero scripts/promptimg/00-stile-base.md (la direzione
+  artistica, il blocco di stile, le descrizioni di Lupo Solitario e del
+  bestiario già stabilito) e scripts/promptimg/README.md (come sono
+  organizzati i file e come si usano). NON rigenerare ritratti di
+  riferimento che esistono già in scripts/promptimg/riferimenti/ (Lupo
+  Solitario e le creature/personaggi già coperti dai libri precedenti) -
+  quei file sono già stati generati come immagini reali da un libro
+  precedente e vanno solo RIUSATI (la riga "Base da riutilizzare" nei
+  prompt di scena li referenzia per nome), non riscritti né rilanciati nel
+  generatore.
+- Scegli, con lo stesso criterio già usato per i libri precedenti (leggi in
+  fondo a scripts/promptimg/README.md la sezione "Perché non tutte le ~350
+  sezioni per libro"), le ~50 sezioni più importanti dal punto di vista
+  narrativo/visivo di QUESTO libro: combattimenti con nemici unici,
+  rivelazioni, luoghi memorabili, oggetti speciali significativi, morte di
+  compagni/PNG, inizio e finale.
+- Identifica le creature/personaggi ricorrenti VERAMENTE NUOVI introdotti in
+  questo libro (compaiono in 3+ delle sezioni scelte sopra). Solo per
+  questi, e solo per questi:
+  1. Aggiungi la voce del bestiario a scripts/promptimg/00-stile-base.md
+     (stessa struttura delle voci esistenti, tag "(Libro N+)" o "(Libro N)"
+     secondo se ricorre o non ricorre in libri successivi).
+  2. Crea il file scripts/promptimg/riferimenti/ritratto-<nome>.txt (stesso
+     schema degli altri: blocco di stile "reference portrait" + descrizione
+     del soggetto). Personaggi umani nominati che compaiono solo in questo
+     libro meritano comunque un ritratto se ricorrono spesso nelle sezioni
+     scelte - non serve che tornino in libri futuri per giustificarlo.
+- Crea la cartella scripts/promptimg/bookN/ con un file `.txt` per ogni
+  sezione scelta (riga "Base da riutilizzare: ..." con i ritratti di
+  riferimento pertinenti + blocco di stile + descrizione di Lupo
+  Solitario/bestiario pertinenti + descrizione della scena specifica, tutto
+  già unito e pronto da copiare) e un `_indice.md` (stato sostituzione/
+  nuova immagine, riferimenti da usare, descrizione breve in italiano).
+- Aggiorna scripts/promptimg/README.md: aggiungi la voce `bookN/`
+  nell'elenco "Contenuto" con il numero di prompt creati, e aggiorna il
+  conteggio dei ritratti in `riferimenti/` se ne hai aggiunti di nuovi.
+- Nota: creare i file `.txt` con i prompt è un compito tuo (Claude); la
+  generazione VERA delle immagini tramite il tool esterno (ChatGPT/Nano
+  Banana/ecc.) e il salvataggio dei PNG in public/img/bookN/ resta un passo
+  manuale dell'utente, che poi aggiungerà lui/tu il campo `"image"` alle
+  sezioni corrispondenti in data/books/0N-*.json - non bloccarti su questo
+  passo, limitati a preparare i prompt.
+
+FASE 10 — Test automatici
 - Esegui `npm test` e assicurati che tutti i test esistenti passino dopo le
   tue modifiche al motore.
 - Se hai aggiunto anche solo un piccolo pezzo di logica non banale al motore
   (un nuovo campo, un nuovo guard clause, una nuova condizione), aggiungi un
   test minimo corrispondente in tests/ prima di considerare il lavoro finito
-  - non è opzionale, è già capitato che un test scoprisse subito un bug reale
-  (un campo nuovo non propagato correttamente nello stato di combattimento).
+  - non è opzionale, è già capitato più volte che un test scoprisse subito un
+  bug reale (un campo non propagato correttamente nello stato di
+  combattimento, una regex che non gestiva i numeri negativi).
 
-FASE 9 — Resoconto finale
+FASE 11 — Resoconto finale
 - Riportami: quante sezioni tradotte, quali modifiche al motore/transizione
-  ho fatto e perché, quali incongruenze ho trovato e come le ho risolte,
-  cosa NON ho potuto verificare (es. non ho un browser per giocare la
-  partita reale end-to-end con login Firebase) così sai cosa controllare tu
-  a mano.
+  ho fatto e perché, quali incongruenze/bug ho trovato (comprese eventuali
+  meccaniche della FASE 2 che ricorrevano già, in silenzio, nei libri
+  PRECEDENTI già pubblicati - se ne trovi, correggile anche lì, non solo nel
+  libro nuovo) e come le ho risolte, quanti prompt immagine ho creato nella
+  FASE 9 e quali nuovi ritratti di riferimento (se nessuno, dillo), cosa NON
+  ho potuto verificare o ho deliberatamente rimandato e perché (es. non ho un
+  browser per giocare la partita reale end-to-end con login Firebase; una
+  meccanica richiederebbe un nuovo sottosistema stateful) così sai cosa
+  controllare tu a mano.
 
 -------------------------------------------------------------------------
 NOTE
 -------------------------------------------------------------------------
 - Non serve rifare da zero la FASE 1 se il motore non è cambiato dall'ultima
   conversione: rileggi comunque i file (potrebbero essere cambiati) ma sarà
-  più rapido.
+  più rapido. La FASE 2 (audit meccaniche) invece va SEMPRE rifatta da capo
+  su ogni libro nuovo: le primitive esistono già, ma quali ricorrono in
+  QUESTO libro cambia sempre.
 - Se in futuro si arriva ai Gran Maestri (Libro 6+) o ad altre discipline
-  aggiuntive, la FASE 1/2 dovrà controllare anche src/components/
-  character-creator.js (elenco KAI_ARTS) perché a quel punto potrebbe
-  servire una modifica più profonda del motore, non solo dei dati.
+  aggiuntive, la FASE 1/3 dovrà controllare anche src/components/
+  character-creator.js (elenco KAI_ARTS, e quindi anche KAI_ART_NAMES in
+  validate-book.mjs) perché a quel punto potrebbe servire una modifica più
+  profonda del motore, non solo dei dati.
