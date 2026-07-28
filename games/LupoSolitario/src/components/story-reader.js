@@ -55,9 +55,24 @@ export class StoryReader {
       } else if (section.isFailureEnding) {
         html += this.renderFailureEndingSection();
       } else if (section.isVictory) {
-        html += this.renderVictorySection(state.bookNumber, this.onContinueNextBook && state.bookNumber < 4);
+        html += this.renderVictorySection(state.bookNumber, this.onContinueNextBook && state.bookNumber < 5);
+      } else if (section.numericPuzzle) {
+        // A physical-book puzzle (a combination lock, a map-derived code):
+        // the "correct" outcome isn't one of a fixed set of buttons, it's
+        // whatever section number the player works out from clues elsewhere
+        // in the book. Any other guess falls through to a single fixed
+        // "wrong guess" section - see numericPuzzle.wrongSection. A section
+        // can still offer regular choices alongside it (e.g. "give up
+        // without trying") - those render as normal buttons above the puzzle.
+        if (section.choices && section.choices.length > 0) html += this.renderStandardChoices(section.choices, state);
+        html += this.renderNumericPuzzle();
       } else if (section.choices && section.choices.length > 0) {
-        if (this.isDestinyTest(section.choices)) {
+        if (section.doubleDestinyRoll) {
+          // A rarer Destiny Table variant: draw two numbers in sequence and
+          // compare them to each other (rather than matching one modified
+          // roll against fixed ranges) - see handleDoubleDestinyRoll.
+          html += this.renderDestinyTest();
+        } else if (this.isDestinyTest(section.choices)) {
           // A "bypass" choice (e.g. "if you possess the Sommerswerd, turn to
           // X") can sit alongside a real Destiny Table roll - show it as a
           // normal button; if its requirements don't pass, the player just
@@ -105,7 +120,16 @@ export class StoryReader {
 
     const destinyBtn = container.querySelector('#destiny-roll-btn');
     if (destinyBtn) {
-      destinyBtn.addEventListener('click', () => this.handleDestinyRoll(container, section));
+      if (section.doubleDestinyRoll) {
+        destinyBtn.addEventListener('click', () => this.handleDoubleDestinyRoll(container, section));
+      } else {
+        destinyBtn.addEventListener('click', () => this.handleDestinyRoll(container, section));
+      }
+    }
+
+    const puzzleBtn = container.querySelector('#numeric-puzzle-btn');
+    if (puzzleBtn) {
+      puzzleBtn.addEventListener('click', () => this.handleNumericPuzzle(container, section));
     }
 
     const continueNextBookBtn = container.querySelector('#continue-next-book-btn');
@@ -239,6 +263,24 @@ export class StoryReader {
       const took = state.lastCombatSummary.damageTaken > 0;
       if (took !== requirements.tookDamage) return false;
     }
+    // Compares how much Resistenza each side lost in the combat that just
+    // ended (e.g. a single-round surprise clash with a 3-way outcome: "you
+    // lost more" / "the enemy lost more" / "exact tie").
+    if (requirements.enemyLostMore !== undefined) {
+      if (!state.lastCombatSummary) return false;
+      const result = state.lastCombatSummary.damageDealt > state.lastCombatSummary.damageTaken;
+      if (result !== requirements.enemyLostMore) return false;
+    }
+    if (requirements.playerLostMore !== undefined) {
+      if (!state.lastCombatSummary) return false;
+      const result = state.lastCombatSummary.damageTaken > state.lastCombatSummary.damageDealt;
+      if (result !== requirements.playerLostMore) return false;
+    }
+    if (requirements.combatTied !== undefined) {
+      if (!state.lastCombatSummary) return false;
+      const result = state.lastCombatSummary.damageTaken === state.lastCombatSummary.damageDealt;
+      if (result !== requirements.combatTied) return false;
+    }
 
     return true;
   }
@@ -357,9 +399,9 @@ export class StoryReader {
 
     // Must eat or lose endurance
     if (effects.mustEatOrLoseEndurance) {
-      // Check for Caccia (Hunting) - doesn't work in Book 3 (Kalte is an icy
-      // wasteland, per the book's own equipment rules), but works everywhere else.
-      const huntingWorks = gameState.getState().bookNumber !== 3;
+      // Check for Caccia (Hunting) - doesn't work in Book 3, nor in Book 5 section 320
+      const state = gameState.getState();
+      const huntingWorks = state.bookNumber !== 3 && !(state.bookNumber === 5 && state.currentSection === 320);
       if (huntingWorks && gameState.hasKaiArt('Caccia')) {
         UIHelpers.showToast('🏹 Caccia: Hai procurato del cibo e non devi consumare un Pasto.', 'success');
         const state = gameState.getState();
@@ -649,6 +691,21 @@ export class StoryReader {
     `;
   }
 
+  renderNumericPuzzle() {
+    return `
+      <div class="numeric-puzzle-container" style="text-align: center; margin-top: 2rem;">
+        <div class="card" style="background: rgba(139, 92, 246, 0.1); border-color: var(--color-primary);">
+          <h3>🔢 Enigma numerico</h3>
+          <p>Se conosci il numero della sezione corretta, scrivilo qui sotto e conferma.</p>
+          <input type="number" id="numeric-puzzle-input" class="stat-value" style="text-align: center; font-size: 2rem; width: 100%; margin: 1rem 0; background: transparent; border: 1px solid var(--color-primary); border-radius: 8px; padding: 0.5rem;" placeholder="?">
+          <button class="btn btn-primary btn-large btn-block" id="numeric-puzzle-btn">
+            Conferma
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
   renderDeathSection() {
     return `
       <div class="death-container" style="text-align: center; margin-top: 2rem;">
@@ -681,7 +738,8 @@ export class StoryReader {
     const nextBookLabels = {
       1: '🌊 Continua nel Libro 2: Fuoco sulle Acque',
       2: '❄️ Continua nel Libro 3: Le Caverne di Kalte',
-      3: '⛰️ Continua nel Libro 4: Il Baratro della Perdizione'
+      3: '⛰️ Continua nel Libro 4: Il Baratro della Perdizione',
+      4: '☀️ Continua nel Libro 5: Ombra sulla Sabbia'
     };
     return `
       <div class="death-container" style="text-align: center; margin-top: 2rem;">
@@ -751,6 +809,66 @@ export class StoryReader {
       }
     }, 100);
   }
+  // Physical-book puzzle (combination lock, map-derived code): the player
+  // works out a section number from clues elsewhere in the book and jumps
+  // straight to it. Any other guess (including a blank/invalid one) falls
+  // through to the book's single fixed "wrong guess" section.
+  handleNumericPuzzle(container, section) {
+    const input = container.querySelector('#numeric-puzzle-input');
+    const guess = parseInt(input.value, 10);
+    const { correctSection, wrongSection } = section.numericPuzzle;
+    const target = guess === correctSection ? correctSection : wrongSection;
+    this.navigateToSection(target, section);
+  }
+
+  // Rarer Destiny Table variant: draw two numbers in sequence and compare
+  // them to each other, rather than matching one modified roll against fixed
+  // ranges (see handleDestinyRoll). Only the first roll takes the section's
+  // destinyModifier - the book always narrates the second as a plain redraw.
+  // Choices are matched by an explicit `outcome` field ('secondLess' |
+  // 'secondMore' | 'equal') rather than text-parsed, since the range-based
+  // phrasings in parseDestinyRange don't describe a comparison between two
+  // rolls.
+  async handleDoubleDestinyRoll(container, section) {
+    const btn = container.querySelector('#destiny-roll-btn');
+    if (btn) btn.disabled = true;
+
+    const display = container.querySelector('#destiny-roll-result');
+    const message = container.querySelector('#destiny-message');
+
+    let count = 0;
+    const interval = setInterval(() => {
+      display.textContent = Math.floor(Math.random() * 10);
+      count++;
+      if (count > 10) {
+        clearInterval(interval);
+
+        const first = getRandomDestinyNumber();
+        const modifier = this.calculateDestinyModifier(section, gameState.getState());
+        const firstTotal = first + modifier;
+        const second = getRandomDestinyNumber();
+        display.textContent = `${firstTotal} / ${second}`;
+
+        const outcome = second < firstTotal ? 'secondLess' : (second > firstTotal ? 'secondMore' : 'equal');
+        const matchedChoice = section.choices.find(choice => choice.outcome === outcome);
+
+        if (matchedChoice) {
+          const firstLabel = modifier !== 0
+            ? `${first} ${modifier > 0 ? '+' : ''}${modifier} = ${firstTotal}`
+            : `${firstTotal}`;
+          message.innerHTML = `<span style="color: var(--color-success); font-weight: bold;">Primo numero: ${firstLabel} — Secondo numero: ${second}</span>. ${matchedChoice.text}`;
+
+          setTimeout(() => {
+            this.navigateToSection(matchedChoice.section, section, matchedChoice);
+          }, 2000);
+        } else {
+          message.textContent = "Errore: Nessuna corrispondenza trovata.";
+          if (btn) btn.disabled = false;
+        }
+      }
+    }, 100);
+  }
+
   async checkDeath() {
     const state = gameState.getState();
     if (state.character.resistenza <= 0) {

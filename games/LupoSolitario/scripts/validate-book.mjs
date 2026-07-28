@@ -27,6 +27,9 @@ const REQUIREMENT_FIELDS = {
   maxRounds: 'number',
   minRounds: 'number',
   tookDamage: 'boolean',
+  enemyLostMore: 'boolean', // compares lastCombatSummary.damageDealt vs damageTaken (single-round "who took more damage" outcomes)
+  playerLostMore: 'boolean',
+  combatTied: 'boolean',
   anyOf: 'object[]', // OR: passes if ANY nested requirements object here passes
   not: 'object' // negates a nested requirements object (e.g. "does NOT have this Kai Discipline yet")
 };
@@ -127,12 +130,15 @@ const COMBAT_FIELDS = {
   combatModifiers: 'object[]'
 };
 
+const DOUBLE_ROLL_OUTCOMES = new Set(['secondLess', 'secondMore', 'equal']);
+
 const CHOICE_FIELDS = {
   text: 'string',
   section: 'number|null', // null only valid together with isDeathSection: true (inline death, no "turn to" target)
   requirements: 'object',
   effects: 'object',
-  isDeathSection: 'boolean'
+  isDeathSection: 'boolean',
+  outcome: 'string' // only on choices under a doubleDestinyRoll section - see DOUBLE_ROLL_OUTCOMES
 };
 
 const SECTION_FIELDS = {
@@ -148,7 +154,9 @@ const SECTION_FIELDS = {
   // navigateToSection() folds these onto every enemy in the fight before combat starts
   playerCombatBonus: 'number',
   playerCombatPenalty: 'number',
-  destinyModifier: 'object[]' // adjusts a Destiny Table roll before it's matched against choice ranges
+  destinyModifier: 'object[]', // adjusts a Destiny Table roll before it's matched against choice ranges
+  doubleDestinyRoll: 'boolean', // draw two numbers and compare them, instead of matching one roll against choice ranges
+  numericPuzzle: 'numericPuzzle' // {correctSection, wrongSection} - physical-book puzzle, player jumps straight to the section they worked out
 };
 
 function typeOf(value) {
@@ -168,6 +176,10 @@ function checkType(value, expected) {
   if (expected === 'penaltyNoItem') {
     return typeof value === 'object' && value !== null &&
       typeof value.item === 'string' && typeof value.penalty === 'number';
+  }
+  if (expected === 'numericPuzzle') {
+    return typeof value === 'object' && value !== null &&
+      typeof value.correctSection === 'number' && typeof value.wrongSection === 'number';
   }
   return typeOf(value) === expected;
 }
@@ -232,6 +244,23 @@ function validateBook(filePath) {
 
     if (section.effects) checkEffects(section.effects, `${path}.effects`, errors);
     if (section.destinyModifier) checkDestinyModifiers(section.destinyModifier, `${path}.destinyModifier`, errors);
+
+    if (section.numericPuzzle) {
+      checkSectionRef(section.numericPuzzle.correctSection, `${path}.numericPuzzle.correctSection`);
+      checkSectionRef(section.numericPuzzle.wrongSection, `${path}.numericPuzzle.wrongSection`);
+    }
+
+    if (section.doubleDestinyRoll) {
+      const choices = section.choices || [];
+      if (choices.length === 0) {
+        errors.push(`${path}: doubleDestinyRoll is true but has no choices`);
+      }
+      choices.forEach((choice, i) => {
+        if (!DOUBLE_ROLL_OUTCOMES.has(choice.outcome)) {
+          errors.push(`${path}.choices[${i}]: doubleDestinyRoll section requires choices[].outcome to be one of secondLess/secondMore/equal, got "${choice.outcome}"`);
+        }
+      });
+    }
 
     const combats = Array.isArray(section.combat) ? section.combat : (section.combat ? [section.combat] : []);
     combats.forEach((c, i) => {

@@ -258,7 +258,8 @@ class GameState {
         const combat = this.state.combatState;
         const lastCombatSummary = combat ? {
             rounds: combat.rounds.length,
-            damageTaken: combat.rounds.reduce((sum, r) => sum + (r.heroDamage || 0), 0)
+            damageTaken: combat.rounds.reduce((sum, r) => sum + (r.heroDamage || 0), 0),
+            damageDealt: combat.rounds.reduce((sum, r) => sum + (r.enemyDamage || 0), 0)
         } : this.state.lastCombatSummary;
 
         this.setState({

@@ -200,6 +200,16 @@ test('fightRound: noPlayerLossRounds modifier zeroes hero damage only during the
   assert.equal(gameState.getState().character.resistenza, 15, 'round 2 takes normal damage');
 });
 
+test('endCombat: lastCombatSummary tracks damageDealt (enemy) alongside damageTaken (hero)', () => {
+  // combattivita 15 + Sommerswerd(+8) vs 15 => ratio 8; table['8'][destinyNumber=1] = [enemyDamage 8, heroDamage 3]
+  mockRollQueue = [1];
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20, zaino: ['Spada del Sole'] });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 30 });
+  combatManager.fightRound();
+  combatManager.endCombat('victory');
+  assert.deepEqual(gameState.getState().lastCombatSummary, { rounds: 1, damageTaken: 3, damageDealt: 8 });
+});
+
 test('canPlayerFlee: respects fleeAfterRounds gating', () => {
   mockRollQueue = [1, 1];
   resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });

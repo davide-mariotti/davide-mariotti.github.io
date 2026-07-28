@@ -72,6 +72,20 @@ test('checkRequirements: maxRounds/minRounds/tookDamage gate on the last combat 
   assert.equal(reader.checkRequirements({ maxRounds: 4 }, fakeState()), false, 'no summary at all means the gate fails closed');
 });
 
+test('checkRequirements: enemyLostMore/playerLostMore/combatTied compare damageDealt vs damageTaken', () => {
+  const enemyLostMore = { rounds: 1, damageTaken: 2, damageDealt: 5 };
+  const playerLostMore = { rounds: 1, damageTaken: 5, damageDealt: 2 };
+  const tied = { rounds: 1, damageTaken: 3, damageDealt: 3 };
+
+  assert.equal(reader.checkRequirements({ enemyLostMore: true }, fakeState({ lastCombatSummary: enemyLostMore })), true);
+  assert.equal(reader.checkRequirements({ enemyLostMore: true }, fakeState({ lastCombatSummary: playerLostMore })), false);
+  assert.equal(reader.checkRequirements({ playerLostMore: true }, fakeState({ lastCombatSummary: playerLostMore })), true);
+  assert.equal(reader.checkRequirements({ playerLostMore: true }, fakeState({ lastCombatSummary: tied })), false);
+  assert.equal(reader.checkRequirements({ combatTied: true }, fakeState({ lastCombatSummary: tied })), true);
+  assert.equal(reader.checkRequirements({ combatTied: true }, fakeState({ lastCombatSummary: enemyLostMore })), false);
+  assert.equal(reader.checkRequirements({ enemyLostMore: true }, fakeState()), false, 'no summary at all means the gate fails closed');
+});
+
 test('checkRequirements: items requires ALL of a list at once (unlike single item)', () => {
   assert.equal(
     reader.checkRequirements({ items: ['Torcia', 'Acciarino'] }, fakeState({ zaino: ['Torcia', 'Acciarino'] })),
