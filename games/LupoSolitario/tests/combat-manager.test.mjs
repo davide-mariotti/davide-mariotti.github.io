@@ -222,6 +222,23 @@ test('canPlayerFlee: respects fleeAfterRounds gating', () => {
   assert.equal(combatManager.canPlayerFlee(), true);
 });
 
+test('fightRound: forceEndAfterRounds cuts the combat short (neither side dead) once the round cap is reached', () => {
+  // ratio 0, destinyNumber 5 -> table['0'][5] = [enemyDamage 7, heroDamage 2] - nobody dies with these HP totals
+  mockRollQueue = [5, 5];
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 999, forceEndAfterRounds: 2, forceEndSection: 394 });
+
+  assert.equal(combatManager.fightRound(), 'ongoing', 'round 1: cap not reached yet');
+  assert.equal(combatManager.fightRound(), 'force-end', 'round 2: cap reached, neither side dead');
+});
+
+test('fightRound: forceEndAfterRounds does not override a real victory/defeat reached within the cap', () => {
+  mockRollQueue = [1]; // ratio 8, destinyNumber 1 -> table['8'][1] = [enemyDamage 8, heroDamage 3]
+  resetGameState({ combattivita: 23, resistenza: 20, resistenzaMax: 20 });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 8, forceEndAfterRounds: 3, forceEndSection: 394 });
+  assert.equal(combatManager.fightRound(), 'victory');
+});
+
 test('multi-enemy queue: defeating one enemy automatically engages the next', () => {
   mockRollQueue = [0]; // ratio 0, destinyNumber 0 -> table['0'][0] = [enemyDamage 12, heroDamage 0]
   resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });

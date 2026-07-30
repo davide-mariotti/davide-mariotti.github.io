@@ -3,8 +3,6 @@
  "bookNumber": 3,
  "title": "Le Caverne di Kalte",
  "originalTitle": "The Caverns of Kalte",
- "author": "Joe Dever",
- "illustrator": "Gary Chalk",
  "sections": {
   "1": {
    "image": "public/img/book03/sec1.png",

@@ -8,7 +8,14 @@ mock.module('../src/save-manager.js', {
   exports: { saveManager: { scheduleAutoSave: () => {}, deleteSave: async () => {} } }
 });
 
+// ui-helpers.js touches `document` for toasts/modals - stubbed so applyEffects
+// (which calls UIHelpers.showToast) is safely callable outside a browser.
+mock.module('../src/utils/ui-helpers.js', {
+  exports: { UIHelpers: { showToast: () => {}, showAlert: async () => {}, confirmAsync: async () => true, showModal: () => {} } }
+});
+
 const { StoryReader } = await import('../src/components/story-reader.js');
+const { gameState } = await import('../src/game-state.js');
 
 const reader = new StoryReader({ sections: {} });
 
@@ -188,6 +195,23 @@ test('isDestinyTest: also true when a non-range "bypass" choice sits alongside 2
   ];
   assert.equal(reader.isDestinyTest(choices), true);
   assert.equal(reader.isDestinyTest([{ text: 'Numero 0-4' }, { text: 'Se hai una spada' }]), false, 'only 1 range choice - not enough to be a real roll');
+});
+
+test('applyEffects: restoreHalfDamageTaken heals floor(damageTaken / 2) from the last combat', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  gameState.setState({ lastCombatSummary: { rounds: 2, damageTaken: 7, damageDealt: 20 } });
+
+  await reader.applyEffects({ restoreHalfDamageTaken: true });
+  assert.equal(gameState.getState().character.resistenza, 13, '10 + floor(7/2)=3');
+});
+
+test('applyEffects: restoreHalfDamageTaken is a no-op with no prior combat', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ restoreHalfDamageTaken: true });
+  assert.equal(gameState.getState().character.resistenza, 10);
 });
 
 test('isDestinyTest: false when a non-range choice has no requirements at all (ambiguous shape, e.g. Book 1 section 21\'s 3-attempt reroll) - falls back to plain buttons rather than guessing', () => {

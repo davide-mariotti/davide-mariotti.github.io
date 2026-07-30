@@ -58,7 +58,8 @@ const EFFECT_FIELDS = {
   restoreEndurance: 'number|full',
   loseAllWeapons: 'boolean',
   loseRandomWeapon: 'boolean',
-  loseAllItems: 'boolean'
+  loseAllItems: 'boolean',
+  restoreHalfDamageTaken: 'boolean' // heals floor(lastCombatSummary.damageTaken / 2) - see Book 5 sections 20/135/161
 };
 
 const COMBAT_MODIFIER_TYPES = new Set(['firstRound', 'noKaiArt', 'noPlayerLossRounds']);
@@ -126,6 +127,9 @@ const COMBAT_FIELDS = {
   canFleeDamage: 'boolean', // documents that fleeing costs Endurance - always true, see combat-manager.js flee()
   fleeSection: 'number',
   fleeAfterRounds: 'number',
+  loseSection: 'number', // some enemies spare the hero instead of killing him - redirect here instead of Game Over, see Book 5 section 20/135
+  forceEndAfterRounds: 'number', // combat is cut short (neither side necessarily dead) after this many rounds - see forceEndSection
+  forceEndSection: 'number',
   undead: 'boolean',
   combatModifiers: 'object[]'
 };
@@ -266,6 +270,8 @@ function validateBook(filePath) {
     combats.forEach((c, i) => {
       checkFields(c, COMBAT_FIELDS, `${path}.combat[${i}]`, errors);
       if (c.fleeSection !== undefined) checkSectionRef(c.fleeSection, `${path}.combat[${i}].fleeSection`);
+      if (c.loseSection !== undefined) checkSectionRef(c.loseSection, `${path}.combat[${i}].loseSection`);
+      if (c.forceEndSection !== undefined) checkSectionRef(c.forceEndSection, `${path}.combat[${i}].forceEndSection`);
       if (c.combatModifiers) checkCombatModifiers(c.combatModifiers, `${path}.combat[${i}].combatModifiers`, errors);
     });
 

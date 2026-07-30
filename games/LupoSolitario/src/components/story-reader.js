@@ -411,7 +411,6 @@ export class StoryReader {
         return; // Skip the rest
       }
 
-      const state = gameState.getState();
       const currentSection = state.currentSection;
       const mealFlagKey = `meal_consumed_section_${currentSection}`;
 
@@ -483,6 +482,16 @@ export class StoryReader {
       gameState.clearEquipment();
       UIHelpers.showToast('🎒 Hai perso tutto il tuo equipaggiamento!', 'error');
     }
+
+    // Restore half the ENDURANCE lost in the combat that just ended (rounded
+    // down) - a "got off lightly" outcome (quick win, evasion, spared rather
+    // than killed), see Book 5 sections 20/135/161.
+    if (effects.restoreHalfDamageTaken) {
+      const state = gameState.getState();
+      if (state.lastCombatSummary) {
+        gameState.heal(Math.floor(state.lastCombatSummary.damageTaken / 2));
+      }
+    }
   }
 
 
@@ -548,6 +557,19 @@ export class StoryReader {
       return;
     }
 
+    // Some fights end without either side dying, cutting the combat short
+    // after a fixed number of rounds (see combatData.forceEndAfterRounds) -
+    // e.g. reinforcements interrupt the fight before it's resolved.
+    if (result === 'force-end') {
+      setTimeout(() => {
+        const forceEndSection = combatManager.combatData.forceEndSection;
+        combatManager.endCombat('force-end');
+        const currentSection = this.bookData.sections[gameState.getState().currentSection];
+        this.navigateToSection(forceEndSection, currentSection);
+      }, 1000);
+      return;
+    }
+
     if (result === 'victory') {
       setTimeout(() => {
         combatManager.endCombat('victory');
@@ -570,8 +592,17 @@ export class StoryReader {
       }, 1000);
     } else if (result === 'defeat') {
       setTimeout(async () => {
+        // Some enemies spare the hero instead of killing him (e.g. knocked
+        // unconscious rather than dead) - combatData.loseSection redirects
+        // there instead of ending the game. See Book 5 sections 20/135.
+        const loseSection = combatManager.combatData.loseSection;
         combatManager.endCombat('defeat');
-        await this.endGame('💀 Sei stato sconfitto... L\'avventura finisce qui.', 'Game Over');
+        if (loseSection) {
+          const currentSection = this.bookData.sections[gameState.getState().currentSection];
+          this.navigateToSection(loseSection, currentSection);
+        } else {
+          await this.endGame('💀 Sei stato sconfitto... L\'avventura finisce qui.', 'Game Over');
+        }
       }, 1000);
     }
   }

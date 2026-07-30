@@ -97,8 +97,6 @@ Vedi il file esistente per la struttura completa.
 
 ## 📄 Crediti
 
-**Autore originale:** Joe Dever  
-**Illustratore:** Gary Chalk  
 **Web App:** Fan-made moderna  
 **Tech Stack:** Vanilla JS + Firebase + PWA
 

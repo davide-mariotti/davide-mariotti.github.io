@@ -323,6 +323,13 @@ export class CombatManager {
             return 'victory';
         }
 
+        // Some fights are narratively cut short after a fixed number of rounds
+        // regardless of how the combat stands (e.g. reinforcements interrupt) -
+        // see Book 5 sections 20/330.
+        if (this.combatData.forceEndAfterRounds && updatedCombat.rounds.length >= this.combatData.forceEndAfterRounds) {
+            return 'force-end';
+        }
+
         return 'ongoing';
     }
 

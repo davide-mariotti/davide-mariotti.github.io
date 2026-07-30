@@ -9,7 +9,7 @@ INPUT PER QUESTO LIBRO (compila questi campi prima di inviare il prompt)
 -------------------------------------------------------------------------
 - Numero libro: N (es. 5)
 - Titolo originale inglese: "..."
-- Cartella sorgente HTML (Project Aon) già presente in: games/LupoSolitario/old-data/<cartella>
+- Cartella sorgente HTML già presente in: games/LupoSolitario/old-data/<cartella>
 - bookId da usare: "0N-slug-in-inglese" (stesso stile di 01-flight-from-the-dark,
   02-fire-on-the-water, 03-the-caverns-of-kalte, 04-the-chasm-of-doom)
 
@@ -145,7 +145,7 @@ FASE 3 — Ricognizione differenze rispetto al motore esistente
   (src/components/bookN-transition.js, ricalcato sull'ultimo creato):
   - Testo "la storia finora" tradotto fedelmente dalla pagina ufficiale
     (tssf.htm o equivalente) del libro NUOVO (non del libro precedente) -
-    è lì che Joe Dever scrive il ponte narrativo tra i due libri.
+    è lì che si scrive il ponte narrativo tra i due libri.
   - Rilancio Corone d'Oro (+10), scelta di 1 nuova Arte Ramas, scelta di
     equipaggiamento dalla tabella reale del libro (leggi equipmnt.htm, e
     quanti oggetti si possono scegliere - verificalo, non assumerlo),
@@ -163,7 +163,7 @@ FASE 4 — Verifica di coerenza narrativa tra i libri (NON SALTARE)
   chi è il nemico finale, cosa succede, quali personaggi sopravvivono.
 - Confronta con il testo "storia finora" del libro nuovo che stai per
   tradurre/riscrivere nella transizione: deve essere coerente (stessi nomi,
-  stesso esito, nessuna contraddizione). Il testo ufficiale di Joe Dever è
+  stesso esito, nessuna contraddizione). Il testo ufficiale di è
   quasi sempre già coerente di per sé (è lui che scrive il ponte), ma la
   TRADUZIONE italiana di libri diversi potrebbe aver usato nomi diversi per
   lo stesso personaggio/luogo/oggetto - se succede, uniforma al nome già
@@ -247,7 +247,7 @@ FASE 8 — Controlli di qualità e coerenza (obbligatori, non opzionali)
    libro, ordina ed elenca le uniche. Cerca varianti quasi identiche dello
    stesso oggetto (plurali, diminutivi, parentesi descrittive incoerenti,
    lo stesso oggetto chiamato in due modi nell'originale inglese stesso -
-   capita, Joe Dever non è sempre stato consistente). Per ognuna, verifica
+   capita, non è sempre consistente). Per ognuna, verifica
    nel testo HTML originale se si tratta davvero dello stesso oggetto
    (spesso un oggetto viene "concesso" in una sezione e "richiesto" in
    un'altra sezione lontana, tradotta da un batch diverso) e uniforma al
