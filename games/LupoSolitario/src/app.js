@@ -29,6 +29,14 @@ class App {
       const currentState = gameState.getState();
       const targetState = enable === null ? !currentState.easyMode : !!enable;
       gameState.setEasyMode(targetState);
+
+      // Instantly refresh active view
+      if (this.storyReader && document.getElementById('story-container')) {
+        this.storyReader.update(document.getElementById('story-container'), gameState.getState());
+      } else if (document.getElementById('character-creation-container')) {
+        this.showCharacterCreation();
+      }
+
       if (targetState) {
         console.log('%c🟢 EASY MODE ATTIVATA!', 'color: #22c55e; font-weight: bold; font-size: 14px;');
         console.log('%cLe scelte migliori per completare la storia sono ora evidenziate in verde.', 'color: #a7f3d0;');
