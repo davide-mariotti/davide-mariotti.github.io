@@ -236,21 +236,31 @@ export class CharacterCreator {
   }
 
   getKaiArtsHTML() {
+    const isEasy = gameState.getState().easyMode;
+    const recommendedArts = ['Sesto Senso', 'Mimetismo', 'Guarigione', 'Caccia', 'Scherma'];
+
     return `
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">🧙 Arti Kai Ramas</h2>
           <p class="text-muted">Scegli 5 Arti Kai (${this.character.artiRamas.length}/5)</p>
+          ${isEasy ? `<p style="color: #22c55e; font-weight: 600; margin-top: 0.5rem;">💡 Easy Mode: Le 5 Arti consigliate per vincere sono evidenziate in verde (Sesto Senso, Mimetismo, Guarigione, Caccia, Scherma).</p>` : ''}
         </div>
         <div class="kai-arts-grid">
-          ${KAI_ARTS.map((art, index) => `
-            <div class="kai-art-card ${this.character.artiRamas.includes(art.name) ? 'selected' : ''}"
+          ${KAI_ARTS.map((art, index) => {
+            const isRec = isEasy && recommendedArts.includes(art.name);
+            return `
+            <div class="kai-art-card ${this.character.artiRamas.includes(art.name) ? 'selected' : ''} ${isRec ? 'easy-mode-art-recommendation' : ''}"
                  data-art="${art.name}">
               <img class="kai-art-emoji" src="${art.image}" alt="${art.name}">
-              <div class="kai-art-name">${art.name}</div>
+              <div class="kai-art-name">
+                ${art.name}
+                ${isRec ? '<span class="easy-mode-badge" style="font-size: 0.65rem; margin-left: 4px;">💡 Easy</span>' : ''}
+              </div>
               <div class="kai-art-desc">${art.description}</div>
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
         <div style="margin-top: 2rem;">
           <button class="btn btn-success btn-large btn-block" id="continue-to-item" 

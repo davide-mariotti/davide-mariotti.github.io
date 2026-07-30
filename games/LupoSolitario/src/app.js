@@ -24,6 +24,21 @@ class App {
   }
 
   async init() {
+    // Expose Easy Mode helper to browser console
+    window.easyMode = (enable = null) => {
+      const currentState = gameState.getState();
+      const targetState = enable === null ? !currentState.easyMode : !!enable;
+      gameState.setEasyMode(targetState);
+      if (targetState) {
+        console.log('%c🟢 EASY MODE ATTIVATA!', 'color: #22c55e; font-weight: bold; font-size: 14px;');
+        console.log('%cLe scelte migliori per completare la storia sono ora evidenziate in verde.', 'color: #a7f3d0;');
+      } else {
+        console.log('%c🔴 EASY MODE DISATTIVATA!', 'color: #ef4444; font-weight: bold; font-size: 14px;');
+      }
+      return targetState ? 'Easy Mode: ON' : 'Easy Mode: OFF';
+    };
+    console.log('%c💡 Suggerimento: Digita easyMode() in console per attivare/disattivare la Easy Mode!', 'color: #8b5cf6; font-weight: bold;');
+
     // Initialize auth
     authManager.init();
 

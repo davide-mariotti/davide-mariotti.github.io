@@ -12,6 +12,7 @@ class GameState {
             bookId: '01-flight-from-the-dark',
             bookNumber: 1,
             currentSection: 1,
+            easyMode: localStorage.getItem('lupo_easy_mode') === 'true',
             history: [1], // Section history for back button
             character: {
                 combattivita: 0,
@@ -50,6 +51,11 @@ class GameState {
     setState(updates) {
         this.state = { ...this.state, ...updates };
         this.notifyListeners();
+    }
+
+    setEasyMode(enabled) {
+        localStorage.setItem('lupo_easy_mode', enabled ? 'true' : 'false');
+        this.setState({ easyMode: !!enabled });
     }
 
     // Load state from save

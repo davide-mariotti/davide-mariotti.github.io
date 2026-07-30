@@ -1,5 +1,5 @@
 // Service Worker for offline support
-const CACHE_NAME = 'lupo-solitario-v2';
+const CACHE_NAME = 'lupo-solitario-v4';
 const urlsToCache = [
     './',
     './index.html',

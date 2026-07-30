@@ -8,6 +8,55 @@ export class StoryReader {
   constructor(bookData, onContinueNextBook = null) {
     this.bookData = bookData;
     this.onContinueNextBook = onContinueNextBook;
+    this.easyModeMap = {};
+    if (bookData) this.buildEasyModeMap(bookData);
+  }
+
+  buildEasyModeMap(bookData) {
+    if (!bookData || !bookData.sections) return;
+
+    let victorySectionId = null;
+    for (const [id, sec] of Object.entries(bookData.sections)) {
+      if (sec.isVictory || id === '350') {
+        victorySectionId = parseInt(id);
+        break;
+      }
+    }
+    if (!victorySectionId) return;
+
+    const dist = {};
+    const bestNext = {};
+    dist[victorySectionId] = 0;
+    let updated = true;
+
+    while (updated) {
+      updated = false;
+      for (const [sIdStr, sec] of Object.entries(bookData.sections)) {
+        const sId = parseInt(sIdStr);
+        if (!sec.choices) continue;
+
+        let minD = Infinity;
+        let best = null;
+
+        for (const c of sec.choices) {
+          if (c.section && dist[c.section] !== undefined) {
+            if (dist[c.section] + 1 < minD) {
+              minD = dist[c.section] + 1;
+              best = c.section;
+            }
+          }
+        }
+
+        if (minD !== Infinity && (dist[sId] === undefined || minD < dist[sId])) {
+          dist[sId] = minD;
+          bestNext[sId] = best;
+          updated = true;
+        }
+      }
+    }
+
+    this.easyModeDistances = dist;
+    this.easyModeMap = bestNext;
   }
 
   render() {
@@ -23,6 +72,9 @@ export class StoryReader {
 
   update(container, state) {
     const { currentSection, history, inCombat, combatState } = state;
+    if (!this.easyModeMap || Object.keys(this.easyModeMap).length === 0) {
+      this.buildEasyModeMap(this.bookData);
+    }
     const section = this.bookData.sections[currentSection];
 
     if (!section) {
@@ -644,13 +696,33 @@ export class StoryReader {
 
   renderStandardChoices(choices, state) {
     let html = `<div class="choices">`;
+
+    // Filter available choices (where character meets requirements)
+    // and pick the choice leading to the shortest distance to victory
+    let recommendedSection = null;
+    if (state.easyMode && this.easyModeDistances) {
+      let minDistance = Infinity;
+      choices.forEach(choice => {
+        const canChoose = this.checkRequirements(choice.requirements, state);
+        if (canChoose && choice.section && this.easyModeDistances[choice.section] !== undefined) {
+          const d = this.easyModeDistances[choice.section];
+          if (d < minDistance) {
+            minDistance = d;
+            recommendedSection = choice.section;
+          }
+        }
+      });
+    }
+
     choices.forEach((choice, index) => {
       const canChoose = this.checkRequirements(choice.requirements, state);
+      const isEasyChoice = state.easyMode && recommendedSection && choice.section === recommendedSection && canChoose;
+
       html += `
-          <button class="btn btn-secondary btn-large choice-btn"
+          <button class="btn btn-secondary btn-large choice-btn ${isEasyChoice ? 'easy-mode-choice' : ''}"
                   data-section="${choice.section}" data-index="${index}"
                   ${!canChoose ? 'disabled' : ''}>
-            ${choice.text}
+            ${isEasyChoice ? '⭐ ' : ''}${choice.text}${isEasyChoice ? ' <span class="easy-mode-badge">💡 Easy</span>' : ''}
           </button>
         `;
     });
@@ -702,11 +774,15 @@ export class StoryReader {
   }
 
   renderDestinyTest() {
+    const state = gameState.getState();
+    const recommendedSection = (state.easyMode && this.easyModeMap) ? this.easyModeMap[state.currentSection] : null;
+
     return `
       <div class="destiny-test-container" style="text-align: center; margin-top: 2rem;">
         <div class="card" style="background: rgba(139, 92, 246, 0.1); border-color: var(--color-primary);">
           <h3>🎲 Tabella del Destino</h3>
           <p>La tua sorte è nelle mani del destino...</p>
+          ${recommendedSection ? `<div style="margin: 0.5rem 0; color: #22c55e; font-weight: 600; font-size: 0.95rem;">💡 Easy Mode: Il percorso vincente porta alla Sezione ${recommendedSection}</div>` : ''}
           
           <div class="destiny-display" style="margin: 2rem 0;">
             <div class="stat-value" style="font-size: 4rem;" id="destiny-roll-result">?</div>
