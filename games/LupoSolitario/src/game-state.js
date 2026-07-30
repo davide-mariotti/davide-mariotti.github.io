@@ -302,3 +302,6 @@ class GameState {
 }
 
 export const gameState = new GameState();
+if (typeof window !== 'undefined') {
+    window.gameState = gameState;
+}

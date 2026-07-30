@@ -38,6 +38,28 @@
         </div>
     </div>
 
+    <!-- Global Console Helpers -->
+    <script>
+        window.easyMode = function(enable = null) {
+            const current = localStorage.getItem('lupo_easy_mode') === 'true';
+            const target = enable === null ? !current : !!enable;
+            localStorage.setItem('lupo_easy_mode', target ? 'true' : 'false');
+
+            if (window.gameState) {
+                window.gameState.setEasyMode(target);
+            }
+
+            if (target) {
+                console.log('%c🟢 EASY MODE ATTIVATA!', 'color: #22c55e; font-weight: bold; font-size: 14px;');
+                console.log('%cLe scelte migliori per completare la storia sono ora evidenziate in verde.', 'color: #a7f3d0;');
+            } else {
+                console.log('%c🔴 EASY MODE DISATTIVATA!', 'color: #ef4444; font-weight: bold; font-size: 14px;');
+            }
+            return target ? 'Easy Mode: ON' : 'Easy Mode: OFF';
+        };
+        console.log('%c💡 Suggerimento: Digita easyMode() in console per attivare/disattivare la Easy Mode!', 'color: #8b5cf6; font-weight: bold;');
+    </script>
+
     <!-- Main App Script (ES Module) -->
     <script type="module" src="./src/app.js"></script>
 
