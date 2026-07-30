@@ -27,6 +27,10 @@ mock.module('../src/save-manager.js', {
   exports: { saveManager: { scheduleAutoSave: () => {} } }
 });
 
+// game-state.js reads localStorage at module load time (easyMode persistence),
+// which doesn't exist outside a browser - stubbed so it's importable here.
+globalThis.localStorage ??= { getItem: () => null, setItem: () => {} };
+
 const { gameState } = await import('../src/game-state.js');
 const { combatManager } = await import('../src/components/combat-manager.js');
 

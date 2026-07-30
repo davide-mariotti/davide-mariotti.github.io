@@ -14,6 +14,10 @@ mock.module('../src/utils/ui-helpers.js', {
   exports: { UIHelpers: { showToast: () => {}, showAlert: async () => {}, confirmAsync: async () => true, showModal: () => {} } }
 });
 
+// game-state.js reads localStorage at module load time (easyMode persistence),
+// which doesn't exist outside a browser - stubbed so it's importable here.
+globalThis.localStorage ??= { getItem: () => null, setItem: () => {} };
+
 const { StoryReader } = await import('../src/components/story-reader.js');
 const { gameState } = await import('../src/game-state.js');
 
@@ -214,6 +218,24 @@ test('applyEffects: restoreHalfDamageTaken is a no-op with no prior combat', asy
   assert.equal(gameState.getState().character.resistenza, 10);
 });
 
+test('applyEffects: canAddItems routes weapon-named entries to the weapon slot, not the Zaino - see loot piles like Book 4 section 2', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ canAddItems: ['Spada', 'Pergamena'] });
+  const character = gameState.getState().character;
+  assert.deepEqual(character.armi, ['Spada'], 'a canonical weapon name must land in armi, not zaino');
+  assert.deepEqual(character.zaino, ['Pergamena'], 'a non-weapon item still goes to zaino as before');
+});
+
+test('applyEffects: removeItem also finds and removes an equipped weapon (not just Zaino/Oggetti Speciali) - see Book 4 section 327', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: ['Spada', 'Lancia'], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ removeItem: 'Spada' });
+  assert.deepEqual(gameState.getState().character.armi, ['Lancia']);
+});
+
 test('isDestinyTest: false when a non-range choice has no requirements at all (ambiguous shape, e.g. Book 1 section 21\'s 3-attempt reroll) - falls back to plain buttons rather than guessing', () => {
   const choices = [
     { text: 'Primo lancio: 5-9 (eviti la palude)', section: 189 },
@@ -221,4 +243,42 @@ test('isDestinyTest: false when a non-range choice has no requirements at all (a
     { text: 'Terzo lancio: 9 (ultima possibilità)', section: 312 }
   ];
   assert.equal(reader.isDestinyTest(choices), false);
+});
+
+test('buildEasyModeMap: finds the isVictory section regardless of its number (not hardcoded to 350)', () => {
+  const book = {
+    sections: {
+      1: { choices: [{ text: 'Vai', section: 2 }] },
+      2: { choices: [{ text: 'Vai', section: 400 }] },
+      350: { choices: [{ text: 'Vicolo cieco', section: 999 }] }, // a plain section, NOT the ending
+      400: { isVictory: true }
+    }
+  };
+  const r = new StoryReader(book);
+  r.buildEasyModeMap(book);
+  assert.equal(r.easyModeDistances[400], 0);
+  assert.notEqual(r.easyModeDistances[350], 0, 'section 350 must not be mistaken for the victory section');
+  assert.equal(r.easyModeDistances[1], 2);
+});
+
+test('buildEasyModeMap: combat fleeSection/loseSection/forceEndSection and numericPuzzle.correctSection count as story edges, not just choices', () => {
+  const book = {
+    sections: {
+      1: { combat: { name: 'Nemico', combattivita: 10, resistenza: 10, fleeSection: 2 } },
+      2: { combat: { name: 'Nemico', combattivita: 10, resistenza: 10, loseSection: 3, forceEndSection: 4 } },
+      3: { choices: [{ text: 'Continua', section: 4 }] },
+      4: { numericPuzzle: { correctSection: 5, wrongSection: 4 } },
+      5: { isVictory: true }
+    }
+  };
+  const r = new StoryReader(book);
+  r.buildEasyModeMap(book);
+  // Every section here reaches victory only through combat/puzzle fields
+  // (no section but 3 has a `choices` array) - if these fields aren't
+  // treated as edges, none of them get a distance at all.
+  assert.equal(r.easyModeDistances[5], 0);
+  assert.equal(r.easyModeDistances[4], 1);
+  assert.equal(r.easyModeDistances[3], 2);
+  assert.equal(r.easyModeDistances[2], 2, 'shortest via forceEndSection (2 hops: 2->4->5), not loseSection (3 hops: 2->3->4->5)');
+  assert.equal(r.easyModeDistances[1], 3);
 });

@@ -3,6 +3,7 @@ import { combatManager } from './combat-manager.js';
 import { UIHelpers } from '../utils/ui-helpers.js';
 import { saveManager } from '../save-manager.js';
 import { getRandomDestinyNumber } from './destiny-table.js';
+import { WEAPONS } from './character-creator.js';
 
 export class StoryReader {
   constructor(bookData, onContinueNextBook = null) {
@@ -17,7 +18,7 @@ export class StoryReader {
 
     let victorySectionId = null;
     for (const [id, sec] of Object.entries(bookData.sections)) {
-      if (sec.isVictory || id === '350') {
+      if (sec.isVictory) {
         victorySectionId = parseInt(id);
         break;
       }
@@ -33,18 +34,36 @@ export class StoryReader {
       updated = false;
       for (const [sIdStr, sec] of Object.entries(bookData.sections)) {
         const sId = parseInt(sIdStr);
-        if (!sec.choices) continue;
 
         let minD = Infinity;
         let best = null;
 
-        for (const c of sec.choices) {
+        for (const c of sec.choices || []) {
           if (c.section && dist[c.section] !== undefined) {
             if (dist[c.section] + 1 < minD) {
               minD = dist[c.section] + 1;
               best = c.section;
             }
           }
+        }
+
+        // Combat outcomes and map/code puzzles aren't buttons in a choices
+        // list, but they're still real story edges - without them, any
+        // section whose only way onward is a fight (win/flee/lose) or a
+        // numeric puzzle looks like a dead end, and everything upstream of
+        // it silently loses its distance-to-victory too. `best` stays a
+        // choices-only target since that's the only thing the UI can
+        // actually highlight as a clickable button.
+        const combats = Array.isArray(sec.combat) ? sec.combat : (sec.combat ? [sec.combat] : []);
+        for (const c of combats) {
+          for (const target of [c.fleeSection, c.loseSection, c.forceEndSection]) {
+            if (target && dist[target] !== undefined && dist[target] + 1 < minD) {
+              minD = dist[target] + 1;
+            }
+          }
+        }
+        if (sec.numericPuzzle && dist[sec.numericPuzzle.correctSection] !== undefined) {
+          minD = Math.min(minD, dist[sec.numericPuzzle.correctSection] + 1);
         }
 
         if (minD !== Infinity && (dist[sId] === undefined || minD < dist[sId])) {
@@ -371,6 +390,15 @@ export class StoryReader {
     // Add multiple items with confirmation
     if (effects.canAddItems) {
       for (const item of effects.canAddItems) {
+        // A loot pile sometimes mixes weapons in with Backpack Items (e.g.
+        // "search the bodies: Sword, Mace, Dagger, Backpack"). A weapon picked
+        // up this way must still go through the weapon slot (with its own
+        // 2-weapon swap prompt), not into the Zaino - otherwise it silently
+        // never counts as "equipped" for Scherma's mastery bonus.
+        if (WEAPONS.includes(item)) {
+          await this.handleWeaponAcquisition(item);
+          continue;
+        }
         const confirmed = await UIHelpers.confirmAsync(`Vuoi prendere ${item}?`);
         if (confirmed) {
           if (gameState.addToZaino(item)) {

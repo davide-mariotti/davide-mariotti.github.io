@@ -118,6 +118,8 @@ class GameState {
         } else if (this.state.character.oggettiSpeciali.includes(item)) {
             const oggettiSpeciali = this.state.character.oggettiSpeciali.filter(i => i !== item);
             this.updateStats({ oggettiSpeciali });
+        } else if (this.state.character.armi.includes(item)) {
+            this.removeWeapon(item);
         }
     }
 
