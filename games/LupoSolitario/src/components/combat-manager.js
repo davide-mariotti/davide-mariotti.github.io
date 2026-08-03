@@ -135,7 +135,10 @@ export class CombatManager {
             playerPenaltyNoItem: enemyData.playerPenaltyNoItem || null,
             psicoschermoPreventsLoss: enemyData.psicoschermoPreventsLoss || false,
             undead: enemyData.undead || false,
-            combatModifiers: enemyData.combatModifiers || []
+            combatModifiers: enemyData.combatModifiers || [],
+            doubleEnemyEnduranceLoss: enemyData.doubleEnemyEnduranceLoss || false,
+            playerEnduranceLossPerRound: enemyData.playerEnduranceLossPerRound || null,
+            allyDamagePerRound: enemyData.allyDamagePerRound || 0
         });
 
         this.log(`⚔️ Combattimento contro ${enemyData.name}!`);
@@ -265,10 +268,33 @@ export class CombatManager {
             enemyDamage *= 2;
         }
 
+        // A companion fights alongside the hero, chipping a fixed extra amount
+        // off the enemy every round regardless of how the hero's own round
+        // goes - see Book 3 section 180 (Fenor).
+        if (combat.allyDamagePerRound && enemyDamage !== 999) {
+            enemyDamage += combat.allyDamagePerRound;
+        }
+
+        // Some fights are narrated as "double all ENDURANCE points lost by the
+        // enemy" regardless of weapon (e.g. a knock-out/capture attempt) - see
+        // Book 2 section 306.
+        if (combat.doubleEnemyEnduranceLoss && enemyDamage !== 999) {
+            enemyDamage *= 2;
+        }
+
         // "Surprised" enemy that can't hurt the hero for its first few rounds
         const noLossMod = (combat.combatModifiers || []).find(m => m.type === 'noPlayerLossRounds');
         if (noLossMod && combat.rounds.length < noLossMod.rounds && heroDamage !== 999) {
             heroDamage = 0;
+        }
+
+        // Flat ENDURANCE loss every round on top of the normal combat result (e.g.
+        // an ongoing Mindblast/curse), optionally waived by a Kai Discipline -
+        // see Book 2 section 332 / Book 4 section 77.
+        const perRoundLoss = combat.playerEnduranceLossPerRound;
+        if (perRoundLoss && heroDamage !== 999) {
+            const waived = perRoundLoss.waivedByKaiArt && gameState.hasKaiArt(perRoundLoss.waivedByKaiArt);
+            if (!waived) heroDamage += perRoundLoss.value;
         }
 
         // Apply damage

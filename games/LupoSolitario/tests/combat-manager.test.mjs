@@ -189,6 +189,42 @@ test('fightRound: Sommerswerd doubles ENDURANCE lost by undead enemies, but only
   assert.equal(gameState.getState().combatState.currentEnemyResistenza, 22, '30 - 8, not doubled without undead flag');
 });
 
+test('fightRound: allyDamagePerRound adds a flat extra ENDURANCE loss to the enemy every round, independent of the hero\'s own roll - see Book 3 section 180', () => {
+  mockRollQueue = [0]; // ratio 0, destinyNumber 0 -> table['0'][0] = [enemyDamage 12, heroDamage 0]
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });
+  combatManager.startCombat({ name: 'Kalkoth', combattivita: 15, resistenza: 35, allyDamagePerRound: 3 });
+  combatManager.fightRound();
+  assert.equal(gameState.getState().combatState.currentEnemyResistenza, 20, '35 - (12+3)');
+});
+
+test('fightRound: doubleEnemyEnduranceLoss doubles ENDURANCE lost by the enemy regardless of weapon - see Book 2 section 306', () => {
+  mockRollQueue = [0]; // ratio 0, destinyNumber 0 -> table['0'][0] = [enemyDamage 12, heroDamage 0]
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });
+  combatManager.startCombat({ name: 'Border Guard', combattivita: 15, resistenza: 24, doubleEnemyEnduranceLoss: true });
+  combatManager.fightRound();
+  assert.equal(gameState.getState().combatState.currentEnemyResistenza, 0, '24 - (12*2), clamped at 0');
+});
+
+test('fightRound: playerEnduranceLossPerRound adds a flat ENDURANCE loss every round, waived by the given Kai Discipline - see Book 2 section 332', () => {
+  mockRollQueue = [0]; // ratio 0, destinyNumber 0 -> table['0'][0] = [enemyDamage 12, heroDamage 0]
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20, artiRamas: [] });
+  combatManager.startCombat({
+    name: 'Helghast', combattivita: 15, resistenza: 30,
+    playerEnduranceLossPerRound: { value: 2, waivedByKaiArt: 'Psicoschermo' }
+  });
+  combatManager.fightRound();
+  assert.equal(gameState.getState().character.resistenza, 18, '20 - (0 + 2) without Psicoschermo');
+
+  mockRollQueue = [0];
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20, artiRamas: ['Psicoschermo'] });
+  combatManager.startCombat({
+    name: 'Helghast', combattivita: 15, resistenza: 30,
+    playerEnduranceLossPerRound: { value: 2, waivedByKaiArt: 'Psicoschermo' }
+  });
+  combatManager.fightRound();
+  assert.equal(gameState.getState().character.resistenza, 20, 'waived entirely with Psicoschermo');
+});
+
 test('fightRound: noPlayerLossRounds modifier zeroes hero damage only during the protected rounds', () => {
   mockRollQueue = [1, 1];
   resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });
@@ -254,4 +290,19 @@ test('multi-enemy queue: defeating one enemy automatically engages the next', ()
   const result = combatManager.fightRound();
   assert.equal(result, 'next-enemy');
   assert.equal(gameState.getState().combatState.enemy, 'Enemy B');
+});
+
+test('multi-enemy queue: canFlee/fleeSection are read fresh from each enemy, not just the first - see Book 2 sections 90/185/296/298', () => {
+  mockRollQueue = [0];
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20 });
+  combatManager.startCombat([
+    { name: 'Enemy A', combattivita: 15, resistenza: 10, canFlee: true, fleeSection: 42 },
+    { name: 'Enemy B', combattivita: 15, resistenza: 10, canFlee: true, fleeSection: 42 }
+  ]);
+  assert.equal(combatManager.combatData.fleeSection, 42, 'first enemy carries its own fleeSection');
+
+  combatManager.fightRound();
+  assert.equal(combatManager.combatData.name, 'Enemy B');
+  assert.equal(combatManager.canFlee, true, 'flee stays available once the fight moves to the next enemy, as long as that enemy also allows it');
+  assert.equal(combatManager.combatData.fleeSection, 42, 'the section that navigateToSection/fleeCombat must read this from, not currentSection.combat (which has no .fleeSection on an array)');
 });

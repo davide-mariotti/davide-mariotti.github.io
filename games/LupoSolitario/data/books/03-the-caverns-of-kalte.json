@@ -860,7 +860,8 @@
   "55": {
    "text": "<p>Ti mancano meno di trenta metri dalla cima quando il dolore comincia a svanire. Alla fine non senti più nulla con le mani: ogni sensazione sotto gli avambracci è completamente intorpidita dal congelamento.</p><p>Con un ultimo sforzo, raggiungi una stretta cengia di ghiaccio dove puoi inginocchiarti e riposare. Ma presto scopri, con sgomento, che è impossibile risalire ulteriormente: ti trovi di fronte pareti di ghiaccio verticali che non offrono alcun appiglio sulle loro superfici lisce. Dovrai tornare sui tuoi passi. Passano più di quattro ore prima che la sensibilità ritorni alle tue mani. Il congelamento è grave e perdi 5 punti Resistenza. Inoltre, perdi anche 2 punti dalla tua Combattività iniziale: questa perdita di Combattività è permanente e ti accompagnerà per il resto della tua vita.</p><p>Ti occorrono altre cinque ore per raggiungere il fondo sano e salvo. Esausto e sofferente, ti fai forza per cercare un'altra via d'uscita da questo inferno di ghiaccio.</p>",
    "effects": {
-    "loseEndurance": 5
+    "loseEndurance": 5,
+    "loseCombattivita": 2
    },
    "choices": [
     {
@@ -1444,6 +1445,14 @@
      "text": "Se il tuo totale è ora da 9 a 11",
      "section": 214
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "item": "Olio di Baknar"
+     }
+    }
    ]
   },
   "97": {
@@ -1480,14 +1489,17 @@
    ]
   },
   "99": {
-   "text": "<p>Mentre estrai la tua possente lama, un bagliore dorato illumina l'oscurità del corridoio. L'Helghast strilla e indietreggia, gli occhi rossi che ardono d'odio e paura. Riconosce il potere che impugni, un potere capace di distruggerlo per sempre. Disperato, ti attacca con un potente Psicolaser: a meno che tu non possieda l'Arte Ramas dello Psicoschermo, perdi 2 punti Combattività per ogni scontro contro questa creatura. L'Helghast è immune al Psicolaser, ma essendo uno dei non-morti è particolarmente vulnerabile alla Spada del Sole: raddoppia tutti i punti Resistenza che perde a causa del suo potere.</p>",
+   "text": "<p>Mentre estrai la tua possente lama, un bagliore dorato illumina l'oscurità del corridoio. L'Helghast strilla e indietreggia, gli occhi rossi che ardono d'odio e paura. Riconosce il potere che impugni, un potere capace di distruggerlo per sempre. Disperato, ti attacca con un potente Psicolaser: a meno che tu non possieda l'Arte Ramas dello Psicoschermo, perdi 2 punti Resistenza per ogni round di questo combattimento. L'Helghast è immune al Psicolaser, ma essendo uno dei non-morti è particolarmente vulnerabile alla Spada del Sole: raddoppia tutti i punti Resistenza che perde a causa del suo potere.</p>",
    "combat": {
     "name": "Helghast",
     "combattivita": 22,
     "resistenza": 30,
-    "mindblast": true,
     "immuneToPsicolaser": true,
-    "undead": true
+    "undead": true,
+    "playerEnduranceLossPerRound": {
+     "value": 2,
+     "waivedByKaiArt": "Psicoschermo"
+    }
    },
    "choices": [
     {
@@ -1636,17 +1648,12 @@
     "name": "Barbaro dei Ghiacci",
     "combattivita": 16,
     "resistenza": 24,
-    "immuneToPsicolaser": false
+    "immuneToPsicolaser": false,
+    "canFlee": true,
+    "fleeAfterRounds": 1,
+    "fleeSection": 330
    },
    "choices": [
-    {
-     "text": "Se in questo momento vuoi dirigerti a sud (destra)",
-     "section": 330
-    },
-    {
-     "text": "Se vuoi dirigerti a nord (sinistra)",
-     "section": 198
-    },
     {
      "text": "Se vinci il combattimento",
      "section": 282
@@ -2070,7 +2077,9 @@
      "name": "Kalkoth 2",
      "combattivita": 10,
      "resistenza": 32,
-     "immuneToPsicolaser": false
+     "immuneToPsicolaser": false,
+     "canFlee": true,
+     "fleeSection": 277
     }
    ],
    "choices": [
@@ -2289,7 +2298,11 @@
      "text": "Se vuoi tentare di fuggire nell'arco lontano",
      "section": 211
     }
-   ]
+   ],
+   "effects": {
+    "loseEndurance": 2,
+    "waivedByItem": "Olio di Baknar"
+   }
   },
   "151": {
    "text": "<p>Mentre la bestia orrenda muore ai tuoi piedi, senti Dyce gridare: «Presto, dobbiamo allontanarci da qui. I Kalkoth non cacciano mai da soli.»</p><p>Afferrato lo Zaino, segui Dyce e Irian lungo un ripido sentiero di montagna, su e via dalla cengia di ghiaccio. Ma non avete percorso che una cinquantina di iarde quando la sciagura colpisce. Accecato dall'oscurità e dal vento gelido, Dyce non si accorge che il sentiero finisce bruscamente sull'orlo di un precipizio a strapiombo. Ti geli d'orrore sentendo le urla della tua guida svanire nel buio davanti a te. Con la morte che ti minaccia da ogni lato, ti aggrappi disperatamente alla roccia gelata.</p>",
@@ -2692,7 +2705,8 @@
     "combattivita": 11,
     "resistenza": 35,
     "immuneToPsicolaser": false,
-    "canFlee": false
+    "canFlee": false,
+    "allyDamagePerRound": 3
    },
    "choices": [
     {
@@ -2797,6 +2811,14 @@
     {
      "text": "Se il totale è ora da 5 a 11",
      "section": 326
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Sesto Senso"
+     }
     }
    ]
   },
@@ -3455,10 +3477,10 @@
    ]
   },
   "233": {
-   "text": "<p>Riconosci il liquido: è Laumspur distillato, un'erba dalle grandi proprietà curative. Questa pozione concentrata è abbastanza potente da restituire 5 punti Resistenza. Se vuoi conservare questa fiala, ricorda di segnarla sul tuo Registro di Guerra come Oggetto dello Zaino.</p>",
+   "text": "<p>Riconosci il liquido: è Laumspur Rossa, un'erba dalle grandi proprietà curative. Questa pozione rossa e concentrata è abbastanza potente da restituire 5 punti Resistenza. Se vuoi conservare questa fiala, ricorda di segnarla sul tuo Registro di Guerra come Oggetto dello Zaino.</p>",
    "effects": {
     "canAddItems": [
-     "Boccetta di Laumspur (ripristina 5 Resistenza)"
+     "Pozione di Laumspur Rossa"
     ]
    },
    "choices": [
@@ -3871,12 +3893,16 @@
     {
      "name": "Kalkoth 2",
      "combattivita": 10,
-     "resistenza": 32
+     "resistenza": 32,
+     "canFlee": true,
+     "fleeSection": 277
     },
     {
      "name": "Kalkoth 3",
      "combattivita": 8,
-     "resistenza": 30
+     "resistenza": 30,
+     "canFlee": true,
+     "fleeSection": 277
     }
    ],
    "choices": [
@@ -4409,7 +4435,9 @@
     "name": "Barbari dei Ghiacci di guardia",
     "combattivita": 17,
     "resistenza": 30,
-    "immuneToPsicolaser": false
+    "immuneToPsicolaser": false,
+    "forceEndAfterRounds": 3,
+    "forceEndSection": 173
    },
    "choices": [
     {
@@ -4564,9 +4592,12 @@
     "name": "Helghast",
     "combattivita": 22,
     "resistenza": 30,
-    "mindblast": true,
     "immuneToPsicolaser": true,
-    "undead": true
+    "undead": true,
+    "playerEnduranceLossPerRound": {
+     "value": 2,
+     "waivedByKaiArt": "Psicoschermo"
+    }
    },
    "choices": [
     {
@@ -4921,7 +4952,8 @@
   "331": {
    "text": "<p>Il giorno seguente, il clima diventa gelido e pungente. Un vento del nord porta una grandine di ghiaccio che ti sferza il volto. Le tue labbra presto si spaccano e sanguinano. A mezzogiorno, sei avvolto da una tormenta che rende il cammino lento e sfiancante. Il vento ululante ti costringe a scendere dalla slitta e spingerla. Ti senti completamente esausto. Le tue mani e le dita dei piedi sono intorpidite dal freddo; il sudore dello sforzo gela sulla tua pelle, ricoprendo di uno strato di ghiaccio stivali e guanti.</p><p>Quando raggiungi il bordo del ghiacciaio, è quasi notte. Siete tutti così esausti da avere a malapena la forza di piantare la tenda e consumare un pasto. Il disastro vi ha quasi sopraffatti: hai i geloni alle dita dei piedi, delle mani e al naso, e a meno che tu non abbia l'Arte Ramas della Guarigione, perdi 4 punti Resistenza.</p><p>Scegli un numero dalla Tabella del Destino.</p>",
    "effects": {
-    "loseEndurance": 4
+    "loseEndurance": 4,
+    "waivedByKaiArt": "Guarigione"
    },
    "choices": [
     {

@@ -261,7 +261,7 @@
     },
     {
      "text": "Da 3 a 9",
-     "section": 331
+     "section": 316
     }
    ]
   },
@@ -336,6 +336,16 @@
     {
      "text": "Terzo lancio: 9 (ultima possibilità)",
      "section": 312
+    },
+    {
+     "text": "Secondo lancio: 0-7 (affoghi nel fango)",
+     "section": null,
+     "isDeathSection": true
+    },
+    {
+     "text": "Terzo lancio: diverso da 9 (il fango ti trascina giù)",
+     "section": null,
+     "isDeathSection": true
     }
    ]
   },
@@ -580,7 +590,7 @@
    ]
   },
   "39": {
-   "text": "<p>Dopo un attimo due piccole facce pelose e spaventate compaiono da dietro il tronco. Dicono di essere Kakarmi e ti informano che i Kraan sono dappertutto. Il loro paese si trova verso ovest, ma ormai ne rimane ben poco. Stanno cercando gli altri della loro tribù che sono fuggiti nella foresta durante l'attacco dei Kraan. Ti dicono che il sentiero verso est, quello dietro a loro, è senza uscita; però qualche metro più avanti nel sottobosco pu Human trovare una vecchia torre di guardia dove il sentiero si biforca. Tu devi prendere quello che porta a est, fino alla grande strada che collega Holmgard, la capitale, con il porto settentrionale di Toran. Ringrazi i Kakarmi e li saluti.</p>",
+   "text": "<p>Dopo un attimo due piccole facce pelose e spaventate compaiono da dietro il tronco. Dicono di essere Kakarmi e ti informano che i Kraan sono dappertutto. Il loro paese si trova verso ovest, ma ormai ne rimane ben poco. Stanno cercando gli altri della loro tribù che sono fuggiti nella foresta durante l'attacco dei Kraan. Ti dicono che il sentiero verso est, quello dietro a loro, è senza uscita; però qualche metro più avanti nel sottobosco puoi trovare una vecchia torre di guardia dove il sentiero si divide in tre direzioni. Tu devi prendere quello che porta a est, fino alla grande strada che collega Holmgard, la capitale, con il porto settentrionale di Toran. Ringrazi i Kakarmi e li saluti.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -839,7 +849,7 @@
    "choices": [
     {
      "text": "Acquattati tra le rocce e aspetta che passino",
-     "section": 286
+     "section": 251
     },
     {
      "text": "Continua a correre con l'arma pronta",
@@ -880,10 +890,10 @@
    ]
   },
   "62": {
-   "text": "<p>I 'soldati' giacciono morti ai tuoi piedi. Erano banditi che rapinavano i profughi di Toran, e razziavano le case e le fattorie abbandonate della zona. Frugandoli trovi 28 Corone d'oro e due Zaini con dentro abbastanza cibo per due Pasti. Erano armati con una balestra e tre Spade. La balestra è rimasta danneggiata nel combattimento, ma le Spade sono intatte e, se vuoi, puoi tenerne una. Sistemi il tuo equipaggiamento, guardi verso ovest che non ci siano pericoli e continui a correre verso le fortificazioni della capitale.</p>",
+   "text": "<p>I 'soldati' giacciono morti ai tuoi piedi. Erano banditi che rapinavano i profughi di Toran, e razziavano le case e le fattorie abbandonate della zona. Frugandoli trovi 28 Corone d'oro e due Zaini con dentro abbastanza cibo per tre Pasti. Erano armati con una balestra e tre Spade. La balestra è rimasta danneggiata nel combattimento, ma le Spade sono intatte e, se vuoi, puoi tenerne una. Sistemi il tuo equipaggiamento, guardi verso ovest che non ci siano pericoli e continui a correre verso le fortificazioni della capitale.</p>",
    "effects": {
     "addGold": 28,
-    "canAddMeals": 2,
+    "canAddMeals": 3,
     "canAddWeapon": "Spada"
    },
    "choices": [
@@ -946,7 +956,7 @@
    "choices": [
     {
      "text": "Vai a est",
-     "section": 140
+     "section": 252
     }
    ]
   },
@@ -1017,8 +1027,8 @@
    "text": "<p>Ti giri e ti trovi davanti il ghigno di un Giak e le zanne affilate della sua cavalcatura. Devi combattere come se fosse un solo nemico.</p>",
    "combat": {
     "name": "Giak + Tigerwolf",
-    "combattivita": 18,
-    "resistenza": 20,
+    "combattivita": 15,
+    "resistenza": 24,
     "immuneToPsicolaser": false,
     "canFlee": false
    },
@@ -1135,7 +1145,7 @@
    ]
   },
   "82": {
-   "text": "<p>Il gigante Gurgaz giace morto ai tuoi piedi. I suoi diabolici seguaci ti sibilano contro, e poi si allontanano dal ponte. I soldati del principe formano con gli scudi una barriera intorno a te e al loro capo che sta morendo. Una pioggia di frecce nere ti sfiorano la testa. Il principe morente ti guarda negli occhi e dice 'Nobile Ramas, porta questo messaggio a mio padre. Il nemico è troppo forte e noi non possiamo fermarlo. Il Re deve cercare aiuto a Durenor, o tutto è perduto. Prendi il mio cavallo e corri alla capitale. Che il favore degli dei cavalchi al tuo fianco'. Saluti mestamente il principe, salti sul suo cavallo bianco e ti dirigi a sud lungo il sentiero nella foresta. La battaglia ancora infuria dietro di te mentre gli uomini del principe respingono un altro assalto sul ponte.</p>",
+   "text": "<p>Il gigante Gurgaz giace morto ai tuoi piedi. I suoi diabolici seguaci ti sibilano contro, e poi si allontanano dal ponte. I soldati del principe formano con gli scudi una barriera intorno a te e al loro capo che sta morendo. Una pioggia di frecce nere ti sfiorano la testa. Il principe morente ti guarda negli occhi e dice 'Nobile Ramas, porta questo messaggio a mio padre. Il nemico è troppo forte e noi non possiamo fermarlo. Il Re deve cercare ciò che si trova a Durenor, o tutto è perduto. Prendi il mio cavallo e corri alla capitale. Che il favore degli dei cavalchi al tuo fianco'. Saluti mestamente il principe, salti sul suo cavallo bianco e ti dirigi a sud lungo il sentiero nella foresta. La battaglia ancora infuria dietro di te mentre gli uomini del principe respingono un altro assalto sul ponte.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -1475,7 +1485,7 @@
    ]
   },
   "108": {
-   "text": "<p>Con un salto mortale ti lanci verso il tetto opposto. Tutto sembra accadere al rallentatore. Vedi la folla che si muove nelle strade, e alla tua destra, sotto un tetto, un nido di passeri. Senti le grida spaventate della gente quando atterri con uno schianto dall'altra parte. È l'ultimo suono che sentirai. Le tegole si frantumano e crollano e tu precipiti per tutti i quattro piani della locanda 'All'Orso Grigio' rompendoti la spina dorsale. La tua missione e la tua vita finiscono qui.</p>",
+   "text": "<p>Con un salto mortale ti lanci verso il tetto opposto. Tutto sembra accadere al rallentatore. Vedi la folla che si muove nelle strade, e alla tua destra, sotto un tetto, un nido di passeri. Senti le grida spaventate della gente quando atterri con uno schianto dall'altra parte. È l'ultimo suono che sentirai. Le tegole si frantumano e crollano e tu precipiti per tutti i quattro piani della locanda 'Alla Pantofola Verde' rompendoti la spina dorsale. La tua missione e la tua vita finiscono qui.</p>",
    "isDeathSection": true,
    "choices": [],
    "image": "public/img/book01/sec108.png"
@@ -1752,8 +1762,7 @@
      "text": "Usa l'Arte della Caccia",
      "section": 297,
      "requirements": {
-      "kaiArt": "Caccia",
-      "item": "Ascia"
+      "kaiArt": "Caccia"
      }
     },
     {
@@ -2003,7 +2012,8 @@
   "144": {
    "text": "<p>A stento riesci a farti strada nella calca che riempie la strada verso la rocca. Gli abitanti corrono di qua e di là in preda al panico udendo le grida dei Kraan che volteggiano sulle loro teste. Nella confusione ti viene rubato un Oggetto dallo Zaino. Se non hai più lo Zaino, devi perdere un'Arma. Segna la perdita sul Registro di Guerra. Un carro trascinato da un cavallo senza guida passa a tutta velocità e ti scaraventa contro un portone. Sei intontito e perdi 2 punti di Resistenza! Mentre ti stai rialzando la porta si apre di colpo e un vecchio decrepito ti attacca con un coltellaccio. È completamente pazzo e devi difenderti o cercare di sottrarti.</p>",
    "effects": {
-    "loseEndurance": 2
+    "loseEndurance": 2,
+    "loseRandomItem": true
    },
    "choices": [
     {
@@ -2028,7 +2038,7 @@
   "146": {
    "text": "<p>Hai cavalcato per un paio di chilometri quando vieni sbalzato da cavallo a causa di una freccia, che fortunatamente ti ferisce solo di striscio alla fronte. Perdi 2 punti di Resistenza. Mentre ti rimetti in piedi vedi dei Drakkar uscire dal bosco da entrambi i lati della strada. È un'imboscata: devi metterti in salvo il più presto possibile entrando nella foresta.</p>",
    "effects": {
-    "loseEndurance": 2
+    "loseEndurance": 3
    },
    "choices": [
     {
@@ -2100,6 +2110,10 @@
      "requirements": {
       "kaiArt": "Telecinesi"
      }
+    },
+    {
+     "text": "Togli lo spillo",
+     "section": 337
     }
    ]
   },
@@ -2606,7 +2620,10 @@
    "choices": [
     {
      "text": "Numero 0-6: il Kraan ti strappa lo zaino",
-     "section": 303
+     "section": 303,
+     "effects": {
+      "loseAllItems": true
+     }
     },
     {
      "text": "Numero 7-9: salvi lo Zaino ma vieni ferito (-3 Resistenza)",
@@ -2732,10 +2749,10 @@
    ]
   },
   "197": {
-   "text": "<p>Il Drakkar giace morto sul ponte del traghetto. È armato con una Daga e ha 6 Corone d'oro: se vuoi puoi tenerle. Spingi il corpo in acqua e lo vedi galleggiare per un attimo prima che scompaia nei gelidi abissi. Manovrando con la lunga asta raggiungi l'altra sponda del lago e abbandoni il traghetto.</p>",
+   "text": "<p>Il Drakkar giace morto sul ponte del traghetto. È armato con una Spada Corta e ha 6 Corone d'oro: se vuoi puoi tenerle. Spingi il corpo in acqua e lo vedi galleggiare per un attimo prima che scompaia nei gelidi abissi. Manovrando con la lunga asta raggiungi l'altra sponda del lago e abbandoni il traghetto.</p>",
    "effects": {
     "addGold": 6,
-    "canAddWeapon": "Daga"
+    "canAddWeapon": "Spada Corta"
    },
    "choices": [
     {
@@ -2794,7 +2811,7 @@
     },
     {
      "text": "Vai a est",
-     "section": 215
+     "section": 15
     },
     {
      "text": "Vai a ovest",
@@ -2853,7 +2870,11 @@
      "text": "Numero 5-9",
      "section": 145
     }
-   ]
+   ],
+   "effects": {
+    "loseAllWeapons": true,
+    "loseAllItems": true
+   }
   },
   "206": {
    "text": "<p>Il sentiero raggiunge una strada dove un cartello indica Toran a nord e Holmgard a sud. Vai verso la capitale.</p>",
@@ -2977,7 +2998,7 @@
    ]
   },
   "216": {
-   "text": "<p>Appoggiando una mano sulla sua fronte e l'altra sul suo braccio senti il calore dei tuoi poteri di Guarigione trasmettersi e dare forza all'uomo ferito. Ti dice che il suo nome è Trimis, è un soldato dell'esercito del principe Pelalar. Il principe e le sue truppe sono impegnati in una battaglia a sud, dove le creature dei Signori delle Tenebre stanno portando un massiccio attacco al ponte di Alema. Lui è stato afferrato da un Kraan ed è caduto poi nella foresta. Cerchi di sistemarlo alla meglio e continui il tuo viaggio.</p>",
+   "text": "<p>Appoggiando una mano sulla sua fronte e l'altra sul suo braccio senti il calore dei tuoi poteri di Guarigione trasmettersi e dare forza all'uomo ferito. Ti dice che il suo nome è Trimis, è un soldato dell'esercito del principe Pelatar. Il principe e le sue truppe sono impegnati in una battaglia a sud, dove le creature dei Signori delle Tenebre stanno portando un massiccio attacco al ponte di Alema. Lui è stato afferrato da un Kraan ed è caduto poi nella foresta. Cerchi di sistemarlo alla meglio e continui il tuo viaggio.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -3156,7 +3177,7 @@
     "name": "Kraan",
     "combattivita": 16,
     "resistenza": 25,
-    "playerCombatBonus": -1
+    "playerCombatPenalty": 1
    },
    "choices": [
     {
@@ -3264,7 +3285,9 @@
   "236": {
    "text": "<p>La Gemma sta sospesa sopra la testa dello scheletro, ed emette un chiarore rossastro. Improvvisamente una violenta esplosione di fuoco esce dal sarcofago distruggendo la Gemma. La violenza dello scoppio ti scaglia contro la parete opposta e il colpo ti fa perdere i sensi. Quando li svegli la stanza è vuota. Lo scheletro e il sarcofago sono svaniti. Hai perso 6 punti di Resistenza e la tua Combattività iniziale è ridotta di un punto per sempre. Ti rimetti in piedi e ti trascini verso la galleria.</p>",
    "effects": {
-    "loseEndurance": 6
+    "loseEndurance": 6,
+    "removeItem": "Gemma Vordak",
+    "loseCombattivita": 1
    },
    "choices": [
     {
@@ -3390,7 +3413,10 @@
      "text": "Se vinci",
      "section": 197
     }
-   ]
+   ],
+   "effects": {
+    "removeGold": 2
+   }
   },
   "247": {
    "text": "<p>Il mercante sembra arrabbiato e chiama la guardia del corpo. Devi escogitare rapidamente qualcosa.</p>",
@@ -3622,7 +3648,10 @@
      "text": "Salta dal carrozzone in corsa",
      "section": 234
     }
-   ]
+   ],
+   "effects": {
+    "removeGold": 10
+   }
   },
   "263": {
    "text": "<p>Cautamente segui il ruscello che va verso est. Improvvisamente noti qualcosa e ti fermi. Il cadavere di un Kraan giace di traverso nella corrente, come un'orrenda diga. Ti avvicini con cautela e vedi tre frecce piantate nel suo petto. Schiacciato sotto la bestia c'è il corpo del Giak che lo montava. I Giak sono i malvagi servitori dei Signori delle Tenebre. Molti secoli fa i loro antenati furono impiegati dai Signori delle Tenebre come schiavi per costruire l'infernale città di Helgedad che si trova nelle desolate terre vulcaniche oltre i monti Dumcrag. La costruzione della città fu un lungo e tormentato incubo, e solo i più forti dei Giak sopravvissero all'aria soffocante e nociva di Helgedad. Questo essere è un discendente di quegli schiavi. Dev'essere morto annegato. La borsa del Giak contiene 3 Corone d'oro, che puoi prendere.</p>",
@@ -3965,12 +3994,25 @@
   "291": {
    "text": "<p>I due Giak sono ai tuoi piedi, riversi ed esanimi. Gli trovi addosso 6 Corone d'oro, un Pugnale e due Lance. Puoi prendere l'oro, e tenere o il Pugnale o una Lancia, segnando tutto sul Registro di Guerra. Il Kraan è volato via durante il combattimento. Sistemi lo Zaino e prosegui il viaggio.</p>",
    "effects": {
-    "addGold": 6,
-    "canAddWeapon": "Lancia"
+    "addGold": 6
    },
    "choices": [
     {
-     "text": "Continua",
+     "text": "Prendi il Pugnale e continua",
+     "section": 272,
+     "effects": {
+      "canAddWeapon": "Pugnale"
+     }
+    },
+    {
+     "text": "Prendi la Lancia e continua",
+     "section": 272,
+     "effects": {
+      "canAddWeapon": "Lancia"
+     }
+    },
+    {
+     "text": "Non prendere nessuna delle due armi e continua",
      "section": 272
     }
    ]
@@ -4678,7 +4720,7 @@
      "Torcia",
      "Acciarino"
     ],
-    "canAddWeapon": "Daga"
+    "canAddWeapon": "Spada Corta"
    },
    "choices": [
     {
@@ -4699,7 +4741,7 @@
   },
   "349": {
    "image": "public/img/book01/sec349.png",
-   "text": "<p>È un giovane biondo, con gli occhi malinconici. Porta sul volto i segni della battaglia, e la lunga veste azzurra in cattive condizioni mostra che ha vissuto a lungo alla macchia. Ti stringe la mano e si inchina. \"Ti ringrazio profondamente, cavaliere. I miei poteri sono quasi esauriti. Se tu non mi avessi aiutato avrei finito i miei giorni infilzato sulla punta di una lancia Giak\". E' debole e si regge a stento. Lo prendi per un braccio e lo fai sedere su un masso. Il giovane comincia il suo racconto: \"Il mio nome è Banedon. Sono un iniziato della Fratellanza della Stella di Cristallo, la corporazione dei maghi di Toran. Il mio Maestro mi ha inviato al tuo monastero con questo messaggio urgente\". Così dicendo prende una pergamena da sotto la veste e te la porge. \"Come vedi ho aperto la lettera e ho letto il contenuto. Quando la guerra è cominciata mi trovavo per strada con due compagni di viaggio. I Kraan ci hanno attaccato e durante la fuga ci siamo persi nella foresta\". La lettera avvisa i Ramas che i Signori delle Tenebre hanno radunato un enorme esercito al di là dei monti Durncrag. Il Maestro esorta a annullare i festeggiamenti di Fendar e a prepararsi per la guerra. “Temo che siamo stati traditi\", dice Banedon con un'espressione di dolore. \"Uno dei miei confratelli, di nome Vonatar, aveva approfondito i misteri proibiti dell'Art Nera. Dieci giorni or sono ha rinnegato la Fratellanza e ha assassinato uno degli anziani. Poi è scomparso. Dicono che ora sta con i Signori delle Tenebre\". Racconti a Banedon cosa è successo al monastero, e della tua missione. Senza dir nulla si toglie dal collo una catena d'oro e te la porge. Appesa alla catena c'è una piccola Stella di Cristallo. \"E' il simbolo della mia Fratellanza: in quest'ora buia siamo davvero fratelli. È un talismano benefico che ti proteggerà nel tuo cammino\". Lo ringrazi e ti metti la catena intorno al collo nascondendola sotto la tunica. (Ricordati di segnarla sul tuo Registro di Guerra). Banedon ti saluta \"Dobbiamo lasciare questo luogo perché i Giak potrebbero tornare con dei rinforzi. Devo tornare alla mia corporazione. Addio fratello. Che il cielo ti protegga\".</p>",
+   "text": "<p>È un giovane biondo, con gli occhi malinconici. Porta sul volto i segni della battaglia, e la lunga veste azzurra in cattive condizioni mostra che ha vissuto a lungo alla macchia. Ti stringe la mano e si inchina. \"Ti ringrazio profondamente, cavaliere. I miei poteri sono quasi esauriti. Se tu non mi avessi aiutato avrei finito i miei giorni infilzato sulla punta di una lancia Giak\". E' debole e si regge a stento. Lo prendi per un braccio e lo fai sedere su un masso. Il giovane comincia il suo racconto: \"Il mio nome è Banedon. Sono un iniziato della Fratellanza della Stella di Cristallo, la corporazione dei maghi di Toran. Il mio Maestro mi ha inviato al tuo monastero con questo messaggio urgente\". Così dicendo prende una pergamena da sotto la veste e te la porge. \"Come vedi ho aperto la lettera e ho letto il contenuto. Quando la guerra è cominciata mi trovavo per strada con due compagni di viaggio. I Kraan ci hanno attaccato e durante la fuga ci siamo persi nella foresta\". La lettera avvisa i Ramas che i Signori delle Tenebre hanno radunato un enorme esercito al di là dei monti Durncrag. Il Maestro esorta a annullare i festeggiamenti di Fendar e a prepararsi per la guerra. “Temo che siamo stati traditi\", dice Banedon con un'espressione di dolore. \"Uno dei miei confratelli, di nome Vonotar, aveva approfondito i misteri proibiti dell'Art Nera. Dieci giorni or sono ha rinnegato la Fratellanza e ha assassinato uno degli anziani. Poi è scomparso. Dicono che ora sta con i Signori delle Tenebre\". Racconti a Banedon cosa è successo al monastero, e della tua missione. Senza dir nulla si toglie dal collo una catena d'oro e te la porge. Appesa alla catena c'è una piccola Stella di Cristallo. \"E' il simbolo della mia Fratellanza: in quest'ora buia siamo davvero fratelli. È un talismano benefico che ti proteggerà nel tuo cammino\". Lo ringrazi e ti metti la catena intorno al collo nascondendola sotto la tunica. (Ricordati di segnarla sul tuo Registro di Guerra). Banedon ti saluta \"Dobbiamo lasciare questo luogo perché i Giak potrebbero tornare con dei rinforzi. Devo tornare alla mia corporazione. Addio fratello. Che il cielo ti protegga\".</p>",
    "effects": {
     "canAddItems": [
      "Stella di Cristallo"

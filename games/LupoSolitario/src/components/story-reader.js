@@ -449,9 +449,15 @@ export class StoryReader {
     }
 
     // Direct endurance loss (sometimes waived entirely by a Kai Discipline, e.g.
-    // "lose 2 Endurance unless you have Mindshield")
+    // "lose 2 Endurance unless you have Mindshield", or by possessing/having
+    // applied an item, e.g. "lose 2 Endurance unless you applied Baknar oil" -
+    // see Book 3 sections 331/150).
     if (effects.loseEndurance) {
-      const prevented = effects.psicoschermoPreventsLoss && gameState.hasKaiArt('Psicoschermo');
+      const character = gameState.getState().character;
+      const hasItem = (item) => character.zaino.includes(item) || character.armi.includes(item) || character.oggettiSpeciali.includes(item);
+      const prevented = (effects.psicoschermoPreventsLoss && gameState.hasKaiArt('Psicoschermo')) ||
+        (effects.waivedByKaiArt && gameState.hasKaiArt(effects.waivedByKaiArt)) ||
+        (effects.waivedByItem && hasItem(effects.waivedByItem));
       if (!prevented) {
         gameState.takeDamage(effects.loseEndurance);
         UIHelpers.showToast(`💔 Persi ${effects.loseEndurance} punti Resistenza`, 'error');
@@ -534,6 +540,21 @@ export class StoryReader {
       UIHelpers.showToast('💚 Resistenza completamente recuperata!', 'success');
     }
 
+    // Restore ENDURANCE based on lifetime damage taken (not just the last
+    // combat): full recovery with the given Kai Discipline, half of all
+    // ENDURANCE ever lost without it - see Book 2 section 240.
+    if (effects.restoreEnduranceFromTotalLost) {
+      const state = gameState.getState();
+      if (gameState.hasKaiArt(effects.restoreEnduranceFromTotalLost.kaiArt)) {
+        gameState.heal(state.character.resistenzaMax);
+        UIHelpers.showToast('💚 Resistenza completamente recuperata!', 'success');
+      } else {
+        const amount = Math.floor((state.character.totalEnduranceLost || 0) / 2);
+        gameState.heal(amount);
+        UIHelpers.showToast(`💚 Recuperati ${amount} punti Resistenza`, 'success');
+      }
+    }
+
     // Damage
     if (effects.damage) {
       gameState.takeDamage(effects.damage);
@@ -557,10 +578,36 @@ export class StoryReader {
       }
     }
 
-    // Automatic items (e.g. from Loot)
+    // Lose the Backpack and everything in it - Weapons are untouched (they're
+    // a separate Action Chart section); combine with loseAllWeapons for
+    // sections that narrate losing both - see Book 3 section 49 / Book 4
+    // sections 94/158/342 (Backpack only) vs Book 1 sections 258/294 (both).
     if (effects.loseAllItems) {
-      gameState.clearEquipment();
-      UIHelpers.showToast('🎒 Hai perso tutto il tuo equipaggiamento!', 'error');
+      gameState.clearZaino();
+      UIHelpers.showToast('🎒 Hai perso lo Zaino e tutto il suo contenuto!', 'error');
+    }
+
+    // Lose a single random Backpack item (e.g. pickpocketed); falls back to a
+    // random weapon if the Backpack is empty - see Book 1 section 144.
+    if (effects.loseRandomItem) {
+      const { zaino, armi } = gameState.getState().character;
+      if (zaino.length > 0) {
+        const lostItem = zaino[Math.floor(Math.random() * zaino.length)];
+        gameState.removeFromZaino(lostItem);
+        UIHelpers.showToast(`🎒 Ti hanno rubato: ${lostItem}`, 'error');
+      } else if (armi.length > 0) {
+        const lostWeapon = armi[Math.floor(Math.random() * armi.length)];
+        gameState.removeWeapon(lostWeapon);
+        UIHelpers.showToast(`⚔️ Ti hanno rubato l'arma: ${lostWeapon}`, 'error');
+      }
+    }
+
+    // Permanent Combat Skill reduction ("your initial COMBAT SKILL is reduced
+    // by 1 point for the rest of your life") - rare, see Book 1 section 236.
+    if (effects.loseCombattivita) {
+      const state = gameState.getState();
+      gameState.updateStats({ combattivita: state.character.combattivita - effects.loseCombattivita });
+      UIHelpers.showToast(`⚔️ Combattività ridotta permanentemente di ${effects.loseCombattivita}`, 'error');
     }
 
     // Restore half the ENDURANCE lost in the combat that just ended (rounded
@@ -703,16 +750,20 @@ export class StoryReader {
       return;
     }
 
+    // Read fleeSection from the currently engaged enemy (combatManager.combatData),
+    // not from currentSection.combat directly - for a multi-enemy fight that's an
+    // array, which has no .fleeSection of its own even when every enemy in it does.
+    const fleeSection = combatManager.combatData && combatManager.combatData.fleeSection;
+
     if (combatManager.flee()) {
       // Fleeing can still cost enough Resistenza to kill the hero
       const died = await this.checkDeath();
       if (died) return;
 
-      const state = gameState.getState();
-      const currentSection = this.bookData.sections[state.currentSection];
-
-      if (currentSection.combat && currentSection.combat.fleeSection) {
-        this.navigateToSection(currentSection.combat.fleeSection, currentSection);
+      if (fleeSection) {
+        const state = gameState.getState();
+        const currentSection = this.bookData.sections[state.currentSection];
+        this.navigateToSection(fleeSection, currentSection);
       } else {
         // Fallback if no flee section defined
         this.update(document.getElementById('story-reader'), gameState.getState());

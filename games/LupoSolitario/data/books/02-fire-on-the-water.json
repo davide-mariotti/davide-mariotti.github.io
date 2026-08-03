@@ -101,7 +101,13 @@
     "name": "Dorier + Ganon",
     "combattivita": 28,
     "resistenza": 30,
-    "immuneToPsicolaser": true
+    "immuneToPsicolaser": true,
+    "combatModifiers": [
+     {
+      "type": "firstRound",
+      "value": 2
+     }
+    ]
    },
    "choices": [
     {
@@ -197,7 +203,60 @@
    "text": "<p>Il suo sguardo sospettoso si trasforma in sorpresa. «Credevo tu fossi un impostore, cavaliere Ramas. Devo confessare che avevo intenzione di darti una lezione che non avresti dimenticato per tutta la vita. Perdona i miei dubbi, ma la tua storia sembrava cosi grave che mi sono rifiutato di crederci per paura che fosse vera. Sono votato alla difesa del confine e non posso lasciare questa torre, ma ti offro qualsiasi mio possedimento se puo aiutarti nella tua missione.»</p><p>Posa i seguenti oggetti su un grande tavolo di quercia e ti invita a fare la tua scelta:</p><p>Mentre stai per lasciare la torre, ti indica la direzione da prendere.</p><p>«Quando raggiungi il Rymerift, prendi il sentiero verso nord. Arriverai a un ponte sorvegliato dagli uomini del Re. Quando ti chiederanno la parola d'ordine, rispondi con la parola “tramonto”. La strada oltre il Rymerift conduce a Port Bax. Buona fortuna, Lupo Solitario.»</p><p>Ringrazi il coraggioso guerriero e te ne vai. Devi abbandonare il tuo cavallo alla torre di guardia, poiche sarebbe impossibile attraversare la fitta boscaglia a cavallo.</p>",
    "choices": [
     {
-     "text": "Prosegui",
+     "text": "Prendi lo Spadone",
+     "section": 244,
+     "effects": {
+      "canAddWeapon": "Spadone"
+     }
+    },
+    {
+     "text": "Prendi la Mazza",
+     "section": 244,
+     "effects": {
+      "canAddWeapon": "Mazza"
+     }
+    },
+    {
+     "text": "Prendi l'Asta",
+     "section": 244,
+     "effects": {
+      "canAddWeapon": "Asta"
+     }
+    },
+    {
+     "text": "Prendi la Pozione Curativa",
+     "section": 244,
+     "effects": {
+      "canAddItems": [
+       "Pozione Curativa"
+      ]
+     }
+    },
+    {
+     "text": "Prendi il cibo per 3 Pasti",
+     "section": 244,
+     "effects": {
+      "canAddMeals": 3
+     }
+    },
+    {
+     "text": "Prendi lo Zaino",
+     "section": 244,
+     "effects": {
+      "canAddItems": [
+       "Zaino"
+      ]
+     }
+    },
+    {
+     "text": "Prendi 12 Corone d'Oro",
+     "section": 244,
+     "effects": {
+      "addGold": 12
+     }
+    },
+    {
+     "text": "Non prendere nulla e prosegui",
      "section": 244
     }
    ]
@@ -331,7 +390,14 @@
      "text": "Se possiedi l'Arte Ramas del Sesto Senso o della Telecinesi",
      "section": 116,
      "requirements": {
-      "kaiArt": "Sesto Senso"
+      "anyOf": [
+       {
+        "kaiArt": "Sesto Senso"
+       },
+       {
+        "kaiArt": "Telecinesi"
+       }
+      ]
      }
     },
     {
@@ -738,7 +804,8 @@
   "55": {
    "text": "<p>Un uomo grande e grosso, vestito con un grembiule di cuoio, sta affilando con cura una splendida spada. È seduto davanti a una mola che manda scintille in alto ogni volta che vi accosta la lama. Ti augura la buonasera e ti offre la spada.</p><p>«È una bella lama, forgiata in acciaio di Durenor. Può essere tua per sole 12 Corone d'Oro.»</p><p>Se vuoi acquistare questa spada, segnala sul tuo Registro di Guerra.</p>",
    "effects": {
-    "canAddWeapon": "Spada"
+    "canAddWeapon": "Spada",
+    "removeGold": 12
    },
    "choices": [
     {
@@ -979,7 +1046,8 @@
   "72": {
    "text": "<p>L'oste prende la tua Corona d'Oro e posa sul bancone un boccale di birra schiumante. La birra è forte e corroborante. Ripristina 1 punto Resistenza al tuo totale attuale.</p>",
    "effects": {
-    "restoreEndurance": 1
+    "restoreEndurance": 1,
+    "removeGold": 1
    },
    "choices": [
     {
@@ -991,6 +1059,9 @@
      "section": 56,
      "requirements": {
       "minGold": 2
+     },
+     "effects": {
+      "removeGold": 2
      }
     },
     {
@@ -1028,7 +1099,8 @@
       "minGold": 10
      },
      "effects": {
-      "addItem": "Lasciapassare Bianco"
+      "addItem": "Lasciapassare Bianco",
+      "removeGold": 10
      }
     },
     {
@@ -1066,7 +1138,8 @@
   "78": {
    "text": "<p>Ti getti all'indietro, ma solo appena in tempo per evitare l'albero maestro che precipita, sfondando il ponte. Ti rialzi barcollando e scruti tra la massa di travi in frantumi. Intrappolato sotto l'albero spezzato giace il corpo senza vita del capitano Kelman.</p><p>Mentre osservi inorridito, un forte scricchiolio riempie l'aria quando la tempesta squarcia lo scafo gia danneggiato della Green Sceptre. Mentre la nave si sfascia, vieni scaraventato fuori bordo, nel mare in tempesta.</p><p>Ansimando per l'aria, ti arrampichi verso la superficie ma sbatti la testa contro un boccaporto. Perdi 1 punto Resistenza e ti issi su questa zattera di fortuna. Se indossi un Farsetto di Maglia, devi liberartene subito o affogherai di certo. Nella luce grigia della tempesta, guardi la nave spezzata inabissarsi nel mare in tumulto. Ti senti stordito e molto malato. Aggrappandoti al boccaporto con tutte le tue forze, scivoli gradualmente nell'incoscienza.</p><p>Quando finalmente ti risvegli, la tempesta e passata. L'unica traccia della Green Sceptre e il boccaporto su cui giaci. Dalla posizione del sole, supponi che sia tardo pomeriggio. In lontananza scorgi una piccola barca da pesca e, oltre di essa, la costa si estende lungo l'orizzonte.</p>",
    "effects": {
-    "loseEndurance": 1
+    "loseEndurance": 1,
+    "removeItem": "Farsetto di Maglia"
    },
    "choices": [
     {
@@ -1080,7 +1153,7 @@
    ]
   },
   "79": {
-   "text": "<p>Il potere che scorre nel tuo corpo sopraffa a tal punto i tuoi sensi che diventi ignaro di cio che ti circonda. Sollevi istintivamente la lama sopra la testa, dove un raggio di sole ne coglie improvvisamente la punta e inonda la camera di un bagliore bianco accecante. In quel momento ti viene rivelato il vero potere della Spada del Sole.</p><p>Quest'arma fu forgiata molto prima che i Sommlending, i Durenesi o i Signori delle Tenebre abitassero le Terre Ultime. I suoi artefici appartenevano a una razza che gli uomini oggi chiamerebbero dei. Per liberare il potere che contiene, solo un cavaliere Ramas puo impugnarla. Se venisse usata in combattimento da chiunque non sia un cavaliere Ramas, il suo potere svanirebbe e andrebbe perduto per sempre.</p><p>Quando viene usata in combattimento, la Spada del Sole aggiunge 8 punti alla tua Combattivita (10 punti se possiedi l'Arte di Scherma con le spade; questo bonus di +10 non si somma agli 8 concessi dalla spada, ma li combina con i +2 dati dalla Scherma con Spada Corta, Spada o Spadone, poiche ciascuna di queste conferisce padronanza anche con la Spada del Sole - in combattimento trattala comunque come un'arma a una mano, indipendentemente dal bonus di Scherma). Ha la capacita di assorbire qualsiasi magia usata contro chi la porta, e raddoppia il totale dei punti Resistenza persi dai nemici non-morti (ad esempio gli Helghast) in combattimento. E l'unica arma in tutto il Magnamund capace di uccidere un Signore delle Tenebre, e per questo motivo i Signori delle Tenebre sono determinati a contrastare la tua missione.</p><p>Ora ti rendi conto di possedere l'unico potere in Magnamund capace di salvare il tuo popolo. Lentamente la luce inizia ad affievolirsi e senti la mano di Lord Axim posarsi sulla tua spalla.</p><p>«Vieni, Lupo Solitario, c'e molto da preparare per il tuo ritorno a Sommerlund.»</p><p>Riponi la Spada del Sole nel suo fodero ingioiellato e segui Lord Axim mentre lascia la camera del Re.</p><p>Effettua ora gli aggiustamenti necessari alla tua Combattivita ora che possiedi la Spada del Sole. Annota i poteri della spada nella sezione Oggetti Speciali del tuo Registro di Guerra.</p>",
+   "text": "<p>Il potere che scorre nel tuo corpo sopraffa a tal punto i tuoi sensi che diventi ignaro di cio che ti circonda. Sollevi istintivamente la lama sopra la testa, dove un raggio di sole ne coglie improvvisamente la punta e inonda la camera di un bagliore bianco accecante. In quel momento ti viene rivelato il vero potere della Spada del Sole.</p><p>Quest'arma fu forgiata molto prima che i Sommlending, i Durenesi o i Signori delle Tenebre abitassero le Terre Ultime. I suoi artefici appartenevano a una razza che gli uomini oggi chiamerebbero dei. Per liberare il potere che contiene, solo un cavaliere Ramas puo impugnarla. Se venisse usata in combattimento da chiunque non sia un cavaliere Ramas, il suo potere svanirebbe e andrebbe perduto per sempre.</p><p>Quando viene usata in combattimento, la Spada del Sole aggiunge 8 punti alla tua Combattivita (10 punti se possiedi l'Arte di Scherma con le spade). Ha la capacita di assorbire qualsiasi magia usata contro chi la porta, e raddoppia il totale dei punti Resistenza persi dai nemici non-morti (ad esempio gli Helghast) in combattimento. E l'unica arma in tutto il Magnamund capace di uccidere un Signore delle Tenebre, e per questo motivo i Signori delle Tenebre sono determinati a contrastare la tua missione.</p><p>Ora ti rendi conto di possedere l'unico potere in Magnamund capace di salvare il tuo popolo. Lentamente la luce inizia ad affievolirsi e senti la mano di Lord Axim posarsi sulla tua spalla.</p><p>«Vieni, Lupo Solitario, c'e molto da preparare per il tuo ritorno a Sommerlund.»</p><p>Riponi la Spada del Sole nel suo fodero ingioiellato e segui Lord Axim mentre lascia la camera del Re.</p><p>Effettua ora gli aggiustamenti necessari alla tua Combattivita ora che possiedi la Spada del Sole. Annota i poteri della spada nella sezione Oggetti Speciali del tuo Registro di Guerra.</p>",
    "choices": [
     {
      "text": "Prosegui",
@@ -1176,7 +1249,7 @@
    "image": "public/img/book02/sec085.png"
   },
   "86": {
-   "text": "<p>Ci sono molte navi di ogni dimensione e nazionalita ormeggiate su questo lato del porto. Il fiume Dorn, che divide la citta di Ragadorn, e sempre trafficato.</p><p>Stai per rinunciare alla ricerca, quando individui la barca da pesca dei ladri. Non c'e nessuno a bordo, ma una ricerca accurata della cabina rivela una Mazza e 3 Corone d'Oro nascoste dentro un'amaca ripiegata. L'amaca porta un'etichetta che recita:</p><p>Prendi la Mazza e le Corone e torni a Piazza Stonepost.</p>",
+   "text": "<p>Ci sono molte navi di ogni dimensione e nazionalita ormeggiate su questo lato del porto. Il fiume Dorn, che divide la citta di Ragadorn, e sempre trafficato.</p><p>Stai per rinunciare alla ricerca, quando individui la barca da pesca dei ladri. Non c'e nessuno a bordo, ma una ricerca accurata della cabina rivela una Mazza e 3 Corone d'Oro nascoste dentro un'amaca ripiegata. L'amaca porta un'etichetta che recita:</p><p>Taverna della Stella Polare — Barnacle Street.</p>",
    "effects": {
     "canAddWeapon": "Mazza",
     "addGold": 3
@@ -1247,22 +1320,30 @@
     {
      "name": "Szall 1",
      "combattivita": 6,
-     "resistenza": 9
+     "resistenza": 9,
+     "canFlee": true,
+     "fleeSection": 132
     },
     {
      "name": "Villico 2",
      "combattivita": 11,
-     "resistenza": 14
+     "resistenza": 14,
+     "canFlee": true,
+     "fleeSection": 132
     },
     {
      "name": "Szall 2",
      "combattivita": 5,
-     "resistenza": 8
+     "resistenza": 8,
+     "canFlee": true,
+     "fleeSection": 132
     },
     {
      "name": "Villico 3",
      "combattivita": 11,
-     "resistenza": 17
+     "resistenza": 17,
+     "canFlee": true,
+     "fleeSection": 132
     }
    ],
    "choices": [
@@ -1277,7 +1358,17 @@
    "choices": [
     {
      "text": "Prosegui",
-     "section": 245
+     "section": 245,
+     "effects": {
+      "canAddItems": [
+       "Bastone",
+       "Coperta",
+       "Zaino",
+       "Corda"
+      ],
+      "canAddMeals": 2,
+      "canAddWeapon": "Pugnale"
+     }
     }
    ]
   },
@@ -1524,8 +1615,7 @@
     "combattivita": 15,
     "resistenza": 22,
     "canFlee": true,
-    "fleeSection": 65,
-    "playerCombatPenalty": 4
+    "fleeSection": 65
    },
    "choices": [
     {
@@ -1729,7 +1819,10 @@
    "text": "<p>Perquisisci rapidamente il suo corpo ma non trovi alcuna prova che fosse lei la tua presunta assassina. Scopri 42 Corone, una Spada Corta e un Pugnale. Prendi pure uno qualsiasi di questi oggetti, se lo desideri, e segnalo sul tuo Registro di Guerra.</p>",
    "effects": {
     "addGold": 42,
-    "canAddWeapon": "Spada Corta"
+    "canAddWeapon": "Spada Corta",
+    "canAddItems": [
+     "Pugnale"
+    ]
    },
    "choices": [
     {
@@ -1818,13 +1911,17 @@
      "name": "Ladro 1",
      "combattivita": 13,
      "resistenza": 21,
-     "immuneToPsicolaser": false
+     "immuneToPsicolaser": false,
+     "canFlee": true,
+     "fleeSection": 121
     },
     {
      "name": "Ladro 2",
      "combattivita": 13,
      "resistenza": 20,
-     "immuneToPsicolaser": false
+     "immuneToPsicolaser": false,
+     "canFlee": true,
+     "fleeSection": 121
     }
    ],
    "playerCombatPenalty": 4,
@@ -1946,7 +2043,7 @@
    ]
   },
   "140": {
-   "text": "<p>Entrambe le guardie fissano il Sigillo con soggezione. La leggenda del Sigillo di Hammerdal è ben nota a tutto il popolo di Durenor. Si dice che, tra tutti i tesori perduti di Durenor, il Sigillo di Hammerdal sia l'unico che non vorrebbero veder tornare. I volti ansiosi delle due guardie mostrano che ne comprendono chiaramente il significato.</p><p>Una delle guardie ti scorta attraverso il Rymerift e lungo una strada nella foresta che alla fine termina in un incrocio. Un cartello indica la direzione est.</p><p>«Ora devo lasciarti e tornare al Rymerift. Temo che presto la guerra getterà la sua ombra nera su questa terra, e sarò necessario al confine. Buona fortuna, Sommlending, buona fortuna.»</p><p>Osservi per qualche minuto il soldato che torna lungo il sentiero nel bosco, prima di incamminarti verso est. Dovresti raggiungere Port Bax entro un'ora.</p>",
+   "text": "<p>Entrambe le guardie fissano il Sigillo con soggezione. La leggenda del Sigillo di Hammerdal è ben nota a tutto il popolo di Durenor. Si dice che, tra tutti i tesori perduti di Durenor, il Sigillo di Hammerdal sia l'unico che non vorrebbero veder tornare. I volti ansiosi delle due guardie mostrano che ne comprendono chiaramente il significato.</p><p>Una delle guardie ti scorta attraverso il Rymerift e lungo una strada nella foresta che alla fine termina in un incrocio. Un cartello recita: «Port Bax — 3 miglia», indicando la direzione est.</p><p>«Ora devo lasciarti e tornare al Rymerift. Temo che presto la guerra getterà la sua ombra nera su questa terra, e sarò necessario al confine. Buona fortuna, Sommlending, buona fortuna.»</p><p>Osservi per qualche minuto il soldato che torna lungo il sentiero nel bosco, prima di incamminarti verso est. Dovresti raggiungere Port Bax entro un'ora.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -1957,7 +2054,8 @@
   "141": {
    "text": "<p>Mentre l'albero maestro si schianta sul ponte, una trave scheggiata ti colpisce la testa e vieni sbalzato fuori bordo. Boccheggiando per l'aria, ti fai strada a fatica verso la superficie e ti aggrappi a un boccaporto divelto. Sei mezzo stordito. Perdi 2 punti di Resistenza.</p><p>Ti issi su questa zattera di fortuna e ti aggrappi ad essa con tutte le tue forze. Se indossi un Farsetto di Maglia, devi liberartene subito, altrimenti affogherai di sicuro.</p><p>Ti senti frastornato e nauseato. Mentre il mare in tempesta ti sballotta senza tregua, scivoli lentamente nell'incoscienza. Quando ti risvegli, molte ore dopo, la tempesta è passata. Dalla posizione del sole, giudichi che sia tardo pomeriggio. In lontananza scorgi una piccola barca da pesca e, oltre di essa, all'orizzonte, la terraferma. L'unica traccia dello Scettro Verde è il boccaporto su cui ora siedi.</p>",
    "effects": {
-    "loseEndurance": 2
+    "loseEndurance": 2,
+    "removeItem": "Farsetto di Maglia"
    },
    "choices": [
     {
@@ -1983,7 +2081,7 @@
    ]
   },
   "143": {
-   "text": "<p>Ti dirigi a sud e segui la banchina finché non giungi a un incrocio dove la strada svolta verso est. La maggior parte dei negozi in questa via sono ancora chiusi, tranne uno alla tua destra. Sopra la porta c'è un'insegna.</p>",
+   "text": "<p>Ti dirigi a sud e segui la banchina finché non giungi a un incrocio dove la strada svolta verso est. La maggior parte dei negozi in questa via sono ancora chiusi, tranne uno alla tua destra. Sopra la porta c'è un'insegna: «Jinelda Koop – Alchimista: Pozioni Magiche Comprate e Vendute».</p>",
    "choices": [
     {
      "text": "Entra nel negozio",
@@ -2160,7 +2258,7 @@
    ]
   },
   "155": {
-   "text": "<p>Dopo aver percorso un miglio lungo il sentiero di sinistra, giungi a un lungo ponte di pietra. A prima vista, il fiume che attraversa sembra gonfio e sul punto di straripare. Poi ti rendi conto che si tratta del Rymerift. Le acque del Rymerift sono larghe due miglia nel punto più ampio e profonde oltre un miglio per la maggior parte della loro estensione. Qui la terra è sprofondata, creando una spaccatura naturale che separa Durenor dal resto di Magnamund.</p><p>All'ingresso del ponte di pietra c'è un cartello.</p><p>Tiri un sospiro di sollievo, perché sei sulla strada giusta e dovresti raggiungere la città entro un'ora.</p>",
+   "text": "<p>Dopo aver percorso un miglio lungo il sentiero di sinistra, giungi a un lungo ponte di pietra. A prima vista, il fiume che attraversa sembra gonfio e sul punto di straripare. Poi ti rendi conto che si tratta del Rymerift. Le acque del Rymerift sono larghe due miglia nel punto più ampio e profonde oltre un miglio per la maggior parte della loro estensione. Qui la terra è sprofondata, creando una spaccatura naturale che separa Durenor dal resto di Magnamund.</p><p>All'ingresso del ponte di pietra c'è un cartello che recita: «Port Bax — 3 miglia».</p><p>Tiri un sospiro di sollievo, perché sei sulla strada giusta e dovresti raggiungere la città entro un'ora.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -2319,7 +2417,11 @@
      "text": "Continua",
      "section": 186
     }
-   ]
+   ],
+   "effects": {
+    "addGold": 40,
+    "removeItem": "Sigillo di Hammerdal"
+   }
   },
   "166": {
    "text": "<p>Sali una rampa di scale e raggiungi il ponte affollato. Una furiosa battaglia infuria tutt'intorno a te, mentre la flotta di Durenor viene travolta dall'assalto di spettrali navi-carcasse della morte. Improvvisamente un lampo di fiamma incandescente scaturisce da una torre sul retro della nave-carcassa su cui ti trovi, ed esplode contro il fianco di una nave da guerra di Durenor a meno di cinquanta iarde di distanza. Guardi con orrore i soldati che si gettano dal ponte, con i vestiti e i capelli in fiamme.</p>",
@@ -2526,7 +2628,7 @@
    ]
   },
   "181": {
-   "text": "<p>Questa strada sembra più sporca e maleodorante di quella che hai appena percorso. La vetrina ingombra di una bottega alla tua sinistra attira la tua attenzione. Nella vetrina ci sono molti oggetti utili, ognuno con il proprio cartellino del prezzo.</p><p>Puoi entrare e acquistare uno qualsiasi di questi oggetti. Ricordati di segnarli sul tuo Registro di Guerra. Terminati gli acquisti, prosegui lungo Sage Street, verso il Ponte di Ragadorn. Questo ponte è l'unico collegamento tra il lato est e il lato ovest del porto, e ti fai strada tra la folla di gente e carretti. Ti ritrovi in un viale ingombro di rifiuti conosciuto come East Trade Lane.</p><p>[7] Secondo la Newsletter n. 12 del Lone Wolf Club: «In pratica puoi indossare un solo Zaino alla volta, e portare al massimo otto Oggetti nello Zaino (gli Oggetti Speciali non sono inclusi).»</p>",
+   "text": "<p>Questa strada sembra più sporca e maleodorante di quella che hai appena percorso. La vetrina ingombra di una bottega alla tua sinistra attira la tua attenzione. Nella vetrina ci sono molti oggetti utili, ognuno con il proprio cartellino del prezzo: Spada (4 Corone), Pugnale (2 Corone), Spada Corta (3 Corone), Martello da Guerra (6 Corone), Lancia (5 Corone), Mazza (4 Corone), Coperta di Pelliccia (3 Corone), Zaino (1 Corona).</p><p>Puoi entrare e acquistare uno qualsiasi di questi oggetti. Ricordati di segnarli sul tuo Registro di Guerra. Terminati gli acquisti, prosegui lungo Sage Street, verso il Ponte di Ragadorn. Questo ponte è l'unico collegamento tra il lato est e il lato ovest del porto, e ti fai strada tra la folla di gente e carretti. Ti ritrovi in un viale ingombro di rifiuti conosciuto come East Trade Lane.</p><p>[7] Secondo la Newsletter n. 12 del Lone Wolf Club: «In pratica puoi indossare un solo Zaino alla volta, e portare al massimo otto Oggetti nello Zaino (gli Oggetti Speciali non sono inclusi).»</p>",
    "choices": [
     {
      "text": "Prosegui",
@@ -2578,7 +2680,9 @@
     {
      "name": "Drakkar 2",
      "combattivita": 16,
-     "resistenza": 26
+     "resistenza": 26,
+     "canFlee": true,
+     "fleeSection": 286
     }
    ],
    "choices": [
@@ -2608,7 +2712,14 @@
      "text": "Prosegui",
      "section": 265
     }
-   ]
+   ],
+   "effects": {
+    "addGold": 6,
+    "canAddWeapon": "Spada",
+    "canAddItems": [
+     "Lancia"
+    ]
+   }
   },
   "188": {
    "text": "<p>I tuoi riflessi e la tua abilità ti hanno salvato da un morso velenoso. Mentre il serpente scompare nell'erba alta oltre la strada, raccogli il tuo Zaino e ti arrampichi sull'albero, dove trascorri il resto della notte al sicuro sopra il suolo.</p>",
@@ -3030,7 +3141,7 @@
    ]
   },
   "223": {
-   "text": "<p>La guardia fissa con soggezione il magnifico anello. La leggenda del Sigillo di Hammerdal è ben nota al popolo di Durenor. Si dice che, fra tutti i tesori perduti dei Durenesi, il Sigillo di Hammerdal sia uno di quelli che non vorrebbero veder tornare. Il volto ansioso della guardia mostra chiaramente che riconosce il terribile significato dell'anello.</p><p>«Non ostacolerò la vostra urgente missione, ma non posso aiutarvi se non indicandovi la strada per Port Bax. Proseguite su questo sentiero nel bosco e giungerete a un bivio vicino a una quercia rinsecchita. Prendete il sentiero di sinistra: è la via più rapida.»</p><p>Ringrazi la fedele guardia e ti addentri di nuovo nella foresta. Dopo circa un miglio, raggiungi il bivio e prendi il sentiero di sinistra. Conduce a un ponte di pietra che attraversa il Rymerift. Le acque del Rymerift sono profonde più di un miglio, e larghe fino a due miglia nel punto più ampio. Vicino al ponte trovi un cartello.</p><p>Tiri un sospiro di sollievo, perché dovresti arrivarci in meno di un'ora.</p>",
+   "text": "<p>La guardia fissa con soggezione il magnifico anello. La leggenda del Sigillo di Hammerdal è ben nota al popolo di Durenor. Si dice che, fra tutti i tesori perduti dei Durenesi, il Sigillo di Hammerdal sia uno di quelli che non vorrebbero veder tornare. Il volto ansioso della guardia mostra chiaramente che riconosce il terribile significato dell'anello.</p><p>«Non ostacolerò la vostra urgente missione, ma non posso aiutarvi se non indicandovi la strada per Port Bax. Proseguite su questo sentiero nel bosco e giungerete a un bivio vicino a una quercia rinsecchita. Prendete il sentiero di sinistra: è la via più rapida.»</p><p>Ringrazi la fedele guardia e ti addentri di nuovo nella foresta. Dopo circa un miglio, raggiungi il bivio e prendi il sentiero di sinistra. Conduce a un ponte di pietra che attraversa il Rymerift. Le acque del Rymerift sono profonde più di un miglio, e larghe fino a due miglia nel punto più ampio. Vicino al ponte trovi un cartello che recita: «Port Bax — 3 miglia».</p><p>Tiri un sospiro di sollievo, perché dovresti arrivarci in meno di un'ora.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -3309,7 +3420,12 @@
      "text": "Se vuoi avvertire il capitano",
      "section": 101
     }
-   ]
+   ],
+   "effects": {
+    "restoreEnduranceFromTotalLost": {
+     "kaiArt": "Guarigione"
+    }
+   }
   },
   "241": {
    "text": "<p>Un silenzio cala sulla taverna mentre l'uomo che hai accusato si volta a guardarti.</p><p>«Hai una lingua sciolta, straniero» dice minaccioso. «Andrebbe tagliata prima che faccia altri danni.» Estrae un pugnale ricurvo e ti attacca. La folla forma un cerchio intorno a voi due, impedendo a entrambi di fuggire. Devi combattere quest'uomo fino alla morte.</p>",
@@ -3583,9 +3699,13 @@
    "text": "<p>La guardia ti spinge bruscamente da parte e corre fuori dalla torre di guardia verso Tomb Square. C'è una piccola stanza vicino alla scala e decidi di entrare e perquisirla prima che egli ritorni. Al suo interno scopri un Pasto e una Pozione Arancione. Se vuoi prendere uno di questi oggetti, segnalo sul tuo Registro di Guerra. Nota bene: se hai perso lo Zaino, non puoi portare con te il Pasto né la Pozione Arancione.</p><p>Mentre stai uscendo, ti scontri con un'altra guardia e cadete entrambi ruzzolando giù per le scale, ma prima che egli possa riprendersi, tu sei già scattato nella notte.</p>",
    "effects": {
     "canAddItems": [
+     "Spada",
+     "Mazza",
+     "Asta",
      "Pasto",
      "Pozione Arancione"
-    ]
+    ],
+    "addGold": 6
    },
    "choices": [
     {
@@ -3692,7 +3812,12 @@
     "combattivita": 28,
     "resistenza": 30,
     "immuneToPsicolaser": true,
-    "playerCombatBonus": 2
+    "combatModifiers": [
+     {
+      "type": "firstRound",
+      "value": 2
+     }
+    ]
    },
    "choices": [
     {
@@ -3868,7 +3993,7 @@
    ]
   },
   "283": {
-   "text": "<p>Osservi stupito la varietà delle merci in vendita. Seta e spezie provenienti dagli sfarzosi bazar di Vassagonia; gioielli dalle miniere di Bor; le armi e le armature migliori forgiate nelle fucine di Durenor; pellicce dal Brumalmarc di Kalte; stoffe di Cloeasia; e ogni genere di cibo e bevanda ricopre i tavoli.</p><p>Vicino al centro dell'emporio noti che i prezzi sono indicati su grandi pergamene tese. Uno dei cartelli in particolare attira la tua attenzione:</p><p>Se hai denaro sufficiente, puoi acquistare uno qualsiasi degli oggetti sopra elencati. Una volta concluso gli acquisti, puoi lasciare l'emporio da un'uscita laterale.</p>",
+   "text": "<p>Osservi stupito la varietà delle merci in vendita. Seta e spezie provenienti dagli sfarzosi bazar di Vassagonia; gioielli dalle miniere di Bor; le armi e le armature migliori forgiate nelle fucine di Durenor; pellicce dal Brumalmarc di Kalte; stoffe di Cloeasia; e ogni genere di cibo e bevanda ricopre i tavoli.</p><p>Vicino al centro dell'emporio noti che i prezzi sono indicati su grandi pergamene tese. Uno dei cartelli in particolare attira la tua attenzione: Spade (4 Corone l'una), Pugnali (2 Corone l'uno), Spadoni (6 Corone l'uno), Lance (5 Corone l'una), cibo pregiato (2 Corone a Pasto), Anelli d'oro (8 Corone), Coperte di Pelliccia (3 Corone), Zaini (1 Corona l'uno).</p><p>Se hai denaro sufficiente, puoi acquistare uno qualsiasi degli oggetti sopra elencati. Una volta concluso gli acquisti, puoi lasciare l'emporio da un'uscita laterale.</p>",
    "choices": [
     {
      "text": "Continua",
@@ -3930,7 +4055,10 @@
    "choices": [
     {
      "text": "Se vuoi accettare la sua offerta",
-     "section": 165
+     "section": 165,
+     "requirements": {
+      "item": "Sigillo di Hammerdal"
+     }
     },
     {
      "text": "Se preferisci lasciare il negozio",
@@ -4004,27 +4132,37 @@
     {
      "name": "Caporale della Guardia Cittadina",
      "combattivita": 12,
-     "resistenza": 20
+     "resistenza": 20,
+     "canFlee": true,
+     "fleeSection": 88
     },
     {
      "name": "Guardia Cittadina 1",
      "combattivita": 11,
-     "resistenza": 19
+     "resistenza": 19,
+     "canFlee": true,
+     "fleeSection": 88
     },
     {
      "name": "Guardia Cittadina 2",
      "combattivita": 11,
-     "resistenza": 19
+     "resistenza": 19,
+     "canFlee": true,
+     "fleeSection": 88
     },
     {
      "name": "Guardia Cittadina 3",
      "combattivita": 10,
-     "resistenza": 18
+     "resistenza": 18,
+     "canFlee": true,
+     "fleeSection": 88
     },
     {
      "name": "Guardia Cittadina 4",
      "combattivita": 10,
-     "resistenza": 17
+     "resistenza": 17,
+     "canFlee": true,
+     "fleeSection": 88
     }
    ],
    "choices": [
@@ -4058,13 +4196,17 @@
      "name": "Ladro di Strada 1",
      "combattivita": 13,
      "resistenza": 21,
-     "playerCombatPenalty": 4
+     "playerCombatPenalty": 4,
+     "canFlee": true,
+     "fleeSection": 121
     },
     {
      "name": "Ladro di Strada 2",
      "combattivita": 13,
      "resistenza": 20,
-     "playerCombatPenalty": 4
+     "playerCombatPenalty": 4,
+     "canFlee": true,
+     "fleeSection": 121
     }
    ],
    "choices": [
@@ -4120,12 +4262,25 @@
   "301": {
    "text": "<p>Frughi tra i cadaveri e scopri 3 Corone, 3 Pugnali e una Spada Corta. Se vuoi prenderne qualcuno, segnalo sul tuo Registro di Guerra.</p>",
    "effects": {
-    "addGold": 3,
-    "canAddWeapon": "Pugnale"
+    "addGold": 3
    },
    "choices": [
     {
-     "text": "Continua",
+     "text": "Se vuoi prendere il Pugnale",
+     "section": 20,
+     "effects": {
+      "canAddWeapon": "Pugnale"
+     }
+    },
+    {
+     "text": "Se vuoi prendere la Spada Corta",
+     "section": 20,
+     "effects": {
+      "canAddWeapon": "Spada Corta"
+     }
+    },
+    {
+     "text": "Se non vuoi prendere nessun'arma",
      "section": 20
     }
    ]
@@ -4137,7 +4292,18 @@
      "text": "Continua",
      "section": 244
     }
-   ]
+   ],
+   "effects": {
+    "addGold": 12,
+    "canAddMeals": 3,
+    "canAddItems": [
+     "Zaino",
+     "Pozione Curativa",
+     "Mazza",
+     "Spadone",
+     "Asta"
+    ]
+   }
   },
   "303": {
    "text": "<p>Su questo tratto del lungomare si ammucchiano cumuli di rifiuti in decomposizione, che emanano un fetore così nauseabondo da costringerti a coprirti bocca e naso con il mantello. Più avanti, alla tua sinistra, noti il bagliore di una torcia che filtra da una porta aperta. Sopra la porta c'è un'insegna.</p>",
@@ -4171,7 +4337,8 @@
    "combat": {
     "name": "Guardia di Frontiera",
     "combattivita": 16,
-    "resistenza": 24
+    "resistenza": 24,
+    "doubleEnemyEnduranceLoss": true
    },
    "choices": [
     {
@@ -4537,10 +4704,12 @@
     "combattivita": 21,
     "resistenza": 30,
     "immuneToPsicolaser": true,
-    "playerCombatPenalty": 2,
-    "psicoschermoPreventsLoss": true,
     "canFlee": true,
-    "fleeSection": 183
+    "fleeSection": 183,
+    "playerEnduranceLossPerRound": {
+     "value": 2,
+     "waivedByKaiArt": "Psicoschermo"
+    }
    },
    "choices": [
     {
@@ -4764,7 +4933,17 @@
      "text": "Se puoi permetterti la Corona d'oro per la stanza",
      "section": 280,
      "requirements": {
-      "minGold": 1
+      "anyOf": [
+       {
+        "minGold": 1
+       },
+       {
+        "item": "Pasto"
+       }
+      ]
+     },
+     "effects": {
+      "removeGold": 1
      }
     },
     {

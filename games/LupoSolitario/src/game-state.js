@@ -23,7 +23,8 @@ class GameState {
                 zaino: [], // Max 8 items including meals
                 corone: 0, // Max 50
                 pasti: 0,
-                oggettiSpeciali: [] // No limit
+                oggettiSpeciali: [], // No limit
+                totalEnduranceLost: 0 // lifetime ENDURANCE lost, never reset - see restoreEnduranceFromTotalLost (Book 2 section 240)
             },
             inCombat: false,
             combatState: null,
@@ -76,8 +77,10 @@ class GameState {
     }
 
     takeDamage(damage) {
-        const newResistenza = Math.max(0, this.state.character.resistenza - damage);
-        this.updateStats({ resistenza: newResistenza });
+        const before = this.state.character.resistenza;
+        const newResistenza = Math.max(0, before - damage);
+        const totalEnduranceLost = (this.state.character.totalEnduranceLost || 0) + (before - newResistenza);
+        this.updateStats({ resistenza: newResistenza, totalEnduranceLost });
         return newResistenza;
     }
 
@@ -141,11 +144,11 @@ class GameState {
         this.updateStats({ armi: [] });
     }
 
-    clearEquipment() {
-        this.updateStats({
-            armi: [],
-            zaino: []
-        });
+    // Backpack Items only, per Lone Wolf's own terminology - Weapons are a
+    // separate Action Chart section and need loseAllWeapons alongside this if
+    // both are meant to be lost (see effects.loseAllItems).
+    clearZaino() {
+        this.updateStats({ zaino: [] });
     }
 
     addOggettoSpeciale(item) {

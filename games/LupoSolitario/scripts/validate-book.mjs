@@ -52,6 +52,8 @@ const EFFECT_FIELDS = {
   addGoldFromRoll: 'object', // { modifiers?: [{value, requirements}] } - see Book 2 section 116
   removeItem: 'string',
   loseEndurance: 'number',
+  waivedByKaiArt: 'string', // companion to loseEndurance: skip the loss entirely with this Kai Discipline (generalizes psicoschermoPreventsLoss), see Book 3 section 331
+  waivedByItem: 'string', // companion to loseEndurance: skip the loss entirely while holding this item, see Book 3 section 150
   loseEnduranceFromRoll: 'object', // { zeroMeansTen?, modifiers?: [{value, requirements}] } - see Book 3 section 258
   psicoschermoPreventsLoss: 'boolean',
   mustEatOrLoseEndurance: 'number',
@@ -59,7 +61,10 @@ const EFFECT_FIELDS = {
   loseAllWeapons: 'boolean',
   loseRandomWeapon: 'boolean',
   loseAllItems: 'boolean',
-  restoreHalfDamageTaken: 'boolean' // heals floor(lastCombatSummary.damageTaken / 2) - see Book 5 sections 20/135/161
+  loseRandomItem: 'boolean', // steals one random Zaino item, or a random weapon if Zaino is empty - see Book 1 section 144
+  loseCombattivita: 'number', // PERMANENT Combat Skill reduction ("for the rest of your life") - rare, see Book 1 section 236
+  restoreHalfDamageTaken: 'boolean', // heals floor(lastCombatSummary.damageTaken / 2) - see Book 5 sections 20/135/161
+  restoreEnduranceFromTotalLost: 'kaiArtGated' // { kaiArt } - full recovery with the Discipline, half of ALL lifetime ENDURANCE lost without it, see Book 2 section 240
 };
 
 const COMBAT_MODIFIER_TYPES = new Set(['firstRound', 'noKaiArt', 'noPlayerLossRounds']);
@@ -131,7 +136,10 @@ const COMBAT_FIELDS = {
   forceEndAfterRounds: 'number', // combat is cut short (neither side necessarily dead) after this many rounds - see forceEndSection
   forceEndSection: 'number',
   undead: 'boolean',
-  combatModifiers: 'object[]'
+  combatModifiers: 'object[]',
+  doubleEnemyEnduranceLoss: 'boolean', // doubles ENDURANCE lost by the enemy each round, regardless of weapon - see Book 2 section 306
+  allyDamagePerRound: 'number', // a companion adds this much flat ENDURANCE loss to the enemy every round, independent of the hero's own roll - see Book 3 section 180
+  playerEnduranceLossPerRound: 'enduranceLossPerRound' // { value, waivedByKaiArt? } - flat ENDURANCE loss every round (e.g. ongoing Mindblast), see Book 2 section 332
 };
 
 const DOUBLE_ROLL_OUTCOMES = new Set(['secondLess', 'secondMore', 'equal']);
@@ -184,6 +192,14 @@ function checkType(value, expected) {
   if (expected === 'numericPuzzle') {
     return typeof value === 'object' && value !== null &&
       typeof value.correctSection === 'number' && typeof value.wrongSection === 'number';
+  }
+  if (expected === 'enduranceLossPerRound') {
+    return typeof value === 'object' && value !== null &&
+      typeof value.value === 'number' &&
+      (value.waivedByKaiArt === undefined || typeof value.waivedByKaiArt === 'string');
+  }
+  if (expected === 'kaiArtGated') {
+    return typeof value === 'object' && value !== null && typeof value.kaiArt === 'string';
   }
   return typeOf(value) === expected;
 }

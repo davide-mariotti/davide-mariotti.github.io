@@ -201,6 +201,28 @@ test('isDestinyTest: also true when a non-range "bypass" choice sits alongside 2
   assert.equal(reader.isDestinyTest([{ text: 'Numero 0-4' }, { text: 'Se hai una spada' }]), false, 'only 1 range choice - not enough to be a real roll');
 });
 
+test('applyEffects: loseCombattivita permanently lowers Combat Skill - see Book 1 section 236', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ loseCombattivita: 1 });
+  assert.equal(gameState.getState().character.combattivita, 19);
+});
+
+test('applyEffects: loseRandomItem steals one Zaino item, falling back to a weapon only if the Zaino is empty - see Book 1 section 144', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: ['Spada'], zaino: ['Torcia'], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ loseRandomItem: true });
+  let character = gameState.getState().character;
+  assert.deepEqual(character.zaino, [], 'the only Zaino item is stolen');
+  assert.deepEqual(character.armi, ['Spada'], 'weapon untouched while Zaino had an item');
+
+  await reader.applyEffects({ loseRandomItem: true });
+  character = gameState.getState().character;
+  assert.deepEqual(character.armi, [], 'Zaino now empty, falls back to stealing the weapon');
+});
+
 test('applyEffects: restoreHalfDamageTaken heals floor(damageTaken / 2) from the last combat', async () => {
   gameState.resetGame();
   gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
@@ -216,6 +238,58 @@ test('applyEffects: restoreHalfDamageTaken is a no-op with no prior combat', asy
 
   await reader.applyEffects({ restoreHalfDamageTaken: true });
   assert.equal(gameState.getState().character.resistenza, 10);
+});
+
+test('applyEffects: loseEndurance is waived by waivedByKaiArt - see Book 3 section 331', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: ['Guarigione'], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  await reader.applyEffects({ loseEndurance: 4, waivedByKaiArt: 'Guarigione' });
+  assert.equal(gameState.getState().character.resistenza, 20, 'no loss with the Discipline');
+
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  await reader.applyEffects({ loseEndurance: 4, waivedByKaiArt: 'Guarigione' });
+  assert.equal(gameState.getState().character.resistenza, 16, 'full loss without the Discipline');
+});
+
+test('applyEffects: loseEndurance is waived by waivedByItem - see Book 3 section 150', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: ['Olio di Baknar'], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  await reader.applyEffects({ loseEndurance: 2, waivedByItem: 'Olio di Baknar' });
+  assert.equal(gameState.getState().character.resistenza, 20, 'no loss while holding the item');
+
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  await reader.applyEffects({ loseEndurance: 2, waivedByItem: 'Olio di Baknar' });
+  assert.equal(gameState.getState().character.resistenza, 18, 'full loss without the item');
+});
+
+test('applyEffects: loseAllItems only clears the Zaino, not Armi - Weapons are a separate Action Chart section (see Book 3 section 49, Book 4 sections 94/158/342)', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: ['Spada'], zaino: ['Torcia', 'Corda'], corone: 5, pasti: 0, oggettiSpeciali: ['Anello'] });
+
+  await reader.applyEffects({ loseAllItems: true });
+  const character = gameState.getState().character;
+  assert.deepEqual(character.zaino, [], 'Zaino is emptied');
+  assert.deepEqual(character.armi, ['Spada'], 'Weapons are untouched');
+  assert.deepEqual(character.oggettiSpeciali, ['Anello'], 'Special Items are untouched');
+});
+
+test('applyEffects: restoreEnduranceFromTotalLost heals fully with the Kai Discipline, half of all lifetime ENDURANCE lost without it - see Book 2 section 240', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 30, artiRamas: ['Guarigione'], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  gameState.takeDamage(4); // simulates earlier damage across the adventure, not just the last fight
+  gameState.takeDamage(6); // resistenza now 20-4-6=10, totalEnduranceLost=10
+
+  await reader.applyEffects({ restoreEnduranceFromTotalLost: { kaiArt: 'Guarigione' } });
+  assert.equal(gameState.getState().character.resistenza, 30, 'restored to resistenzaMax with the Discipline');
+
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 30, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  gameState.takeDamage(4);
+  gameState.takeDamage(6);
+  await reader.applyEffects({ restoreEnduranceFromTotalLost: { kaiArt: 'Guarigione' } });
+  assert.equal(gameState.getState().character.resistenza, 15, '10 (current after -10) + floor(10/2)=5, without the Discipline');
 });
 
 test('applyEffects: canAddItems routes weapon-named entries to the weapon slot, not the Zaino - see loot piles like Book 4 section 2', async () => {

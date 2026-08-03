@@ -1153,7 +1153,11 @@
     "immuneToPsicolaser": true,
     "canFlee": true,
     "fleeAfterRounds": 2,
-    "fleeSection": 98
+    "fleeSection": 98,
+    "playerEnduranceLossPerRound": {
+     "value": 1,
+     "waivedByKaiArt": "Psicoschermo"
+    }
    },
    "choices": [
     {
@@ -2159,7 +2163,9 @@
     {
      "name": "Guardiano del Tunnel 1",
      "combattivita": 16,
-     "resistenza": 22
+     "resistenza": 22,
+     "canFlee": true,
+     "fleeSection": 87
     },
     {
      "name": "Guardiano del Tunnel 2",
@@ -2961,27 +2967,37 @@
     {
      "name": "Guardia 2",
      "combattivita": 15,
-     "resistenza": 24
+     "resistenza": 24,
+     "canFlee": true,
+     "fleeSection": 342
     },
     {
      "name": "Guardia 3",
      "combattivita": 15,
-     "resistenza": 21
+     "resistenza": 21,
+     "canFlee": true,
+     "fleeSection": 342
     },
     {
      "name": "Guardia 4",
      "combattivita": 16,
-     "resistenza": 25
+     "resistenza": 25,
+     "canFlee": true,
+     "fleeSection": 342
     },
     {
      "name": "Guardia 5",
      "combattivita": 14,
-     "resistenza": 24
+     "resistenza": 24,
+     "canFlee": true,
+     "fleeSection": 342
     },
     {
      "name": "Guardia 6",
      "combattivita": 14,
-     "resistenza": 22
+     "resistenza": 22,
+     "canFlee": true,
+     "fleeSection": 342
     }
    ],
    "choices": [
