@@ -56,7 +56,8 @@ export class StoryReader {
         // actually highlight as a clickable button.
         const combats = Array.isArray(sec.combat) ? sec.combat : (sec.combat ? [sec.combat] : []);
         for (const c of combats) {
-          for (const target of [c.fleeSection, c.loseSection, c.forceEndSection]) {
+          const targets = [c.fleeSection, c.loseSection, c.forceEndSection, ...(c.fleeSections || []).map(f => f.section)];
+          for (const target of targets) {
             if (target && dist[target] !== undefined && dist[target] + 1 < minD) {
               minD = dist[target] + 1;
             }
@@ -246,7 +247,21 @@ export class StoryReader {
 
     // Check for combat
     const nextSection = this.bookData.sections[sectionNumber];
-    if (nextSection && nextSection.combat) {
+    // A single-enemy combat can be entirely skipped under some condition (e.g.
+    // "you cannot fight with an injured arm, you fall instead") - bypassEffects
+    // then substitutes for the fight. See Book 5 section 162.
+    const combatSkipped = nextSection && nextSection.combat && !Array.isArray(nextSection.combat) &&
+      nextSection.combat.requirements && !this.checkRequirements(nextSection.combat.requirements, gameState.getState());
+    if (combatSkipped) {
+      if (nextSection.combat.bypassEffects) {
+        try {
+          await this.applyEffects(nextSection.combat.bypassEffects);
+        } catch (error) {
+          console.error('Error applying combat bypass effects:', error);
+          UIHelpers.showToast('⚠️ Errore nell\'applicare gli effetti', 'warning');
+        }
+      }
+    } else if (nextSection && nextSection.combat) {
       // Some sections apply a combat bonus/penalty (terrain, surprise, etc.)
       // to the whole encounter rather than to a specific enemy - fold it into
       // every enemy in the fight so combatManager only has one mechanism to handle.
@@ -284,6 +299,11 @@ export class StoryReader {
     if (requirements.kaiArt !== undefined) {
       if (!character.artiRamas.includes(requirements.kaiArt)) return false;
     }
+    // All of these Kai Disciplines must be held at once (e.g. "if you have
+    // Camouflage AND Hunting") - `kaiArt` above only ever checks a single one.
+    if (requirements.kaiArts !== undefined) {
+      if (!requirements.kaiArts.every(art => character.artiRamas.includes(art))) return false;
+    }
     if (requirements.item !== undefined) {
       const has = character.zaino.includes(requirements.item) ||
         character.oggettiSpeciali.includes(requirements.item) ||
@@ -317,6 +337,11 @@ export class StoryReader {
     }
     // "Kai Discipline of Weaponskill WITH the weapon you are now using" -
     // Scherma only helps while the mastered weapon is actually equipped.
+    // Persistent narrative injury flag (e.g. Limbdeath numbing an arm) - set/
+    // cleared via effects.setArmInjured/clearArmInjured, see Book 5 sections 166/2
+    if (requirements.armInjured !== undefined) {
+      if (!!state.flags.armInjured !== requirements.armInjured) return false;
+    }
     if (requirements.weaponMasteryEquipped !== undefined) {
       const equipped = character.artiRamas.includes('Scherma') &&
         !!character.weaponMastery && character.armi.includes(character.weaponMastery);
@@ -424,6 +449,54 @@ export class StoryReader {
         UIHelpers.showToast(`🍖 Hai preso ${added} pasti, ma lo zaino è pieno.`, 'warning');
       } else {
         UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere i pasti.`, 'error');
+      }
+    }
+
+    // Choose exactly N of the listed options (e.g. "pick any 2 of these 6
+    // items") - ask about each in turn, stop once N have been accepted.
+    if (effects.chooseNItems) {
+      const { count, options } = effects.chooseNItems;
+      let accepted = 0;
+      for (const opt of options) {
+        if (accepted >= count) break;
+        const confirmed = await UIHelpers.confirmAsync(`Vuoi prendere: ${opt.label}?`);
+        if (!confirmed) continue;
+        if (opt.type === 'weapon') {
+          await this.handleWeaponAcquisition(opt.value);
+        } else if (opt.type === 'meals') {
+          const added = gameState.addPasti(opt.value);
+          UIHelpers.showToast(added === opt.value ? `🍖 Hai preso ${opt.value} pasti!` : `🎒 Zaino Pieno! Impossibile prendere i pasti.`, added === opt.value ? 'success' : 'error');
+        } else if (gameState.addToZaino(opt.value)) {
+          UIHelpers.showToast(`✅ Preso: ${opt.value}`, 'success');
+        } else {
+          UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere: ${opt.value}`, 'error');
+        }
+        accepted++;
+      }
+    }
+
+    // A shop selling any/all of several items, each at its own Gold Crown
+    // price (unlike chooseNItems, which is free and capped at N picks) - see
+    // Book 5 sections 27/211/388.
+    if (effects.shopItems) {
+      for (const opt of effects.shopItems) {
+        const confirmed = await UIHelpers.confirmAsync(`Vuoi acquistare: ${opt.label}?`);
+        if (!confirmed) continue;
+        if (gameState.getState().character.corone < opt.cost) {
+          UIHelpers.showToast(`💰 Non hai abbastanza Corone d'Oro per: ${opt.label}`, 'error');
+          continue;
+        }
+        gameState.removeCorone(opt.cost);
+        if (opt.type === 'weapon') {
+          await this.handleWeaponAcquisition(opt.value);
+        } else if (opt.type === 'meals') {
+          const added = gameState.addPasti(opt.value);
+          UIHelpers.showToast(added === opt.value ? `🍖 Hai comprato ${opt.value} pasti!` : `🎒 Zaino Pieno! Impossibile prendere i pasti.`, added === opt.value ? 'success' : 'error');
+        } else if (gameState.addToZaino(opt.value)) {
+          UIHelpers.showToast(`✅ Acquistato: ${opt.value}`, 'success');
+        } else {
+          UIHelpers.showToast(`🎒 Zaino Pieno! Impossibile prendere: ${opt.value}`, 'error');
+        }
       }
     }
 
@@ -610,6 +683,22 @@ export class StoryReader {
       UIHelpers.showToast(`⚔️ Combattività ridotta permanentemente di ${effects.loseCombattivita}`, 'error');
     }
 
+    // Persistent narrative injury (Limbdeath numbing an arm): -3 Combattività
+    // until cured, at which point clearArmInjured restores it - see Book 5
+    // sections 166 (set) and 2 (cure).
+    if (effects.setArmInjured) {
+      gameState.setFlag('armInjured', true);
+      const state = gameState.getState();
+      gameState.updateStats({ combattivita: state.character.combattivita - 3 });
+      UIHelpers.showToast('🩹 Il tuo braccio è ora inutilizzabile: -3 Combattività', 'error');
+    }
+    if (effects.clearArmInjured) {
+      gameState.setFlag('armInjured', false);
+      const state = gameState.getState();
+      gameState.updateStats({ combattivita: state.character.combattivita + 3 });
+      UIHelpers.showToast('💚 Hai riacquistato l\'uso del braccio: +3 Combattività', 'success');
+    }
+
     // Restore half the ENDURANCE lost in the combat that just ended (rounded
     // down) - a "got off lightly" outcome (quick win, evasion, spared rather
     // than killed), see Book 5 sections 20/135/161.
@@ -690,9 +779,20 @@ export class StoryReader {
     if (result === 'force-end') {
       setTimeout(() => {
         const forceEndSection = combatManager.combatData.forceEndSection;
+        const state = gameState.getState();
+        const currentSectionNum = state.currentSection;
         combatManager.endCombat('force-end');
-        const currentSection = this.bookData.sections[gameState.getState().currentSection];
-        this.navigateToSection(forceEndSection, currentSection);
+        if (forceEndSection === currentSectionNum) {
+          // The story branches on this single round's outcome via the
+          // section's own choices (enemyLostMore/playerLostMore/combatTied)
+          // rather than a separate destination - just stop fighting and show
+          // them, instead of re-entering navigateToSection and restarting
+          // the same combat forever. See Book 5 section 244.
+          this.update(document.getElementById('story-reader'), gameState.getState());
+        } else {
+          const currentSection = this.bookData.sections[currentSectionNum];
+          this.navigateToSection(forceEndSection, currentSection);
+        }
       }, 1000);
       return;
     }
@@ -708,10 +808,10 @@ export class StoryReader {
         // truly a single way forward - "fuggi" choices only make sense mid-combat.
         const state = gameState.getState();
         const currentSection = this.bookData.sections[state.currentSection];
-        const fleeSection = (currentSection.combat && !Array.isArray(currentSection.combat))
-          ? currentSection.combat.fleeSection
-          : undefined;
-        const nonFleeChoices = currentSection.choices.filter(c => c.section !== fleeSection);
+        const combatObj = (currentSection.combat && !Array.isArray(currentSection.combat)) ? currentSection.combat : null;
+        const fleeSection = combatObj ? combatObj.fleeSection : undefined;
+        const fleeSectionTargets = combatObj ? (combatObj.fleeSections || []).map(f => f.section) : [];
+        const nonFleeChoices = currentSection.choices.filter(c => c.section !== fleeSection && !fleeSectionTargets.includes(c.section));
 
         if (nonFleeChoices.length === 1) {
           this.navigateToSection(nonFleeChoices[0].section, currentSection);
@@ -754,16 +854,24 @@ export class StoryReader {
     // not from currentSection.combat directly - for a multi-enemy fight that's an
     // array, which has no .fleeSection of its own even when every enemy in it does.
     const fleeSection = combatManager.combatData && combatManager.combatData.fleeSection;
+    // Some encounters let the hero pick a direction while fleeing (e.g.
+    // "run north" vs "run south") instead of a single fixed destination -
+    // see Book 3 section 108.
+    const fleeSections = combatManager.combatData && combatManager.combatData.fleeSections;
 
     if (combatManager.flee()) {
       // Fleeing can still cost enough Resistenza to kill the hero
       const died = await this.checkDeath();
       if (died) return;
 
-      if (fleeSection) {
+      const destination = fleeSections && fleeSections.length
+        ? await UIHelpers.chooseAsync('Da che parte vuoi fuggire?', fleeSections.map(f => ({ label: f.label, value: f.section })))
+        : fleeSection;
+
+      if (destination) {
         const state = gameState.getState();
         const currentSection = this.bookData.sections[state.currentSection];
-        this.navigateToSection(fleeSection, currentSection);
+        this.navigateToSection(destination, currentSection);
       } else {
         // Fallback if no flee section defined
         this.update(document.getElementById('story-reader'), gameState.getState());

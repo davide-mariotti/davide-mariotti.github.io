@@ -17,6 +17,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const REQUIREMENT_FIELDS = {
   kaiArt: 'string',
+  kaiArts: 'string[]', // ALL of these Kai Disciplines must be held at once (AND) - `kaiArt` above only checks one
   item: 'string',
   items: 'string[]', // ALL of these must be held at once (AND) - `item` above only checks one
   minGold: 'number',
@@ -27,6 +28,7 @@ const REQUIREMENT_FIELDS = {
   maxRounds: 'number',
   minRounds: 'number',
   tookDamage: 'boolean',
+  armInjured: 'boolean', // persistent narrative injury flag (e.g. Limbdeath) - see Book 5 sections 166/2/23/162
   enemyLostMore: 'boolean', // compares lastCombatSummary.damageDealt vs damageTaken (single-round "who took more damage" outcomes)
   playerLostMore: 'boolean',
   combatTied: 'boolean',
@@ -64,7 +66,11 @@ const EFFECT_FIELDS = {
   loseRandomItem: 'boolean', // steals one random Zaino item, or a random weapon if Zaino is empty - see Book 1 section 144
   loseCombattivita: 'number', // PERMANENT Combat Skill reduction ("for the rest of your life") - rare, see Book 1 section 236
   restoreHalfDamageTaken: 'boolean', // heals floor(lastCombatSummary.damageTaken / 2) - see Book 5 sections 20/135/161
-  restoreEnduranceFromTotalLost: 'kaiArtGated' // { kaiArt } - full recovery with the Discipline, half of ALL lifetime ENDURANCE lost without it, see Book 2 section 240
+  restoreEnduranceFromTotalLost: 'kaiArtGated', // { kaiArt } - full recovery with the Discipline, half of ALL lifetime ENDURANCE lost without it, see Book 2 section 240
+  chooseNItems: 'chooseNItems', // { count, options: [{label, type: 'item'|'weapon'|'meals', value}] } - player picks exactly `count` of the listed options, see Book 2 section 91
+  shopItems: 'shopItems', // [{label, type: 'item'|'weapon'|'meals', value, cost}] - buy any/all at their own Gold Crown price, unlike chooseNItems which is free and capped, see Book 5 sections 27/211/388
+  setArmInjured: 'boolean', // -3 Combattività, until clearArmInjured restores it - see Book 5 section 166
+  clearArmInjured: 'boolean' // see Book 5 section 2
 };
 
 const COMBAT_MODIFIER_TYPES = new Set(['firstRound', 'noKaiArt', 'noPlayerLossRounds']);
@@ -126,11 +132,13 @@ const COMBAT_FIELDS = {
   playerCombatBonus: 'number',
   playerCombatPenalty: 'number',
   playerPenaltyNoItem: 'penaltyNoItem',
+  playerBonusIfItem: 'bonusIfItem', // { item, value } - mirror of playerPenaltyNoItem, bonus applies WHILE holding the item instead of while lacking it, see Book 5 section 253
   psicolaserBonusOverride: 'number', // reduced Psicolaser bonus for partially-immune enemies (default is +2), see Book 3 section 137
   psicoschermoPreventsLoss: 'boolean',
   canFlee: 'boolean',
   canFleeDamage: 'boolean', // documents that fleeing costs Endurance - always true, see combat-manager.js flee()
   fleeSection: 'number',
+  fleeSections: 'fleeChoices', // [{label, section}] - flee leads to a choice of destination instead of one fixed section, see Book 3 section 108
   fleeAfterRounds: 'number',
   loseSection: 'number', // some enemies spare the hero instead of killing him - redirect here instead of Game Over, see Book 5 section 20/135
   forceEndAfterRounds: 'number', // combat is cut short (neither side necessarily dead) after this many rounds - see forceEndSection
@@ -139,7 +147,10 @@ const COMBAT_FIELDS = {
   combatModifiers: 'object[]',
   doubleEnemyEnduranceLoss: 'boolean', // doubles ENDURANCE lost by the enemy each round, regardless of weapon - see Book 2 section 306
   allyDamagePerRound: 'number', // a companion adds this much flat ENDURANCE loss to the enemy every round, independent of the hero's own roll - see Book 3 section 180
-  playerEnduranceLossPerRound: 'enduranceLossPerRound' // { value, waivedByKaiArt? } - flat ENDURANCE loss every round (e.g. ongoing Mindblast), see Book 2 section 332
+  enduranceLossAfterRoundsFromRoll: 'oxygenRounds', // { zeroMeansTen?, kaiArtBonus?: {kaiArt, value}, lossPerRound } - rolled once at combat start for how many rounds the hero can hold his breath before extra loss kicks in, see Book 4 sections 194/234
+  playerEnduranceLossPerRound: 'enduranceLossPerRound', // { value, waivedByKaiArt? } - flat ENDURANCE loss every round (e.g. ongoing Mindblast), see Book 2 section 332
+  requirements: 'object', // gates whether this combat happens at all - if it fails, bypassEffects runs instead and no fight occurs, see Book 5 section 162
+  bypassEffects: 'object'
 };
 
 const DOUBLE_ROLL_OUTCOMES = new Set(['secondLess', 'secondMore', 'equal']);
@@ -189,6 +200,10 @@ function checkType(value, expected) {
     return typeof value === 'object' && value !== null &&
       typeof value.item === 'string' && typeof value.penalty === 'number';
   }
+  if (expected === 'bonusIfItem') {
+    return typeof value === 'object' && value !== null &&
+      typeof value.item === 'string' && typeof value.value === 'number';
+  }
   if (expected === 'numericPuzzle') {
     return typeof value === 'object' && value !== null &&
       typeof value.correctSection === 'number' && typeof value.wrongSection === 'number';
@@ -198,8 +213,31 @@ function checkType(value, expected) {
       typeof value.value === 'number' &&
       (value.waivedByKaiArt === undefined || typeof value.waivedByKaiArt === 'string');
   }
+  if (expected === 'chooseNItems') {
+    return typeof value === 'object' && value !== null &&
+      typeof value.count === 'number' && Array.isArray(value.options) &&
+      value.options.every(o => typeof o === 'object' && o !== null &&
+        typeof o.label === 'string' &&
+        ['item', 'weapon', 'meals'].includes(o.type) &&
+        (o.type === 'meals' ? typeof o.value === 'number' : typeof o.value === 'string'));
+  }
+  if (expected === 'fleeChoices') {
+    return Array.isArray(value) && value.length > 0 &&
+      value.every(o => typeof o === 'object' && o !== null && typeof o.label === 'string' && typeof o.section === 'number');
+  }
+  if (expected === 'shopItems') {
+    return Array.isArray(value) && value.every(o => typeof o === 'object' && o !== null &&
+      typeof o.label === 'string' && typeof o.cost === 'number' &&
+      ['item', 'weapon', 'meals'].includes(o.type) &&
+      (o.type === 'meals' ? typeof o.value === 'number' : typeof o.value === 'string'));
+  }
   if (expected === 'kaiArtGated') {
     return typeof value === 'object' && value !== null && typeof value.kaiArt === 'string';
+  }
+  if (expected === 'oxygenRounds') {
+    return typeof value === 'object' && value !== null && typeof value.lossPerRound === 'number' &&
+      (value.zeroMeansTen === undefined || typeof value.zeroMeansTen === 'boolean') &&
+      (value.kaiArtBonus === undefined || (typeof value.kaiArtBonus === 'object' && typeof value.kaiArtBonus.kaiArt === 'string' && typeof value.kaiArtBonus.value === 'number'));
   }
   return typeOf(value) === expected;
 }
@@ -289,6 +327,8 @@ function validateBook(filePath) {
       if (c.loseSection !== undefined) checkSectionRef(c.loseSection, `${path}.combat[${i}].loseSection`);
       if (c.forceEndSection !== undefined) checkSectionRef(c.forceEndSection, `${path}.combat[${i}].forceEndSection`);
       if (c.combatModifiers) checkCombatModifiers(c.combatModifiers, `${path}.combat[${i}].combatModifiers`, errors);
+      if (c.requirements) checkRequirementsObject(c.requirements, `${path}.combat[${i}].requirements`, errors);
+      if (c.bypassEffects) checkEffects(c.bypassEffects, `${path}.combat[${i}].bypassEffects`, errors);
     });
 
     if (section.isDeathSection && section.choices && section.choices.length > 0) {

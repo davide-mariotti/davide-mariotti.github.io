@@ -26,7 +26,8 @@
    "effects": {
     "canAddItems": [
      "Erba di Oede"
-    ]
+    ],
+    "clearArmInjured": true
    },
    "choices": [
     {
@@ -347,6 +348,14 @@
      "text": "Se il tuo totale è ora da 7 a 11",
      "section": 114
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": -3,
+     "requirements": {
+      "armInjured": true
+     }
+    }
    ]
   },
   "24": {
@@ -403,10 +412,25 @@
     }
    ],
    "effects": {
-    "canAddItems": [
-     "Fiala di Olio di Larnuma",
-     "Pozione di Laumspur",
-     "Elisir di Rendalim"
+    "shopItems": [
+     {
+      "label": "Fiala di Olio di Larnuma — 3 Corone d'Oro",
+      "type": "item",
+      "value": "Fiala di Olio di Larnuma",
+      "cost": 3
+     },
+     {
+      "label": "Pozione di Laumspur — 5 Corone d'Oro",
+      "type": "item",
+      "value": "Pozione di Laumspur",
+      "cost": 5
+     },
+     {
+      "label": "Elisir di Rendalim — 7 Corone d'Oro",
+      "type": "item",
+      "value": "Elisir di Rendalim",
+      "cost": 7
+     }
     ]
    }
   },
@@ -585,7 +609,9 @@
   "40": {
    "text": "<p>Il Kwaraz precipita dal soffitto e si tuffa nell'acqua, sollevando un'enorme ondata di melma fetida che ti sommerge completamente. Straziato dalla nausea, tossisci e conati mentre cerchi di toglierti il fango dagli occhi e dalla bocca. La carcassa del Kwaraz blocca il tunnel, e puoi superarla solo scavalcandola. Ancora sotto shock, perdi 1 Oggetto da Zaino, il tuo sacchetto di Corone d'Oro e 2 punti Resistenza. Apporta le modifiche necessarie al tuo Registro di Guerra.</p>",
    "effects": {
-    "loseEndurance": 2
+    "loseEndurance": 2,
+    "loseRandomItem": true,
+    "removeGold": 9999
    },
    "choices": [
     {
@@ -850,6 +876,14 @@
      "text": "Se il tuo totale è ora 4-11",
      "section": 28
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Scherma"
+     }
+    }
    ]
   },
   "57": {
@@ -938,7 +972,8 @@
    "combat": {
     "name": "Kwaraz",
     "combattivita": 20,
-    "resistenza": 30
+    "resistenza": 30,
+    "psicolaserBonusOverride": 4
    },
    "choices": [
     {
@@ -1127,7 +1162,13 @@
    "choices": [
     {
      "text": "Se possiedi le Arti Ramas di Mimetismo e Caccia",
-     "section": 170
+     "section": 170,
+     "requirements": {
+      "kaiArts": [
+       "Mimetismo",
+       "Caccia"
+      ]
+     }
     },
     {
      "text": "Se decidi di tentare di superare di soppiatto le guardie intente a bere",
@@ -1272,7 +1313,8 @@
    "combat": {
     "name": "Carceriere del Palazzo",
     "combattivita": 14,
-    "resistenza": 21
+    "resistenza": 21,
+    "playerCombatPenalty": 4
    },
    "choices": [
     {
@@ -1486,7 +1528,14 @@
    "combat": {
     "name": "Corriere",
     "combattivita": 16,
-    "resistenza": 23
+    "resistenza": 23,
+    "combatModifiers": [
+     {
+      "type": "firstRound",
+      "value": -2,
+      "rounds": 3
+     }
+    ]
    },
    "choices": [
     {
@@ -1543,7 +1592,7 @@
     "name": "Kwaraz",
     "combattivita": 19,
     "resistenza": 30,
-    "mindblast": true
+    "psicolaserBonusOverride": 4
    },
    "choices": [
     {
@@ -1766,7 +1815,13 @@
    "choices": [
     {
      "text": "Se possiedi le Arti Ramas di Mimetismo e Caccia",
-     "section": 170
+     "section": 170,
+     "requirements": {
+      "kaiArts": [
+       "Mimetismo",
+       "Caccia"
+      ]
+     }
     },
     {
      "text": "Se decidi di tentare di corrompere le guardie",
@@ -2242,11 +2297,25 @@
    "choices": [
     {
      "text": "Se possiedi le Arti Ramas della Telecinesi e del Sesto Senso",
-     "section": 8
+     "section": 8,
+     "requirements": {
+      "kaiArts": [
+       "Telecinesi",
+       "Sesto Senso"
+      ]
+     }
     },
     {
      "text": "Se non possiedi entrambe queste Arti",
-     "section": 98
+     "section": 98,
+     "requirements": {
+      "not": {
+       "kaiArts": [
+        "Telecinesi",
+        "Sesto Senso"
+       ]
+      }
+     }
     }
    ]
   },
@@ -2334,7 +2403,15 @@
     "name": "Ragni del Vapore",
     "combattivita": 10,
     "resistenza": 35,
-    "immuneToPsicolaser": true
+    "immuneToPsicolaser": true,
+    "requirements": {
+     "armInjured": false
+    },
+    "bypassEffects": {
+     "loseEnduranceFromRoll": {
+      "zeroMeansTen": true
+     }
+    }
    },
    "choices": [
     {
@@ -2399,7 +2476,10 @@
      "text": "Continua",
      "section": 55
     }
-   ]
+   ],
+   "effects": {
+    "setArmInjured": true
+   }
   },
   "167": {
    "text": "<p>Attraversi la porta e ti affretti verso il fresco accogliente della stanza al di là. Noti una grande spranga di legno su questo lato della porta e istintivamente la chiudi per rallentare eventuali inseguitori. La stanza è vuota, a eccezione di alcuni abiti gettati sullo schienale di una sedia di ferro battuto. A giudicare dalla misura e dal taglio della stoffa, gli abiti devono appartenere all'armaiolo.</p><p>Senti rumori echeggiare da un passaggio a est: le voci di guardie affamate e il caratteristico tintinnio di piatti.</p><p>Sali un'ampia scalinata e segui una rete di passaggi verso ovest. Sono fiancheggiati da nicchie che contengono busti di marmo e splendidi arazzi, ciascuno raffigurante uno Zakhan del passato o una battaglia ormai dimenticata.</p>",
@@ -2553,7 +2633,12 @@
      "text": "Continua",
      "section": 69
     }
-   ]
+   ],
+   "effects": {
+    "loseAllItems": true,
+    "loseAllWeapons": true,
+    "removeGold": 9999
+   }
   },
   "177": {
    "text": "<p>Mentre infliggi al Kwaraz un colpo mortale, tre Sharnazim escono a guado dalla fogna buia. Hanno gettato via le loro vesti nere e sono nudi fino alla vita. I loro petti muscolosi sono decorati con un grande tatuaggio blu a forma di artiglio d'aquila. Mentre escono a fatica dall'acqua, ti fissano con sguardo malevolo e sguainano scimitarre affilate come rasoi.</p>",
@@ -2736,7 +2821,8 @@
    "combat": {
     "name": "Hammerfist l'Armaiolo",
     "combattivita": 18,
-    "resistenza": 30
+    "resistenza": 30,
+    "playerCombatPenalty": 2
    },
    "choices": [
     {
@@ -2788,7 +2874,9 @@
    "combat": {
     "name": "Yas",
     "combattivita": 14,
-    "resistenza": 28
+    "resistenza": 28,
+    "playerCombatPenalty": 3,
+    "psicoschermoPreventsLoss": true
    },
    "choices": [
     {
@@ -3009,9 +3097,17 @@
    ]
   },
   "211": {
-   "text": "<p>Nonostante le tue riserve, il vino verde lime ha un sapore delizioso. Un caldo bagliore si irradia lentamente dal tuo stomaco, riempiendoti di una piacevole sensazione di benessere. Recupera 2 punti Resistenza. L'uomo sembra deliziato dalla tua reazione al suo vino e si offre di venderti la bottiglia per 5 Corone d'Oro. Se vuoi acquistare la Bottiglia di Kourshah, paga all'uomo 5 Corone d'Oro e apporta le necessarie modifiche al tuo Registro di Guerra. (C'è abbastanza Kourshah nella bottiglia da recuperare altri 4 punti Resistenza.)</p>",
+   "text": "<p>Nonostante le tue riserve, il vino verde lime ha un sapore delizioso. Un caldo bagliore si irradia lentamente dal tuo stomaco, riempiendoti di una piacevole sensazione di benessere. Recupera 2 punti Resistenza. L'uomo sembra deliziato dalla tua reazione al suo vino e si offre di venderti la bottiglia per 5 Corone d'Oro. (C'è abbastanza Kourshah nella bottiglia da recuperare altri 4 punti Resistenza.)</p>",
    "effects": {
-    "restoreEndurance": 2
+    "restoreEndurance": 2,
+    "shopItems": [
+     {
+      "label": "Bottiglia di Kourshah — 5 Corone d'Oro",
+      "type": "item",
+      "value": "Bottiglia di Kourshah",
+      "cost": 5
+     }
+    ]
    },
    "choices": [
     {
@@ -3214,6 +3310,14 @@
      "text": "Se il totale è 0",
      "section": 257
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "minDisciplines": 6
+     }
+    }
    ]
   },
   "225": {
@@ -3278,6 +3382,14 @@
     {
      "text": "Se il tuo totale è ora 7-12",
      "section": 251
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": 3,
+     "requirements": {
+      "kaiArt": "Sesto Senso"
+     }
     }
    ]
   },
@@ -3407,6 +3519,24 @@
      "text": "Se è 5 o più",
      "section": 303
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArts": [
+       "Caccia",
+       "Orientamento",
+       "Mimetismo"
+      ]
+     }
+    },
+    {
+     "value": 3,
+     "requirements": {
+      "minDisciplines": 7
+     }
+    }
    ]
   },
   "240": {
@@ -3414,7 +3544,8 @@
    "combat": {
     "name": "Itikar",
     "combattivita": 17,
-    "resistenza": 30
+    "resistenza": 30,
+    "doubleEnemyEnduranceLoss": true
    },
    "choices": [
     {
@@ -3454,6 +3585,20 @@
      "text": "Se è 7 o più",
      "section": 378
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Mimetismo"
+     }
+    },
+    {
+     "value": 3,
+     "requirements": {
+      "kaiArt": "Psicoschermo"
+     }
+    }
    ]
   },
   "243": {
@@ -3470,20 +3615,31 @@
    "combat": {
     "name": "Drakkarim Cavaliere di Kraan",
     "combattivita": 20,
-    "resistenza": 28
+    "resistenza": 28,
+    "forceEndAfterRounds": 1,
+    "forceEndSection": 244
    },
    "choices": [
     {
      "text": "Se in questo round di combattimento perdi più punti Resistenza del nemico",
-     "section": 347
+     "section": 347,
+     "requirements": {
+      "playerLostMore": true
+     }
     },
     {
      "text": "Se il nemico perde più punti Resistenza di te",
-     "section": 327
+     "section": 327,
+     "requirements": {
+      "enemyLostMore": true
+     }
     },
     {
      "text": "Se entrambi perdete esattamente lo stesso numero di punti Resistenza",
-     "section": 271
+     "section": 271,
+     "requirements": {
+      "combatTied": true
+     }
     }
    ]
   },
@@ -3600,7 +3756,11 @@
    "combat": {
     "name": "Dhorgaan",
     "combattivita": 20,
-    "resistenza": 40
+    "resistenza": 40,
+    "playerBonusIfItem": {
+     "item": "Mazza Ingioiellata",
+     "value": 5
+    }
    },
    "choices": [
     {
@@ -3721,7 +3881,11 @@
      "text": "Se non possiedi questo Oggetto Speciale",
      "section": 299
     }
-   ]
+   ],
+   "effects": {
+    "loseEndurance": 2,
+    "waivedByKaiArt": "Psicoschermo"
+   }
   },
   "265": {
    "text": "<p>Si rifiuta di dire qualsiasi cosa finché non avrai messo del denaro nella sua ciotola per l'elemosina.</p>",
@@ -4048,7 +4212,7 @@
    "text": "<p>Il Drakkar ti maledice con l'ultimo respiro, il suo grido che si spegne mentre cade dalla piattaforma. Corri ad aiutare il tuo compatriota ferito, ma la battaglia non è ancora finita. Un cavaliere di Kraan sta piombando su di te, una balestra puntata alla tua testa; spara e il dardo sfreccia verso il tuo volto. Poi un fischio acuto e metallico ti risuona nelle orecchie mentre il dardo, miracolosamente, rimbalza via, deviato da uno scudo invisibile.</p>",
    "choices": [
     {
-     "text": "Se hai mai ricevuto un Ciondolo di Cristallo a Stella",
+     "text": "Se hai mai ricevuto un Ciondolo a Stella di Cristallo",
      "section": 399,
      "requirements": {
       "item": "Ciondolo a Stella di Cristallo"
@@ -4109,7 +4273,7 @@
    ]
   },
   "293": {
-   "text": "<p>Per un istante, il tuo senso dell'orientamento si perde completamente mentre precipiti, ruotando nel vuoto, ignaro di cosa stia accadendo al tuo corpo. Provi a gridare, ma le tue grida si perdono nel vento che ti sfreccia accanto. Colpisci i rami più alti di un albero di toa. Sei stordito dallo schianto, e il tuo corpo si intorpidisce.</p><p>Quando il tuo corpo straziato viene trovato dai Drakkarim, sei già morto dissanguato.</p>",
+   "text": "<p>Per un istante, il tuo senso dell'orientamento si perde completamente mentre precipiti, ruotando nel vuoto, ignaro di cosa stia accadendo al tuo corpo. Provi a gridare, ma le tue grida si perdono nel vento che ti sfreccia accanto. Colpisci i rami più alti di un albero di toa. Sei stordito dallo schianto, e il tuo corpo si intorpidisce.</p><p>Quando il tuo corpo straziato viene trovato dai Drakkarim, sei già morto dissanguato. La tua vita e le speranze di Sommerlund finiscono qui.</p>",
    "isDeathSection": true,
    "choices": []
   },
@@ -4179,7 +4343,9 @@
     "name": "Vordak",
     "combattivita": 17,
     "resistenza": 25,
-    "immuneToPsicolaser": true
+    "immuneToPsicolaser": true,
+    "playerCombatPenalty": 2,
+    "psicoschermoPreventsLoss": true
    },
    "choices": [
     {
@@ -4214,6 +4380,20 @@
     {
      "text": "Se il tuo punteggio è 5-9",
      "section": 259
+    }
+   ],
+   "destinyModifier": [
+    {
+     "value": -2,
+     "requirements": {
+      "minDisciplines": 7
+     }
+    },
+    {
+     "value": -1,
+     "requirements": {
+      "kaiArt": "Caccia"
+     }
     }
    ]
   },
@@ -4296,7 +4476,7 @@
    ]
   },
   "310": {
-   "text": "<p>Mentre scavalchi i corpi senza vita, noti una Chiave di Rame appesa a una catena al collo di uno di loro. Afferri la Chiave e te la infili in tasca, poi ti precipiti giù per i gradini verso una fioca luce in basso. Segna la Chiave di Rame sul tuo Registro di Guerra come Oggetto Speciale.</p><p>Un piccolo fuoco, sul quale arrostisce un pollo allo spiedo, illumina una stanza di guardia alla base della torre. Sullo schienale di una sedia di ferro battuto è appesa una Borraccia d'Acqua, e accanto giace una Spada Larga affilatissima. Puoi prendere uno di questi oggetti, se lo desideri, e segnarlo sul tuo Registro di Guerra (la Borraccia è un Oggetto da Zaino).</p><p>Senti i Drakkarim precipitarsi giù per le scale della torre. Saranno presto sopra di te.</p>",
+   "text": "<p>Mentre scavalchi i corpi senza vita, noti una Chiave di Rame appesa a una catena al collo di uno di loro. Afferri la Chiave e te la infili in tasca, poi ti precipiti giù per i gradini verso una fioca luce in basso. Segna la Chiave di Rame sul tuo Registro di Guerra come Oggetto Speciale.</p><p>Un piccolo fuoco, sul quale arrostisce un pollo allo spiedo, illumina una stanza di guardia alla base della torre. Sullo schienale di una sedia di ferro battuto è appesa una Borraccia d'Acqua, e accanto giace uno Spadone affilatissimo. Puoi prendere uno di questi oggetti, se lo desideri, e segnarlo sul tuo Registro di Guerra (la Borraccia è un Oggetto da Zaino).</p><p>Senti i Drakkarim precipitarsi giù per le scale della torre. Saranno presto sopra di te.</p>",
    "effects": {
     "addItem": "Chiave di Rame",
     "canAddItems": [
@@ -4396,7 +4576,14 @@
    "combat": {
     "name": "Drakkar",
     "combattivita": 18,
-    "resistenza": 26
+    "resistenza": 26,
+    "combatModifiers": [
+     {
+      "type": "firstRound",
+      "value": -2,
+      "rounds": 3
+     }
+    ]
    },
    "choices": [
     {
@@ -4509,6 +4696,14 @@
      "text": "Se il totale è 4 o più",
      "section": 398
     }
+   ],
+   "destinyModifier": [
+    {
+     "value": 2,
+     "requirements": {
+      "kaiArt": "Scherma"
+     }
+    }
    ]
   },
   "326": {
@@ -4610,7 +4805,13 @@
     "combattivita": 17,
     "resistenza": 32,
     "canFlee": true,
-    "fleeSection": 209
+    "fleeSection": 209,
+    "combatModifiers": [
+     {
+      "type": "noPlayerLossRounds",
+      "rounds": 2
+     }
+    ]
    },
    "choices": [
     {
@@ -5142,7 +5343,8 @@
    "combat": {
     "name": "Itikar",
     "combattivita": 17,
-    "resistenza": 30
+    "resistenza": 30,
+    "doubleEnemyEnduranceLoss": true
    },
    "choices": [
     {
@@ -5414,7 +5616,29 @@
      "text": "Se vuoi prendere la strada a destra",
      "section": 367
     }
-   ]
+   ],
+   "effects": {
+    "shopItems": [
+     {
+      "label": "Spada — 5 Corone d'Oro",
+      "type": "weapon",
+      "value": "Spada",
+      "cost": 5
+     },
+     {
+      "label": "Pugnale — 3 Corone d'Oro",
+      "type": "weapon",
+      "value": "Pugnale",
+      "cost": 3
+     },
+     {
+      "label": "Spadone — 9 Corone d'Oro",
+      "type": "weapon",
+      "value": "Spadone",
+      "cost": 9
+     }
+    ]
+   }
   },
   "389": {
    "text": "<p>Mentre salti dalla passerella sulla piattaforma di atterraggio, la sentinella si volta di scatto per affrontarti. Afferra la lancia, pronta all'attacco. Ora si trova tra te e il recinto dell'Itikar: il combattimento è inevitabile.</p>",
@@ -5471,7 +5695,15 @@
     "combattivita": 16,
     "resistenza": 25,
     "canFlee": true,
-    "fleeSection": 228
+    "fleeSection": 228,
+    "fleeAfterRounds": 3,
+    "combatModifiers": [
+     {
+      "type": "firstRound",
+      "value": -2,
+      "rounds": 1
+     }
+    ]
    },
    "choices": [
     {

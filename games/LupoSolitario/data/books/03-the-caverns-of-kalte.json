@@ -48,10 +48,10 @@
    ]
   },
   "4": {
-   "text": "<p>Nascondi il corpo sotto la scala e lo perquisisci rapidamente. Trovi una Spada d'Osso e un Disco di Pietra Blu. Se vuoi tenere uno di questi oggetti, o entrambi, segnali sul tuo Registro di Guerra come Oggetti Speciali. Lasci il corpo e risali velocemente le scale.</p>",
+   "text": "<p>Nascondi il corpo sotto la scala e lo perquisisci rapidamente. Trovi una Spada d'Osso di Kalkoth e un Disco di Pietra Blu. La Spada d'Osso di Kalkoth, se impugnata, aggiunge 1 punto a Combattivit&agrave;. Se vuoi tenere la Spada, segnala sul tuo Registro di Guerra come Arma; se vuoi tenere il Disco, segnalo come Oggetto Speciale. Lasci il corpo e risali velocemente le scale.</p>",
    "effects": {
+    "canAddWeapon": "Spada d'Osso di Kalkoth",
     "canAddItems": [
-     "Spada d'Osso",
      "Disco di Pietra Blu"
     ]
    },
@@ -1651,7 +1651,16 @@
     "immuneToPsicolaser": false,
     "canFlee": true,
     "fleeAfterRounds": 1,
-    "fleeSection": 330
+    "fleeSections": [
+     {
+      "label": "Vai a Sud",
+      "section": 330
+     },
+     {
+      "label": "Vai a Nord",
+      "section": 198
+     }
+    ]
    },
    "choices": [
     {

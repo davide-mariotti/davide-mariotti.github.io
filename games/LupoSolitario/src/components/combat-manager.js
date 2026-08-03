@@ -123,6 +123,19 @@ export class CombatManager {
         this.combatData = enemyData;
         this.canFlee = enemyData.canFlee || false;
 
+        // Underwater fights: roll once, at the start, for how many rounds the
+        // hero can hold his breath before extra ENDURANCE loss kicks in - see
+        // Book 4 sections 194/234.
+        let oxygenSafeRounds = null;
+        if (enemyData.enduranceLossAfterRoundsFromRoll) {
+            const spec = enemyData.enduranceLossAfterRoundsFromRoll;
+            const roll = getRandomDestinyNumber();
+            oxygenSafeRounds = (spec.zeroMeansTen && roll === 0) ? 10 : roll;
+            if (spec.kaiArtBonus && gameState.hasKaiArt(spec.kaiArtBonus.kaiArt)) {
+                oxygenSafeRounds += spec.kaiArtBonus.value;
+            }
+        }
+
         gameState.startCombat({
             enemy: enemyData.name,
             combattivita: enemyData.combattivita,
@@ -133,12 +146,15 @@ export class CombatManager {
             playerCombatBonus: enemyData.playerCombatBonus || 0,
             playerCombatPenalty: enemyData.playerCombatPenalty || 0,
             playerPenaltyNoItem: enemyData.playerPenaltyNoItem || null,
+            playerBonusIfItem: enemyData.playerBonusIfItem || null,
             psicoschermoPreventsLoss: enemyData.psicoschermoPreventsLoss || false,
             undead: enemyData.undead || false,
             combatModifiers: enemyData.combatModifiers || [],
             doubleEnemyEnduranceLoss: enemyData.doubleEnemyEnduranceLoss || false,
             playerEnduranceLossPerRound: enemyData.playerEnduranceLossPerRound || null,
-            allyDamagePerRound: enemyData.allyDamagePerRound || 0
+            allyDamagePerRound: enemyData.allyDamagePerRound || 0,
+            enduranceLossAfterRoundsFromRoll: enemyData.enduranceLossAfterRoundsFromRoll || null,
+            oxygenSafeRounds
         });
 
         this.log(`⚔️ Combattimento contro ${enemyData.name}!`);
@@ -173,6 +189,12 @@ export class CombatManager {
             }
         }
 
+        // Spada d'Osso di Kalkoth: a Kalkoth rib blade that adds 1 to Combattività
+        // while wielded, unlike an ordinary Spada d'Osso - see Book 3 section 4
+        if (character.armi.includes('Spada d\'Osso di Kalkoth')) {
+            heroCombattivita += 1;
+        }
+
         // Enemy Mindblast (Psicoattacco)
         if (enemy.mindblast && !character.artiRamas.includes('Psicoschermo')) {
             heroCombattivita -= 2;
@@ -192,6 +214,19 @@ export class CombatManager {
                 character.armi.includes(item);
             if (!hasItem) {
                 heroCombattivita += penalty;
+            }
+        }
+
+        // Bonus applied only while the hero holds a specific item (e.g. an
+        // enchanted weapon especially effective against this creature) - the
+        // mirror image of playerPenaltyNoItem above, see Book 5 section 253.
+        if (enemy.playerBonusIfItem) {
+            const { item, value } = enemy.playerBonusIfItem;
+            const hasItem = character.zaino.includes(item) ||
+                character.oggettiSpeciali.includes(item) ||
+                character.armi.includes(item);
+            if (hasItem) {
+                heroCombattivita += value;
             }
         }
 
@@ -295,6 +330,15 @@ export class CombatManager {
         if (perRoundLoss && heroDamage !== 999) {
             const waived = perRoundLoss.waivedByKaiArt && gameState.hasKaiArt(perRoundLoss.waivedByKaiArt);
             if (!waived) heroDamage += perRoundLoss.value;
+        }
+
+        // Underwater fights: once the hero has fought longer than he can hold
+        // his breath (rolled once at combat start, see engageNextEnemy), each
+        // further round costs extra ENDURANCE from lack of oxygen - see Book 4
+        // sections 194/234.
+        if (combat.enduranceLossAfterRoundsFromRoll && heroDamage !== 999 &&
+            combat.rounds.length >= combat.oxygenSafeRounds) {
+            heroDamage += combat.enduranceLossAfterRoundsFromRoll.lossPerRound;
         }
 
         // Apply damage

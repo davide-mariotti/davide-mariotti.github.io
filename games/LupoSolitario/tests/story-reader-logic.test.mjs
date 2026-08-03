@@ -10,8 +10,25 @@ mock.module('../src/save-manager.js', {
 
 // ui-helpers.js touches `document` for toasts/modals - stubbed so applyEffects
 // (which calls UIHelpers.showToast) is safely callable outside a browser.
+let mockChooseAsyncResult;
 mock.module('../src/utils/ui-helpers.js', {
-  exports: { UIHelpers: { showToast: () => {}, showAlert: async () => {}, confirmAsync: async () => true, showModal: () => {} } }
+  exports: { UIHelpers: { showToast: () => {}, showAlert: async () => {}, confirmAsync: async () => true, showModal: () => {}, chooseAsync: async () => mockChooseAsyncResult } }
+});
+
+// combat-manager.js is stubbed for fleeCombat's own tests below - fleeCombat
+// only ever reads combatManager.combatData/canPlayerFlee()/flee(), never the
+// real combat math, so a minimal fake avoids pulling in destiny-table.js too.
+let mockCombatData;
+let startCombatCalls = 0;
+mock.module('../src/components/combat-manager.js', {
+  exports: {
+    combatManager: {
+      canPlayerFlee: () => true,
+      get combatData() { return mockCombatData; },
+      flee: () => true,
+      startCombat: () => { startCombatCalls++; }
+    }
+  }
 });
 
 // game-state.js reads localStorage at module load time (easyMode persistence),
@@ -25,11 +42,12 @@ const reader = new StoryReader({ sections: {} });
 
 function fakeState({
   artiRamas = [], zaino = [], oggettiSpeciali = [], armi = [], corone = 0,
-  resistenza = 20, weaponMastery = null, lastCombatSummary = null
+  resistenza = 20, weaponMastery = null, lastCombatSummary = null, flags = {}
 } = {}) {
   return {
     character: { artiRamas, zaino, oggettiSpeciali, armi, corone, resistenza, weaponMastery },
-    lastCombatSummary
+    lastCombatSummary,
+    flags
   };
 }
 
@@ -41,6 +59,13 @@ test('checkRequirements: no requirements always passes', () => {
 test('checkRequirements: kaiArt must be in artiRamas', () => {
   assert.equal(reader.checkRequirements({ kaiArt: 'Sesto Senso' }, fakeState({ artiRamas: ['Sesto Senso'] })), true);
   assert.equal(reader.checkRequirements({ kaiArt: 'Sesto Senso' }, fakeState()), false);
+});
+
+test('checkRequirements: armInjured matches the persistent flag set/cleared by setArmInjured/clearArmInjured - see Book 5 sections 166/2', () => {
+  assert.equal(reader.checkRequirements({ armInjured: true }, fakeState({ flags: { armInjured: true } })), true);
+  assert.equal(reader.checkRequirements({ armInjured: true }, fakeState()), false);
+  assert.equal(reader.checkRequirements({ armInjured: false }, fakeState()), true);
+  assert.equal(reader.checkRequirements({ armInjured: false }, fakeState({ flags: { armInjured: true } })), false);
 });
 
 test('checkRequirements: item matches Zaino, Oggetti Speciali, or Armi', () => {
@@ -106,6 +131,18 @@ test('checkRequirements: items requires ALL of a list at once (unlike single ite
     reader.checkRequirements({ items: ['Torcia', 'Acciarino'] }, fakeState({ zaino: ['Torcia'] })),
     false,
     'missing the second item'
+  );
+});
+
+test('checkRequirements: kaiArts requires ALL of a list at once (unlike single kaiArt) - see Book 5 section 79', () => {
+  assert.equal(
+    reader.checkRequirements({ kaiArts: ['Mimetismo', 'Caccia'] }, fakeState({ artiRamas: ['Mimetismo', 'Caccia'] })),
+    true
+  );
+  assert.equal(
+    reader.checkRequirements({ kaiArts: ['Mimetismo', 'Caccia'] }, fakeState({ artiRamas: ['Mimetismo'] })),
+    false,
+    'missing the second Kai Discipline'
   );
 });
 
@@ -223,6 +260,19 @@ test('applyEffects: loseRandomItem steals one Zaino item, falling back to a weap
   assert.deepEqual(character.armi, [], 'Zaino now empty, falls back to stealing the weapon');
 });
 
+test('applyEffects: setArmInjured/clearArmInjured toggle the flag and its -3/+3 Combattività - see Book 5 sections 166/2', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({ setArmInjured: true });
+  assert.equal(gameState.getState().character.combattivita, 17);
+  assert.equal(gameState.getFlag('armInjured'), true);
+
+  await reader.applyEffects({ clearArmInjured: true });
+  assert.equal(gameState.getState().character.combattivita, 20);
+  assert.equal(gameState.getFlag('armInjured'), false);
+});
+
 test('applyEffects: restoreHalfDamageTaken heals floor(damageTaken / 2) from the last combat', async () => {
   gameState.resetGame();
   gameState.setCharacter({ combattivita: 20, resistenza: 10, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
@@ -290,6 +340,86 @@ test('applyEffects: restoreEnduranceFromTotalLost heals fully with the Kai Disci
   gameState.takeDamage(6);
   await reader.applyEffects({ restoreEnduranceFromTotalLost: { kaiArt: 'Guarigione' } });
   assert.equal(gameState.getState().character.resistenza, 15, '10 (current after -10) + floor(10/2)=5, without the Discipline');
+});
+
+test('fleeCombat: fleeSections lets the player pick a direction instead of one fixed destination - see Book 3 section 108', async () => {
+  gameState.resetGame();
+  const originalCheckDeath = reader.checkDeath;
+  const originalNavigateToSection = reader.navigateToSection;
+  reader.checkDeath = async () => false;
+  let navigatedTo = null;
+  reader.navigateToSection = (dest) => { navigatedTo = dest; };
+
+  mockCombatData = { fleeSections: [{ label: 'Vai a Sud', section: 330 }, { label: 'Vai a Nord', section: 198 }] };
+  mockChooseAsyncResult = 198;
+
+  await reader.fleeCombat();
+  assert.equal(navigatedTo, 198, 'navigates to whichever direction the player chose');
+
+  reader.checkDeath = originalCheckDeath;
+  reader.navigateToSection = originalNavigateToSection;
+});
+
+test('navigateToSection: combat.requirements failing skips the fight and runs bypassEffects instead - see Book 5 section 162', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+  gameState.setFlag('armInjured', true);
+  startCombatCalls = 0;
+
+  reader.bookData = {
+    sections: {
+      162: {
+        text: 'x',
+        combat: { name: 'Ragni del Vapore', combattivita: 10, resistenza: 35, requirements: { armInjured: false }, bypassEffects: { loseEndurance: 4 } },
+        choices: [{ text: 'Continua', section: 114 }]
+      }
+    }
+  };
+  await reader.navigateToSection(162, { text: 'prev', choices: [] });
+  assert.equal(startCombatCalls, 0, 'combat is skipped while the arm is injured');
+  assert.equal(gameState.getState().character.resistenza, 16, 'bypassEffects still applies');
+
+  gameState.setFlag('armInjured', false);
+  await reader.navigateToSection(162, { text: 'prev', choices: [] });
+  assert.equal(startCombatCalls, 1, 'combat runs normally once the requirement passes');
+
+  reader.bookData = { sections: {} };
+});
+
+test('applyEffects: chooseNItems stops asking once count options are accepted - see Book 2 section 91', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 0, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({
+    chooseNItems: {
+      count: 2,
+      options: [
+        { label: 'Asta', type: 'weapon', value: 'Asta' },
+        { label: 'Coperta', type: 'item', value: 'Coperta' },
+        { label: 'Cibo per 2 Pasti', type: 'meals', value: 2 },
+        { label: 'Zaino', type: 'item', value: 'Zaino' }
+      ]
+    }
+  });
+  const character = gameState.getState().character;
+  assert.deepEqual(character.armi, ['Asta'], 'first option accepted (weapon)');
+  assert.deepEqual(character.zaino, ['Coperta'], 'second option accepted (item)');
+  assert.equal(character.pasti, 0, 'third option never offered - count already reached');
+});
+
+test('applyEffects: shopItems deducts each item\'s own price and blocks purchases the hero can\'t afford - see Book 5 sections 27/211/388', async () => {
+  gameState.resetGame();
+  gameState.setCharacter({ combattivita: 20, resistenza: 20, resistenzaMax: 20, artiRamas: [], armi: [], zaino: [], corone: 6, pasti: 0, oggettiSpeciali: [] });
+
+  await reader.applyEffects({
+    shopItems: [
+      { label: 'Pugnale — 3 Corone', type: 'weapon', value: 'Pugnale', cost: 3 },
+      { label: 'Spadone — 9 Corone', type: 'weapon', value: 'Spadone', cost: 9 }
+    ]
+  });
+  const character = gameState.getState().character;
+  assert.deepEqual(character.armi, ['Pugnale'], 'affordable item is bought');
+  assert.equal(character.corone, 3, 'cost is deducted');
 });
 
 test('applyEffects: canAddItems routes weapon-named entries to the weapon slot, not the Zaino - see loot piles like Book 4 section 2', async () => {

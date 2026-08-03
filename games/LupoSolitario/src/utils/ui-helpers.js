@@ -84,6 +84,23 @@ export class UIHelpers {
         });
     }
 
+    // Prompts with one button per option, resolving to the chosen option's
+    // value - e.g. "which way do you flee?" with more than 2 outcomes.
+    static chooseAsync(message, options) {
+        return new Promise((resolve) => {
+            const buttons = {};
+            const buttonsHtml = options.map((opt, i) => {
+                buttons[`[data-action="choice-${i}"]`] = (e, modal) => {
+                    modal.remove();
+                    resolve(opt.value);
+                };
+                return `<button class="btn btn-primary btn-large" data-action="choice-${i}">${opt.label}</button>`;
+            }).join('');
+
+            this.showModal(`<p class="modal-text">${message}</p><div class="modal-actions">${buttonsHtml}</div>`, { buttons });
+        });
+    }
+
     static confirmAsync(message) {
         return new Promise((resolve) => {
             this.showConfirm(

@@ -1360,14 +1360,41 @@
      "text": "Prosegui",
      "section": 245,
      "effects": {
-      "canAddItems": [
-       "Bastone",
-       "Coperta",
-       "Zaino",
-       "Corda"
-      ],
-      "canAddMeals": 2,
-      "canAddWeapon": "Pugnale"
+      "chooseNItems": {
+       "count": 2,
+       "options": [
+        {
+         "label": "Asta",
+         "type": "weapon",
+         "value": "Asta"
+        },
+        {
+         "label": "Coperta",
+         "type": "item",
+         "value": "Coperta"
+        },
+        {
+         "label": "Cibo per 2 Pasti",
+         "type": "meals",
+         "value": 2
+        },
+        {
+         "label": "Zaino",
+         "type": "item",
+         "value": "Zaino"
+        },
+        {
+         "label": "Pugnale",
+         "type": "weapon",
+         "value": "Pugnale"
+        },
+        {
+         "label": "Corda",
+         "type": "item",
+         "value": "Corda"
+        }
+       ]
+      }
      }
     }
    ]

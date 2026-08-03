@@ -150,7 +150,8 @@
      "Corda",
      "Pozione di Laumspur",
      "Spada",
-     "Lancia"
+     "Lancia",
+     "Zaino"
     ]
    },
    "choices": [
@@ -1149,7 +1150,6 @@
     "name": "Capitano Vassagoniano",
     "combattivita": 22,
     "resistenza": 28,
-    "mindblast": true,
     "immuneToPsicolaser": true,
     "canFlee": true,
     "fleeAfterRounds": 2,
@@ -1281,7 +1281,14 @@
      "text": "Se possiedi l'Arte Ramas del Sesto Senso o dell'Orientamento",
      "section": 60,
      "requirements": {
-      "kaiArt": "Sesto Senso"
+      "anyOf": [
+       {
+        "kaiArt": "Sesto Senso"
+       },
+       {
+        "kaiArt": "Orientamento"
+       }
+      ]
      }
     },
     {
@@ -2281,7 +2288,7 @@
    ]
   },
   "152": {
-   "text": "<p>Una rapida perquisizione del corpo rivela una Spada, 6 Corone d'Oro, cibo a sufficienza per due Pasti e una Chiave di Ottone. Puoi prendere uno qualsiasi di questi oggetti, ricordando di segnarli sul tuo Registro di Guerra.</p><p>Mentre ti volti per entrare nel tunnel, una guardia compare sulla rampa più in basso. Ti vede e dà l'allarme suonando un corno di guerra appeso al collo. Non resti a scoprire come reagiranno gli altri al segnale: con il suo suono ancora nelle orecchie, fuggi di corsa nel tunnel.</p>",
+   "text": "<p>Una rapida perquisizione del corpo rivela una Spada, 6 Corone d'Oro, cibo a sufficienza per due Pasti e una Chiave d'Ottone. Puoi prendere uno qualsiasi di questi oggetti, ricordando di segnarli sul tuo Registro di Guerra.</p><p>Mentre ti volti per entrare nel tunnel, una guardia compare sulla rampa più in basso. Ti vede e dà l'allarme suonando un corno di guerra appeso al collo. Non resti a scoprire come reagiranno gli altri al segnale: con il suo suono ancora nelle orecchie, fuggi di corsa nel tunnel.</p>",
    "effects": {
     "addGold": 6,
     "canAddWeapon": "Spada",
@@ -2829,7 +2836,9 @@
    "combat": {
     "name": "Cani da Guerra Vassagoniani",
     "combattivita": 17,
-    "resistenza": 30
+    "resistenza": 30,
+    "forceEndAfterRounds": 2,
+    "forceEndSection": 311
    },
    "choices": [
     {
@@ -2843,7 +2852,15 @@
    "combat": {
     "name": "Piovra Gigante",
     "combattivita": 16,
-    "resistenza": 37
+    "resistenza": 37,
+    "enduranceLossAfterRoundsFromRoll": {
+     "zeroMeansTen": true,
+     "kaiArtBonus": {
+      "kaiArt": "Telecinesi",
+      "value": 2
+     },
+     "lossPerRound": 2
+    }
    },
    "choices": [
     {
@@ -3460,7 +3477,15 @@
     "name": "Meresquid Gigante",
     "combattivita": 16,
     "resistenza": 37,
-    "canFlee": false
+    "canFlee": false,
+    "enduranceLossAfterRoundsFromRoll": {
+     "zeroMeansTen": true,
+     "kaiArtBonus": {
+      "kaiArt": "Telecinesi",
+      "value": 2
+     },
+     "lossPerRound": 2
+    }
    },
    "choices": [
     {
@@ -3738,11 +3763,19 @@
    "choices": [
     {
      "text": "Se hai l'Arte Ramas dell'Orientamento",
-     "section": 326
+     "section": 326,
+     "requirements": {
+      "kaiArt": "Orientamento"
+     }
     },
     {
      "text": "Se non possiedi questa abilità, puoi imboccare il tunnel a est",
-     "section": 156
+     "section": 156,
+     "requirements": {
+      "not": {
+       "kaiArt": "Orientamento"
+      }
+     }
     },
     {
      "text": "In alternativa puoi imboccare il tunnel a sud",
@@ -3832,7 +3865,9 @@
    "combat": {
     "name": "Cani da Guerra Vassagoniani",
     "combattivita": 18,
-    "resistenza": 30
+    "resistenza": 30,
+    "forceEndAfterRounds": 3,
+    "forceEndSection": 311
    },
    "choices": [
     {
@@ -5041,7 +5076,7 @@
    ]
   },
   "350": {
-   "text": "<p>Mentre Barraka muore, il vento si alza improvvisamente d'intensità, riempiendo il tempio di un lamento di disperazione. Senti lo spirito gelido e malevolo del Signore delle Tenebre Vashna avvolgerti in un abbraccio di ghiaccio, ma percepisci che è impotente a farti del male. Il sacrificio è stato sventato; è condannato a rimpiangere per sempre una vittoria che sarebbe potuta essere sua.</p><p>Sul pavimento nero del tempio giace la Daga di Vashna. Mentre la raccogli e la infili nella cintura (segnala sul tuo Registro di Guerra come Oggetto Speciale), la fiamma blu maligna tremola e si spegne. Finché possiederai questa lama malvagia, il Signore delle Tenebre Vashna e la sua legione di guerrieri morti resteranno imprigionati nel Baratro della Perdizione.</p><p>Liberi la bella Madelon dall'altare e la porti attraverso i corridoi del tempio che conducono in superficie. Mentre emergi tra le rovine illuminate dalla luna, uno spettacolo sorprendente ti si para davanti. I guerrieri di Barraka fuggono dalla città fantasma in ogni direzione, inseguiti da vicino da un esercito di cavalieri. La luce della luna piena e le torce di questi cavalieri illuminano lo stemma del sole che decora le loro tuniche. La notizia deve essere giunta a Holmgard, perché sono l'esercito sommlending, guidato dallo stesso Re Ulnar. I tuoi compatrioti lodano il tuo coraggio e ardimento, le loro grida acclamanti sovrastando l'eco di Maakengorge, poiché ancora una volta ti sei dimostrato un vero eroe di Sommerlund. Mentre consegni Madelon tra le braccia in attesa di suo padre, la sua gioia travolgente ti riempie di un profondo senso di soddisfazione. Sei davvero degno del titolo di «cavaliere Ramas». Hai portato a termine la tua pericolosa missione, ma l'epica saga di Lupo Solitario - ultimo dei cavalieri Ramas - è lungi dall'essere conclusa.</p>",
+   "text": "<p>Mentre Barraka muore, il vento si alza improvvisamente d'intensità, riempiendo il tempio di un lamento di disperazione. Senti lo spirito gelido e malevolo del Signore delle Tenebre Vashna avvolgerti in un abbraccio di ghiaccio, ma percepisci che è impotente a farti del male. Il sacrificio è stato sventato; è condannato a rimpiangere per sempre una vittoria che sarebbe potuta essere sua.</p><p>Sul pavimento nero del tempio giace la Daga di Vashna. Mentre la raccogli e la infili nella cintura (segnala sul tuo Registro di Guerra come Oggetto Speciale), la fiamma blu maligna tremola e si spegne. Finché possiederai questa lama malvagia, il Signore delle Tenebre Vashna e la sua legione di guerrieri morti resteranno imprigionati nel Baratro della Perdizione.</p><p>Liberi la bella Madelon dall'altare e la porti attraverso i corridoi del tempio che conducono in superficie. Mentre emergi tra le rovine illuminate dalla luna, uno spettacolo sorprendente ti si para davanti. I guerrieri di Barraka fuggono dalla città fantasma in ogni direzione, inseguiti da vicino da un esercito di cavalieri. La luce della luna piena e le torce di questi cavalieri illuminano lo stemma del sole che decora le loro tuniche. La notizia deve essere giunta a Holmgard, perché sono l'esercito sommlending, guidato dallo stesso Re Ulnar. I tuoi compatrioti lodano il tuo coraggio e ardimento, le loro grida acclamanti sovrastando l'eco di Maakengorge, poiché ancora una volta ti sei dimostrato un vero eroe di Sommerlund. Mentre consegni Madelon tra le braccia in attesa di suo padre, la sua gioia travolgente ti riempie di un profondo senso di soddisfazione. Sei davvero degno del titolo di «cavaliere Ramas». Hai portato a termine la tua pericolosa missione, ma l'epica saga di Lupo Solitario - ultimo dei cavalieri Ramas - è lungi dall'essere conclusa. Una nuova e mortale sfida ti attende nel Libro Quinto della serie di Lupo Solitario, intitolato: Ombra sulla Sabbia.</p>",
    "isVictory": true
   }
  }

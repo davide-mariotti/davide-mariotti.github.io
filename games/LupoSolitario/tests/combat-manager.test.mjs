@@ -98,6 +98,16 @@ test('calculateForceRatio: Sommerswerd grants +10 total with a sword-type Scherm
   assert.equal(combatManager.calculateForceRatio(), 15);
 });
 
+test('calculateForceRatio: Spada d\'Osso di Kalkoth grants +1 only while wielded - see Book 3 section 4', () => {
+  resetGameState({ combattivita: 20, armi: ['Spada d\'Osso di Kalkoth'] });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 10 });
+  assert.equal(combatManager.calculateForceRatio(), 6);
+
+  resetGameState({ combattivita: 20, oggettiSpeciali: ['Spada d\'Osso di Kalkoth'] });
+  combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 10 });
+  assert.equal(combatManager.calculateForceRatio(), 5, 'no bonus while merely carried, not equipped');
+});
+
 test('calculateForceRatio: enemy Mindblast applies -2 unless the hero has Psicoschermo', () => {
   resetGameState({ combattivita: 20 });
   combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 10, mindblast: true });
@@ -116,6 +126,16 @@ test('calculateForceRatio: playerPenaltyNoItem applies only while the item is mi
   resetGameState({ combattivita: 20, zaino: ['Torcia'] });
   combatManager.startCombat({ name: 'Enemy', combattivita: 15, resistenza: 10, playerPenaltyNoItem: { item: 'Torcia', penalty: -3 } });
   assert.equal(combatManager.calculateForceRatio(), 5, 'has Torcia -> no penalty');
+});
+
+test('calculateForceRatio: playerBonusIfItem applies only while holding the item - mirror of playerPenaltyNoItem, see Book 5 section 253', () => {
+  resetGameState({ combattivita: 20 });
+  combatManager.startCombat({ name: 'Dhorgaan', combattivita: 15, resistenza: 10, playerBonusIfItem: { item: 'Mazza Ingioiellata', value: 5 } });
+  assert.equal(combatManager.calculateForceRatio(), 5, 'no item -> no bonus');
+
+  resetGameState({ combattivita: 20, oggettiSpeciali: ['Mazza Ingioiellata'] });
+  combatManager.startCombat({ name: 'Dhorgaan', combattivita: 15, resistenza: 10, playerBonusIfItem: { item: 'Mazza Ingioiellata', value: 5 } });
+  assert.equal(combatManager.calculateForceRatio(), 10, 'has item -> bonus applies');
 });
 
 test('calculateForceRatio: playerCombatPenalty is waived by psicoschermoPreventsLoss + Psicoschermo', () => {
@@ -187,6 +207,25 @@ test('fightRound: Sommerswerd doubles ENDURANCE lost by undead enemies, but only
   combatManager.startCombat({ name: 'Ordinary enemy', combattivita: 15, resistenza: 30, undead: false });
   combatManager.fightRound();
   assert.equal(gameState.getState().combatState.currentEnemyResistenza, 22, '30 - 8, not doubled without undead flag');
+});
+
+test('fightRound: enduranceLossAfterRoundsFromRoll rolls once at combat start for how many rounds the hero can hold his breath, then adds extra loss past that - see Book 4 sections 194/234', () => {
+  // queue[0] is consumed once by engageNextEnemy's oxygen roll (-> safeRounds = 2,
+  // no Telecinesi bonus); queue[1..] are consumed one per fightRound() call, each
+  // with ratio 0/destinyNumber 0 -> table['0'][0] = [enemyDamage 12, heroDamage 0].
+  mockRollQueue = [2, 0, 0, 0];
+  resetGameState({ combattivita: 15, resistenza: 20, resistenzaMax: 20, artiRamas: [] });
+  combatManager.startCombat({
+    name: 'Piovra Gigante', combattivita: 15, resistenza: 999,
+    enduranceLossAfterRoundsFromRoll: { lossPerRound: 2 }
+  });
+
+  combatManager.fightRound(); // round 1 (rounds.length was 0 < 2 safe rounds)
+  combatManager.fightRound(); // round 2 (rounds.length was 1 < 2 safe rounds)
+  assert.equal(gameState.getState().character.resistenza, 20, 'still within the safe rounds, no extra loss');
+
+  combatManager.fightRound(); // round 3 (rounds.length was 2 >= 2 safe rounds)
+  assert.equal(gameState.getState().character.resistenza, 18, '0 base heroDamage + 2 oxygen penalty');
 });
 
 test('fightRound: allyDamagePerRound adds a flat extra ENDURANCE loss to the enemy every round, independent of the hero\'s own roll - see Book 3 section 180', () => {
