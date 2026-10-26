@@ -68,7 +68,7 @@
   <div class="an" id="an">
     <section class="card"><p class="headline" id="headline"></p><div class="verdict" id="verdict" style="margin-top:18px"></div></section>
 
-    <section><h2>Le gare</h2><p class="sec-sub">Il VDOT traduce ogni tempo in un livello di forma confrontabile tra distanze diverse. Prima di ogni gara: i km corsi nei 7 giorni precedenti.</p>
+    <section><h2>Le gare</h2><p class="sec-sub">Il VDOT traduce ogni tempo in un livello di forma confrontabile tra distanze diverse, ma solo se la gara è a tutta (FC media almeno il 98% della soglia in mezza, il 92% in maratona): se è controllata, vale come minimo. Prima di ogni gara: i km corsi nei 7 giorni precedenti.</p>
       <div class="races" id="races"></div></section>
 
     <section class="card"><h3>VO2max stimato da Garmin</h3><p class="sub">Le linee verticali sono le gare. L’orologio lo ricalcola sulle uscite a intensità medio-alta: scende se la qualità manca.</p><div class="chart" id="c-vo2"></div></section>
@@ -115,10 +115,13 @@ $('#sub').textContent = `${span(A.blocks[0].from, A.blocks.at(-1).to)} · ${A.ra
 $('#headline').textContent = C.headline || '';
 $('#verdict').innerHTML = (C.verdict || []).map(v => `<article><h3>${esc(v.title)}</h3><p>${esc(v.text)}</p></article>`).join('');
 
-// gare come pettorali
+// gare come pettorali; lo sforzo dice se il VDOT è la forma (a tutta) o solo un minimo (controllata)
+const EFFORT = { max: 'a tutta', controlled: 'controllata', invalid: 'non indicativa' };
 $('#races').innerHTML = A.races.map(r => `<div class="card bib race"><h3>${esc(r.name)}</h3><span class="when">${fmtDay(r.date)} · ${nf(r.km_real, 1)} km</span>
   <div class="count"><b>${clock(r.time)}</b></div>
-  <dl><dt>Passo</dt><dd>${pace(r.pace)} /km</dd><dt>FC media</dt><dd>${r.hr} bpm · ${r.hr_pct}%</dd><dt>VDOT</dt><dd>${nf(r.vdot, 1)}</dd>
+  <dl><dt>Passo</dt><dd>${pace(r.pace)} /km</dd><dt>FC media</dt><dd>${r.hr} bpm · ${r.hr_pct}%</dd>
+  <dt>Sforzo</dt><dd>${EFFORT[r.effort] || '–'}${r.hr_thr && r.effort !== 'invalid' ? ` · ${r.hr_thr}% soglia` : ''}</dd>
+  <dt>VDOT</dt><dd>${r.effort === 'controlled' ? '≥ ' : ''}${nf(r.vdot, 1)}${r.effort === 'invalid' ? ' (non conta)' : ''}</dd>
   <dt>Metà gara</dt><dd>${r.split ? `${clock(r.split.first)} / ${clock(r.split.second)}` : '–'}</dd>
   <dt>Cadenza</dt><dd>${nf(r.cad)} spm · ${nf(r.stride)} cm</dd><dt>Contatto</dt><dd>${r.gct ? nf(r.gct) + ' ms' : '–'}</dd>
   <dt>Prima</dt><dd>${r.load.km7} km in 7 giorni</dd></dl>${r.note ? `<p class="r-note">${esc(r.note)}</p>` : ''}</div>`).join('');

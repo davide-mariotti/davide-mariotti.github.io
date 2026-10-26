@@ -21,6 +21,7 @@ PACE_REF = [390, 360, 330, 300, 285]               # passi (s/km) a cui confront
 EASY_PACE = (345, 405)                             # 5:45–6:45: forma di corsa confrontata a passo facile
 FAST_PACE = (270, 315)                             # 4:30–5:15: forma a passo veloce
 PACE_BANDS = [(375, 400), (355, 375), (335, 355), (315, 335), (295, 315), (270, 295)]  # FC a passo fisso: 6:15–6:40 … 4:30–4:55
+EFFORT_FULL = {"half": 0.98, "marathon": 0.92}       # "a tutta": FC media almeno il 98% della soglia in mezza, il 92% in maratona
 SPLIT_DAYS = 140                                   # blocchi più lunghi di 20 settimane: FC a passo fisso divisa in due metà (stagioni diverse)
 
 
@@ -59,6 +60,12 @@ def vdot(meters, seconds):
     return (-4.6 + 0.182258 * vel + 0.000104 * vel * vel) / (0.8 + 0.1894393 * math.exp(-0.012778 * t) + 0.2989558 * math.exp(-0.1932605 * t))
 
 
+def lthr_of(D):
+    """FC di soglia della corsa (Garmin)."""
+    z = next((z for z in D.get("hrZones") or [] if z["sport"] == "RUNNING"), None) or {}
+    return z.get("lactateThresholdHeartRateUsed")
+
+
 def zones_of(D):
     """Zone FC attuali della corsa (fisse per tutti i blocchi, così i blocchi sono confrontabili)."""
     z = next((z for z in D.get("hrZones") or [] if z["sport"] == "RUNNING"), None) or (D.get("hrZones") or [{}])[0]
@@ -74,6 +81,7 @@ def main():
     coach_file = base / "analisi-coach.json"
     coach = json.loads(coach_file.read_text(encoding="utf-8")) if coach_file.exists() else None
     floors = zones_of(D)
+    lthr = lthr_of(D)
     today = D["generated"][:10]
 
     runs = [a for a in D["activities"] if "running" in a["activityType"]["typeKey"] and a.get("distance")]
@@ -254,10 +262,17 @@ def main():
             split = {"first": round(t1), "second": round(a["duration"] - t1),
                      "hr1": mean(hr[:i_half]), "hr2": mean(hr[i_half:])}
         v = a.get("avgGradeAdjustedSpeed") or a["averageSpeed"]
+        # sforzo: una gara "controllata" (FC sotto la soglia di sforzo pieno) dà un VDOT minimo, non la forma;
+        # "invalid" in gare.json (malattia, gara da accompagnatore) la esclude
+        thr = a["averageHR"] / lthr if lthr else None
+        full = EFFORT_FULL["marathon" if r["km"] > 30 else "half"]
+        effort = "invalid" if r.get("effort") == "invalid" else "max" if thr and thr >= full else "controlled" if thr else None
+        i5 = next((i for i, x in enumerate(d) if x and x >= a["distance"] - 5000), None)
+        hr_last5 = mean(hr[i5:]) if i5 is not None else None
         before = lambda n: round(sum(x["distance"] for x in runs if 0 < (date.fromisoformat(r["date"]) - date.fromisoformat(x["day"])).days <= n) / 1000)
         long6 = max((x["distance"] for x in runs if 0 < (date.fromisoformat(r["date"]) - date.fromisoformat(x["day"])).days <= 42), default=0)
         load = {"km7": before(7), "km14": before(14), "km28": before(28), "long6w": round(long6 / 1000, 1)}
-        out_races.append({**r, "load": load, "id": aid, "time": round(a["duration"]), "km_real": round(a["distance"] / 1000, 2), "pace": round(1000 / a["averageSpeed"]),
+        out_races.append({**r, "load": load, "effort": effort, "hr_thr": round(thr * 100) if thr else None, "hr_last5": round(hr_last5) if hr_last5 else None, "id": aid, "time": round(a["duration"]), "km_real": round(a["distance"] / 1000, 2), "pace": round(1000 / a["averageSpeed"]),
                           "gap": round(1000 / v), "hr": round(a["averageHR"]), "hr_max": a.get("maxHR"), "hr_pct": round(a["averageHR"] / floors[5] * 100) if floors[5] else None,
                           "ef": round(v * 60 / a["averageHR"], 3), "elev": a.get("elevationGain"), "temp_max": a.get("maxTemperature"),
                           "cad": a.get("averageRunningCadenceInStepsPerMinute"), "stride": a.get("avgStrideLength"), "power": a.get("avgPower"),
@@ -301,7 +316,7 @@ def main():
     print("\n== gare")
     for r in out_races:
         s = r["split"] or {}
-        print(f"  {r['date']} {r['name']}: {pace(r['time'] // 60 * 60 / 60) if False else r['time']}s · {pace(r['pace'])}/km (GAP {pace(r['gap'])}) · FC {r['hr']} ({r['hr_pct']}%) max {r['hr_max']} · VDOT {r['vdot']} · EF {r['ef']} · D+ {r['elev']} · T max {r['temp_max']} · cad {r['cad']} · split {s.get('first')}/{s.get('second')} FC {s.get('hr1')}/{s.get('hr2')} · prima: {r['load']}")
+        print(f"  {r['date']} {r['name']}: {pace(r['time'] // 60 * 60 / 60) if False else r['time']}s · {pace(r['pace'])}/km (GAP {pace(r['gap'])}) · FC {r['hr']} ({r['hr_pct']}%) max {r['hr_max']} · VDOT {r['vdot']} · EF {r['ef']} · D+ {r['elev']} · T max {r['temp_max']} · cad {r['cad']} · split {s.get('first')}/{s.get('second')} FC {s.get('hr1')}/{s.get('hr2')} · prima: {r['load']} · sforzo {r['effort']} ({r['hr_thr']}% soglia, ultimi 5 km FC {r['hr_last5']})")
     print("\n== FC a passo fisso (giri a regime):", "  ".join(f"{pace(lo)}–{pace(hi)}" for lo, hi in PACE_BANDS))
     for pr in out_periods:
         print(f"  {pr['id']:4} {pr['from']} → {pr['to']}: " + "  ".join(f"{x['hr'] or '–':>3}(n{x['n']})" for x in pr["bands"]))

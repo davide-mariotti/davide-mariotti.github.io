@@ -22,7 +22,7 @@ Tutti i dati e il commento sono **privati** (`data/<atleta>/`, mai nella repo pu
 ## Procedura
 
 1. **Dati aggiornati.** `.venv\Scripts\python fetch.py --athlete <atleta>` (incrementale; i dettagli FIT/GPX servono per i giri).
-2. **Gare.** Aggiungi la gara nuova a `gare.json` (data, nome, km ufficiali). La gara è la corsa più lunga di quel giorno.
+2. **Gare.** Aggiungi la gara nuova a `gare.json` (data, nome, km ufficiali). La gara è la corsa più lunga di quel giorno. Chiedi all'atleta com'è andata: se era malato o accompagnava qualcuno, scrivi `"effort": "invalid"` e una `note`.
 3. **VO2max** (se l'atleta è quello collegato al connettore MCP). `mcp__garmin__get_vo2max_trend` accetta al massimo 90 giorni: chiedi finestre consecutive dall'ultimo punto salvato a oggi e aggiungi a `vo2max.json` un valore ogni 2–3 settimane, solo dei giorni ricalcolati (non `carried_forward`). I primi 1–2 mesi di un orologio nuovo sono di calibrazione: escludili e scrivilo in `note`.
 4. **Calcolo.** `.venv\Scripts\python analisi.py <atleta>` e leggi il riassunto stampato (blocchi, gare, FC a passo fisso per periodo).
 5. **Controlli di senso** (sezione sotto) prima di credere a qualsiasi tendenza.
@@ -46,10 +46,21 @@ Tutti i dati e il commento sono **privati** (`data/<atleta>/`, mai nella repo pu
 | Tempo nelle zone | Serie FC dei FIT, zone attuali, solo allenamenti | Quanto lavoro facile, medio e duro. Tanta Z3 = "zona grigia" |
 | Deriva cardiaca (decoupling) | Efficienza (velocità/FC) seconda metà vs prima, solo lunghi ≥ 70' con FC media ≤ 155 e velocità costante tra le metà (±4%) | < 3% ottimo, 3–5% buono, > 5% base aerobica da costruire |
 | VO2max Garmin | Dal connettore | Guarda la tendenza su 4–6 settimane. Scende quando mancano uscite a intensità medio-alta, anche se la base migliora |
-| VDOT gara | Formula Daniels/Gilbert sul tempo ufficiale | Il confronto più oggettivo tra gare di distanze diverse. Una maratona vale di solito 1–2 punti meno della mezza della stessa forma |
+| VDOT gara | Formula Daniels/Gilbert sul tempo ufficiale | Il confronto più oggettivo tra gare di distanze diverse, **solo se la gara è a tutta** (vedi "Lo sforzo delle gare"). Una maratona vale di solito 1–2 punti meno della mezza della stessa forma |
 | Forma di corsa | Mediane su uscite pianeggianti (≤ 10 m/km) a passo facile reale 5:45–6:45, e in gara | Confronta sempre a parità di passo. Cadenza alta e contatto breve = corsa più leggera; rapporto verticale < 9% buono. In gara: velocità = cadenza × lunghezza del passo, quindi se il passo si accorcia a parità di cadenza manca spinta (forza, freschezza) |
 | Corpo e recupero | FC a riposo, HRV, sonno, stress, peso (mediane del blocco) | FC a riposo in salita e HRV in discesa per settimane = fatica o malattia. Il peso pesa: ~2–3 s/km per kg |
 | Carico prima della gara | Km nei 7/14/28 giorni prima, lungo più lungo nelle 6 settimane | Senza scarico (settimana gara oltre il 60% del picco) la gara non misura la forma vera |
+
+## Lo sforzo delle gare
+
+Una gara misura la forma solo se è corsa a tutta. `analisi.py` confronta la FC media con la soglia (Garmin):
+- **a tutta**: almeno il 98% della soglia in mezza (Davide: ~170 bpm, 101%, chiusura a 175), almeno il 92% in maratona;
+- **controllata**: sotto quelle soglie. Il VDOT della gara è un **minimo**: la forma vera era più alta. Indizio forte: FC che scende negli ultimi 5 km;
+- **non indicativa** (`"effort": "invalid"` in `gare.json`): malattia nei giorni prima, gara corsa accompagnando qualcuno, crisi evidente.
+
+Per stimare il potenziale di una gara controllata usa la FC a passo fisso del periodo e il riferimento a tutta della stessa distanza (10 bpm in più valgono indicativamente 15–20 s/km in mezza). **Calibra il piano solo su gare a tutta e su test a tutta**; le gare controllate alzano il minimo, non fissano la forma.
+
+Errori già fatti (26/10/2026): il personale di mezza di marzo 2026 (FC 160, 95% della soglia, in calo nel finale) era stato letto come una gara a tutta con la fascia che leggeva male; Pisa 2026 (post-febbre, da accompagnatore) come un calo di forma. Chiedi sempre all'atleta prima di concludere.
 
 ## Controlli di senso (trappole già incontrate)
 
