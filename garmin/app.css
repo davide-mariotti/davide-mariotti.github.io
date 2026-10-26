@@ -4,7 +4,7 @@
   --page: #f4f4f1; --surface: #fcfcfb; --raised: #ffffff; --text-1: #0b0b0b; --text-2: #52514e; --muted: #898781;
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,.08); --wash: rgba(11,11,11,.05);
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s7: #6250d6; --s8: #e34948;
-  --z1: #86b6ef; --z2: #5598e7; --z3: #2a78d6; --z4: #1c5cab; --z5: #104281;
+  --z1: #a8a69e; --z2: #2a78d6; --z3: #1baf7a; --z4: #eda100; --z5: #e34948;  /* zone FC come Garmin: grigio, blu, verde, arancio, rosso */
   --st1: #f2a07a; --st2: #e0642e; --st3: #a8441c;
   --seq-lo: #cde2fb; --seq-hi: #0d366b;
   --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
@@ -16,7 +16,7 @@
     --page: #0d0d0d; --surface: #1a1a19; --raised: #222221; --text-1: #f0efec; --text-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,.08); --wash: rgba(255,255,255,.06);
     --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s7: #9085e9; --s8: #e66767;
-    --z1: #184f95; --z2: #256abf; --z3: #3987e5; --z4: #6da7ec; --z5: #9ec5f4;
+    --z1: #6f6d68; --z2: #3987e5; --z3: #199e70; --z4: #c98500; --z5: #d03b3b;
     --st1: #a8441c; --st2: #e0642e; --st3: #f2a07a;
     --seq-lo: #0d366b; --seq-hi: #86b6ef;
     --shadow: none;
@@ -27,7 +27,7 @@
   --page: #0d0d0d; --surface: #1a1a19; --raised: #222221; --text-1: #f0efec; --text-2: #c3c2b7; --muted: #898781;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,.08); --wash: rgba(255,255,255,.06);
   --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s7: #9085e9; --s8: #e66767;
-  --z1: #184f95; --z2: #256abf; --z3: #3987e5; --z4: #6da7ec; --z5: #9ec5f4;
+  --z1: #6f6d68; --z2: #3987e5; --z3: #199e70; --z4: #c98500; --z5: #d03b3b;
   --st1: #a8441c; --st2: #e0642e; --st3: #f2a07a;
   --seq-lo: #0d366b; --seq-hi: #86b6ef;
   --shadow: none;
@@ -52,7 +52,7 @@ a.brand { color: inherit; text-decoration: none; }
 .nav a.active svg { stroke: var(--s1); }
 .nav .sep { height: 1px; background: var(--border); margin: 10px 8px; }
 .ico { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.side-foot { margin-top: auto; padding: 0 8px; color: var(--muted); font-size: 12px; }
+.side-foot { margin-top: auto; padding: 0 8px; color: var(--muted); font-size: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
 .main { min-width: 0; padding: 0 28px 64px; }
 .top { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 18px 0 16px; background: color-mix(in srgb, var(--page) 88%, transparent); backdrop-filter: blur(12px); }
 .top h1 { font-size: 22px; font-weight: 680; letter-spacing: -.01em; margin: 0; flex: 1; }
@@ -121,7 +121,7 @@ dialog.modal { width: min(760px, calc(100vw - 24px)); max-height: calc(100dvh - 
 .panel-h { position: sticky; top: 0; z-index: 2; display: flex; gap: 12px; align-items: flex-start; padding: 18px 20px 14px; background: color-mix(in srgb, var(--page) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
 .panel-h h2 { margin: 0; font-size: 19px; font-weight: 680; }
 .panel-h p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
-.panel-b { padding: 18px 20px 28px; display: grid; gap: 16px; }
+.panel-b { padding: 18px 20px 28px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
 .stat b { display: block; font-size: 17px; font-weight: 650; }
@@ -131,14 +131,38 @@ dialog.modal { width: min(760px, calc(100vw - 24px)); max-height: calc(100dvh - 
 @media (max-width: 1200px) {
   .s3 { grid-column: span 6; } .s4, .s5 { grid-column: span 6; } .s7, .s8 { grid-column: 1 / -1; }
 }
+/* tablet e telefono: la sidebar diventa una barra in alto che scorre in orizzontale */
 @media (max-width: 900px) {
-  .shell { grid-template-columns: 1fr; }
-  .side { position: sticky; z-index: 6; height: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: 8px 12px; border-right: 0; border-bottom: 1px solid var(--border); }
-  .brand { padding: 0 8px 0 0; } .brand small, .brand span:not(.logo), .side-foot, .nav .sep { display: none; }
+  .shell { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; }
+  .side { z-index: 6; height: auto; flex-direction: row; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 8px 12px; border-right: 0; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); }
+  .side::-webkit-scrollbar { display: none; }
+  .brand { padding: 0; flex: none; } .brand small, .brand span:not(.logo), .side-foot > span, .nav .sep { display: none; }
   .nav { flex-direction: row; }
+  .side-foot { margin: 0 0 0 auto; padding: 0 4px; flex: none; }
   .main { padding: 0 16px 48px; }
-  .top { top: 53px; }
+  .top { position: static; }
   .bento > * { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .main { padding: 0 12px 40px; }
+  .top { padding: 14px 0 12px; gap: 10px; }
+  .top h1 { font-size: 20px; }
+  .top:has(.seg) h1 { flex-basis: 100%; }
+  .top .seg { flex: 1; }
+  .seg button { flex: 1; padding: 7px 4px; }
+  .bento, .kpis { gap: 10px; }
+  .card { padding: 14px 14px 10px; border-radius: 14px; }
+  .chart { height: 250px; }
+  .kpi { padding: 12px 12px 8px; border-radius: 14px; }
+  .kpi .val { font-size: 22px; }
+  .scroll { max-height: 70vh; }
+  th, td { padding: 7px 8px; }
+  td.name { max-width: 150px; }
+  dialog.modal { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; }
+  .panel-h { padding: 14px 14px 12px; }
+  .panel-h h2 { font-size: 17px; }
+  .panel-b { padding: 14px 12px 24px; gap: 12px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 }
 
 /* ---- accesso (versione online) ---- */

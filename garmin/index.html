@@ -25,20 +25,21 @@
 <body>
 <main class="wrap">
   <header><span class="logo">◆</span><h1>Garmin Dashboard</h1></header>
-  <p class="lead">Scegli l'atleta. Ogni dashboard è privata: serve l'accesso con l'account Google autorizzato.</p>
+  <p class="lead">Scegli l'atleta. Ogni dashboard è privata: serve l'accesso con l'account Google autorizzato. Per vedere come funziona senza account, apri l'atleta demo.</p>
   <div class="athletes" id="athletes"></div>
-  <p class="note">I dati si aggiornano ogni mattina da Garmin Connect.</p>
+  <p class="note">I dati si aggiornano ogni mattina da Garmin Connect. · <a href="/">Torna al sito</a></p>
 </main>
 <script>
 // id = parametro ?a= usato da dashboard.html e piano.html (nome-cognome)
 const ATHLETES = [
   { id: 'davide-mariotti', name: 'Davide Mariotti', color: '--s1', plan: true },
   { id: 'andrea-prosperi', name: 'Andrea Prosperi', color: '--s2' },
+  { id: 'sample', name: 'Atleta Demo', color: '--s3', demo: true },  // dati finti di sample.js, aperta a tutti
 ];
 document.getElementById('athletes').innerHTML = ATHLETES.map(a => `
   <section class="card athlete">
     <div class="who"><span class="avatar" style="--c:var(${a.color})">${a.name.split(' ').map(w => w[0]).join('')}</span>
-      <div><h2>${a.name}</h2><span>${a.plan ? 'Dashboard e piano gare' : 'Dashboard'}</span></div></div>
+      <div><h2>${a.name}</h2><span>${a.demo ? 'Dati di esempio, senza login' : a.plan ? 'Dashboard e piano gare' : 'Dashboard'}</span></div></div>
     <div class="links">
       <a class="btn" href="dashboard.html?a=${a.id}">Apri la dashboard →</a>
       ${a.plan ? `<a class="btn" href="piano.html?a=${a.id}">Piano gare</a>` : ''}

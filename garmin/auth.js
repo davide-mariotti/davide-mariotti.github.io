@@ -15,6 +15,7 @@ const ATHLETE = (new URLSearchParams(location.search).get('a') || '').replace(/[
 const PLAN_OWNER = 'davide-mariotti';  // il piano gare esiste solo per lui
 if (!ATHLETE) location.replace('index.html');
 const LOCAL = location.protocol === 'file:';
+const SAMPLE = ATHLETE === 'sample';  // atleta demo: dati finti generati da sample.js, senza login
 
 const loadScript = src => new Promise((ok, ko) => {
   const s = document.createElement('script');
@@ -72,10 +73,10 @@ async function signOut() {
 }
 
 window.ATHLETE = ATHLETE;
-window.garminSignOut = LOCAL ? null : signOut;
+window.garminSignOut = LOCAL || SAMPLE ? null : signOut;
 
 window.garminData = async () => {
-  if (LOCAL) { await loadScript(`data/${ATHLETE}/garmin.js`).catch(() => {}); return window.GARMIN || null; }
+  if (LOCAL || SAMPLE) { await loadScript(SAMPLE ? 'sample.js' : `data/${ATHLETE}/garmin.js`).catch(() => {}); return window.GARMIN || null; }
   gate('Caricamento…');
   const user = await signedIn();
   const loading = gate('Caricamento dei dati…');
@@ -94,6 +95,7 @@ window.garminData = async () => {
 };
 
 window.garminActivity = async id => {
+  if (SAMPLE) return window.sampleActivity(id);
   if (LOCAL) { await loadScript(`data/${ATHLETE}/act/${id}.js`).catch(() => {}); return window.ACT?.[id] || null; }
   const doc = await read('athletes', ATHLETE, 'acts', String(id)).catch(() => null);
   return doc ? JSON.parse(await gunzip([doc.d.toUint8Array()])) : null;

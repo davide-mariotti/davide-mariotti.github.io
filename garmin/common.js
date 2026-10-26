@@ -61,9 +61,12 @@ function renderSidebar(onDashboard, who, foot) {
       ${window.PLAN ? `<div class="sep"></div>
       <a href="piano.html${location.search}" data-view="piano"${onDashboard ? '' : ' class="active"'}>${icon('piano')}Piano gare</a>` : ''}
     </nav>
-    <div class="side-foot">${esc(foot || '')}${window.garminSignOut ? '<br><button class="link" id="signout">Esci</button>' : ''}</div>`;
+    <div class="side-foot"><span>${esc(foot || '')}</span>${window.garminSignOut ? '<button class="link" id="signout">Esci</button>' : ''}</div>`;
   $('#signout')?.addEventListener('click', window.garminSignOut);
+  revealNav();
 }
+// su telefono la barra scorre in orizzontale: porta in vista la voce attiva
+const revealNav = () => { const a = $('.nav a.active'); if (a) $('#side').scrollLeft = a.offsetLeft - 64; };
 
 // ---------- tema ----------
 function initTheme(onChange) {
@@ -106,7 +109,7 @@ function opt(o, fmt = x => nf(x, 1)) {
   return {
     grid: { left: 4, right: 14, top: named.length > 1 ? 38 : 22, bottom: 4, containLabel: true },
     tooltip: { trigger: 'axis', formatter: tipAxis(fmt), axisPointer: { type: 'line', lineStyle: { color: v('--axis') } } },
-    legend: { show: named.length > 1, top: 0, left: 0, icon: 'roundRect', itemWidth: 10, itemHeight: 10, data: named },
+    legend: { show: named.length > 1, type: 'scroll', top: 0, left: 0, width: '85%', icon: 'roundRect', itemWidth: 10, itemHeight: 10, data: named },  // il 15% a destra resta alla toolbox
     toolbox: {
       right: 0, top: -2, itemSize: 13,
       feature: {

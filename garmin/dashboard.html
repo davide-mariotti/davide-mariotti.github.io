@@ -44,7 +44,19 @@
 .zleg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px; color: var(--text-2); }
 .lapbar { height: 6px; border-radius: 3px; background: var(--s1); min-width: 2px; }
 tr.rest td { color: var(--muted); }
+.m-when { display: none; }
 .empty { max-width: 640px; margin: 80px auto; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+@media (max-width: 600px) {
+  .count b { font-size: 42px; }
+  .strip { grid-auto-columns: minmax(180px, 62%); }
+  .card-h input { flex: 1 1 100%; }
+  /* su telefono restano nome (con la data sotto), km, ritmo e FC: il resto è nel dettaglio */
+  #t-acts :is(th, td):is(:nth-child(1), :nth-child(4), :nth-child(n+7)) { display: none; }
+  #t-acts td.name { max-width: 130px; }
+  #t-acts .m-when { display: block; margin-left: 14px; color: var(--muted); font-size: 11.5px; }
+  #t-acts :is(th, td) { padding: 7px 5px; }
+  #d-map { height: 240px; }
+}
 </style>
 </head>
 <body>
@@ -260,7 +272,9 @@ chart('c-weekly', () => {
   });
 });
 chart('c-calendar', () => {
-  const from = FROM < addDays(TODAY, -364) ? addDays(TODAY, -364) : FROM;
+  // al massimo un anno, e solo le settimane che stanno nella larghezza con celle di almeno 11 px
+  const fit = addDays(TODAY, -7 * Math.floor(((document.getElementById('c-calendar').clientWidth || 1000) - 40) / 11) + 1);
+  const from = [FROM, addDays(TODAY, -364), fit].sort().pop();
   const mins = {}, acts = {};
   ALL_ACTS.filter(a => a.day >= from).forEach(a => { mins[a.day] = (mins[a.day] || 0) + a.duration / 60; (acts[a.day] ||= []).push(a); });
   const data = Object.entries(mins).map(([d, m]) => [d, Math.round(m)]);
@@ -305,7 +319,7 @@ chart('c-zones', () => {
 function actTable() {
   const q = $('#q').value.trim().toLowerCase();
   const list = ACTS.filter(a => !q || a.activityName.toLowerCase().includes(q));
-  const rows = list.slice(0, 300).map(a => `<tr class="click" data-id="${a.activityId}"><td>${esc(a.startTimeLocal.slice(0, 16))}</td><td class="name" title="${esc(a.activityName)}"><span class="dot" style="background:${sportColor(a)}"></span>${esc(a.activityName)}</td>
+  const rows = list.slice(0, 300).map(a => `<tr class="click" data-id="${a.activityId}"><td>${esc(a.startTimeLocal.slice(0, 16))}</td><td class="name" title="${esc(a.activityName)}"><span class="dot" style="background:${sportColor(a)}"></span>${esc(a.activityName)}<span class="m-when">${dayMonth(a.day)} · ${a.startTimeLocal.slice(11, 16)}</span></td>
     <td class="num">${nf((a.distance || 0) / 1000, 2)}</td><td class="num">${a.duration ? clock(a.duration) : '–'}</td><td class="num">${paceOf(a)}</td>
     <td class="num">${nf(a.averageHR)}</td><td class="num">${nf(a.activityTrainingLoad)}</td><td class="num">${nf(a.aerobicTrainingEffect, 1)}</td><td class="num">${nf(a.calories)}</td></tr>`).join('');
   $('#t-acts').innerHTML = `<thead><tr><th>Data</th><th>Attività</th><th class="num">km</th><th class="num">Durata</th><th class="num">Ritmo</th><th class="num">FC media</th><th class="num">Carico</th><th class="num">Effetto aerobico</th><th class="num">kcal</th></tr></thead><tbody>${rows}</tbody>`;
@@ -500,7 +514,7 @@ async function openActivity(id) {
     <div class="panel-h">
       <div style="flex:1;min-width:0"><span class="chip" style="--c:${sportColor(a)}">${sport(a)} · ${esc(a.activityType?.typeKey?.replace(/_/g, ' '))}</span>
         <h2>${esc(a.activityName)}</h2><p>${fmtDay(new Date(a.startTimeLocal.replace(' ', 'T')).getTime())}${a.locationName ? ' · ' + esc(a.locationName) : ''}</p></div>
-      <a class="icon-btn" href="https://connect.garmin.com/modern/activity/${a.activityId}" target="_blank" rel="noopener" title="Apri su Garmin Connect">${icon('ext')}</a>
+      ${ATHLETE === 'sample' ? '' : `<a class="icon-btn" href="https://connect.garmin.com/modern/activity/${a.activityId}" target="_blank" rel="noopener" title="Apri su Garmin Connect">${icon('ext')}</a>`}
       <button class="icon-btn" id="d-close" title="Chiudi" aria-label="Chiudi">${icon('close')}</button>
     </div>
     <div class="panel-b">
@@ -549,7 +563,7 @@ function renderDetail(a, det) {
 
   let marker = null;
   if (det.gps?.length > 1) {
-    detailMap = L.map('d-map', { zoomControl: false, scrollWheelZoom: false });
+    detailMap = L.map('d-map', { zoomControl: false, scrollWheelZoom: false, dragging: !L.Browser.mobile });  // su telefono un dito scorre la pagina, due zoomano
     L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${isDark() ? 'Dark' : 'Light'}_Gray_Base/MapServer/tile/{z}/{y}/{x}`, { attribution: 'Tiles © Esri', maxZoom: 16 }).addTo(detailMap);
     const line = L.polyline(det.gps, { color: v('--s1'), weight: 4, opacity: .9 }).addTo(detailMap);
     const dot = (p, c) => L.circleMarker(p, { radius: 6, color: v('--surface'), weight: 2, fillColor: v(c), fillOpacity: 1 }).addTo(detailMap);
@@ -618,6 +632,7 @@ function show(view) {
   VIEW = VIEWS.some(x => x[0] === view) ? view : 'panoramica';
   document.querySelectorAll('.view').forEach(s => s.hidden = s.dataset.view !== VIEW);
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.view === VIEW));
+  revealNav();
   $('#title').textContent = VIEWS.find(x => x[0] === VIEW)[1];
   render();
   scrollTo({ top: 0 });
@@ -627,7 +642,7 @@ function setRange(r) {
   document.querySelectorAll('#range button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === r));
 }
 renderSidebar(true, ALL_ACTS[0]?.ownerFullName, `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}`);
-$('#meta').textContent = `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'long', timeStyle: 'short' })}`;
+$('#meta').textContent = ATHLETE === 'sample' ? 'Dati di esempio: atleta e numeri sono finti' : `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'long', timeStyle: 'short' })}`;
 $('#range').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setRange(b.dataset.d); render(); } });
 $('#q').addEventListener('input', actTable);
 // #attivita-<id> apre il dettaglio (link dal piano), ogni altro hash è una vista

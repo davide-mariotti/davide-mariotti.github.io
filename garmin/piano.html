@@ -66,6 +66,30 @@
 .why b { color: var(--text-1); }
 .rules { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 8px; color: var(--text-2); }
 .rules b { color: var(--text-1); }
+/* su telefono ogni settimana diventa una scheda: date in alto, sedute su due colonne col nome del giorno */
+@media (max-width: 700px) {
+  .wk { min-width: 0; table-layout: auto; }
+  .wk thead { display: none; }
+  .wk tbody, .wk td { display: block; }
+  .wk tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--grid); }
+  .wk tr.phase { display: block; padding: 0; border: 0; }
+  .wk td, .wk td:first-child, .wk td:last-child { width: auto; padding: 0; border: 0; }
+  .wk td:first-child { grid-column: 1 / -1; }
+  .wk td:empty { display: none; }
+  .wk td[data-day]::before { content: attr(data-day); display: block; color: var(--muted); font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+  .wk td.num { text-align: left; }
+  .wk tr.now { background: color-mix(in srgb, var(--s1) 7%, transparent); border-radius: 12px; padding: 12px 8px; }
+  .wk .now td { background: none; }
+  /* ritmi: nome sopra, passo e FC affiancati, descrizione sotto */
+  .zt thead { display: none; }
+  .zt tbody { display: block; }
+  .zt tr { display: flex; flex-wrap: wrap; gap: 2px 14px; padding: 9px 0; border-bottom: 1px solid var(--grid); }
+  .zt td { padding: 0; border: 0; }
+  .zt td:first-child, .zt td:last-child { flex-basis: 100%; }
+  .zt td.num { text-align: left; color: var(--text-2); }
+  .race .count b { font-size: 32px; }
+  .preds b { font-size: 14px; }
+}
 </style>
 </head>
 <body>
@@ -247,9 +271,9 @@ function weeksTable() {
       <div class="focus">${esc(w.focus || w.note || '')}</div>${now ? '<span class="pill">● questa settimana</span>' : ''}</td>`;
     P.DAYS.forEach((d, i) => {
       const s = ss.find(x => x.date === addDays(w.start, i));
-      html += `<td>${s ? sesChip(s) : ''}</td>`;
+      html += `<td data-day="${DAY_LBL[i]}">${s ? sesChip(s) : ''}</td>`;
     });
-    html += `<td class="num">${ss.length ? nf(sum(ss.map(s => s.km))) : w.own ? '<span class="own">tuo piano</span>' : ''}</td></tr>`;
+    html += `<td class="num" data-day="km della settimana">${ss.length ? nf(sum(ss.map(s => s.km))) : w.own ? '<span class="own">tuo piano</span>' : ''}</td></tr>`;
   }
   $('#t-weeks').innerHTML = html + '</tbody>';
 }
