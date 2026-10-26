@@ -84,6 +84,10 @@
 .d-steps small { color: var(--text-2); font-size: 12.5px; }
 .d-steps .now { background: var(--raised); }
 .d-ref { margin: 0; color: var(--muted); font-size: 13px; max-width: 90ch; }
+.d-also { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 14px 0 0; }
+.d-also div { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; }
+.d-also b { display: block; font-size: 17px; font-weight: 800; font-stretch: 80%; }
+.d-also small { display: block; color: var(--text-2); font-size: 12.5px; margin-top: 2px; }
 /* su telefono ogni settimana diventa una scheda con il suo bordo: date in alto, sedute su due colonne col nome del giorno */
 @media (max-width: 700px) {
   .card.weeks { background: none; border: 0; padding: 0; }
@@ -217,7 +221,9 @@ function dream() {
   el.innerHTML = `<span class="label">Obiettivo a lungo termine</span><h2>${esc(d.title)}</h2><p class="d-why">${esc(d.why)}</p>
     <div class="d-steps"><div class="now"><span>Oggi</span><b>${esc(d.now.pace)}</b><small>${esc(d.now.note)}</small></div>
       ${d.steps.map(s => `<div><span>${esc(s.when)}</span><b>${esc(s.pace)}</b><small>a 145 bpm · VDOT ${s.vdot} · ${esc(s.race)}</small></div>`).join('')}</div>
-    <p class="d-ref">${esc(d.ref)} Lo misura il “Test aerobico a 145” nelle settimane di scarico.</p>`;
+    <p class="d-ref">${esc(d.ref)} Lo misura il “Test aerobico a 145” nelle settimane di scarico.</p>
+    ${d.also ? `<div class="d-also">${d.also.map(a => `<div><span class="label">Anche</span><b>${esc(a.title)}</b>
+      <small>VDOT ${a.vdot} · oggi varresti ${esc(a.now)} · ${esc(a.when)}</small><small>${esc(a.how)}</small></div>`).join('')}</div>` : ''}`;
 }
 
 // ---------- ritmi e calibrazione ----------
