@@ -121,7 +121,7 @@
 <aside class="side" id="side"></aside>
 <main class="main">
   <header class="top">
-    <h1>Piano gare<small>Firenze → Massa → Firenze · 4 sedute a settimana, ritmi calibrati sui tuoi dati</small></h1>
+    <h1>Piano gare<small>Firenze → Massa → Firenze → Pisa · 4–5 sedute a settimana, ritmi calibrati sui tuoi dati</small></h1>
     <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
   </header>
 
@@ -234,7 +234,7 @@ function zonesTable() {
   $('#t-zones').innerHTML = `<thead><tr><th>Zona</th><th class="num">Passo</th><th class="num">FC</th><th>A cosa serve</th></tr></thead><tbody>` +
     ZONE_ROWS.map(k => { const z = Z[k]; return `<tr><td><span class="sw" style="background:var(--z${z.lvl})"></span>${z.name}</td><td class="num">${paceRange(z.pace) || '–'}</td><td class="num">${hrRange(z.hr) || '–'}</td><td style="white-space:normal;color:var(--text-2)">${esc(z.desc)}</td></tr>`; }).join('') + '</tbody>';
 }
-const HM_GOALS = [6240, 6180, 6120, 6060, 6000, 5940, 5880];  // 1:44 … 1:38
+const HM_GOALS = [6240, 6180, 6120, 6060, 6000, 5940, 5880, 5820, 5760, 5700];  // 1:44 … 1:35
 function calibration() {
   const c = P.calib();
   $('#vdot').innerHTML = `${nf(c.vdot, 1)} <small style="font-size:14px;font-weight:500;color:var(--text-2)">VDOT</small>`;
@@ -315,7 +315,8 @@ function weeksTable() {
   }
   $('#t-weeks').innerHTML = html + '</tbody>';
 }
-const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite e prima soglia', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza' };
+const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite e prima soglia', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
+  'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e 5 uscite a settimana', 'Specifico Pisa': 'soglia, passo mezza e lunghi fino a 24 km' };
 function actual(s) {
   const runs = RUNS[s.date];
   if (!runs || s.date > TODAY) return null;
