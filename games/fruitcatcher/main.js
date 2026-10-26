@@ -51,11 +51,11 @@ let restartButton;
 let gameTimer;
 
 function preload() {
-    this.load.image('background', 'img/background.png');
-    this.load.image('player', 'img/basket.png');
-    this.load.image('fruit', 'img/apple.png');
-    this.load.image('bad', 'img/rock.png');
-    this.load.image('powerup', 'img/star.png');
+    this.load.image('background', 'img/background.webp');
+    this.load.image('player', 'img/basket.webp');
+    this.load.image('fruit', 'img/apple.webp');
+    this.load.image('bad', 'img/rock.webp');
+    this.load.image('powerup', 'img/star.webp');
 }
 
 function create() {

@@ -72,11 +72,12 @@ e per le icone di Arti Ramas/Armi/Oggetti nella creazione del personaggio.
    testuali del personaggio/bestiario più sotto nello stesso file sono
    identiche a quelle usate per generare il ritratto.
 4. Salva l'immagine generata come `public/img/book0N/secNNN.png`
-   (sostituendo il file esistente per le sezioni segnate "Sostituzione").
+   (sostituendo il file esistente per le sezioni segnate "Sostituzione"),
+   poi lancia `python scripts/to-webp.py`: converte il PNG in WebP e aggiorna il JSON.
 5. Controlla che il campo `"image"` della sezione corrispondente in
    `data/books/0N-*.json` punti già a quel percorso (per le sezioni
    "Sostituzione" è già così; per le sezioni "Nuova" dovrai aggiungere il
-   campo `"image": "public/img/book0N/secNNN.png"` alla sezione nel JSON).
+   campo `"image": "public/img/book0N/secNNN.webp"` alla sezione nel JSON).
 6. Rilancia `node scripts/validate-book.mjs` per essere sicuro che il
    percorso dell'immagine sia corretto e il file esista.
 

@@ -235,6 +235,7 @@ border or frame, no UI elements.
   (`ITEM_IMAGES`/`WEAPON_IMAGES` in `character-creator.js`) - appena il file
   immagine esiste al percorso giusto, appare automaticamente in-app.
 - Dopo aver generato un'immagine di sezione, salvala come
-  `public/img/book0N/secNNN.png` (sostituendo l'eventuale file esistente) e
+  `public/img/book0N/secNNN.png` (sostituendo l'eventuale file esistente), lancia
+  `python scripts/to-webp.py` (lo converte in WebP e aggiorna i riferimenti) e
   verifica che il campo `"image"` della sezione corrispondente in
   `data/books/0N-*.json` punti a quel percorso.

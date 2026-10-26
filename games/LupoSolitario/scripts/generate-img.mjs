@@ -329,7 +329,7 @@ NON generare immagini reali.
 
 NON aggiungere automaticamente il campo `"image"` alle sezioni del JSON del libro.
 
-La generazione delle immagini tramite ChatGPT, Nano Banana o altro strumento esterno e il successivo salvataggio dei PNG in:
+La generazione delle immagini tramite ChatGPT, Nano Banana o altro strumento esterno e il successivo salvataggio dei PNG (poi `python scripts/to-webp.py`) in:
 
 `public/img/book<N>/`
 

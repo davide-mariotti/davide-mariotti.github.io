@@ -54,11 +54,11 @@ let scoreText;
 let highScoreText;
 
 function preload() {
-    this.load.image('sky', 'img/sky.png');
-    this.load.image('ground', 'img/platform.png');
-    this.load.image('player', 'img/player.png');
-    this.load.image('spring', 'img/spring.png');
-    this.load.image('crystal', 'img/crystal.png');
+    this.load.image('sky', 'img/sky.webp');
+    this.load.image('ground', 'img/platform.webp');
+    this.load.image('player', 'img/player.webp');
+    this.load.image('spring', 'img/spring.webp');
+    this.load.image('crystal', 'img/crystal.webp');
 }
 
 function create() {

@@ -11,3 +11,8 @@ plugins:
 
 exclude:
   - node_modules
+  - games/LupoSolitario/scripts
+  - games/LupoSolitario/tests
+  - games/LupoSolitario/package.json
+  - games/LupoSolitario/firestore.rules
+  - games/LupoSolitario/*.md

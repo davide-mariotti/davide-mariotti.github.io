@@ -5,7 +5,7 @@
  "originalTitle": "The Caverns of Kalte",
  "sections": {
   "1": {
-   "image": "public/img/book03/sec1.png",
+   "image": "public/img/book03/sec1.webp",
    "text": "<p>Ancor prima che tu accettassi l'incarico di consegnare Vonotar alla giustizia, i preparativi per il tuo viaggio verso Kalte erano già in corso. Il capitano della nave da guerra sommlending Cardonal, di ritorno da una lunga pattuglia nel Kaltersee, aveva ricevuto l'ordine di attendere il tuo arrivo ad Anskaven. Durante la notte vennero caricati a bordo cibo, equipaggiamento per il ghiaccio e squadre di cani Kanu. La missione era altamente segreta: solo i membri più anziani dell'equipaggio conoscevano la vera natura del viaggio che li attendeva.</p><p>Il piano prevede che tu venga sbarcato a Halle Bluff, dove la nave getterà l'ancora e attenderà il tuo ritorno. Una squadra scelta di guide fidate ti condurrà dalla scogliera fino a Ikaya. Una volta dentro la fortezza di ghiaccio, dovrai stanare e catturare Vonotar, per poi tornare alla nave insieme alle tue guide. La missione dovrà essere compiuta entro un massimo di trenta giorni, poiché l'inverno sta arrivando e nessuna nave può resistere alla morsa della banchisa di Kalte. Se non farai ritorno in tempo, il capitano sarà costretto a salpare senza di te.</p><p>Per sei giorni la Cardonal solca le acque tempestose del Kaltersee senza incontrare tempeste, ma di giorno in giorno la temperatura scende costantemente, finché uno strato di ghiaccio non ricopre i ponti. La mattina del settimo giorno, l'isola innevata di Tola viene avvistata all'orizzonte. Poco dopo, un vento leggero comincia a soffiare da est.</p><p>All'inizio sembra un pericolo da poco, ma in mezz'ora si scatena una furiosa bufera di neve, e ogni traccia di terra scompare rapidamente nella neve turbinante. La tempesta infuria per tutto il giorno. Venti tremendi tagliano le creste delle enormi onde grigie, e l'acqua si abbatte sui ponti, sugli alberi e sul sartiame della nave, gelando quasi all'istante in ghiaccio solido. Le fiancate della nave si ricoprono di uno strato di acqua marina spesso diversi piedi. Solo verso sera il tempo si rasserena, e sebbene il vento continui a soffiare forte, la furia della tempesta si è ormai esaurita.</p><p>Scopri presto che la tempesta ha spinto la nave quasi trenta miglia fuori rotta, lungo il margine della banchisa di Ljuk. Sai che tornare a Halle Bluff farebbe perdere un giorno prezioso, così decidi di sbarcare sulla banchisa e iniziare da lì la tua missione.</p><p>Mentre l'ultimo dei cani Kanu viene portato a terra, le tue guide ti illustrano i due possibili percorsi verso Ikaya. Il primo prevede una marcia di centotrenta miglia fino a Cloudmaker Mountain e poi, seguendo il terreno impervio del Viad Glacier, altre cento miglia prima di raggiungere la fortezza di ghiaccio. Il percorso alternativo comporta un viaggio più lungo, di quasi centottanta miglia, fino all'Hrod Basin, seguito da una marcia di cento miglia attraverso lo Storm Giant Pass fino a Ikaya. Anche con il tempo e la fortuna dalla vostra parte, entrambi i percorsi richiederanno dieci giorni di marcia estenuante prima di raggiungere la meta. Dovresti consultare la mappa di Kalte prima di decidere.</p>",
    "choices": [
     {
@@ -63,7 +63,7 @@
    ]
   },
   "5": {
-   "image": "public/img/book03/sec5.png",
+   "image": "public/img/book03/sec5.webp",
    "text": "<p>Vedi due uomini con abiti a brandelli, raggomitolati vicino a un fuoco che sembra ardere dentro una piccola ciotola di metallo. Sopra le fiamme, la carcassa scuoiata di un piccolo animale gira su uno spiedo. Gli uomini sono vecchi e sdentati, e nei loro occhi obliqui brilla uno strano bagliore di follia.</p>",
    "choices": [
     {
@@ -188,7 +188,7 @@
    ]
   },
   "13": {
-   "image": "public/img/book03/sec13.png",
+   "image": "public/img/book03/sec13.webp",
    "text": "<p>C'è una leva nel muro e uno spioncino al centro della porta. Guardando attraverso lo spioncino, assisti a una scena strana. Un uomo con una tunica scura è inginocchiato al centro di un pentacolo tracciato col gesso sul pavimento della stanza. Ha il capo chino e sembra essere in trance.</p>",
    "choices": [
     {
@@ -216,7 +216,7 @@
      "section": 309
     }
    ],
-   "image": "public/img/book03/sec014.png"
+   "image": "public/img/book03/sec014.webp"
   },
   "15": {
    "text": "<p>Esamini con attenzione la serratura per valutare le tue possibilità di riuscire a scassinarla.</p>",
@@ -288,7 +288,7 @@
    ]
   },
   "19": {
-   "image": "public/img/book03/sec19.png",
+   "image": "public/img/book03/sec19.webp",
    "text": "<p>Corri a perdifiato lungo il ponte di ghiaccio e ti getti per afferrare la mano di Dyce, ma è troppo tardi. Un istante prima che tu lo raggiunga, la sua presa cede, e precipita all'indietro nel vuoto spalancato. Un brivido ti percorre la schiena mentre il suo urlo si spegne nell'oscurità sottostante. Stai fissando impotente la gola quando Irian comincia a gridare: «Là, laggiù... sono sicuro di aver visto qualcosa.»</p><p>Sforzi gli occhi, sperando di vedere qualcosa, qualunque cosa, ma la gola è nera come mezzanotte. Ti volti e vedi Irian che indica, non la gola, ma l'orizzonte a ovest. «Guarda laggiù» dice, mostrando una cresta in lontananza. Due guerrieri vestiti di pelliccia sono in piedi su una grande piattaforma di ghiaccio. Stanno guardando nella tua direzione, allertati, senza dubbio, dall'urlo agonizzante di Dyce.</p><p>«Barbari dei Ghiacci» dice Fenor, con la voce tremante di paura. «Se raggiungono Ikaya prima di noi, siamo bell'e morti!»</p><p>Ora siete a quindici miglia dalla fortezza di ghiaccio, e restano meno di tre ore di luce.</p>",
    "choices": [
     {
@@ -367,7 +367,7 @@
    ]
   },
   "26": {
-   "image": "public/img/book03/sec26.png",
+   "image": "public/img/book03/sec26.webp",
    "text": "<p>Oltre alle Spade d'Osso, trovi anche un Pugnale e una Mazza, entrambi ricavati da osso massiccio. Se desideri conservare uno di questi oggetti, ricorda di segnarlo sul tuo Registro di Guerra come Arma. I Barbari dei Ghiacci portano anche strani bracciali al polso sinistro: sono lisci, privi di iscrizioni o marchi, e sembrano fatti d'oro massiccio.</p>",
    "effects": {
     "canAddItems": [
@@ -470,7 +470,7 @@
    ]
   },
   "31": {
-   "image": "public/img/book03/sec31.png",
+   "image": "public/img/book03/sec31.webp",
    "text": "<p>La statua si solleva lentamente dall'altare e avanza verso di te. Man mano che si avvicina, senti un freddo intenso emanare dalla sua pelle liscia e pietrosa. I suoi movimenti sono però rigidi e incerti: potresti facilmente schivare le sue braccia tese.</p>",
    "choices": [
     {
@@ -521,7 +521,7 @@
      }
     }
    ],
-   "image": "public/img/book03/sec032.png"
+   "image": "public/img/book03/sec032.webp"
   },
   "33": {
    "text": "<p>Getti il ragazzo sulla slitta, afferri la frusta e incalzi i cani Kanu, spingendoli al massimo delle loro forze. Gli esploratori Barbari dei Ghiacci vi inseguono subito, gridando al ragazzo nella loro strana lingua di Kalte.</p><p>Avete percorso meno di cento metri quando il ragazzo si getta dalla slitta in un profondo cumulo di neve. Nello stesso istante, una raffica di frecce dalla punta d'osso ti sibila accanto alla testa, e una ti sfiora la spalla. Perdi 1 punto Resistenza. Il ragazzo è ormai libero, ma due esploratori continuano a inseguirvi; la vostra muta di cani è però veloce, e presto li lasciate indietro insieme alle loro frecce.</p><p>Al calar della notte raggiungete i confini delle Viad Mountains. Queste imponenti montagne di granito si ergono a picco dal ghiaccio e dalla neve: sarebbe impossibile attraversarle in questa notte fredda e senza luna. Un vento che si alza da ovest annuncia una bufera notturna. Dovete trovare un riparo o morirete assiderati.</p>",
@@ -561,7 +561,7 @@
      "section": 350
     }
    ],
-   "image": "public/img/book03/sec034.png"
+   "image": "public/img/book03/sec034.webp"
   },
   "35": {
    "text": "<p>Hai la sensazione inquietante che qualcuno, o qualcosa, ti stia osservando. Esci dalla tenda e scruti la notte in cerca di un segno di vita, ma la neve e il buio nascondono ogni cosa. Riluttante, torni nella tenda e ti addormenti con una mano vicino all'arma, pronto a un eventuale attacco a sorpresa.</p>",
@@ -652,7 +652,7 @@
      "section": 184
     }
    ],
-   "image": "public/img/book03/sec040.png"
+   "image": "public/img/book03/sec040.webp"
   },
   "41": {
    "text": "<p>Togliendoti dal collo il Triangolo di Pietra Blu, lo premi contro la parete di granito. Si incastra alla perfezione. Senti subito un tremito percorrere la cengia su cui ti trovi, seguito dal rumore di pietra contro pietra. La porta si apre, ma dopo meno di un metro comincia già a richiudersi.</p><p>Senza esitare un istante, ti tuffi nella fortezza mentre la porta si richiude di schianto alle tue spalle. (Puoi tenere il Triangolo di Pietra Blu: non serve cancellarlo dal tuo Registro di Guerra.)</p>",
@@ -712,7 +712,7 @@
    ]
   },
   "45": {
-   "image": "public/img/book03/sec045.png",
+   "image": "public/img/book03/sec045.webp",
    "text": "<p>Volti di creature grottesche e deformi adornano le superfici del forziere. Le loro espressioni oscene e le proporzioni innaturali ti fanno rabbrividire di ripugnanza. Al centro del coperchio è incastonato un grande blocco di pietra scolpito con un volto orrendo, la cui bocca è modellata a forma di serratura.</p>",
    "choices": [
     {
@@ -871,7 +871,7 @@
    ]
   },
   "56": {
-   "image": "public/img/book03/sec056.png",
+   "image": "public/img/book03/sec056.webp",
    "text": "<p>«Sull'anima mia, un cavaliere Ramas!» esclama, gli occhi ora spalancati per lo stupore.</p><p>«Quante volte ho pregato per la libertà, per essere liberato da questo luogo infernale. E anche se la speranza non mi ha mai abbandonato, non mi aspettavo un soccorritore così illustre.»</p><p>Nel mezzo della sua eccitazione, il vecchio viene improvvisamente scosso da un attacco di tosse che lo lascia pallido ed esausto. Passano alcuni minuti prima che riesca a parlare di nuovo. «Il mio nome è Loi-Kymar. Sono un anziano della Gilda dei Maghi di Toran» dice, estraendo lentamente da sotto le sue vesti logore un piccolo ciondolo a forma di stella di cristallo, simbolo della gilda. La gilda è conosciuta come la Confraternita della Stella di Cristallo, e il mago mostra il ciondolo come prova della sua identità. Gli chiedi come sia finito prigioniero qui a Ikaya, a centinaia di chilometri dalla sua nativa Toran.</p><p>«Vonotar, quell'indicibile miserabile, è responsabile della mia sorte. Pochi giorni prima dell'invasione di Sommerlund da parte dei Signori delle Tenebre, tradì i tuoi maestri Ramas per ottenere potere: il potere nero della morte e delle tenebre. Tuttavia, non riuscì a svolgere la sua parte nei piani di guerra stabiliti dai suoi malvagi padroni. I Signori delle Tenebre non tollerano una simile debolezza: la pietà non ha posto nelle loro menti brutali. Nell'amarezza della sconfitta, cercarono di distruggere Vonotar per il suo crimine di fallimento. Vonotar sapeva che io possedevo l'unico mezzo per sfuggire alla loro vendetta, poiché il mio Bastone della Gilda ha il potere della teletrasportazione. Cercò di rubarmelo e fuggire da solo al sicuro a Ikaya, ma scoprì che il suo potere non è per tutti: solo io sono benedetto con il suo segreto. Era furioso e avrebbe ucciso la mia gente se non avessi accettato di portarlo qui, così non ebbi altra scelta che farlo.»</p><p>«Da allora sono prigioniero in questa cella. Vonotar ha torturato il mio corpo e la mia mente, ma non gli ho rivelato il segreto del mio Bastone della Gilda, che ora custodisce nella Sala del Brumalmarc. Perché se glielo rivelassi, la mia vita non avrebbe più alcun valore.»</p><p>Racconti a Loi-Kymar della tua missione e degli eventi che ti hanno condotto a questo incontro. Lui si offre di mostrarti un percorso attraverso Ikaya fino alla Sala del Brumalmarc, dove ora risiede Vonotar come sovrano, e se riuscirai a recuperare il suo Bastone della Gilda, ti promette di teletrasportarti fino alla costa in tempo per l'incontro con la tua nave.</p><p>Per la prima volta da quando sei caduto nelle caverne di Kalte, senti che la tua missione può ora avere successo.</p>",
    "choices": [
     {
@@ -937,7 +937,7 @@
    ]
   },
   "61": {
-   "image": "public/img/book03/sec061.png",
+   "image": "public/img/book03/sec061.webp",
    "text": "<p>Entri in un balcone coperto che corre lungo il perimetro di un cortile aperto. Improvvisamente senti il rintocco cupo di una campana di pietra, mentre suona in alto in una torre di guardia sopra la fortezza: la campana d'allarme. Il balcone e il cortile sottostante sono completamente deserti, a eccezione di una slitta a vela vicino al cancello del cortile.</p><p>Decidi di correre il rischio e scendi una rampa di scale, scoprendo che la slitta è carica di cibo ed equipaggiamento provenienti da Ljuk. Con tutta Ikaya ormai allertata della tua presenza, è impossibile portare a termine la missione. Non ti resta che fuggire sulla slitta a vela, finché sei ancora in tempo.</p><p>Tra dieci giorni raggiungerai la tua nave, la Cardonal, e dovrai riferire con rammarico di aver fallito la missione.</p>",
    "isFailureEnding": true
   },
@@ -1157,7 +1157,7 @@
    ]
   },
   "78": {
-   "image": "public/img/book03/sec078.png",
+   "image": "public/img/book03/sec078.webp",
    "text": "<p>Ti prepari, sollevi il lembo della tenda ed esci in fretta. Il vento è diventato molto più forte, e sferza la neve sottile sollevando piccoli vortici che ti offuscano la vista. Un'ombra alla tua destra tradisce il Baknar che ti balza addosso di corsa. Non c'è tempo per schivare l'attacco: devi combattere la creatura fino alla morte.</p>",
    "combat": {
     "name": "Baknar",
@@ -1234,7 +1234,7 @@
    ]
   },
   "83": {
-   "image": "public/img/book03/sec083.png",
+   "image": "public/img/book03/sec083.webp",
    "text": "<p>I Barbari dei Ghiacci mutanti sembrano essere controllati da una creatura orrenda in agguato nell'ombra di una porta lontana. Questo mostro somiglia a una testa umana abnormemente grande, con due piedi che sporgono al di sotto. Non ha né busto né arti, ma possiede una lunga coda rettiliana con cui mantiene l'equilibrio.</p><p>I Barbari dei Ghiacci mutanti attaccano tutti insieme, e devi combatterli come un unico nemico. Sono immuni al Psicolaser. Nello stesso momento, il loro strano dominatore ti attacca con il suo Psicolaser: a meno che tu non possieda l'Arte Ramas dello Psicoschermo, perdi 2 punti Resistenza a causa di questo attacco.</p>",
    "effects": {
     "loseEndurance": 2,
@@ -1320,7 +1320,7 @@
    ]
   },
   "88": {
-   "image": "public/img/book03/sec088.png",
+   "image": "public/img/book03/sec088.webp",
    "text": "<p>Mentre il serpente bicefalo scivola lungo la cengia, vedi chiaramente la mascella spalancata della sua seconda testa e le zanne curve e gialle, gocciolanti di veleno. Ti sfili la spessa giacca e te la avvolgi intorno all'avambraccio sinistro. Ora puoi usare il braccio imbottito per proteggerti da una delle teste mortali mentre colpisci l'altra. Questa creatura è immune al Psicolaser.</p><p>Se perdi punti Resistenza durante questo combattimento, non sottrarli dal tuo totale di Resistenza. Scegli invece un numero dalla Tabella del Destino. Se il numero estratto è da 0 a 8, lo Javek ha affondato le zanne innocuamente nel tuo braccio imbottito, e puoi continuare il combattimento senza perdere punti Resistenza.</p><p>Se invece estrai un 9, le zanne ti hanno perforato il braccio. Il veleno di uno Javek è il veleno naturale più potente di tutto Magnamund. In pochi istanti il tuo cuore si ferma, e il tuo corpo paralizzato precipita nell'abisso. La tua missione finisce qui.</p>",
    "combat": {
     "name": "Javek",
@@ -1550,7 +1550,7 @@
    ]
   },
   "103": {
-   "image": "public/img/book03/sec103.png",
+   "image": "public/img/book03/sec103.webp",
    "text": "<p>Il giorno seguente si alza un vento forte da nord. Ora dopo ora, soffia incessante contro il tuo viso. La banchisa di Ljuk diventa una distesa di lastre di ghiaccio contorte, che si ergono a ogni angolazione. Avanzare è lento e difficile. A mezzogiorno tremi dal freddo; le labbra screpolate sanguinano e le raffiche gelide ti hanno ricoperto di un sottile velo di neve.</p><p>Guidi la tua slitta attraverso uno stretto passaggio ai margini della banchisa, dove questa incontra il Bacino di Hrod. Qui sei al riparo dal vento e, per la prima volta oggi, riesci a vedere chiaramente davanti a te.</p><p>Improvvisamente, delle grida dall'alto ti avvertono che non sei l'unica creatura in cerca di riparo qui. In pochi istanti, tre grandi Baknar balzano dalla parete di ghiaccio e atterrano con un tonfo sulle slitte. Irian, il tuo compagno di guida, viene scaraventato contro il ghiaccio e cade privo di sensi. Un Baknar affamato e carnivoro ti impedisce di soccorrerlo. Non c'è modo di evitarlo: devi combatterlo fino alla morte.</p>",
    "combat": {
     "name": "Baknar",
@@ -1679,7 +1679,7 @@
    ]
   },
   "110": {
-   "image": "public/img/book03/sec110.png",
+   "image": "public/img/book03/sec110.webp",
    "text": "<p>La porta di pietra si apre con un cigolio, rivelando una piccola camera scarsamente illuminata. Un monolito nero, alto più di due metri, si erge proprio di fronte a te. È ricoperto di strani simboli. Avanzi per osservarlo meglio, quando la porta inizia improvvisamente a richiudersi alle tue spalle. In questa camera non c'è alcuna leva.</p>",
    "choices": [
     {
@@ -1770,7 +1770,7 @@
    ]
   },
   "117": {
-   "image": "public/img/book03/sec117.png",
+   "image": "public/img/book03/sec117.webp",
    "text": "<p>La bufera si placa durante la notte e l'alba arriva calma e serena. All'orizzonte, verso nord, scorgi Ikaya, la fortezza di ghiaccio. L'enorme roccaforte dalle torri di cristallo è uno spettacolo meraviglioso, reso ancora più stupefacente dal fatto che sembra fluttuare capovolta su una grande nuvola. «Miraggio di Kalte», dice Dyce. «Non c'è polvere nell'aria, qui: il paesaggio si riflette nelle nuvole. Quella è Ikaya, ma la vera fortezza è oltre l'orizzonte. Non può essere a più di sessantaquattro chilometri da qui.» Dyce afferra una pala e comincia a disseppellire i cani Kanu sepolti dalla neve. Svegli gli altri e mangiate un pasto prima di rimettervi in cammino.</p><p>È mezzogiorno quando raggiungete il bordo di una profonda gola. È larga più di dodici metri, e non sembra esserci modo di attraversarla. Siete costretti a proseguire lungo la gola verso est. Alla fine, dopo circa cinque chilometri, scoprite uno stretto ponte di ghiaccio. Tuttavia, il centro del ponte è spaventosamente sottile e stretto: sembra incapace di sostenere il peso di una slitta carica.</p><p>Ora puoi vedere la vera Ikaya all'orizzonte.</p>",
    "choices": [
     {
@@ -1830,7 +1830,7 @@
      "section": 306
     }
    ],
-   "image": "public/img/book03/sec120.png"
+   "image": "public/img/book03/sec120.webp"
   },
   "121": {
    "text": "<p>Sei sul punto di perdere la concentrazione quando la corda intorno al tuo piede si allenta e si stacca. Ti getti giù dalla slitta pochi istanti prima che si schianti nel crepaccio. Si odono le grida strazianti dei cani Kanu mentre precipitano per centinaia di metri nell'oscurità. Rapidamente, Fenor corre al tuo fianco e ti trascina via dal bordo di ghiaccio che si sgretola. Hai perso la tua muta di cani, la tua slitta e la maggior parte del cibo, ma almeno sei ancora vivo.</p><p>Tu e Fenor saltate oltre la crepa che si allarga e vi ricongiungete al resto del gruppo. Dopo lunghe discussioni, le guide accettano di proseguire la missione, anche se le difficoltà saranno ora doppiamente gravose. In lontananza vedi uno stretto passaggio ai margini della banchisa, dove questa incontra il Bacino di Hrod. Al calar della notte raggiungete il riparo di questo passo ghiacciato e vi accampate per la notte. Un rapido controllo delle scorte rimaste rivela la necessità di dimezzare le razioni se volete raggiungere tutti Ikaya. Perdi 1 punto Resistenza per lo scarso pasto serale.</p>",
@@ -1887,7 +1887,7 @@
    ]
   },
   "125": {
-   "image": "public/img/book03/sec125.png",
+   "image": "public/img/book03/sec125.webp",
    "text": "<p>Dopo due ore trascorse a esplorare con cautela il passaggio, ti accorgi che è disceso gradualmente per oltre sessanta metri. Alla fine raggiungi un'immensa volta di ghiaccio, al cui centro si trova un lago. La superficie ghiacciata è molto sottile, e l'acqua sottostante appare scura e profonda. Ti inginocchi sul bordo del lago, scrutando le sue misteriose profondità. Improvvisamente vedi una grande forma nera passare vicino alla superficie. C'è qualcosa di vivo sotto il ghiaccio, ed è enorme. Poi, alle tue spalle, senti i ringhi di un Kalkoth. Il rumore proviene dal tunnel. C'è solo un'altra uscita da questa volta, dall'altro lato del lago ghiacciato.</p>",
    "choices": [
     {
@@ -2175,7 +2175,7 @@
    "isDeathSection": true
   },
   "145": {
-   "image": "public/img/book03/sec145.png",
+   "image": "public/img/book03/sec145.webp",
    "text": "<p>Il passaggio è breve e giungi presto a un'altra camera di pietra. Davanti a te scorgi una scalinata di pietra che conduce a un arco buio, in alto. Ai piedi della scalinata, ancora eretti e rivestiti di armatura, si trovano i resti scheletrici di un antico guardiano di tomba. Una grande spada nera riposa tra le dita ossute dello scheletro.</p>",
    "choices": [
     {

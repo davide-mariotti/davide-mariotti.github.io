@@ -13,10 +13,10 @@
      "section": 1
     }
    ],
-   "image": "public/img/book01/sec000.png"
+   "image": "public/img/book01/sec000.webp"
   },
   "1": {
-   "image": "public/img/book01/sec001.png",
+   "image": "public/img/book01/sec001.webp",
    "text": "<p>Devi far presto, perché qualcosa ti dice che non è prudente indugiare presso le rovine fumanti del monastero. I Kraan, i mostri dalle nere ali, potrebbero tornare da un momento all'altro. Devi raggiungere Holmgard, la capitale di Sommerlund, e portare al Re la terribile notizia: tutti i cavalieri Ramas, salvo te, sono stati massacrati. Senza i Ramas alla testa del suo esercito, Sommerlund sarà alla mercè del suo antico nemico, i Signori delle Tenebre. Trattenendo le lacrime, dai un ultimo saluto ai tuoi compagni uccisi Dentro di te giuri che la loro morte sarà vendicata. Volti le spalle alle rovine e scendi con circospezione il ripido sentiero.</p><p>Ai piedi della collina il sentiero si biforca, ma entrambe le piste portano nel folto della foresta.</p>",
    "choices": [
     {
@@ -92,7 +92,7 @@
    ]
   },
   "6": {
-   "image": "public/img/book01/sec006.png",
+   "image": "public/img/book01/sec006.webp",
    "text": "<p>In lontananza senti un galoppo di cavalli che si avvicinano. Ti nascondi dietro un albero e aspetti: è la cavalleria della Guardia Reale con le bianche uniformi di Sua Maestà.</p>",
    "choices": [
     {
@@ -117,7 +117,7 @@
      "section": 25
     }
    ],
-   "image": "public/img/book01/sec007.png"
+   "image": "public/img/book01/sec007.webp"
   },
   "8": {
    "text": "<p>Il tuo Sesto Senso ti dice che a sud infuria una violenta battaglia. Tuttavia sai che la via più rapida per la capitale è proprio quella che va verso sud.</p>",
@@ -143,7 +143,7 @@
      "section": 292
     }
    ],
-   "image": "public/img/book01/sec009.png"
+   "image": "public/img/book01/sec009.webp"
   },
   "10": {
    "text": "<p>Stai sudando, e le gambe ti dolgono. Poco lontano vedi un gruppo di capanne.</p>",
@@ -228,7 +228,7 @@
      "section": 35
     }
    ],
-   "image": "public/img/book01/sec015.png"
+   "image": "public/img/book01/sec015.webp"
   },
   "16": {
    "text": "<p>Riesci a sciogliere uno dei cavalli legati al carrozzone. È spaventato dall'odore dei Tigerwolf, e dalle urla dei loro malvagi cavalieri, i Giak. Con la tua Arma in pugno inciti il cavallo verso le belve che avanzano. Sono a meno di cinquanta metri, e si precipitano verso di te con le lance abbassate. State per arrivare allo scontro frontale.</p>",
@@ -240,7 +240,7 @@
    ]
   },
   "17": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Alzi la tua Arma per colpire il mostro, mentre i suoi denti affilati scattano a pochi centimetri dalla tua testa. È difficile tenersi in piedi sotto i battiti delle sue ali. Togli un punto dalla tua Combattività e combatti contro il Kraan.</p>",
    "combat": {
     "name": "Kraan",
@@ -266,7 +266,7 @@
    ]
   },
   "18": {
-   "image": "public/img/book01/sec172.png",
+   "image": "public/img/book01/sec172.webp",
    "text": "<p>Vieni svegliato dal rumore di un esercito in lontananza. Oltre il lago distingui le figure dei Drakkar con i loro mantelli neri, e un branco di Tigerwolf con i loro cavalieri. Un Kraan compare sopra gli alberi, e atterra sul tetto di una piccola capanna di legno. Lo cavalca un essere vestito di rosso. Il Kraan si alza di nuovo in volo e attraversa il lago dirigendosi verso il tuo nascondiglio.</p>",
    "choices": [
     {
@@ -447,7 +447,7 @@
    ]
   },
   "29": {
-   "image": "public/img/book01/sec029.png",
+   "image": "public/img/book01/sec029.webp",
    "text": "<p>Ti avvicini alla riva e ti prepari al combattimento. Il Kraan e il suo cavaliere ti vedono e si lanciano attraverso il lago volando a pochi centimetri sul pelo dell'acqua. Il cavaliere emette un urlo che ti gela il sangue. È uno dei Vordak, i feroci ufficiali dei Signori delle Tenebre. Oramai ti è addosso, e devi combatterlo. Togli due punti dalla tua Combattività, a meno che tu non abbia lo Psicoschermo; il nemico ti sta attaccando anche con il suo Psicolaser, non solo con la sua mazza.</p>",
    "combat": {
     "name": "Vordak",
@@ -488,7 +488,7 @@
    ]
   },
   "32": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Dopo aver cavalcato per un paio di chilometri vedi in lontananza l'inconfondibile sagoma di cinque grandi Tigerwolf. In groppa portano dei Giak. Stanno avanzando lungo il sentiero che porta ad un ampio prato. Improvvisamente uno dei Giak lascia gli altri, si gira, e viene nella tua direzione.</p>",
    "choices": [
     {
@@ -514,7 +514,7 @@
    ]
   },
   "34": {
-   "image": "public/img/book01/sec172.png",
+   "image": "public/img/book01/sec172.webp",
    "text": "<p>Mentre meno te l'aspetti, una orribile figura vestita di rosso scende dal cielo a cavallo di un Kraan. Il suo grido ti congela il sangue. È un Vordak, uno dei feroci ufficiali dei Signori delle Tenebre. Ormai ti è addosso, e devi combatterlo. Togli due punti dalla tua Combattività, a meno che tu non abbia lo Psicoschermo; il nemico ti sta attaccando anche con il suo Psicolaser.</p>",
    "combat": {
     "name": "Vordak",
@@ -608,7 +608,7 @@
    ]
   },
   "41": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Tre Rangers passano al galoppo sulla riva del fiume, inseguiti da vicino dai Giak sui loro ringhiosi Tigerwolf. La sponda è alta, e vieni subito visto dal capo dei Giak, che ordina a cinque dei suoi di colpirti con gli archi. Sei sotto una pioggia di frecce nere.</p>",
    "choices": [
     {
@@ -643,7 +643,7 @@
    ]
   },
   "43": {
-   "image": "public/img/book01/sec043.png",
+   "image": "public/img/book01/sec043.webp",
    "text": "<p>Da dietro la roccia compare un enorme orso nero. Si avvicina lentamente, con la bocca aperta e il muso contratto per la rabbia e il dolore. Vedi che è gravemente ferito e sta sanguinando dal collo e dalla schiena. Devi combatterlo.</p>",
    "combat": {
     "name": "Orso nero",
@@ -712,7 +712,7 @@
    ]
   },
   "47": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Sudato e senza fiato ti trascini verso la sommità della collina. Improvvisamente vedi l'ombra di una grande creatura alata proiettarsi sul fianco della collina. Guardi in su e vedi un Kraan che volteggia sulla vetta. Dietro di te i Giak guadagnano terreno.</p>",
    "choices": [
     {
@@ -793,7 +793,7 @@
    "text": "<p>Un dolore lancinante attanaglia la tua gamba destra, storta e schiacciata sotto il peso del tuo corpo, mentre rotoli giù, e finisci in una fossa ai piedi della Collina. Il colpo è tale che ti manca il respiro, e perdi conoscenza. Vieni svegliato dal dolore acuto di qualcosa che ti preme contro il petto. È la punta di una lancia Giak. La prima cosa che vedi è il ghigno sinistro di quello che la impugna mentre ti blocca a terra il braccio sinistro. Istintivamente vorresti afferrare la tua Arma, ma questa non c'è più. In balia del crudele Giak, l'ultima cosa che vedi prima che la tua luce si spenga per sempre è la lama affilata della lancia che scende sulla tua gola. La tua missione finisce qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec053.png"
+   "image": "public/img/book01/sec053.webp"
   },
   "54": {
    "text": "<p>Sembra che il cielo non abbia sentito la tua preghiera. Una lancia sibila vicino alla tua testa e si pianta nel collo del cavallo. Con un nitrito straziante la bestia cade in avanti e finite entrambi a rotolare sulla strada. Tramortito e bloccato sotto il peso del tuo cavallo morto, l'ultima cosa che vedi sono le punte acuminate delle lance dei Giak. La tua missione è fallita.</p>",
@@ -801,7 +801,7 @@
    "choices": []
   },
   "55": {
-   "image": "public/img/book01/sec136.png",
+   "image": "public/img/book01/sec136.webp",
    "text": "<p>Mentre il Giak si slancia, ti getti in avanti e lo colpisci con la tua arma, sbattendolo via dalla schiena del giovane mago. Gli vai addosso e colpisci di nuovo. Grazie alla sorpresa del tuo attacco puoi aggiungere 4 punti alla tua Combattività finché dura il combattimento, ma alla fine devi toglierli di nuovo.</p>",
    "combat": {
     "name": "Giak",
@@ -880,7 +880,7 @@
    "choices": []
   },
   "61": {
-   "image": "public/img/book01/sec087.png",
+   "image": "public/img/book01/sec087.webp",
    "text": "<p>Finalmente puoi raggiungere la palizzata che circonda la città. Correndo verso un posto di guardia senti le grida concitate delle sentinelle che ti incoraggiano. Grazie al cielo ti hanno riconosciuto, anche se sei conciato in modo da sembrare un individuo sospetto. Il tuo mantello è lacero e sbrindellato, la faccia graffiata e coperta di sangue, e la polvere del cimitero ti copre dalla testa ai piedi. Passando a guado un ruscello ti trascini verso la porta. Solo ora ti rendi pienamente conto della terribile esperienza fatta al cimitero. L'ultima cosa che ricordi prima che lo sfinimento ti faccia perdere i sensi sono le braccia protese dei due soldati che ti vengono incontro per aiutarti.</p>",
    "choices": [
     {
@@ -920,7 +920,7 @@
    ]
   },
   "64": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Ti svegliano le grida di un Kraan che vola in cerchio sopra il carrozzone. È mattina presto, e il cielo è chiaro e sereno. Vedi un branco di Tigerwolf a neanche cinquecento metri più avanti sulla strada: si preparano all'attacco. Devi agire subito.</p>",
    "choices": [
     {
@@ -1023,7 +1023,7 @@
    ]
   },
   "72": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Ti giri e ti trovi davanti il ghigno di un Giak e le zanne affilate della sua cavalcatura. Devi combattere come se fosse un solo nemico.</p>",
    "combat": {
     "name": "Giak + Tigerwolf",
@@ -1131,7 +1131,7 @@
    ]
   },
   "81": {
-   "image": "public/img/book01/sec006.png",
+   "image": "public/img/book01/sec006.webp",
    "text": "<p>Dopo quasi un'ora i Kraan con i loro crudeli cavalieri si allontanano verso ovest. Mentre i fuggiaschi sconvolti cominciano a uscire dal bosco, senti in lontananza un rumore di cavalli che si avvicinano. Resti nascosto aspettando che i cavalieri arrivino. È la cavalleria della Guardia del Re con le divise bianche dell'esercito di Sua Maestà.</p>",
    "choices": [
     {
@@ -1152,7 +1152,7 @@
      "section": 235
     }
    ],
-   "image": "public/img/book01/sec082.png"
+   "image": "public/img/book01/sec082.webp"
   },
   "83": {
    "text": "<p>Hai corso per due chilometri quando tre soldati compaiono da sotto un ponticello. Ti ordinano di fermarti e di lasciar cadere le armi e l'equipaggiamento. Sono macchiati di sangue, sporchi e malandati. Il loro capo porta la tunica dei soldati della guarnigione di Toran.</p>",
@@ -1188,7 +1188,7 @@
    ]
   },
   "85": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Il sentiero è largo, e conduce diritto in un folto sottobosco. Gli alberi sono molto alti e regna una quiete innaturale. Cammini per un paio di chilometri quando improvvisamente senti il battito di un paio di enormi ali proprio sopra di te. Guardando in su resti sconvolto al vedere la sagoma nera di un Kraan che si lancia all'attacco.</p>",
    "choices": [
     {
@@ -1223,7 +1223,7 @@
    ]
   },
   "87": {
-   "image": "public/img/book01/sec087.png",
+   "image": "public/img/book01/sec087.webp",
    "text": "<p>Concentrando i tuoi poteri sulla serratura tenti di visualizzare il meccanismo interno. Pian piano l'immagine si concretizza sullo schermo della tua mente. È vecchia e arrugginita ma funziona ancora. Stai per perdere la concentrazione quando un leggero scatto ti dice che il tuo sforzo non è stato vano. Con lo spillo la cosa è più semplice. Lentamente si sfila dalla serratura finché cade sul pavimento. La porta di granito si apre verso di te ruotando su dei cardini nascosti e la luce fioca del Cimitero penetra nella tomba. L'uscita è completamente coperta da piante di Necranto, che ti tagliuzzano la faccia e le mani mentre ti apri a stento la strada verso la superficie. Ti spaventa un improvviso rumore. Ti giri e vicino a un cadavere vedi una testa mozza che ti sorride. In preda al panico fuggi attraverso la sinistra necropoli verso l'uscita a sud.</p>",
    "choices": [
     {
@@ -1362,7 +1362,7 @@
      "section": 306
     }
    ],
-   "image": "public/img/book01/sec097.png"
+   "image": "public/img/book01/sec097.webp"
   },
   "98": {
    "text": "<p>Sembra che le guardie credano alla tua storia e si inchinano con rispetto davanti al tuo titolo di Ramas. Uno di loro tira una corda nascosta e le enormi porte cominciano ad aprirsi. Entri, e le porte si chiudono dietro di te.</p>",
@@ -1374,7 +1374,7 @@
    ]
   },
   "99": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Ti tuffi nel sottobosco proprio mentre il mostro ti passa a pochi centimetri dalla testa. Ti volti rapidamente e vedi il Kraan che si prepara a un'altra picchiata. Ti rimetti in piedi e corri nel folto della foresta.</p>",
    "choices": [
     {
@@ -1399,7 +1399,7 @@
      "section": 257
     }
    ],
-   "image": "public/img/book01/sec100.png"
+   "image": "public/img/book01/sec100.webp"
   },
   "101": {
    "text": "<p>Il rumore della battaglia si affievolisce, ma il silenzio è presto rotto da una voce dentro di te che ti accusa di essere un codardo e di aver abbandonato nel pericolo un altro essere umano. Tenti di liberarti dall'insistente voce della coscienza dicendoti che la tua missione è molto più importante, e che non solo la vita del giovane mago, ma la vita di tutti i tuoi compatrioti è in pericolo se non raggiungi vivo la capitale. Improvvisamente la vista di una pattuglia di Giak ti costringe a nasconderti. Ma è troppo tardi: ti hanno individuato e devi correr via velocemente.</p>",
@@ -1418,7 +1418,7 @@
      "section": 284
     }
    ],
-   "image": "public/img/book01/sec102.png"
+   "image": "public/img/book01/sec102.webp"
   },
   "103": {
    "text": "<p>Il sentiero è invaso dalla vegetazione, e sbocca su un sentiero che porta a est.</p>",
@@ -1488,7 +1488,7 @@
    "text": "<p>Con un salto mortale ti lanci verso il tetto opposto. Tutto sembra accadere al rallentatore. Vedi la folla che si muove nelle strade, e alla tua destra, sotto un tetto, un nido di passeri. Senti le grida spaventate della gente quando atterri con uno schianto dall'altra parte. È l'ultimo suono che sentirai. Le tegole si frantumano e crollano e tu precipiti per tutti i quattro piani della locanda 'Alla Pantofola Verde' rompendoti la spina dorsale. La tua missione e la tua vita finiscono qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec108.png"
+   "image": "public/img/book01/sec108.webp"
   },
   "109": {
    "text": "<p>Sotto il tappeto c'è solo polvere!</p>",
@@ -1597,7 +1597,7 @@
    ]
   },
   "116": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Mentre esci dall'acqua fangosa, sei bersagliato da una pioggia di frecce nere. Rapidamente ti metti al riparo degli alberi e aspetti che i Giak si allontanino dalla riva opposta, prima di continuare a piedi verso la capitale.</p>",
    "choices": [
     {
@@ -1641,7 +1641,7 @@
    ]
   },
   "120": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Dietro di te senti i Giak assetati di sangue che stanno uccidendo i cavalli della carrozza. Lanci un'occhiata dietro le spalle e vedi un Kraan che si alza in volo. Attaccherà te o è interessato a qualcos'altro? L'ombra nera si fa sempre più grande intorno a te, e capisci che sei tu la vittima destinata. Il Kraan ti attacca in picchiata!</p>",
    "choices": [
     {
@@ -1753,7 +1753,7 @@
    "text": "<p>Dopo un'ora di marcia i Drakkar si fermano improvvisamente all'apparire sul sentiero di una enorme creatura grigia e coperta di scaglie. Appena il mostro si avvicina senti il suo fiato pestilenziale sulla tua faccia. Con un tremendo ruggito ti afferra la testa con le sue potenti zampe. L'ultima cosa che senti è il secco rumore della tua spina dorsale spezzata. La tua missione finisce qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec127.png"
+   "image": "public/img/book01/sec127.webp"
   },
   "128": {
    "text": "<p>Sbirciando attraverso il fitto fogliame una scena terrificante ti si presenta alla vista. In una piccola radura tre Giak hanno legato un uomo ad un palo e stanno dando fuoco a una catasta di legna secca ai suoi piedi. Dalla tunica lo riconosci per un Ranger, uno dei soldati del Re che pattugliano la parte occidentale del regno, vicino alle montagne di Durncrag. È stato picchiato violentemente ed è quasi privo di conoscenza.</p>",
@@ -1770,7 +1770,7 @@
      "section": 336
     }
    ],
-   "image": "public/img/book01/sec128.png"
+   "image": "public/img/book01/sec128.webp"
   },
   "129": {
    "text": "<p>Raggiungi le porte della capitale, fissando con ammirazione le alte mura della città. Queste si ergono per più di sessanta metri, e resistono da secoli agli attacchi del tempo e dei Signori delle Tenebre. Insieme con l'ufficiale percorri la galleria che corre sotto le mura, e dopo un centinaio di metri giungi alla torre di guardia principale. Una grande folla di soldati e di cittadini si muove in ogni direzione.</p>",
@@ -1802,7 +1802,7 @@
    ]
   },
   "131": {
-   "image": "public/img/book01/sec131.png",
+   "image": "public/img/book01/sec131.webp",
    "text": "<p>Hai percorso circa cinquecento metri quando senti delle grida e un rumore come di tuono. Avvicinandoti riconosci il luogo: sono le rovine di Tamargo, un antico tempio nella foresta. Una pattuglia di Giak, una trentina in tutto, stanno attaccando le rovine da ogni parte. Molti altri sono già morti e giacciono tra le colonne abbattute, ma i superstiti continuano ad attaccare un invisibile avversario. Improvvisamente un lampo azzurro investe la prima linea dei Giak, facendoli cadere da ogni parte. Uno di loro, più alto degli altri e vestito da capo a piedi di maglia d'acciaio, impreca contro i suoi compagni e li spinge avanti a frustate. Con l'Arma in pugno arrivi al margine della radura, nascosto dal fitto fogliame, e cerchi di capire chi sono i difensori. Con grande meraviglia vedi che le rovine sono difese da un giovane della tua età. Riconosci la tunica azzurra, ricamata di stelle: è un giovane apprendista della corporazione dei maghi di Toran. Cinque Giak si fanno avanti con le lance alzate e pronte a colpire, mentre il giovane si ritira in fretta più dentro le rovine. Improvvisamente si gira e alza la mano sinistra: ed ecco che dalle sue dita esce un lampo di luce azzurra a colpire i Giak. Vicino a dove sei nascosto vedi un Giak sgattaiolare verso le rovine e arrampicarsi su una delle colonne. Stringe tra i denti un lungo pugnale ricurvo e sta per assalire alle spalle il giovane mago.</p>",
    "choices": [
     {
@@ -1824,7 +1824,7 @@
    ]
   },
   "132": {
-   "image": "public/img/book01/sec132.png",
+   "image": "public/img/book01/sec132.webp",
    "text": "<p>La guardia del corpo ti guarda con grande sospetto e ti sbatte la porta in faccia. Senti delle voci dentro il carrozzone; improvvisamente la porta si apre e vedi la faccia di un ricco mercante. Riconosce il tuo mantello Ramas e si scusa per il comportamento del suo servo. Dice che sono stati attaccati più volte da quando hanno lasciato Toran: dai Kraan, dai banditi e dai ladri. Pensavano che anche tu fossi un bandito. Il carrozzone è pieno di seta e di spezie. Il mercante ti offre del cibo che tu accetti con gratitudine. Dopo un ottimo Pasto il peso delle fatiche sostenute prende il sopravvento e cadi in un sonno profondo.</p>",
    "choices": [
     {
@@ -1834,7 +1834,7 @@
    ]
   },
   "133": {
-   "image": "public/img/book01/sec133.png",
+   "image": "public/img/book01/sec133.webp",
    "text": "<p>Mentre ti avvicini alla statua vedi che sulla sua superficie si aprono delle crepe. Improvvisamente la statua si apre e un vero Serpente Alato, libero dal suo mantello di pietra, si lancia contro di te. Devi combattere.</p>",
    "combat": {
     "name": "Serpente Alato",
@@ -1877,7 +1877,7 @@
    ]
   },
   "136": {
-   "image": "public/img/book01/sec136.png",
+   "image": "public/img/book01/sec136.webp",
    "text": "<p>I Giak si avvicinano e si accovacciano come per spiccare un balzo. Vedi le punte seghettate delle loro lance e li senti parlare nel loro strano linguaggio gutturale. Il più grande dei due grida: 'Orgadak taag' Nogjat aga tok!' E si lancia all'attacco. Devi combattere i Giak uno alla volta. Aggiungi 1 punto alla tua Combattività, in quanto sei avvantaggiato dalla posizione sopraelevata.</p>",
    "combat": [
     {
@@ -1914,7 +1914,7 @@
      "section": 23
     }
    ],
-   "image": "public/img/book01/sec137.png"
+   "image": "public/img/book01/sec137.webp"
   },
   "138": {
    "text": "<p>Impugni la tua arma e muovi incontro al nemico. Ci sono due Giak delle Montagne, e devi combatterli uno alla volta.</p>",
@@ -1998,7 +1998,7 @@
      "section": 102
     }
    ],
-   "image": "public/img/book01/sec142.png"
+   "image": "public/img/book01/sec142.webp"
   },
   "143": {
    "text": "<p>Uscendo dal bosco ti ritrovi su una grande strada. È la strada che collega il porto settentrionale di Toran alla capitale. Spronando il cavallo calcoli di essere a Holmgard verso il mattino.</p>",
@@ -2151,7 +2151,7 @@
    "text": "<p>Sei stordito a causa della ferita e barcollando come un cieco cammini attraverso gli alberi. Improvvisamente cadi in avanti come se il terreno ti fosse stato tolto da sotto i piedi. Sei caduto dentro una trappola. Guardando in su puoi vedere quattro Drakkar che tendono i loro archi contro di te, mentre sui loro ceffi si dipinge un ghigno di soddisfazione. Mentre tutto si oscura, l'ultima cosa che senti sono le quattro frecce nere che si piantano nel tuo petto. Hai fallito la tua missione.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec154.png"
+   "image": "public/img/book01/sec154.webp"
   },
   "155": {
    "text": "<p>Quando ti avvicini il gruppo smette di parlare. Dalla loro espressione vedi che uno di loro tende la mano in segno di amicizia e dice: 'Signore, circolava voce che i Ramas fossero stati sterminati, grazie al cielo non è così. Temevamo che tutto fosse perduto'. Non dici niente della distruzione del monastero, perché questi sono profughi di Toran che hanno perso tutto quello che possedevano. L'unica speranza che gli resta è che i Ramas portino un esercito alla vittoria. Apprendi che il porto settentrionale è stato attaccato sia dal cielo che dal mare, e che le forze dei Signori delle Tenebre erano di molto superiori alla coraggiosa guarnigione del Re. Li rassicuri che Sommerlund non cadrà e gli auguri buona fortuna per il viaggio.</p>",
@@ -2206,7 +2206,7 @@
      }
     }
    ],
-   "image": "public/img/book01/sec158.png"
+   "image": "public/img/book01/sec158.webp"
   },
   "159": {
    "text": "<p>Il tuo tentativo non funziona, perché il mercante non ti lascia entrare nel carrozzone. Improvvisamente fa schioccare le dita e la guardia del corpo impugna la scimitarra.</p>",
@@ -2247,7 +2247,7 @@
      "section": 209
     }
    ],
-   "image": "public/img/book01/sec161.png"
+   "image": "public/img/book01/sec161.webp"
   },
   "162": {
    "text": "<p>Mentre ti avvicini agli uomini provi a chiamarli. Ma appena si voltano sei preso da un brivido e il cuore ti balza in gola: sono Drakkar travestiti. Si lanciano su di te e in un attimo ti trovi a terra, legato e trascinato dietro a loro sul sentiero. Ti prendono Zaino e Armi ma non ti perquisiscono, e così non trovano le Corone d'oro. Sghignazzando pregustano le torture che intendono infliggerti.</p>",
@@ -2362,7 +2362,7 @@
      "section": 23
     }
    ],
-   "image": "public/img/book01/sec169.png"
+   "image": "public/img/book01/sec169.webp"
   },
   "170": {
    "text": "<p>La galleria è buia e l'aria è molto più fredda che all'esterno. Avanzi lentamente con una mano sulla parete per non perdere l'equilibrio, quando senti un odore fetido, come di carne putrefatta. Se nello Zaino hai una Torcia e un Acciarino puoi fare un po' di luce per guardarti intorno. Improvvisamente qualcosa di pesante cade dalla volta del tunnel sulle tue spalle, facendoti cadere in ginocchio. È un Ragno-talpa e devi combatterlo perché tenta di strangolarti con i lunghi tentacoli viscidi.</p>",
@@ -2394,7 +2394,7 @@
    ]
   },
   "172": {
-   "image": "public/img/book01/sec172.png",
+   "image": "public/img/book01/sec172.webp",
    "text": "<p>Cade la notte e sei presto avvolto dall'oscurità. Sarebbe inutile continuare perché ti perderesti. Leghi il cavallo a un albero, ti avvolgi nel mantello e ti addormenti. Sei svegliato da un rumore di soldati in lontananza. Di là dal lago vedi le scure sagome dei Drakkar e un branco di Tigerwolf. Un Kraan compare sopra gli alberi e scende sul tetto della capanna. Lo cavalca un essere vestito di rosso. Il Kraan si alza in volo e attraverso il lago si dirige verso il luogo dove sei nascosto.</p>",
    "choices": [
     {
@@ -2440,7 +2440,7 @@
    ]
   },
   "175": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Agiti le braccia verso i cavalieri che si avvicinano: hai riconosciuto i Rangers del Re, duri uomini della foresta che pattugliano i confini occidentali del regno. La tua gioia però svanisce quando ti accorgi che stanno fuggendo da un branco di Tigerwolf con in groppa i crudeli Giak. I Rangers sono tempestati di frecce nere, e i feroci Tigerwolf si fanno sempre più vicini.</p>",
    "choices": [
     {
@@ -2591,7 +2591,7 @@
    "text": "<p>Aguzzando la vista cerchi di individuare tra gli alberi l'arciere nascosto. Ma subito dopo senti al petto un violento dolore e sei catapultato all'indietro dall'impatto di tre frecce. Due si conficcano nel costato e la terza nel fianco. L'ultima cosa che vedi è la volta del fogliame sopra di te e una grande libellula verde che si appoggia sulla fibbia della tua cintura. La tua vita e il tuo viaggio finiscono qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec185.png"
+   "image": "public/img/book01/sec185.webp"
   },
   "186": {
    "text": "<p>I Kakarmi spariscono nel fitto sottobosco e presto perdi l'orientamento. Dopo aver camminato per quasi due ore senti un rumore di acqua corrente. Decidi di andare a vedere.</p>",
@@ -2709,7 +2709,7 @@
    ]
   },
   "194": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Corri verso il carro. La gente fugge in ogni direzione mentre i Kraan attaccano, scomparendo poi con le povere vittime tra gli artigli nel cielo che scurisce. Un enorme Kraan montato da tre Giak è proprio sopra il carro: questi si lasciano cadere e saltano in groppa ai cavalli spaventati. Devi combatterli oppure rifugiarti dentro una fattoria lì vicino.</p>",
    "choices": [
     {
@@ -3171,7 +3171,7 @@
    ]
   },
   "229": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Il Kraan è sopra di te, e la polvere alzata dalle sue ali nere ti entra negli occhi e nel naso, e ti fa mancare il respiro. Ora il mostro attacca. Devi ucciderlo assolutamente. A causa della polvere devi togliere 1 punto di Combattività.</p>",
    "combat": {
     "name": "Kraan",
@@ -3229,7 +3229,7 @@
      "section": 7
     }
    ],
-   "image": "public/img/book01/sec231.png"
+   "image": "public/img/book01/sec231.webp"
   },
   "232": {
    "text": "<p>Il capo si avvicina e ti dice: \"Non ti chiediamo molto, signore: o la borsa o la vita\".</p>",
@@ -3257,7 +3257,7 @@
    "text": "<p>Salti giù dal carrozzone in corsa ma cadi malamente e ti rompi la caviglia. Il dolore è terribile e presto perdi conoscenza. Purtroppo non ti sveglierai più, ma forse ti interessa sapere che la tua testa ora adorna la sella di un Kraan. La tua missione e la tua vita finiscono qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec234.png"
+   "image": "public/img/book01/sec234.webp"
   },
   "235": {
    "text": "<p>Il cavallo del principe è veramente un magnifico animale, veloce e dai garretti saldi. Galoppi lungo il sentiero tortuoso come se fosse un rettilineo, mentre il rumore della battaglia si affievolisce dietro di te. Hai fame e devi fare un Pasto altrimenti perdi 3 punti di Resistenza. Dopo diversi chilometri il sentiero arriva a un incrocio. C’era sicuramente un cartello, ma è stato distrutto.</p>",
@@ -3295,7 +3295,7 @@
      "section": 104
     }
    ],
-   "image": "public/img/book01/sec236.png"
+   "image": "public/img/book01/sec236.webp"
   },
   "237": {
    "text": "<p>Usando al meglio la tua Arte del Mimetismo ti scavi un buco nel fianco della collina. Coprendoti col mantello ti nascondi sotto dei rami caduti. Scegli un numero della Tabella del Destino.</p>",
@@ -3401,7 +3401,7 @@
    ]
   },
   "246": {
-   "image": "public/img/book01/sec246.png",
+   "image": "public/img/book01/sec246.webp",
    "text": "<p>Quando il traghetto arriva in mezzo al lago l'uomo smette di remare, si alza e con un sogghigno sinistro si toglie il cappuccio. E' un Drakkar, e devi combatterlo.</p>",
    "combat": {
     "name": "Drakkar",
@@ -3445,7 +3445,7 @@
    ]
   },
   "249": {
-   "image": "public/img/book01/sec249.png",
+   "image": "public/img/book01/sec249.webp",
    "text": "<p>Per una scala di pietra scendi in una grande stanza. Ti attende una macabra visione: la strana luce verdastra proviene da due file di teschi appoggiati ognuno su un capitello e sistemati uno di fronte all'altro come per segnare il passaggio. Dal lato opposto, al di là di un arco decorato, inizia un corridoio che si perde nell'oscurità.</p>",
    "choices": [
     {
@@ -3459,7 +3459,7 @@
    ]
   },
   "250": {
-   "image": "public/img/book01/sec250.png",
+   "image": "public/img/book01/sec250.webp",
    "text": "<p>Saltando oltre il tronco ti trovi davanti a due bestioline pelose. Sono Kakarmi, una specie di animali intelligenti che vivono nella foresta di Sommerlund. Prima che tu possa scusarti per il modo in cui sei apparso, gli animaletti impauriti scappano nella foresta.</p>",
    "choices": [
     {
@@ -3482,7 +3482,7 @@
    ]
   },
   "252": {
-   "image": "public/img/book01/sec252.png",
+   "image": "public/img/book01/sec252.webp",
    "text": "<p>Nel centro di una piccola radura c'è un gruppo di persone che parla e gesticola animatamente. Ci sono bambini, tre uomini e una donna. Portano sulle spalle dei fagotti con tutti i loro averi. I loro vestiti sono di buona qualità, ma laceri e sporchi.</p>",
    "choices": [
     {
@@ -3496,7 +3496,7 @@
    ]
   },
   "253": {
-   "image": "public/img/book01/sec253.png",
+   "image": "public/img/book01/sec253.webp",
    "text": "<p>I Tigerwolf ti sono addosso e devi combatterli uno alla volta.</p>",
    "combat": [
     {
@@ -3558,7 +3558,7 @@
      "section": 82
     }
    ],
-   "image": "public/img/book01/sec255.png"
+   "image": "public/img/book01/sec255.webp"
   },
   "256": {
    "text": "<p>Ti svegliano le grida dei Kraan che volteggiano nella chiara luce del mattino. Scrutando tra l'intrico dei rami vedi tre di quelle bestiacce allontanarsi verso nord. Anche se pensi che non ti abbiano visto è opportuno che tu ti metta in viaggio. Sali a cavallo e galoppi verso sud.</p>",
@@ -3599,10 +3599,10 @@
    "text": "<p>La stanza si sta raffreddando. Cominci a sentire un odore di zolfo nell'aria, e una sorta di litania che giunge da qualche parte della caverna. Si apre una fessura nel muro di pietra e spunta la cima di una asta nera. Un lampo di luce azzurra si sprigiona dall'asta e ti colpisce in pieno petto. Mentre la tua vita si spegne, ti resta negli occhi l'immagine di un vecchio vestito di nero che t'avvicina un pugnale alla gola. La tua missione e la tua vita finiscono qui.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec259.png"
+   "image": "public/img/book01/sec259.webp"
   },
   "260": {
-   "image": "public/img/book01/sec136.png",
+   "image": "public/img/book01/sec136.webp",
    "text": "<p>Nuotando verso la riva vedi il Ranger riverso sul bordo dell'acqua. Lo raggiungi ma ti accorgi subito che nella caduta si è spezzato il collo ed è morto. Improvvisamente due Giak si lanciano su di te, e devi combattere. Sei disarmato e puoi usare solo le mani. Togli 4 punti dalla tua Combattività e affrontali uno alla volta.</p>",
    "combat": [
     {
@@ -3670,7 +3670,7 @@
    ]
   },
   "264": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Dopo un po' senti verso ovest l'eco di una battaglia.</p>",
    "choices": [
     {
@@ -3742,7 +3742,7 @@
    ]
   },
   "270": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Da oltre il lago ti giungono le grida infuriate del nemico. Devi andartene prima che compaiano altri Kraan. Monti a cavallo e ti inoltri nella foresta.</p>",
    "choices": [
     {
@@ -3755,7 +3755,7 @@
    "text": "<p>Ti senti molto debole, il veleno del serpente ti è entrato nel sangue. Non controlli più il movimento dei muscoli, le gambe ti vengono meno, e le acque limacciose della palude si chiudono sopra di te. La morte ti ha colto.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec271.png"
+   "image": "public/img/book01/sec271.webp"
   },
   "272": {
    "text": "<p>Continuando a guardare sopra di te cammini velocemente sul sentiero. Sei sulla strada per Fogwood, un piccolo insediamento di baracche dove da cinquant'anni vivono dei carbonai. Le raggiungi dopo una ventina di minuti, ma ti fermi al margine della radura: stranamente non un filo di fumo esce dalle baracche, e regna un'insolita calma.</p>",
@@ -3918,10 +3918,10 @@
      "section": 123
     }
    ],
-   "image": "public/img/book01/sec283.png"
+   "image": "public/img/book01/sec283.webp"
   },
   "284": {
-   "image": "public/img/book01/sec087.png",
+   "image": "public/img/book01/sec087.webp",
    "text": "<p>Attraverso il cimitero non è facile, perché il terreno è sconnesso e coperto di cespugli di Necranto. Le punte acuminate ti tagliano il mantello e le gambe. L'aria è ferma e pesante. Fetidi vapori escono dalle tombe aperte e senti qua e là dei sospiri, e flebili sussurri. Cautamente ti avvicini a un'apertura tra due pilastri, proteggendo la mano col mantello per farti largo tra i rovi. Improvvisamente il terreno cede e precipiti nel sottosuolo.</p>",
    "choices": [
     {
@@ -3943,7 +3943,7 @@
    "text": "<p>Solerti messaggeri di morte, i Tigerwolf ti circondano e ti attaccano. Combatti valorosamente, ma è tutto inutile, sono in troppi. Mentre il tuo flusso vitale se ne va e il buio eterno ti abbraccia, vedi in lontananza il riverbero del sole sulle torri di Holmgard. La tua missione è fallita.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec286.png"
+   "image": "public/img/book01/sec286.webp"
   },
   "287": {
    "text": "<p>Il sentiero si perde nell'intrico di rovi e conifere nane.</p>",
@@ -4021,7 +4021,7 @@
    "text": "<p>La tua ultima sensazione è di essere trascinato in un gorgo di tenebre. In questo mondo non resterà traccia alcuna di te, perché sei passato in una dimensione senza tempo. Ora sei schiavo delle forze del male. La tua avventura è finita.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec292.png"
+   "image": "public/img/book01/sec292.webp"
   },
   "293": {
    "text": "<p>Con uno di saluto Banedon si allontana e tu riprendi la tua strada nella foresta. Dopo poco tempo ti accorgi che sulla tua sinistra ci sono molte paia di occhi giallastri che ti spiano. Una freccia nera ti sfiora il capo. E' un'imboscata dei Giak, e devi scappare più presto che puoi.</p>",
@@ -4186,10 +4186,10 @@
      "section": 105
     }
    ],
-   "image": "public/img/book01/sec305.png"
+   "image": "public/img/book01/sec305.webp"
   },
   "306": {
-   "image": "public/img/book01/sec306.png",
+   "image": "public/img/book01/sec306.webp",
    "text": "<p>Il rumore della battaglia si smorza dietro di te. Improvvisamente sei trascinato a terra da tre Drakkar che si erano nascosti su un albero. Ogni resistenza è inutile, sono in troppi e sono molto forti. L'ultima cosa che senti è il loro ringhio malvagio mentre alzano le lance. Qui ha termine la tua missione.</p>",
    "isDeathSection": true,
    "choices": []
@@ -4227,7 +4227,7 @@
    ]
   },
   "309": {
-   "image": "public/img/book01/sec309.png",
+   "image": "public/img/book01/sec309.webp",
    "text": "<p>Non hai fatto neanche dieci passi che il corvo gracchia un avvertimento allo sconosciuto. Questi si gira e lancia un grido acuto che ti gela il sangue nelle vene, mentre il panico ti attanaglia lo stomaco. E' un Vordak, uno dei morti viventi al servizio dei Signori delle Tenebre. In un attimo una torma di Giak compare accanto a lui e ti attacca. Combatti coraggiosamente ma sei sopraffatto dal numero. L'ultima cosa che ricordi sono le scheletriche mani del Vordak che si stringono sulla tua gola. La tua vita e la tua missione finiscono qui.</p>",
    "isDeathSection": true,
    "choices": []
@@ -4349,10 +4349,10 @@
      "section": 157
     }
    ],
-   "image": "public/img/book01/sec319.png"
+   "image": "public/img/book01/sec319.webp"
   },
   "320": {
-   "image": "public/img/book01/sec229.png",
+   "image": "public/img/book01/sec229.webp",
    "text": "<p>Mentre corri verso il bosco, un Kraan scende su di te e ti graffia un braccio. Prima che tu possa reagire se ne vola via, emettendo un grido sinistro. Arrivi al bosco, ma hai perso 2 punti di Resistenza.</p>",
    "effects": {
     "loseEndurance": 2
@@ -4374,7 +4374,7 @@
    ]
   },
   "322": {
-   "image": "public/img/book01/sec322.png",
+   "image": "public/img/book01/sec322.webp",
    "text": "<p>La salita sembra durare un'eternità, ma alla fine raggiungi la cima. Dietro di te vedi le fumanti rovine del monastero. Verso nord una colonna di fumo nero si alza nel cielo e capisci, con una stretta al cuore, che il porto di Toran è in fiamme. Improvvisamente un urlo sinistro ti fa capire che un Kraan sta per attaccarti. È sopra di te, a una trentina di metri, e sta scendendo in picchiata.</p>",
    "choices": [
     {
@@ -4435,7 +4435,7 @@
    "text": "<p>Dopo pochi minuti vedi i Kraan sbucare da una collina alle tue spalle. Rapidamente ne conti almeno sedici, ognuno con almeno due Giak in groppa. Questi sono armati con lunghe lance e portano degli elmi di bronzo fatti a punta. Dalle loro grida eccitate capisci che ti hanno visto. Cerchi di raggiungere l'imboccatura della galleria che è appena sette metri sotto, ma con uno stivale resti impigliato in un cespuglio spinoso e ti trovi immobilizzato e senza difesa. Per fortuna non soffri molto: quando la lancia del primo Giak ti entra nel cuore la morte arriva subito. Qui finisce la tua pista.</p>",
    "isDeathSection": true,
    "choices": [],
-   "image": "public/img/book01/sec327.png"
+   "image": "public/img/book01/sec327.webp"
   },
   "328": {
    "text": "<p>Il corpo della creatura morente si scioglie lentamente in un liquido verdastro. L'erba e le piante intorno cominciano ad appassire e a morire, ma dove giaceva il corpo vedi scintillare una Gemma di grande valore.</p>",
@@ -4609,7 +4609,7 @@
    ]
   },
   "340": {
-   "image": "public/img/book01/sec041.png",
+   "image": "public/img/book01/sec041.webp",
    "text": "<p>Galoppi contro il nemico con l'Arma pronta a colpire. Il Giak ti vede e sguaina la scimitarra. Devi combattere Giak e Tigerwolf come un solo nemico.</p>",
    "combat": {
     "name": "Giak + Tigerwolf",
@@ -4665,7 +4665,7 @@
      "section": 123
     }
    ],
-   "image": "public/img/book01/sec342.png"
+   "image": "public/img/book01/sec342.webp"
   },
   "343": {
    "text": "<p>Sei immobilizzato dal groviglio di rami e radici. Finalmente liberi la mano destra, afferri l'Ascia e ti apri la strada attraverso il fogliame per arrivare dove il bosco è più rado. Il mantello è strappato in più punti e hai una brutta ferita sul braccio sinistro, proprio sopra il gomito. Perdi 2 punti di Resistenza.</p>",
@@ -4730,7 +4730,7 @@
    ]
   },
   "348": {
-   "image": "public/img/book01/sec348.png",
+   "image": "public/img/book01/sec348.webp",
    "text": "<p>Dai un calcio al corpo del serpente e ti accorgi con orrore che sì tratta di una Vipera d'acqua. Contro il suo morso non c'è antidoto! Proseguire in questa direzione sarebbe un suicidio: torni sui tuoi passi e finalmente raggiungi il terreno solido.</p>",
    "choices": [
     {
@@ -4740,7 +4740,7 @@
    ]
   },
   "349": {
-   "image": "public/img/book01/sec349.png",
+   "image": "public/img/book01/sec349.webp",
    "text": "<p>È un giovane biondo, con gli occhi malinconici. Porta sul volto i segni della battaglia, e la lunga veste azzurra in cattive condizioni mostra che ha vissuto a lungo alla macchia. Ti stringe la mano e si inchina. \"Ti ringrazio profondamente, cavaliere. I miei poteri sono quasi esauriti. Se tu non mi avessi aiutato avrei finito i miei giorni infilzato sulla punta di una lancia Giak\". E' debole e si regge a stento. Lo prendi per un braccio e lo fai sedere su un masso. Il giovane comincia il suo racconto: \"Il mio nome è Banedon. Sono un iniziato della Fratellanza della Stella di Cristallo, la corporazione dei maghi di Toran. Il mio Maestro mi ha inviato al tuo monastero con questo messaggio urgente\". Così dicendo prende una pergamena da sotto la veste e te la porge. \"Come vedi ho aperto la lettera e ho letto il contenuto. Quando la guerra è cominciata mi trovavo per strada con due compagni di viaggio. I Kraan ci hanno attaccato e durante la fuga ci siamo persi nella foresta\". La lettera avvisa i Ramas che i Signori delle Tenebre hanno radunato un enorme esercito al di là dei monti Durncrag. Il Maestro esorta a annullare i festeggiamenti di Fendar e a prepararsi per la guerra. “Temo che siamo stati traditi\", dice Banedon con un'espressione di dolore. \"Uno dei miei confratelli, di nome Vonotar, aveva approfondito i misteri proibiti dell'Art Nera. Dieci giorni or sono ha rinnegato la Fratellanza e ha assassinato uno degli anziani. Poi è scomparso. Dicono che ora sta con i Signori delle Tenebre\". Racconti a Banedon cosa è successo al monastero, e della tua missione. Senza dir nulla si toglie dal collo una catena d'oro e te la porge. Appesa alla catena c'è una piccola Stella di Cristallo. \"E' il simbolo della mia Fratellanza: in quest'ora buia siamo davvero fratelli. È un talismano benefico che ti proteggerà nel tuo cammino\". Lo ringrazi e ti metti la catena intorno al collo nascondendola sotto la tunica. (Ricordati di segnarla sul tuo Registro di Guerra). Banedon ti saluta \"Dobbiamo lasciare questo luogo perché i Giak potrebbero tornare con dei rinforzi. Devo tornare alla mia corporazione. Addio fratello. Che il cielo ti protegga\".</p>",
    "effects": {
     "canAddItems": [
@@ -4755,7 +4755,7 @@
    ]
   },
   "350": {
-   "image": "public/img/book01/sec350.png",
+   "image": "public/img/book01/sec350.webp",
    "text": "<p>Entri nella Camera Reale, una splendida sala riccamente decorata in bianco e oro. Il Re e i suoi ministri stanno studiando una grande carta geografica aperta su un tavolo di marmo al centro della sala. Le loro facce sono segnate dalla preoccupazione. Cade il silenzio mentre racconti della morte dei tuoi fratelli e il lungo e travagliato viaggio per raggiungere la rocca. Quando finisci la tua storia il Re si avvicina e ti prende la mano destra. \"Lupo Solitario, il tuo coraggio è senza limiti, sei un vero Ramas. Benché queste notizie siano un grave colpo per noi, il tuo spirito di abnegazione accende un lampo di speranza nel fondo dei nostri cuori. Tu rendi onore alla memoria dei tuoi Maestri, e noi siamo orgogliosi di te\". Tutti i presenti ti lodano e ti ringraziano, ma appena il Re alza una mano tutte le voci tacciono. \"Hai fatto tutto ciò che Sommerlund poteva chiedere a un suo leale figlio, ma questa terra ha ancora molto bisogno di te. I Signori delle Tenebre sono sempre più potenti, e la loro ambizione non conosce limiti. La nostra unica speranza è riposta nel regno di Durenor e nella sua forza, che già una volta ha sconfitto i Signori delle Tenebre. Lupo Solitario, tu sei l'ultimo dei Ramas, tu solo conosci le nobili Arti. Vuoi tu andare a Durenor e tornare con la Spada del Sole? Solamente con questo dono degli Dei potremo sconfiggere il male e salvare la nostra terra\". Se vuoi accettare il pericoloso incarico troverai tutte le istruzioni nella seconda avventura di Lupo Solitario e potrai lanciarti nella Traversata infernale.</p>",
    "choices": [],
    "isVictory": true

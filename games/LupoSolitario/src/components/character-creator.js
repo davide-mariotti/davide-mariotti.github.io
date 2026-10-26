@@ -6,61 +6,61 @@ export const KAI_ARTS = [
   {
     name: 'Mimetismo',
     emoji: '🎭',
-    image: 'public/img/arti-ramas/mimetismo.png',
+    image: 'public/img/arti-ramas/mimetismo.webp',
     description: 'Ti permette di adattarti all\'ambiente circostante e nasconderti'
   },
   {
     name: 'Caccia',
     emoji: '🏹',
-    image: 'public/img/arti-ramas/caccia.png',
+    image: 'public/img/arti-ramas/caccia.webp',
     description: 'Ti permette di procurarti cibo in natura. Non devi consumare Pasti quando richiesto.'
   },
   {
     name: 'Sesto Senso',
     emoji: '👁️',
-    image: 'public/img/arti-ramas/sesto-senso.png',
+    image: 'public/img/arti-ramas/sesto-senso.webp',
     description: 'Ti avverte di pericoli imminenti e rivela la natura di oggetti strani'
   },
   {
     name: 'Orientamento',
     emoji: '🧭',
-    image: 'public/img/arti-ramas/orientamento.png',
+    image: 'public/img/arti-ramas/orientamento.webp',
     description: 'Ti permette di scegliere sempre il percorso giusto'
   },
   {
     name: 'Guarigione',
     emoji: '💊',
-    image: 'public/img/arti-ramas/guarigione.png',
+    image: 'public/img/arti-ramas/guarigione.webp',
     description: 'Recuperi 1 punto Resistenza per ogni sezione senza combattimento'
   },
   {
     name: 'Scherma',
     emoji: '⚔️',
-    image: 'public/img/arti-ramas/scherma.png',
+    image: 'public/img/arti-ramas/scherma.webp',
     description: 'Maestria con un\'arma specifica: +2 Combattività quando la usi'
   },
   {
     name: 'Psicoschermo',
     emoji: '🛡️',
-    image: 'public/img/arti-ramas/psicoschermo.png',
+    image: 'public/img/arti-ramas/psicoschermo.webp',
     description: 'Protegge dagli attacchi Psicolaser dei nemici'
   },
   {
     name: 'Psicolaser',
     emoji: '⚡',
-    image: 'public/img/arti-ramas/psicolaser.png',
+    image: 'public/img/arti-ramas/psicolaser.webp',
     description: 'Attacca i nemici con la forza della mente: +2 Combattività'
   },
   {
     name: 'Affinità animale',
     emoji: '🐺',
-    image: 'public/img/arti-ramas/affinita-animale.png',
+    image: 'public/img/arti-ramas/affinita-animale.webp',
     description: 'Comunica con gli animali e comprendi le loro intenzioni'
   },
   {
     name: 'Telecinesi',
     emoji: '🔮',
-    image: 'public/img/arti-ramas/telecinesi.png',
+    image: 'public/img/arti-ramas/telecinesi.webp',
     description: 'Muovi piccoli oggetti con la concentrazione mentale'
   }
 ];
@@ -73,16 +73,16 @@ export const WEAPONS = [
 // Maps a weapon's display name to its icon - used anywhere a weapon is shown
 // with an image instead of (or alongside) the generic ⚔️ emoji.
 export const WEAPON_IMAGES = {
-  'Pugnale': 'public/img/weapon/pugnale.png',
-  'Daga': 'public/img/weapon/daga.png',
-  'Lancia': 'public/img/weapon/lancia.png',
-  'Mazza': 'public/img/weapon/mazza.png',
-  'Martello': 'public/img/weapon/martello.png',
-  'Spada': 'public/img/weapon/spada.png',
-  'Spada Corta': 'public/img/weapon/spada-corta.png',
-  'Ascia': 'public/img/weapon/ascia.png',
-  'Asta': 'public/img/weapon/asta.png',
-  'Spadone': 'public/img/weapon/spadone.png'
+  'Pugnale': 'public/img/weapon/pugnale.webp',
+  'Daga': 'public/img/weapon/daga.webp',
+  'Lancia': 'public/img/weapon/lancia.webp',
+  'Mazza': 'public/img/weapon/mazza.webp',
+  'Martello': 'public/img/weapon/martello.webp',
+  'Spada': 'public/img/weapon/spada.webp',
+  'Spada Corta': 'public/img/weapon/spada-corta.webp',
+  'Ascia': 'public/img/weapon/ascia.webp',
+  'Asta': 'public/img/weapon/asta.webp',
+  'Spadone': 'public/img/weapon/spadone.webp'
 };
 
 // <img> tag for a weapon icon, or '' if the weapon has no known icon (safe to
@@ -97,18 +97,18 @@ export function weaponIconHTML(weaponName) {
 // artwork - the game also has hundreds of one-off narrative item names (found
 // deep in the books) that fall back to a generic icon wherever this is used.
 export const ITEM_IMAGES = {
-  'Elmo': 'public/img/oggetti/elmo.png',
-  'Cotta di Maglia': 'public/img/oggetti/cotta-di-maglia.png',
-  'Scudo': 'public/img/oggetti/scudo.png',
-  'Giubba di Cuoio Imbottito': 'public/img/oggetti/giubba-di-cuoio-imbottito.png',
-  'Mappa di Sommerlund': 'public/img/oggetti/mappa.png',
-  'Mappa': 'public/img/oggetti/mappa.png',
-  'Mappa di Kalte': 'public/img/oggetti/mappa.png',
-  'Mappa delle Terre del Sud': 'public/img/oggetti/mappa.png',
-  'Sigillo di Hammerdal': 'public/img/oggetti/sigillo-di-hammerdal.png',
-  'Pozione Magica': 'public/img/oggetti/pozione-magica.png',
-  'Pozione Curativa': 'public/img/oggetti/pozione-curativa.png',
-  'Pozione di Laumspur': 'public/img/oggetti/pozione-di-laumspur.png'
+  'Elmo': 'public/img/oggetti/elmo.webp',
+  'Cotta di Maglia': 'public/img/oggetti/cotta-di-maglia.webp',
+  'Scudo': 'public/img/oggetti/scudo.webp',
+  'Giubba di Cuoio Imbottito': 'public/img/oggetti/giubba-di-cuoio-imbottito.webp',
+  'Mappa di Sommerlund': 'public/img/oggetti/mappa.webp',
+  'Mappa': 'public/img/oggetti/mappa.webp',
+  'Mappa di Kalte': 'public/img/oggetti/mappa.webp',
+  'Mappa delle Terre del Sud': 'public/img/oggetti/mappa.webp',
+  'Sigillo di Hammerdal': 'public/img/oggetti/sigillo-di-hammerdal.webp',
+  'Pozione Magica': 'public/img/oggetti/pozione-magica.webp',
+  'Pozione Curativa': 'public/img/oggetti/pozione-curativa.webp',
+  'Pozione di Laumspur': 'public/img/oggetti/pozione-di-laumspur.webp'
 };
 
 // <img> tag for a known item icon, or '' if this item has no dedicated

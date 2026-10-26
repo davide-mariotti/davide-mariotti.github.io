@@ -37,14 +37,14 @@ const IMAGES = {
     tilesetGrass: new Image(),
     tilesetRoad: new Image()
 };
-IMAGES.soldier.src = 'img/Units/Blue Units/Warrior/Warrior_Run.png';
-IMAGES.enemy.src = 'img/Units/Red Units/Warrior/Warrior_Run.png';
-IMAGES.boss.src = 'img/Units/Black Units/Warrior/Warrior_Idle.png';
-IMAGES.obstacle.src = 'img/Terrain/Decorations/Rocks/Rock1.png';
-IMAGES.cloud.src = 'img/Terrain/Decorations/Clouds/Clouds_01.png';
-IMAGES.tower.src = 'img/Buildings/Blue Buildings/Tower.png';
-IMAGES.tilesetGrass.src = 'img/Terrain/Tileset/Tilemap_color1.png';
-IMAGES.tilesetRoad.src = 'img/Terrain/Tileset/Tilemap_color4.png';
+IMAGES.soldier.src = 'img/Units/Blue Units/Warrior/Warrior_Run.webp';
+IMAGES.enemy.src = 'img/Units/Red Units/Warrior/Warrior_Run.webp';
+IMAGES.boss.src = 'img/Units/Black Units/Warrior/Warrior_Idle.webp';
+IMAGES.obstacle.src = 'img/Terrain/Decorations/Rocks/Rock1.webp';
+IMAGES.cloud.src = 'img/Terrain/Decorations/Clouds/Clouds_01.webp';
+IMAGES.tower.src = 'img/Buildings/Blue Buildings/Tower.webp';
+IMAGES.tilesetGrass.src = 'img/Terrain/Tileset/Tilemap_color1.webp';
+IMAGES.tilesetRoad.src = 'img/Terrain/Tileset/Tilemap_color4.webp';
 
 // Texture System
 let WORLD_TEXTURE = null;
