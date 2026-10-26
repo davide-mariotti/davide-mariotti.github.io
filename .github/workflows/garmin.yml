@@ -1,27 +1,24 @@
 name: Garmin - aggiorna dati
-# Ogni giorno scarica i dati Garmin di ogni atleta e li pubblica su Firestore (privati, dietro login).
+# Ogni giorno aggiorna i dati Garmin di ogni atleta su Firestore (privati, dietro login), con tutta la storia.
+# Il runner parte vuoto: publish.py --pull riprende quello che è già online, così fetch.py scarica solo le novità
+# (ultimi giorni e dettagli delle attività mancanti, al massimo 400 per giro: il primo caricamento può richiedere più giri).
 # Secrets: GARMIN_KEY_<NOME_COGNOME> per atleta + FIREBASE_SERVICE_ACCOUNT. Un atleta senza chiave valida viene saltato.
 on:
   schedule:
     - cron: '30 4 * * *'   # 4:30 UTC = 5:30/6:30 in Italia
   workflow_dispatch:
-    inputs:
-      giorni_dettaglio:
-        description: 'Giorni di attività di cui scaricare il dettaglio FIT (365 per il primo caricamento)'
-        default: '14'
 permissions:
   contents: read
 concurrency: garmin
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         include:
-          # since: inizio della storia da scaricare ogni giorno; senza, gli ultimi 365 giorni
-          - { athlete: davide-mariotti, key: GARMIN_KEY_DAVIDE_MARIOTTI, since: '2024-08-29' }
+          - { athlete: davide-mariotti, key: GARMIN_KEY_DAVIDE_MARIOTTI }
           - { athlete: andrea-prosperi, key: GARMIN_KEY_ANDREA_PROSPERI }
     defaults:
       run:
@@ -42,5 +39,6 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           if [ ${#GARMIN_KEY} -lt 20 ]; then echo "Secret ${{ matrix.key }} mancante o segnaposto: salto."; exit 0; fi
-          python fetch.py --athlete ${{ matrix.athlete }} ${{ matrix.since && format('--since {0}', matrix.since) || '' }} --details-days ${{ inputs.giorni_dettaglio || 14 }}
+          python publish.py --pull ${{ matrix.athlete }}
+          python fetch.py --athlete ${{ matrix.athlete }}
           python publish.py ${{ matrix.athlete }}

@@ -44,7 +44,7 @@ function gate(text, label, action) {
   document.querySelector('.gate')?.remove();
   const el = document.createElement('div');
   el.className = 'gate';
-  el.innerHTML = '<div class="gate-card"><span class="logo">◆</span><h2>Garmin Dashboard</h2><p></p><button class="btn"></button><p class="err"></p></div>';
+  el.innerHTML = '<div class="gate-card"><img class="logo" src="../assets/icons/logo/dm-icon.svg" alt=""><h2>Garmin Dashboard</h2><p></p><button class="btn"></button><p class="err"></p></div>';
   el.querySelector('p').textContent = text;
   const btn = el.querySelector('button');
   btn.textContent = label;

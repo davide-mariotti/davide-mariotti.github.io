@@ -1,7 +1,11 @@
 """Scarica i dati dalla Garmin Connect Personal API in data/<atleta>/garmin.js (letto da dashboard.html)
-e il dettaglio di ogni attività (file FIT) in data/<atleta>/act/<id>.js, solo per quelle non ancora scaricate.
+e il dettaglio di ogni attività (FIT o GPX) in data/<atleta>/act/<id>.js.
 
-Uso:  .venv\\Scripts\\python fetch.py [--athlete davide-mariotti] [--days 365 | --since 2024-08-29] [--details-days 14]
+Tutta la storia, dalla prima attività. Se data/<atleta>/garmin.js esiste già, scarica solo i giorni nuovi
+(più gli ultimi OVERLAP, che Garmin completa in ritardo) e li unisce; i dettagli solo per le attività che mancano.
+In GitHub Actions i dati di partenza li riporta da Firestore `publish.py --pull`.
+
+Uso:  .venv\\Scripts\\python fetch.py [--athlete davide-mariotti] [--full] [--max-details 400]
 La chiave arriva da GARMIN_KEY (GitHub Actions) oppure da GARMIN_KEY_<NOME_COGNOME> nel file .env.
 """
 
@@ -20,6 +24,7 @@ from garmin_fit_sdk import Decoder, Stream
 from garmin_personal_api import GarminPersonalApiClient, HttpError, PersonalApiAuthenticator
 
 ROOT = Path(__file__).parent
+OVERLAP = 7  # giorni riscaricati a ogni giro: sonno, HRV e riepiloghi Garmin li completa nei giorni dopo
 
 
 def load_env():
@@ -152,10 +157,27 @@ def fit_detail(raw):
     return {"rec": rec, "gps": [[round(a, 5), round(b, 5)] for a, b in pos[::g]], "laps": laps}
 
 
-def download_details(c, activities, since, folder):
+def merge(old, new, key):
+    """Unisce due elenchi giornalieri per data: i giorni appena scaricati sostituiscono quelli vecchi."""
+    by_day = {x[key]: x for x in (old or []) + (new or []) if x.get(key)}  # Garmin manda anche voci vuote senza data
+    return sorted(by_day.values(), key=lambda x: x.get(key) or "")
+
+
+def load_js(path):
+    text = path.read_text(encoding="utf-8")
+    return json.loads(text[text.index("=") + 1:text.rstrip().rindex(";")])
+
+
+def download_details(c, activities, folder, limit):
+    """Dettagli delle attività che mancano, dalle più recenti; al massimo `limit` per giro, il resto al giro dopo."""
     folder.mkdir(parents=True, exist_ok=True)
-    todo = [a for a in activities if a["startTimeLocal"][:10] >= since.isoformat() and not a.get("manualActivity")
+    online = folder / "online.txt"  # dettagli già su Firestore, scritto da publish.py --pull
+    have = set(online.read_text().split()) if online.exists() else set()
+    todo = [a for a in activities if not a.get("manualActivity") and str(a["activityId"]) not in have
             and not (folder / f"{a['activityId']}.js").exists()]
+    if len(todo) > limit:
+        print(f"  dettagli      {len(todo)} da scaricare: {limit} ora, gli altri al prossimo giro", flush=True)
+        todo = todo[:limit]
     for n, a in enumerate(todo, 1):
         aid = a["activityId"]
         try:
@@ -172,11 +194,10 @@ def download_details(c, activities, since, folder):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--athlete", default="davide-mariotti", help="id nome-cognome: cartella data/<id> e chiave GARMIN_KEY_<NOME_COGNOME>")
-    parser.add_argument("--days", type=int, default=365, help="giorni di storico per i dati giornalieri")
-    parser.add_argument("--since", type=date.fromisoformat, help="data di inizio AAAA-MM-GG al posto di --days (tutta la storia)")
-    parser.add_argument("--details-days", type=int, help="giorni di attività di cui scaricare il FIT (default: tutto lo storico)")
+    parser.add_argument("--full", action="store_true", help="riscarica tutta la storia invece dei soli giorni nuovi")
+    parser.add_argument("--max-details", type=int, default=400, help="dettagli attività al massimo per giro (~2 s l'uno)")
     args = parser.parse_args()
-    days, athlete = args.days, args.athlete
+    athlete = args.athlete
 
     load_env()
     env_name = "GARMIN_KEY_" + athlete.upper().replace("-", "_")
@@ -187,23 +208,37 @@ def main():
     token = PersonalApiAuthenticator(bearer_token_cache_file=cache).obtain_token(key)
     c = GarminPersonalApiClient(token.access_token)
     end = date.today()
-    start = args.since or end - timedelta(days=days - 1)
     yday = end - timedelta(days=1)
+    out = ROOT / "data" / athlete / "garmin.js"
 
-    # Limiti misurati: summaries/sleep/bodyBattery max ~31 giorni, HRV e peso fino a 365.
+    # la storia parte dalla prima attività; con dati già presenti che la coprono, si scaricano solo i giorni nuovi
+    activities = retry(lambda: all_activities(c))
+    first = min((a["startTimeLocal"][:10] for a in activities), default=(end - timedelta(days=364)).isoformat())
+    old = load_js(out) if out.exists() and not args.full else None
+    if old and old.get("from", "9999") <= first:
+        start = date.fromisoformat(old["from"])
+        since = max(start, date.fromisoformat(old["generated"][:10]) - timedelta(days=OVERLAP))
+    else:
+        old, start = None, date.fromisoformat(first)
+        since = start
+    print(f"  attività      {len(activities)} · dati giornalieri dal {since}{' (incrementale)' if old else ' (tutta la storia)'}", flush=True)
+
+    def daily(name, fn, max_days, pick, key):
+        return merge((old or {}).get(name), ranged(fn, since, end, max_days, pick), key)
+
+    # Limiti misurati: summaries/sleep/bodyBattery max ~31 giorni per chiamata, HRV e peso fino a 365.
     jobs = {
         "profile": lambda: c.get_user_profile_settings(),
         "hrZones": lambda: c.get_heart_rate_zones(),
         "fitnessAge": lambda: c.get_fitness_age(yday),
-        "summaries": lambda: ranged(c.get_daily_summaries, start, end, 31, lambda r: r["data"]),
-        "sleep": lambda: ranged(c.get_daily_sleep_summaries, start, end, 31),
-        "bodyBattery": lambda: ranged(c.get_daily_body_battery, start, end, 31),
-        "hrv": lambda: ranged(c.get_daily_hrv_summaries, start, end, 365, lambda r: r["hrvSummaries"]),
-        "weight": lambda: ranged(c.get_weight_measurements, start, end, 365, lambda r: r["dailyWeightSummaries"]),
+        "summaries": lambda: daily("summaries", c.get_daily_summaries, 31, lambda r: r["data"], "calendarDate"),
+        "sleep": lambda: daily("sleep", c.get_daily_sleep_summaries, 31, lambda r: r, "calendarDate"),
+        "bodyBattery": lambda: daily("bodyBattery", c.get_daily_body_battery, 31, lambda r: r, "date"),
+        "hrv": lambda: daily("hrv", c.get_daily_hrv_summaries, 365, lambda r: r["hrvSummaries"], "calendarDate"),
+        "weight": lambda: daily("weight", c.get_weight_measurements, 365, lambda r: r["dailyWeightSummaries"], "summaryDate"),
         "weightGoals": lambda: c.get_effective_weight_goals(start, end),
         "heartRateDay": lambda: c.get_daily_heart_rate(yday),
         "hrvNight": lambda: c.get_daily_hrv(end),
-        "activities": lambda: all_activities(c),
     }
     data = {"generated": datetime.now().isoformat(timespec="minutes"), "from": start.isoformat()}
     for name, job in jobs.items():
@@ -211,17 +246,15 @@ def main():
             data[name] = retry(job)
             size = len(data[name]) if isinstance(data[name], list) else "ok"
             print(f"  {name:13} {size}", flush=True)
-        except HttpError as e:  # un endpoint che fallisce non deve bloccare gli altri
+        except HttpError as e:  # un endpoint che fallisce non deve bloccare gli altri: si tengono i dati vecchi
             print(f"! {name:13} {e}")
-            data[name] = None
+            data[name] = (old or {}).get(name)
+    data["activities"] = activities
 
-    out = ROOT / "data" / athlete / "garmin.js"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("window.GARMIN = " + json.dumps(data, separators=(",", ":")) + ";\n", encoding="utf-8")
     print(f"Scritto {out} ({out.stat().st_size // 1024} KB)", flush=True)
-    if data["activities"]:
-        since = end - timedelta(days=args.details_days - 1) if args.details_days else start
-        download_details(c, data["activities"], since, out.parent / "act")
+    download_details(c, activities, out.parent / "act", args.max_details)
     print("Fatto. Apri dashboard.html")
 
 

@@ -4,44 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Garmin Dashboard</title>
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#18212b">
+<meta name="apple-mobile-web-app-title" content="Garmin">
 <link rel="stylesheet" href="app.css">
 <script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
 <style>
-.wrap { max-width: 880px; margin: 0 auto; padding: 64px 16px; }
-.wrap header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.wrap header .logo { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--s1); color: #fff; font-size: 18px; }
-.wrap h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
-.lead { color: var(--text-2); margin: 0 0 28px; }
-.athletes { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.athlete { display: flex; flex-direction: column; gap: 14px; }
-.who { display: flex; align-items: center; gap: 14px; }
-.avatar { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 18px; background: var(--c); }
-.who h2 { margin: 0; font-size: 18px; font-weight: 650; }
-.who div span { color: var(--muted); font-size: 13px; }
-.links { display: flex; gap: 8px; flex-wrap: wrap; }
-.note { color: var(--muted); font-size: 12.5px; margin-top: 28px; }
+.wrap { max-width: 920px; margin: 0 auto; padding: 72px 16px 48px; }
+.wrap h1 { margin: 0; font-size: 64px; font-weight: 800; font-stretch: 62%; line-height: .95; }
+.lead { color: var(--text-2); margin: 14px 0 32px; max-width: 60ch; }
+.athletes { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); }
+/* ogni atleta è un pettorale: le iniziali al posto del numero */
+.athlete { display: flex; flex-direction: column; gap: 4px; }
+.athlete .initials { font-size: 84px; font-weight: 800; font-stretch: 62%; line-height: .9; letter-spacing: .01em; }
+.athlete h2 { margin: 8px 0 0; font-size: 18px; font-weight: 650; }
+.athlete .what { color: var(--muted); font-size: 13.5px; }
+.links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--grid); }
+.note { color: var(--muted); font-size: 13px; margin-top: 32px; }
+.note a { color: var(--text-2); }
+@media (max-width: 600px) { .wrap { padding-top: 40px; } .wrap h1 { font-size: 52px; } }
 </style>
 </head>
 <body>
 <main class="wrap">
-  <header><span class="logo">◆</span><h1>Garmin Dashboard</h1></header>
-  <p class="lead">Scegli l'atleta. Ogni dashboard è privata: serve l'accesso con l'account Google autorizzato. Per vedere come funziona senza account, apri l'atleta demo.</p>
+  <h1>Garmin Dashboard</h1>
+  <p class="lead">Scegli l'atleta. Ogni dashboard è privata e si apre con l'account Google autorizzato. Per vedere come funziona senza account, apri l'atleta demo.</p>
   <div class="athletes" id="athletes"></div>
-  <p class="note">I dati si aggiornano ogni mattina da Garmin Connect. · <a href="/">Torna al sito</a></p>
+  <p class="note">I dati si aggiornano ogni mattina da Garmin Connect. <a href="/">Torna al sito</a></p>
 </main>
 <script>
 // id = parametro ?a= usato da dashboard.html e piano.html (nome-cognome)
 const ATHLETES = [
-  { id: 'davide-mariotti', name: 'Davide Mariotti', color: '--s1', plan: true },
-  { id: 'andrea-prosperi', name: 'Andrea Prosperi', color: '--s2' },
-  { id: 'sample', name: 'Atleta Demo', color: '--s3', demo: true },  // dati finti di sample.js, aperta a tutti
+  { id: 'davide-mariotti', name: 'Davide Mariotti', plan: true },
+  { id: 'andrea-prosperi', name: 'Andrea Prosperi' },
+  { id: 'sample', name: 'Atleta Demo', demo: true },  // dati finti di sample.js, aperta a tutti
 ];
 document.getElementById('athletes').innerHTML = ATHLETES.map(a => `
-  <section class="card athlete">
-    <div class="who"><span class="avatar" style="--c:var(${a.color})">${a.name.split(' ').map(w => w[0]).join('')}</span>
-      <div><h2>${a.name}</h2><span>${a.demo ? 'Dati di esempio, senza login' : a.plan ? 'Dashboard e piano gare' : 'Dashboard'}</span></div></div>
+  <section class="card bib athlete">
+    <span class="initials" aria-hidden="true">${a.name.split(' ').map(w => w[0]).join('')}</span>
+    <h2>${a.name}</h2><span class="what">${a.demo ? 'Dati di esempio, senza login' : a.plan ? 'Dashboard e piano gare' : 'Dashboard'}</span>
     <div class="links">
-      <a class="btn" href="dashboard.html?a=${a.id}">Apri la dashboard →</a>
+      <a class="btn primary" href="dashboard.html?a=${a.id}">Apri la dashboard</a>
       ${a.plan ? `<a class="btn" href="piano.html?a=${a.id}">Piano gare</a>` : ''}
     </div>
   </section>`).join('');

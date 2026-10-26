@@ -4,21 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wiki dei piani</title>
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#18212b">
+<meta name="apple-mobile-web-app-title" content="Garmin">
 <link rel="stylesheet" href="app.css">
 <script src="common.js"></script>
 <script src="auth.js"></script>
 <style>
-.wiki { display: grid; gap: 28px; }
-.wiki h2 { margin: 0; font-size: 18px; font-weight: 680; letter-spacing: -.01em; }
+.wiki { display: grid; gap: 36px; }
+.wiki h2 { margin: 0; font-size: 28px; font-weight: 800; font-stretch: 75%; line-height: 1.1; }
 .sec-sub { margin: 4px 0 14px; color: var(--text-2); max-width: 75ch; }
 .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 .rule { display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 90px; }
 .rule h3 { display: flex; align-items: center; gap: 10px; }
-.rule .n { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: color-mix(in srgb, var(--c, var(--s1)) 16%, transparent); color: var(--text-1); font-weight: 700; font-size: 13px; }
-.rule .what { margin: 0; color: var(--text-1); font-weight: 600; font-size: 14.5px; }
+.rule .n { flex: none; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 999px; background: var(--ink); color: var(--on-ink); font-weight: 750; font-size: 14px; }
+.rule.soft .n { background: none; color: var(--text-1); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.rule .what { margin: 0; color: var(--text-1); font-weight: 650; font-size: 15.5px; }
 .rule p { margin: 0; color: var(--text-2); }
-.rule .meta { margin-top: auto; padding-top: 6px; font-size: 12.5px; color: var(--muted); }
-.rule:target { outline: 2px solid var(--s1); outline-offset: 2px; }
+.rule .meta { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--grid); font-size: 12.5px; color: var(--muted); }
+.rule:target { outline: 2px solid var(--ink); outline-offset: 2px; }
 .intro ol { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--text-2); max-width: 80ch; }
 .intro b { color: var(--text-1); }
 .zrow { display: grid; grid-template-columns: 14px 34px minmax(120px, 180px) 1fr; gap: 4px 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--grid); }
@@ -29,11 +36,11 @@
 .dec article { display: grid; grid-template-columns: 96px 1fr; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--grid); }
 .dec article:last-child { border-bottom: 0; }
 .dec time { color: var(--muted); font-size: 12.5px; padding-top: 2px; }
-.dec h3 { font-size: 14.5px; }
+.dec h3 { font-size: 16px; }
 .dec p { margin: 4px 0 0; color: var(--text-2); max-width: 80ch; }
 .refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.ref { font-size: 12px; padding: 2px 9px; border-radius: 999px; background: var(--wash); color: var(--text-2); text-decoration: none; }
-.ref:hover { color: var(--text-1); }
+.ref { font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); text-decoration: none; }
+.ref:hover { color: var(--text-1); border-color: var(--axis); }
 .bib { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--text-2); max-width: 90ch; }
 .bib li { scroll-margin-top: 90px; }
 .bib li:target { color: var(--text-1); }
@@ -107,19 +114,19 @@
       <h2>Linee guida</h2>
       <p class="sec-sub">Lo script le segnala come avvisi. Superarle è possibile, ma va motivato nel registro delle decisioni.</p>
       <div class="cards">
-        <article class="card rule" id="r6" style="--c:var(--s4)">
+        <article class="card rule soft" id="r6">
           <h3><span class="n">6</span>Quota facile</h3>
           <p class="what">Circa l'80% del volume in zona facile.</p>
           <p>Descrive come si allenano gli atleti d'élite. Nelle meta-analisi l'allenamento polarizzato vince nei blocchi sotto le 12 settimane, poi i modelli si equivalgono. Con 4 uscite a settimana il 70–80% è normale.</p>
           <div class="meta">Fonti: <a href="#src-polarized">meta-analisi 2024</a></div>
         </article>
-        <article class="card rule" id="r7" style="--c:var(--s4)">
+        <article class="card rule soft" id="r7">
           <h3><span class="n">7</span>Tetti per seduta</h3>
           <p class="what">Soglia ≤ 10% del volume settimanale (e ≤ 60'), intervalli ≤ 8% (e ≤ 10 km), ripetute ≤ 5% (e ≤ 8 km).</p>
           <p>Evitano che una sola seduta pesi troppo sulla settimana. Sono pensati per chi corre molto: a 50 km a settimana una qualità vale spesso il 10–15%.</p>
           <div class="meta">Fonti: <a href="#src-daniels">Daniels</a></div>
         </article>
-        <article class="card rule" id="r8" style="--c:var(--s4)">
+        <article class="card rule soft" id="r8">
           <h3><span class="n">8</span>Buon senso</h3>
           <p class="what">Non alzare volume e intensità nella stessa settimana; dopo uno stop di oltre 4 settimane ripartire da circa metà del volume; al massimo 6 settimane nella stessa fase.</p>
           <p>Non le controlla lo script: si verificano a mano quando si scrive il piano.</p>

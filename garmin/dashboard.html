@@ -5,49 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Garmin Dashboard</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#18212b">
+<meta name="apple-mobile-web-app-title" content="Garmin">
 <link rel="stylesheet" href="app.css">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="common.js"></script>
 <script src="auth.js"></script>
 <style>
-#kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; }
+#kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; }  /* le due righe riempiono l'altezza del pettorale accanto */
 @media (max-width: 700px) { #kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.hero { display: flex; flex-direction: column; gap: 6px; background: linear-gradient(140deg, color-mix(in srgb, var(--s1) 16%, var(--surface)) 0%, var(--surface) 70%); }
-.hero h2 { margin: 2px 0 0; font-size: 20px; font-weight: 680; }
-.count { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 2px; }
-.count b { font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
-.count span { color: var(--text-2); }
-.next { display: block; margin-top: auto; padding: 12px 14px; border-radius: 12px; background: var(--raised); border: 1px solid var(--border); text-decoration: none; color: var(--text-1); }
-.next:hover { background: var(--wash); }
-.next b { display: block; font-size: 15px; margin-top: 2px; }
-.next span:last-child { color: var(--muted); font-size: 12.5px; }
-.row-h { display: flex; align-items: baseline; justify-content: space-between; margin: 6px 2px 10px; }
-.row-h h3 { margin: 0; font-size: 15px; }
+.hero { display: flex; flex-direction: column; gap: 4px; }
+.hero h2 { margin: 0; font-size: 24px; font-weight: 800; font-stretch: 75%; line-height: 1.1; }
+.next { display: block; margin-top: auto; padding: 12px 14px; border-radius: 10px; background: var(--raised); border: 1px solid var(--border); text-decoration: none; color: var(--text-1); }
+.next:hover { border-color: var(--axis); }
+.next b { display: block; font-size: 16px; margin-top: 2px; }
+.next span:last-child { color: var(--muted); font-size: 13px; }
+.row-h { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 2px 10px; }
+.row-h h3 { margin: 0; font-size: 22px; font-weight: 800; font-stretch: 75%; }
 .strip { display: grid; gap: 12px; grid-auto-flow: column; grid-auto-columns: minmax(210px, 1fr); overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
 .strip > * { scroll-snap-align: start; }
-.act { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); min-width: 0; }
-.act:hover { border-color: color-mix(in srgb, var(--s1) 45%, var(--border)); }
-.act:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+.act { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); min-width: 0; }
+.act:hover { border-color: var(--axis); }
+.act:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .act .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.act .when { color: var(--muted); font-size: 12px; }
-.act .big { font-size: 24px; font-weight: 680; margin-top: 4px; }
-.act .big small { font-size: 13px; color: var(--text-2); font-weight: 500; }
-.act .meta { color: var(--text-2); font-size: 12.5px; }
+.act .when { color: var(--muted); font-size: 12.5px; }
+.act .big { font-size: 34px; font-weight: 750; font-stretch: 70%; line-height: 1; margin-top: 8px; }
+.act .big small { font-size: 14px; color: var(--muted); font-weight: 550; font-stretch: 100%; }
+.act .meta { color: var(--text-2); font-size: 13px; }
 .card-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.big-n { font-size: 48px; font-weight: 700; line-height: 1.1; }
-.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 14px; }
-.facts div { color: var(--muted); font-size: 12px; }
-.facts b { display: block; color: var(--text-1); font-size: 16px; font-weight: 600; }
+.big-n { font-size: 64px; margin: 4px 0 6px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--grid); }
+.facts div { color: var(--muted); font-size: 12.5px; }
+.facts b { display: block; color: var(--text-1); font-size: 17px; font-weight: 650; }
 #d-map { height: 320px; border-radius: 14px; border: 1px solid var(--border); z-index: 0; }
 .zbar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px; }
-.zleg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px; color: var(--text-2); }
+.zleg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 12.5px; color: var(--text-2); }
 .lapbar { height: 6px; border-radius: 3px; background: var(--s1); min-width: 2px; }
 tr.rest td { color: var(--muted); }
 .m-when { display: none; }
 .empty { max-width: 640px; margin: 80px auto; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
 @media (max-width: 600px) {
-  .count b { font-size: 42px; }
   .strip { grid-auto-columns: minmax(180px, 62%); }
   .card-h input { flex: 1 1 100%; }
   /* su telefono restano nome (con la data sotto), km, ritmo e FC: il resto è nel dettaglio */
@@ -73,12 +75,12 @@ tr.rest td { color: var(--muted); }
 
   <section class="view" data-view="panoramica">
     <div class="bento">
-      <div class="card hero s4" id="hero"></div>
+      <div class="card bib hero s4" id="hero"></div>
       <div class="kpis s8" id="kpis"></div>
       <div class="card s8"><h3>Frequenza cardiaca di ieri</h3><p class="sub"></p><div class="chart" id="c-hrday"></div></div>
       <div class="card s4"><h3>HRV dell'ultima notte</h3><p class="sub"></p><div class="chart" id="c-hrvnight"></div></div>
       <div class="s12">
-        <div class="row-h"><h3>Ultime attività</h3><a href="#allenamento">Tutte le attività →</a></div>
+        <div class="row-h"><h3>Ultime attività</h3><a href="#allenamento">Tutte le attività</a></div>
         <div class="strip" id="recent"></div>
       </div>
     </div>
@@ -227,7 +229,7 @@ function hero() {
     <span class="sub" style="margin:0">${fmtDay(race.date)} · obiettivo ${esc(race.goal)}</span>
     <div class="count"><b>${daysBetween(TODAY_REAL, race.date)}</b><span>giorni</span></div>
     ${next ? `<a class="next" href="piano.html${location.search}#s-${next.id}"><span class="label">${daysBetween(TODAY_REAL, next.date) > 7 ? 'Prima seduta del nuovo piano' : 'Prossimo allenamento del piano'}</span><b>${esc(next.title)}</b><span>${fmtDay(next.date)} · ~${nf(next.km, 1)} km</span></a>` : ''}
-    <a href="piano.html${location.search}" style="font-size:13px">Apri il piano gare →</a>`;
+    <a href="piano.html${location.search}" style="font-size:13px">Apri il piano gare</a>`;
 }
 function recent() {
   $('#recent').innerHTML = ALL_ACTS.slice(0, 10).map(a => `<button class="act" data-id="${a.activityId}">

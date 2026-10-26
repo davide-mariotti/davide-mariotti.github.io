@@ -58,7 +58,7 @@ function renderSidebar(page, who, foot) {
   const base = page === 'dashboard' ? '' : 'dashboard.html' + location.search;
   const link = (id, label) => `<a href="${id}.html${location.search}" data-view="${id}"${page === id ? ' class="active"' : ''}>${icon(id)}${label}</a>`;
   $('#side').innerHTML = `
-    <a class="brand" href="index.html" title="Tutti gli atleti"><span class="logo">◆</span><span>Garmin<small>${esc(who || '')}</small></span></a>
+    <a class="brand" href="index.html" title="Tutti gli atleti"><img class="logo" src="../assets/icons/logo/dm-icon.svg" alt=""><span>Garmin<small>${esc(who || '')}</small></span></a>
     <nav class="nav">
       ${VIEWS.map(([id, label]) => `<a href="${base}#${id}" data-view="${id}">${icon(id)}${label}</a>`).join('')}
       <div class="sep"></div>
@@ -89,7 +89,7 @@ function initTheme(onChange) {
 }
 
 // ---------- ECharts ----------
-const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+const FONT = getComputedStyle(document.documentElement).getPropertyValue('--font').trim() || 'system-ui, sans-serif';  // Archivo, da app.css
 function registerTheme() {
   if (!window.echarts) return;  // wiki.html non ha grafici
   const ax = { axisLine: { lineStyle: { color: v('--axis') } }, axisTick: { show: false }, axisLabel: { color: v('--muted'), hideOverlap: true }, splitLine: { lineStyle: { color: v('--grid') } }, nameTextStyle: { color: v('--muted') } };
