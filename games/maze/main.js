@@ -262,16 +262,17 @@ function setupInput() {
         }
     });
 
-    $("#view").swipe({
-        swipe: (event, direction) => {
-            switch (direction) {
-                case "up": player.move('n'); break;
-                case "down": player.move('s'); break;
-                case "left": player.move('w'); break;
-                case "right": player.move('e'); break;
-            }
-        },
-        threshold: 20
+    const view = document.getElementById("view");
+    let start;
+    view.addEventListener("touchstart", (e) => {
+        start = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    view.addEventListener("touchend", (e) => {
+        const dx = e.changedTouches[0].clientX - start.x;
+        const dy = e.changedTouches[0].clientY - start.y;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return; // swipe threshold
+        if (Math.abs(dx) > Math.abs(dy)) player.move(dx > 0 ? 'e' : 'w');
+        else player.move(dy > 0 ? 's' : 'n');
     });
 }
 

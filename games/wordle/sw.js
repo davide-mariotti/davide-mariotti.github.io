@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wordle-it-v1';
+const CACHE_NAME = 'wordle-it-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -6,7 +6,6 @@ const ASSETS = [
     './main.js',
     './firebase.js',
     './parole.txt',
-    '../../assets/js/components.js',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js',
     'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'

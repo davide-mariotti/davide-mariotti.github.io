@@ -4,12 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initStars();
-  initLoader();
   initTyping();
   initMatrix();
   markActiveNavLink();
-  initMobileNavIcon();
-  initFooter();
 });
 
 /* - - - Stars - - - */
@@ -43,12 +40,6 @@ function initStars() {
       star.style.top = Math.random() * window.innerHeight + 'px';
     });
   };
-}
-
-/* - - - Loader - - - */
-function initLoader() {
-  const loader = document.getElementById('loader');
-  if (loader) loader.id = 'loader-none';
 }
 
 /* - - - Typing Effect - - - */
@@ -91,7 +82,7 @@ function initTyping() {
 /* - - - Matrix Animation - - - */
 function initMatrix() {
   const canvas = document.getElementById('matrix');
-  if (!canvas) return;
+  if (!canvas || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const ctx = canvas.getContext('2d');
 
@@ -143,7 +134,10 @@ function initMatrix() {
       drops[i]++;
     }
   }
-  setInterval(draw, 50);
+  // Draw only while on screen and tab visible
+  let visible = false;
+  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(canvas);
+  setInterval(() => { if (visible && !document.hidden) draw(); }, 50);
 }
 
 /* - - - Active Nav Link - - - */
@@ -160,37 +154,4 @@ function markActiveNavLink() {
       link.setAttribute("aria-current", "page");
     }
   });
-}
-
-/* - - - Mobile Nav Icon - - - */
-function initMobileNavIcon() {
-  const navbarToggler = document.querySelector(".navbar-toggler");
-  const animatedIcon = document.querySelector(".animated-icon2");
-  if (navbarToggler && animatedIcon) {
-    navbarToggler.addEventListener("click", () => {
-      animatedIcon.classList.toggle("open");
-    });
-  }
-}
-
-/* - - - Footer Copyright & Clock - - - */
-function initFooter() {
-  const yearSpan = document.getElementById("CopyrightYear");
-  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-
-  const todayDataElement = document.getElementById("todayData");
-  if (!todayDataElement) return;
-
-  const update = () => {
-    const currentDate = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = currentDate.toLocaleDateString('en-US', options);
-    const formattedTime = currentDate.getHours().toString().padStart(2, '0') + ":" +
-      currentDate.getMinutes().toString().padStart(2, '0') + ":" +
-      currentDate.getSeconds().toString().padStart(2, '0');
-    todayDataElement.textContent = formattedDate + " " + formattedTime;
-  };
-
-  update();
-  setInterval(update, 1000);
 }

@@ -88,3 +88,8 @@
     background: #1a1a1a;
     color: white;
 }
+
+/* no page scroll while swiping the maze */
+#view {
+    touch-action: none;
+}
