@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piano Gare</title>
+<link rel="stylesheet" href="app.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="common.js"></script>
+<script src="auth.js"></script>
+<style>
+.race { display: flex; flex-direction: column; gap: 6px; }
+.race h2 { margin: 0; font-size: 18px; font-weight: 680; }
+.race .count { display: flex; align-items: baseline; gap: 6px; }
+.race .count b { font-size: 38px; font-weight: 700; letter-spacing: -.02em; line-height: 1.05; }
+.race .count span { color: var(--text-2); }
+.race .goal { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--text-2); }
+.race .goal b { color: var(--text-1); }
+.race p { margin: 4px 0 0; color: var(--text-2); font-size: 13px; }
+.race.past { opacity: .6; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px 3px 7px; border-radius: 999px; background: color-mix(in srgb, var(--c) 16%, transparent); color: var(--text-1); width: fit-content; }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.status.icon-good::before { content: "✓"; width: auto; height: auto; background: none; color: var(--c); font-size: 12px; }
+.zt td:first-child { font-weight: 600; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+.big-vdot { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.form { display: grid; gap: 10px; margin-top: 12px; }
+.form label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
+.form .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+.form .row > * { flex: 1; min-width: 90px; }
+.err { color: var(--critical); font-size: 12px; min-height: 1em; }
+.preds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.preds div { background: var(--raised); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; font-size: 12px; color: var(--muted); }
+.preds b { display: block; font-size: 15px; color: var(--text-1); }
+.today .verdict { font-size: 17px; font-weight: 650; margin: 8px 0 4px; }
+.today ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 13px; color: var(--text-2); }
+.today li b { color: var(--text-1); }
+.wk { min-width: 980px; table-layout: fixed; }
+.wk th:first-child, .wk td:first-child { width: 170px; white-space: normal; }
+.wk th:last-child, .wk td:last-child { width: 64px; }
+.wk td { vertical-align: top; padding: 8px 6px; white-space: normal; }
+.wk .phase td { background: var(--wash); font-weight: 650; font-size: 12.5px; padding: 7px 10px; }
+.wk .phase span { font-weight: 400; color: var(--muted); margin-left: 8px; }
+.wk .now td { background: color-mix(in srgb, var(--s1) 7%, transparent); }
+.wk .dates { font-weight: 600; }
+.wk .focus { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; color: var(--s1); margin-top: 4px; }
+.ses { all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; padding: 7px 8px; border-radius: 9px; font-size: 12px; line-height: 1.3;
+  background: color-mix(in srgb, var(--c) 13%, var(--surface)); border-left: 3px solid var(--c); }
+.ses:hover { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
+.ses:focus-visible { outline: 2px solid var(--s1); outline-offset: 1px; }
+.ses b { display: block; font-weight: 600; color: var(--text-1); }
+.ses span { color: var(--text-2); }
+.ses .done { display: block; color: var(--text-1); margin-top: 3px; }
+.ses .miss { display: block; color: var(--muted); margin-top: 3px; }
+.own { color: var(--muted); font-size: 12px; font-style: italic; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); }
+.prof { display: flex; align-items: flex-end; gap: 2px; height: 90px; padding: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.prof div { border-radius: 3px 3px 0 0; min-width: 2px; }
+.steps { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 8px; }
+.steps ul { list-style: none; padding-left: 18px; margin: 6px 0 0; display: grid; gap: 6px; border-left: 2px solid var(--grid); }
+.steps li { font-size: 13.5px; }
+.steps .tgt { color: var(--text-2); }
+.steps .nt { color: var(--muted); font-style: italic; }
+.why { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; color: var(--text-2); }
+.why b { color: var(--text-1); }
+.rules { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 8px; color: var(--text-2); }
+.rules b { color: var(--text-1); }
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side" id="side"></aside>
+<main class="main">
+  <header class="top">
+    <h1>Piano gare<small>Firenze → Massa → Firenze · 4 sedute a settimana, ritmi calibrati sui tuoi dati</small></h1>
+    <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
+  </header>
+
+  <div class="bento">
+    <div class="s12 bento" id="races" style="gap:16px"></div>
+
+    <div class="card s8">
+      <h3>I tuoi ritmi</h3><p class="sub" id="zones-sub"></p>
+      <div class="table-wrap"><table class="zt" id="t-zones"></table></div>
+    </div>
+    <div class="card s4">
+      <h3>Calibrazione</h3><p class="sub" id="cal-src"></p>
+      <div class="big-vdot" id="vdot"></div>
+      <div class="preds" id="preds"></div>
+      <form class="form" id="cal-form">
+        <div class="row">
+          <label>Test o gara<select name="dist"><option value="5000">5 km</option><option value="10000" selected>10 km</option><option value="21097.5">Mezza</option><option value="42195">Maratona</option></select></label>
+          <label>Tempo<input name="time" placeholder="es. 45:30" inputmode="numeric" required></label>
+        </div>
+        <div class="row"><button class="btn" type="submit">Aggiorna i ritmi</button><button class="btn" type="button" id="cal-reset">Ripristina</button></div>
+        <div class="err" id="cal-err"></div>
+        <label>Obiettivo della mezza<select id="hm-goal"></select></label>
+      </form>
+    </div>
+
+    <div class="card s8"><h3>Volume settimanale</h3><p class="sub">Km pianificati per tipo di seduta e km effettivamente corsi</p><div class="chart" id="c-vol"></div></div>
+    <div class="card s4 today" id="today"></div>
+
+    <div class="card s12">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px">
+        <div><h3>Settimana per settimana</h3><p class="sub">Clicca una seduta per il dettaglio · km e minuti sono stime dai tuoi ritmi</p></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="table-wrap"><table class="wk" id="t-weeks"></table></div>
+    </div>
+
+    <div class="card s6">
+      <h3>Regole d'oro</h3>
+      <ol class="rules">
+        <li><b>Le facili sono davvero facili</b>: FC sotto 150 anche se il passo ti sembra lento. Sono l'80% del volume.</li>
+        <li><b>Nelle qualità rispetta il passo</b>, non andare più forte: l'ultima ripetuta deve venire come la prima.</li>
+        <li><b>Ascolta i dati del mattino</b>: con HRV bassa o sonno scarso sposta la qualità di un giorno (vedi "Come stai oggi").</li>
+        <li><b>Ricalibra dopo i test</b> di gennaio (5 km) e marzo (10 km): i ritmi successivi si aggiornano da soli.</li>
+        <li><b>Forza e mobilità</b>: 2 × 20 minuti a settimana (core, glutei, polpacci) nei giorni facili o di riposo.</li>
+        <li><b>Settimana gara</b>: niente di nuovo. Scarpe, gel e colazione già provati nei lunghi.</li>
+      </ol>
+    </div>
+    <div class="card s6">
+      <h3>Sincronizzazione con Garmin Connect</h3>
+      <p style="color:var(--text-2);margin:8px 0 0">La Personal API di Garmin è <b>in sola lettura</b>: questa pagina non può scrivere sul tuo account.
+      Gli allenamenti però si possono caricare su Garmin Connect con passo e FC come target, tramite il connettore Garmin di Claude:
+      compaiono nel calendario e sul Forerunner 255S, e l'orologio ti guida passo per passo.</p>
+      <p style="color:var(--text-2)"><b>Caricate il 26/10:</b> le 20 sedute dal 27/10 alla maratona (nome "PG gg/mm …").
+      Le sedute W9–W10 dell'altro piano sono state tolte dal calendario e restano nella libreria Garmin.
+      Le settimane dopo la maratona si caricano più avanti, dopo aver ricalibrato i ritmi.</p>
+    </div>
+  </div>
+</main>
+</div>
+<dialog class="modal" id="ses"></dialog>
+
+<script>
+(async () => {
+const D = await garminData(), P = await garminPlan();
+if (!P) {
+  document.querySelector('.main').innerHTML = '<div class="card" style="margin:40px auto;max-width:560px"><h3>Piano non disponibile</h3><p class="sub">Il piano gare esiste solo per la dashboard di Davide.</p></div>';
+  return;
+}
+const TODAY = TODAY_REAL;
+const RUNS = {};  // corse effettive per giorno, dal download Garmin
+(D?.activities || []).filter(isRun).forEach(a => (RUNS[a.startTimeLocal.slice(0, 10)] ||= []).push(a));
+const pace = s => s == null ? '' : clock(s);
+const paceRange = p => p ? `${pace(p[0])}–${pace(p[1])} /km` : '';
+const hrRange = h => h ? `${h[0]}–${h[1]} bpm` : '';
+const typeColor = t => `var(${P.TYPES[t][1]})`;
+let Z, SESS;
+
+// ---------- gare ----------
+function races() {
+  $('#races').innerHTML = P.races.map(r => {
+    const d = daysBetween(TODAY, r.date), [st, lbl] = r.verdict;
+    return `<div class="card race s4${d < 0 ? ' past' : ''}">
+      <span class="label">${d > 0 ? `tra ${d} giorni` : d === 0 ? 'oggi!' : 'conclusa'}</span>
+      <h2>${esc(r.name)}</h2><span class="sub" style="margin:0">${fmtDay(r.date)} · ${nf(r.km, r.km % 1 ? 1 : 0)} km</span>
+      <div class="goal"><span>Obiettivo <b>${esc(r.goal)}</b></span><span>Passo <b>${esc(r.pace)}</b></span></div>
+      <span class="status" style="--c:var(--${st})">${lbl}</span>
+      <p>${esc(r.note)}</p></div>`;
+  }).join('');
+}
+
+// ---------- ritmi e calibrazione ----------
+const ZONE_ROWS = ['E', 'L', 'MZ', 'G32', 'HMP', 'T', 'I', 'R', 'S'];
+function zonesTable() {
+  const c = P.calib();
+  $('#zones-sub').textContent = `Calcolati da VDOT ${nf(c.vdot, 1)} e soglia ${c.lthr} bpm · i passi sono il riferimento, la FC il limite`;
+  $('#t-zones').innerHTML = `<thead><tr><th>Zona</th><th class="num">Passo</th><th class="num">FC</th><th>A cosa serve</th></tr></thead><tbody>` +
+    ZONE_ROWS.map(k => { const z = Z[k]; return `<tr><td><span class="sw" style="background:var(--z${z.lvl})"></span>${z.name}</td><td class="num">${paceRange(z.pace) || '–'}</td><td class="num">${hrRange(z.hr) || '–'}</td><td style="white-space:normal;color:var(--text-2)">${esc(z.desc)}</td></tr>`; }).join('') + '</tbody>';
+}
+const HM_GOALS = [6000, 5940, 5880, 5820, 5760, 5700];  // 1:40 … 1:35
+function calibration() {
+  const c = P.calib();
+  $('#vdot').innerHTML = `${nf(c.vdot, 1)} <small style="font-size:14px;font-weight:500;color:var(--text-2)">VDOT</small>`;
+  $('#cal-src').textContent = `Da: ${c.vdotSource}`;
+  $('#preds').innerHTML = [['10 km', 10000], ['Mezza', 21097.5], ['32 km', 32000]].map(([l, m]) => `<div><b>${clock(P.raceTime(c.vdot, m))}</b>${l} potenziale</div>`).join('');
+  $('#hm-goal').innerHTML = HM_GOALS.map(s => `<option value="${s}"${s === c.hmGoal ? ' selected' : ''}>${clock(s)} · ${clock(s / 21.0975)}/km · serve VDOT ${nf(P.vdotFrom(21097.5, s), 1)}</option>`).join('');
+}
+$('#cal-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = new FormData(e.target), t = P.secs(String(f.get('time')).trim().replace(/[.,]/g, ':')), m = +f.get('dist');
+  const vd = t ? P.vdotFrom(m, t) : NaN;
+  if (!(vd > 25 && vd < 85)) { $('#cal-err').textContent = 'Tempo non valido: usa il formato mm:ss oppure h:mm:ss.'; return; }
+  $('#cal-err').textContent = '';
+  store.set('plan.vdot', vd.toFixed(1));
+  store.set('plan.vdotSource', `${f.get('dist') === '21097.5' ? 'mezza' : f.get('dist') === '42195' ? 'maratona' : +f.get('dist') / 1000 + ' km'} in ${clock(t)} (${dayMonth(TODAY)})`);
+  render();
+});
+$('#cal-reset').addEventListener('click', () => { ['plan.vdot', 'plan.vdotSource'].forEach(k => store.set(k, '')); render(); });
+$('#hm-goal').addEventListener('change', e => { store.set('plan.hmGoal', e.target.value); render(); });
+
+// ---------- come stai oggi (dai dati Garmin) ----------
+function today() {
+  const el = $('#today');
+  const S = Object.fromEntries((D?.summaries || []).map(s => [s.calendarDate, s]));
+  const H = Object.fromEntries((D?.hrv || []).map(h => [h.calendarDate, h]));
+  const L = Object.fromEntries((D?.sleep || []).map(s => [s.calendarDate, s]));
+  const day = D?.generated.slice(0, 10);
+  if (!day) { el.hidden = true; return; }
+  const hrv = H[day] || H[addDays(day, -1)], sl = L[day], bb = S[day]?.bodyBattery?.maxValue;
+  const rhr = S[day]?.heartRate?.restingValue, rhr7 = avg([1, 2, 3, 4, 5, 6, 7].map(i => S[addDays(day, -i)]?.heartRate?.restingValue ?? null));
+  const score = sl?.sleepScores?.overall?.value;
+  const red = ['LOW', 'POOR'].includes(hrv?.status) || bb < 30 || score < 50;
+  const yellow = !red && (hrv?.status === 'UNBALANCED' || bb < 50 || (rhr && rhr7 && rhr > rhr7 + 4) || score < 65);
+  const [st, verdict, advice] = red ? ['critical', 'Recupera', 'Oggi meglio riposo o una facile corta: sposta la qualità di un giorno.']
+    : yellow ? ['warning', 'Con prudenza', 'Qualità sì, ma togli una ripetuta e resta sul lato lento dei ritmi.']
+    : ['good', 'Via libera', 'Segui il piano come scritto.'];
+  const next = SESS.find(s => s.date >= TODAY);
+  el.innerHTML = `<h3>Come stai oggi</h3><p class="sub">Dati Garmin del ${dayMonth(day)}</p>
+    <span class="status" style="--c:var(--${st})">${verdict}</span>
+    <div class="verdict">${advice}</div>
+    <ul>
+      <li>HRV notte <b>${nf(hrv?.lastNightAvg)} ms</b> · ${esc({ BALANCED: 'bilanciata', UNBALANCED: 'sbilanciata', LOW: 'bassa', POOR: 'scarsa' }[hrv?.status] || '–')}</li>
+      <li>Sonno <b>${nf(score)}/100</b> · ${hm(sl?.sleepTimeSeconds)}</li>
+      <li>Body Battery <b>${nf(bb)}</b> · FC riposo <b>${nf(rhr)}</b> (media 7g ${nf(rhr7)})</li>
+      ${next ? `<li>Prossima seduta: <a href="#s-${next.id}">${esc(next.title)}</a> · ${fmtDay(next.date)}</li>` : ''}
+    </ul>`;
+}
+
+// ---------- volume ----------
+chart('c-vol', () => {
+  const weeks = P.weeks.map(w => w.start);
+  const types = Object.keys(P.TYPES);
+  const rows = types.map(t => weeks.map(w => +sum(SESS.filter(s => s.week.start === w && s.type === t).map(s => s.km)).toFixed(1) || null));
+  const done = weeks.map(w => w > TODAY ? null : +sum([0, 1, 2, 3, 4, 5, 6].flatMap(i => (RUNS[addDays(w, i)] || []).map(a => a.distance / 1000))).toFixed(1));
+  return opt({
+    tooltip: { trigger: 'axis', formatter: ps => 'Settimana del ' + tipAxis(x => nf(x, 1) + ' km')(ps) },
+    xAxis: { type: 'category', data: weeks, axisLabel: { formatter: short } }, yAxis: { type: 'value', axisLabel: { formatter: x => x + ' km' } },
+    series: [...stack(types.map(t => P.TYPES[t][0]), types.map(t => P.TYPES[t][1]), rows), lineS('Corsi', done, '--text-2', { symbol: 'circle', symbolSize: 6, showSymbol: true, connectNulls: false })],
+  }, x => nf(x, 1) + ' km');
+});
+
+// ---------- tabella settimane ----------
+const DAY_LBL = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+function weeksTable() {
+  $('#legend').innerHTML = Object.values(P.TYPES).map(([l, c]) => `<span><span class="dot" style="background:var(${c})"></span>${l}</span>`).join('');
+  let phase = null, html = `<thead><tr><th>Settimana</th>${DAY_LBL.map(d => `<th>${d}</th>`).join('')}<th class="num">km</th></tr></thead><tbody>`;
+  for (const w of P.weeks) {
+    if (w.phase !== phase) { phase = w.phase; html += `<tr class="phase"><td colspan="9">${esc(phase)}<span>${esc(PHASES[phase] || '')}</span></td></tr>`; }
+    const end = addDays(w.start, 6), now = TODAY >= w.start && TODAY <= end;
+    const ss = SESS.filter(s => s.week === w);
+    html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">${dayMonth(w.start)} – ${dayMonth(end)}</div>
+      <div class="focus">${esc(w.focus || w.note || '')}</div>${now ? '<span class="pill">● questa settimana</span>' : ''}</td>`;
+    P.DAYS.forEach((d, i) => {
+      const s = ss.find(x => x.date === addDays(w.start, i));
+      html += `<td>${s ? sesChip(s) : ''}</td>`;
+    });
+    html += `<td class="num">${ss.length ? nf(sum(ss.map(s => s.km))) : w.own ? '<span class="own">tuo piano</span>' : ''}</td></tr>`;
+  }
+  $('#t-weeks').innerHTML = html + '</tbody>';
+}
+const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite e prima soglia', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza' };
+function actual(s) {
+  const runs = RUNS[s.date];
+  if (!runs || s.date > TODAY) return null;
+  const km = sum(runs.map(a => a.distance)) / 1000, dur = sum(runs.map(a => a.duration));
+  return { km, pace: dur / km, hr: avg(runs.map(a => a.averageHR)), runs };
+}
+function sesChip(s) {
+  const a = actual(s), past = s.date < TODAY;
+  return `<button class="ses" style="--c:${typeColor(s.type)}" data-sid="${s.id}"><b>${esc(s.title)}</b><span>~${nf(s.km, 1)} km · ${Math.round(s.sec / 60)}'</span>
+    ${a ? `<span class="done">✓ ${nf(a.km, 1)} km · ${clock(a.pace)}/km</span>` : past ? '<span class="miss">non registrata</span>' : ''}</button>`;
+}
+
+// ---------- dettaglio seduta ----------
+const KIND = { wu: 'Riscaldamento', cd: 'Defaticamento', run: '', rec: 'Recupero' };
+function flat(steps, out = []) {
+  for (const s of steps) {
+    if (s.rep) { for (let i = 0; i < s.rep; i++) flat(s.steps, out); continue; }
+    const e = P.estimate([s], Z); out.push({ sec: e.sec, z: Z[s[2]], s });
+  }
+  return out;
+}
+function stepHtml(s) {
+  if (s.rep) return `<li><b>${s.rep} ×</b><ul>${s.steps.map(stepHtml).join('')}</ul></li>`;
+  const [kind, q, z, nt] = s, zz = Z[z];
+  const amount = typeof q === 'number' ? `${nf(q, q % 1 ? 1 : 0)} km` : q;
+  const tgt = [paceRange(zz.pace), hrRange(zz.hr)].filter(Boolean).join(' · ');
+  return `<li><span class="sw" style="background:var(--z${zz.lvl})"></span><b>${KIND[kind] ? KIND[kind] + ' ' : ''}${amount}</b> ${kind === 'run' || kind === 'rec' ? `<span>${zz.name.toLowerCase()}</span>` : ''}
+    ${tgt ? `<div class="tgt" style="margin-left:18px">${tgt}</div>` : ''}${nt ? `<div class="nt" style="margin-left:18px">${esc(nt)}</div>` : ''}</li>`;
+}
+function openSession(id) {
+  const s = SESS.find(x => x.id === id); if (!s) return;
+  const blocks = flat(s.steps), a = actual(s), dlg = $('#ses');
+  dlg.innerHTML = `<div class="panel-h"><div style="flex:1;min-width:0"><span class="chip" style="--c:${typeColor(s.type)}">${P.TYPES[s.type][0]} · ${esc(s.week.phase)}</span>
+      <h2>${esc(s.title)}</h2><p>${fmtDay(s.date)}</p></div>
+      <button class="icon-btn" id="ses-close" aria-label="Chiudi">${icon('close')}</button></div>
+    <div class="panel-b">
+      <div class="stats">
+        <div class="stat"><b>~${nf(s.km, 1)} km</b><span>Distanza stimata</span></div>
+        <div class="stat"><b>${hm(s.sec)}</b><span>Durata stimata</span></div>
+        ${a ? `<div class="stat"><b>✓ ${nf(a.km, 1)} km</b><span>Corsi a ${clock(a.pace)}/km · FC ${nf(a.hr)}</span></div>` : ''}
+      </div>
+      ${a ? `<p style="margin:0">${a.runs.map(r => `<a href="dashboard.html${location.search}#attivita-${r.activityId}">Apri «${esc(r.activityName)}» nella dashboard →</a>`).join('<br>')}</p>` : ''}
+      ${s.why ? `<div class="why"><b>Perché:</b> ${esc(s.why)}</div>` : ''}
+      <div><span class="label">Profilo della seduta</span>
+        <div class="prof" style="margin-top:6px">${blocks.map(b => `<div style="flex:${Math.max(b.sec, 1)};height:${18 + b.z.lvl * 16}%;background:var(--z${b.z.lvl})" title="${esc(b.z.name)} · ${clock(b.sec)}"></div>`).join('')}</div></div>
+      <div><span class="label">Struttura</span><ol class="steps" style="margin-top:8px">${s.steps.map(stepHtml).join('')}</ol></div>
+      ${s.week.focus ? `<p class="sub" style="margin:0">Settimana: ${esc(s.week.focus)}</p>` : ''}
+    </div>`;
+  dlg.showModal();
+  $('#ses-close').onclick = () => dlg.close();
+  history.replaceState(null, '', `#s-${id}`);
+}
+$('#ses').addEventListener('click', e => { if (e.target.id === 'ses') e.target.close(); });
+$('#ses').addEventListener('close', () => history.replaceState(null, '', location.pathname));
+document.addEventListener('click', e => { const b = e.target.closest('[data-sid]'); if (b) openSession(b.dataset.sid); });
+addEventListener('hashchange', () => { const m = location.hash.match(/^#s-(.+)$/); if (m) openSession(m[1]); });
+
+// ---------- avvio ----------
+function render() {
+  Z = P.zones(); SESS = P.sessions(Z);
+  races(); zonesTable(); calibration(); today(); weeksTable();
+  drawCharts(document.body);
+}
+renderSidebar(false, (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
+initTheme(() => { resetCharts(); render(); });
+render();
+const deep = location.hash.match(/^#s-(.+)$/);
+if (deep) openSession(deep[1]);
+})();
+</script>
+</body>
+</html>

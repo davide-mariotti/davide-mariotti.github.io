@@ -16,3 +16,6 @@ exclude:
   - games/LupoSolitario/package.json
   - games/LupoSolitario/firestore.rules
   - games/LupoSolitario/*.md
+  - garmin/*.py
+  - garmin/requirements.txt
+  - garmin/garmin-export.js

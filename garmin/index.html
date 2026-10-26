@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garmin Dashboard</title>
+<link rel="stylesheet" href="app.css">
+<script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<style>
+.wrap { max-width: 880px; margin: 0 auto; padding: 64px 16px; }
+.wrap header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.wrap header .logo { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--s1); color: #fff; font-size: 18px; }
+.wrap h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
+.lead { color: var(--text-2); margin: 0 0 28px; }
+.athletes { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.athlete { display: flex; flex-direction: column; gap: 14px; }
+.who { display: flex; align-items: center; gap: 14px; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 18px; background: var(--c); }
+.who h2 { margin: 0; font-size: 18px; font-weight: 650; }
+.who div span { color: var(--muted); font-size: 13px; }
+.links { display: flex; gap: 8px; flex-wrap: wrap; }
+.note { color: var(--muted); font-size: 12.5px; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header><span class="logo">◆</span><h1>Garmin Dashboard</h1></header>
+  <p class="lead">Scegli l'atleta. Ogni dashboard è privata: serve l'accesso con l'account Google autorizzato.</p>
+  <div class="athletes" id="athletes"></div>
+  <p class="note">I dati si aggiornano ogni mattina da Garmin Connect.</p>
+</main>
+<script>
+// id = parametro ?a= usato da dashboard.html e piano.html (nome-cognome)
+const ATHLETES = [
+  { id: 'davide-mariotti', name: 'Davide Mariotti', color: '--s1', plan: true },
+  { id: 'andrea-prosperi', name: 'Andrea Prosperi', color: '--s2' },
+];
+document.getElementById('athletes').innerHTML = ATHLETES.map(a => `
+  <section class="card athlete">
+    <div class="who"><span class="avatar" style="--c:var(${a.color})">${a.name.split(' ').map(w => w[0]).join('')}</span>
+      <div><h2>${a.name}</h2><span>${a.plan ? 'Dashboard e piano gare' : 'Dashboard'}</span></div></div>
+    <div class="links">
+      <a class="btn" href="dashboard.html?a=${a.id}">Apri la dashboard →</a>
+      ${a.plan ? `<a class="btn" href="piano.html?a=${a.id}">Piano gare</a>` : ''}
+    </div>
+  </section>`).join('');
+</script>
+</body>
+</html>

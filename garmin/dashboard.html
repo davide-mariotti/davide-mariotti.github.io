@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garmin Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="app.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="common.js"></script>
+<script src="auth.js"></script>
+<style>
+#kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; }
+@media (max-width: 700px) { #kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hero { display: flex; flex-direction: column; gap: 6px; background: linear-gradient(140deg, color-mix(in srgb, var(--s1) 16%, var(--surface)) 0%, var(--surface) 70%); }
+.hero h2 { margin: 2px 0 0; font-size: 20px; font-weight: 680; }
+.count { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 2px; }
+.count b { font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.count span { color: var(--text-2); }
+.next { display: block; margin-top: auto; padding: 12px 14px; border-radius: 12px; background: var(--raised); border: 1px solid var(--border); text-decoration: none; color: var(--text-1); }
+.next:hover { background: var(--wash); }
+.next b { display: block; font-size: 15px; margin-top: 2px; }
+.next span:last-child { color: var(--muted); font-size: 12.5px; }
+.row-h { display: flex; align-items: baseline; justify-content: space-between; margin: 6px 2px 10px; }
+.row-h h3 { margin: 0; font-size: 15px; }
+.strip { display: grid; gap: 12px; grid-auto-flow: column; grid-auto-columns: minmax(210px, 1fr); overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+.strip > * { scroll-snap-align: start; }
+.act { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); min-width: 0; }
+.act:hover { border-color: color-mix(in srgb, var(--s1) 45%, var(--border)); }
+.act:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+.act .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.act .when { color: var(--muted); font-size: 12px; }
+.act .big { font-size: 24px; font-weight: 680; margin-top: 4px; }
+.act .big small { font-size: 13px; color: var(--text-2); font-weight: 500; }
+.act .meta { color: var(--text-2); font-size: 12.5px; }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.big-n { font-size: 48px; font-weight: 700; line-height: 1.1; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 14px; }
+.facts div { color: var(--muted); font-size: 12px; }
+.facts b { display: block; color: var(--text-1); font-size: 16px; font-weight: 600; }
+#d-map { height: 320px; border-radius: 14px; border: 1px solid var(--border); z-index: 0; }
+.zbar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px; }
+.zleg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px; color: var(--text-2); }
+.lapbar { height: 6px; border-radius: 3px; background: var(--s1); min-width: 2px; }
+tr.rest td { color: var(--muted); }
+.empty { max-width: 640px; margin: 80px auto; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side" id="side"></aside>
+<main class="main" id="app">
+  <header class="top">
+    <h1><span id="title">Panoramica</span><small id="meta"></small></h1>
+    <div class="seg" id="range" role="group" aria-label="Periodo">
+      <button data-d="30">30g</button><button data-d="90">90g</button><button data-d="180">6m</button><button data-d="365">1a</button><button data-d="all">Tutto</button>
+    </div>
+    <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
+  </header>
+
+  <section class="view" data-view="panoramica">
+    <div class="bento">
+      <div class="card hero s4" id="hero"></div>
+      <div class="kpis s8" id="kpis"></div>
+      <div class="card s8"><h3>Frequenza cardiaca di ieri</h3><p class="sub"></p><div class="chart" id="c-hrday"></div></div>
+      <div class="card s4"><h3>HRV dell'ultima notte</h3><p class="sub"></p><div class="chart" id="c-hrvnight"></div></div>
+      <div class="s12">
+        <div class="row-h"><h3>Ultime attività</h3><a href="#allenamento">Tutte le attività →</a></div>
+        <div class="strip" id="recent"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" data-view="allenamento" hidden>
+    <div class="bento">
+      <div class="card s8"><h3>Volume settimanale</h3><p class="sub">Chilometri per sport, settimana per settimana</p><div class="chart" id="c-weekly"></div></div>
+      <div class="card s4"><h3>Tempo nelle zone cardio</h3><p class="sub">Ore totali per zona nel periodo</p><div class="chart" id="c-zones"></div></div>
+      <div class="card s8"><h3>Calendario allenamenti</h3><p class="sub">Minuti di attività al giorno · clicca un giorno per aprire l'attività</p><div class="chart cal" id="c-calendar"></div></div>
+      <div class="card s4"><h3>Carico acuto e cronico</h3><p class="sub">Somma 7 giorni vs media settimanale su 28</p><div class="chart cal" id="c-load"></div></div>
+      <div class="card s12">
+        <div class="card-h"><div><h3>Attività</h3><p class="sub"></p></div><input id="q" type="search" placeholder="Cerca attività…" aria-label="Cerca attività"></div>
+        <div class="table-wrap scroll"><table id="t-acts"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" data-view="corsa" hidden>
+    <div class="bento">
+      <div class="kpis s12" id="prs"></div>
+      <div class="card s12"><h3>Passo per uscita</h3><p class="sub">Ogni punto è una corsa · più in alto = più veloce · dimensione = distanza · clicca per il dettaglio</p><div class="chart" id="c-pace"></div></div>
+      <div class="card s4"><h3>Cadenza</h3><p class="sub">passi/min</p><div class="chart sm" id="c-cad"></div></div>
+      <div class="card s4"><h3>Lunghezza del passo</h3><p class="sub">cm</p><div class="chart sm" id="c-stride"></div></div>
+      <div class="card s4"><h3>Potenza</h3><p class="sub">W medi</p><div class="chart sm" id="c-pow"></div></div>
+      <div class="card s4"><h3>Tempo di contatto al suolo</h3><p class="sub">ms · più basso è meglio</p><div class="chart sm" id="c-gct"></div></div>
+      <div class="card s4"><h3>Rapporto verticale</h3><p class="sub">% · più basso è meglio</p><div class="chart sm" id="c-vr"></div></div>
+      <div class="card s4"><h3>Oscillazione verticale</h3><p class="sub">cm</p><div class="chart sm" id="c-vo"></div></div>
+    </div>
+  </section>
+
+  <section class="view" data-view="sonno" hidden>
+    <div class="bento">
+      <div class="card s8"><h3>Fasi del sonno</h3><p class="sub">Ore per notte</p><div class="chart" id="c-stages"></div></div>
+      <div class="card s4"><h3>Punteggio sonno</h3><p class="sub"></p><div class="chart" id="c-sscore"></div></div>
+      <div class="card s6"><h3>Orari di sonno</h3><p class="sub">Da quando ti addormenti a quando ti svegli</p><div class="chart" id="c-stimes"></div></div>
+      <div class="card s6"><h3>Sonno dormito vs necessario</h3><p class="sub">Ore · il bisogno è stimato da Garmin</p><div class="chart" id="c-sneed"></div></div>
+      <div class="card s4"><h3>FC media nel sonno</h3><p class="sub">bpm</p><div class="chart sm" id="c-shr"></div></div>
+      <div class="card s4"><h3>Respirazione nel sonno</h3><p class="sub">respiri/min</p><div class="chart sm" id="c-sresp"></div></div>
+      <div class="card s4"><h3>Stress nel sonno</h3><p class="sub">livello medio 0–100</p><div class="chart sm" id="c-sstress"></div></div>
+    </div>
+  </section>
+
+  <section class="view" data-view="recupero" hidden>
+    <div class="bento">
+      <div class="card s8"><h3>HRV notturna</h3><p class="sub">ms · la fascia verde è il tuo range "bilanciato"</p><div class="chart" id="c-hrv"></div></div>
+      <div class="card s4"><h3>Frequenza cardiaca a riposo</h3><p class="sub">bpm</p><div class="chart" id="c-rhr"></div></div>
+      <div class="card s8"><h3>Stress giornaliero</h3><p class="sub">Ore per livello di stress</p><div class="chart" id="c-stress"></div></div>
+      <div class="card s4"><h3>Body Battery</h3><p class="sub">Escursione giornaliera, dal minimo al massimo</p><div class="chart" id="c-bb"></div></div>
+      <div class="card s6"><h3>Stress medio</h3><p class="sub">livello 0–100</p><div class="chart sm" id="c-stresslvl"></div></div>
+      <div class="card s6"><h3>Respirazione diurna</h3><p class="sub">respiri/min medi</p><div class="chart sm" id="c-resp"></div></div>
+    </div>
+  </section>
+
+  <section class="view" data-view="movimento" hidden>
+    <div class="bento">
+      <div class="card s8"><h3>Passi</h3><p class="sub"></p><div class="chart" id="c-steps"></div></div>
+      <div class="card s4"><h3>Minuti di intensità</h3><p class="sub">Per settimana · i minuti intensi valgono doppio</p><div class="chart" id="c-intensity"></div></div>
+      <div class="card s8"><h3>Calorie</h3><p class="sub">kcal al giorno</p><div class="chart" id="c-kcal"></div></div>
+      <div class="card s4"><h3>Piani saliti</h3><p class="sub"></p><div class="chart" id="c-floors"></div></div>
+    </div>
+  </section>
+
+  <section class="view" data-view="corpo" hidden>
+    <div class="bento">
+      <div class="card s4"><h3>Età fitness</h3><p class="sub">Stima Garmin da FC a riposo, BMI e attività intensa</p><div id="fitage"></div></div>
+      <div class="card s8"><h3>Peso</h3><p class="sub"></p><div class="chart" id="c-weight"></div></div>
+      <div class="card s12"><h3>Zone di frequenza cardiaca</h3><p class="sub">Configurazione attuale</p><div class="table-wrap"><table id="t-zones"></table></div></div>
+    </div>
+  </section>
+</main>
+</div>
+<dialog class="drawer" id="drawer"></dialog>
+
+<script>
+(async () => {
+const D = await garminData();
+if (!D) {
+  document.getElementById('app').innerHTML = `<div class="empty"><h3>Nessun dato</h3><p>Esegui <code>.venv\\Scripts\\python fetch.py --athlete ${esc(ATHLETE)}</code> per scaricare i dati in <code>data/${esc(ATHLETE)}/</code>, poi ricarica questa pagina.</p></div>`;
+  return;
+}
+await garminPlan();
+
+const byDate = (arr, key) => Object.fromEntries((arr || []).filter(x => x?.[key]).map(x => [x[key], x]));
+const SUM = byDate(D.summaries, 'calendarDate'), SLP = byDate(D.sleep, 'calendarDate'), HRV = byDate(D.hrv, 'calendarDate');
+const TODAY = D.generated.slice(0, 10);
+const ALL_ACTS = (D.activities || []).map(a => ({ ...a, day: a.startTimeLocal.slice(0, 10) }));
+const ACT_BY_ID = Object.fromEntries(ALL_ACTS.map(a => [a.activityId, a]));
+const sportColor = a => v(SPORTS.find(s => s[0] === sport(a))[1]);
+
+// stato del filtro: ricalcolato a ogni render
+let RANGE = store.get('range') || '90', VIEW = 'panoramica', FROM, DAYS, ACTS;
+function scope() {
+  const first = ALL_ACTS.length ? ALL_ACTS[ALL_ACTS.length - 1].day : D.from;
+  FROM = RANGE === 'all' ? (first < D.from ? first : D.from) : addDays(TODAY, -(+RANGE - 1));
+  DAYS = [];
+  for (let d = FROM < D.from ? D.from : FROM; d <= TODAY; d = addDays(d, 1)) DAYS.push(d);
+  ACTS = ALL_ACTS.filter(a => a.day >= FROM);
+}
+const col = (map, f) => DAYS.map(d => map[d] ? (f(map[d]) ?? null) : null);
+function last(map, f, from = TODAY) {
+  for (let d = from; d >= D.from; d = addDays(d, -1)) { const x = map[d] && f(map[d]); if (x != null) return [d, x]; }
+  return [null, null];
+}
+const dayAxis = () => ({ type: 'category', data: DAYS, axisLabel: { formatter: short } });
+
+// ---------- Panoramica ----------
+function spark(vals) {
+  const pts = vals.map((y, i) => [i, y]).filter(p => p[1] != null);
+  if (pts.length < 2) return '';
+  const ys = pts.map(p => p[1]), lo = Math.min(...ys), hi = Math.max(...ys), n = Math.max(vals.length - 1, 1);
+  return `<svg viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="${pts.map(([i, y]) => `${(i / n * 100).toFixed(2)},${(26 - (y - lo) / (hi - lo || 1) * 24).toFixed(2)}`).join(' ')}"/></svg>`;
+}
+const HRV_STATUS = { BALANCED: ['Bilanciata', '--good'], UNBALANCED: ['Sbilanciata', '--warning'], LOW: ['Bassa', '--serious'], POOR: ['Scarsa', '--critical'] };
+const per = () => RANGE === 'all' ? 'media periodo' : `media ${RANGE === '365' ? '1 anno' : RANGE === '180' ? '6 mesi' : RANGE + 'g'}`;
+function kpis() {
+  const tile = (lbl, val, unit, foot, sp = '') => `<div class="kpi"><span class="lbl">${lbl}</span><span class="val">${val}<small>${unit}</small></span><span class="foot">${foot}</span>${sp}</div>`;
+  const Y = addDays(TODAY, -1);  // la giornata di oggi è ancora parziale
+  const rhr = col(SUM, s => s.heartRate?.restingValue), [, rhrL] = last(SUM, s => s.heartRate?.restingValue);
+  const hrv = col(HRV, h => h.lastNightAvg), [, hrvL] = last(HRV, h => h.lastNightAvg), [, hrvS] = last(HRV, h => h.status);
+  const st = HRV_STATUS[hrvS] || [hrvS || '', '--muted'];
+  const ss = col(SLP, s => s.sleepScores?.overall?.value), [, ssL] = last(SLP, s => s.sleepScores?.overall?.value);
+  const sd = col(SLP, s => s.sleepTimeSeconds || null), [, sdL] = last(SLP, s => s.sleepTimeSeconds || null);
+  const bb = col(SUM, s => s.bodyBattery?.maxValue), [, bbL] = last(SUM, s => s.bodyBattery?.maxValue, Y);
+  const steps = col(SUM, s => s.movement?.steps?.value).slice(0, -1);
+  const stress = col(SUM, s => s.stress?.avgLevel), [, stL] = last(SUM, s => s.stress?.avgLevel, Y);
+  const runs = ACTS.filter(isRun), km = sum(runs.map(a => a.distance)) / 1000;
+  $('#kpis').innerHTML = [
+    tile('FC a riposo', nf(rhrL), 'bpm', `${per()} ${nf(avg(rhr))}`, spark(rhr)),
+    tile('HRV notturna', nf(hrvL), 'ms', `<span class="chip" style="--c:var(${st[1]})">${esc(st[0])}</span> · ${per()} ${nf(avg(hrv))}`, spark(hrv)),
+    tile('Punteggio sonno', nf(ssL), '/100', `${per()} ${nf(avg(ss))}`, spark(ss)),
+    tile('Durata sonno', hm(sdL), '', `${per()} ${hm(avg(sd))}`, spark(sd)),
+    tile('Body Battery max ieri', nf(bbL), '', `${per()} ${nf(avg(bb))}`, spark(bb)),
+    tile('Passi al giorno', nf(avg(steps)), '', per(), spark(steps)),
+    tile('Stress medio ieri', nf(stL), '/100', `${per()} ${nf(avg(stress))}`, spark(stress)),
+    tile('Km di corsa', nf(km), 'km', `${runs.length} corse · ${ACTS.length} attività`),
+  ].join('');
+}
+function hero() {
+  const P = window.PLAN, el = $('#hero');
+  const race = P?.races.find(r => r.date >= TODAY_REAL);
+  if (!race) { el.hidden = true; $('#kpis').className = 'kpis s12'; return; }
+  const next = P.sessions().find(s => s.date >= TODAY_REAL && s.date !== race.date);
+  el.innerHTML = `<span class="label">Prossima gara</span><h2>${esc(race.name)}</h2>
+    <span class="sub" style="margin:0">${fmtDay(race.date)} · obiettivo ${esc(race.goal)}</span>
+    <div class="count"><b>${daysBetween(TODAY_REAL, race.date)}</b><span>giorni</span></div>
+    ${next ? `<a class="next" href="piano.html${location.search}#s-${next.id}"><span class="label">${daysBetween(TODAY_REAL, next.date) > 7 ? 'Prima seduta del nuovo piano' : 'Prossimo allenamento del piano'}</span><b>${esc(next.title)}</b><span>${fmtDay(next.date)} · ~${nf(next.km, 1)} km</span></a>` : ''}
+    <a href="piano.html${location.search}" style="font-size:13px">Apri il piano gare →</a>`;
+}
+function recent() {
+  $('#recent').innerHTML = ALL_ACTS.slice(0, 10).map(a => `<button class="act" data-id="${a.activityId}">
+    <span class="chip" style="--c:${sportColor(a)}">${sport(a)}</span><span class="nm">${esc(a.activityName)}</span>
+    <span class="when">${fmtDay(a.day)}</span>
+    <span class="big">${a.distance ? `${nf(a.distance / 1000, 1)}<small> km</small>` : clock(a.duration)}</span>
+    <span class="meta">${a.distance ? paceOf(a) + ' · ' : ''}FC ${nf(a.averageHR)}</span></button>`).join('');
+}
+
+chart('c-hrday', () => {
+  const h = D.heartRateDay; if (!h?.heartRateValues?.length) return null;
+  note('c-hrday', `${fmtDay(h.calendarDate)} · riposo ${h.restingHeartRate} · min ${h.minHeartRate} · max ${h.maxHeartRate} bpm`);
+  return opt({
+    tooltip: { trigger: 'axis', formatter: tipAxis(x => x + ' bpm') },
+    xAxis: { type: 'time', axisLabel: { formatter: '{HH}:{mm}' } }, yAxis: { type: 'value', min: 30 },
+    series: [lineS('FC', h.heartRateValues.filter(p => p[1] != null), '--s8', { ...area('--s8'), lineStyle: { color: v('--s8'), width: 1.5 } })],
+  });
+});
+chart('c-hrvnight', () => {
+  const h = D.hrvNight; if (!h?.hrvReadings?.length) return null;
+  const s = h.hrvSummary || {};
+  note('c-hrvnight', `Media ${s.lastNightAvg} ms · picco 5 min ${s.lastNight5MinHigh} ms · 7 giorni ${s.weeklyAvg} ms`);
+  return opt({
+    tooltip: { trigger: 'axis', formatter: tipAxis(x => x + ' ms') },
+    xAxis: { type: 'time', axisLabel: { formatter: '{HH}:{mm}' } }, yAxis: { type: 'value' },
+    series: [lineS('HRV', h.hrvReadings.map(r => [r.readingTimeLocal, r.hrvValue]), '--s7', {
+      markArea: s.baseline && { silent: true, itemStyle: { color: v('--s3'), opacity: .12 }, data: [[{ yAxis: s.baseline.balancedLow }, { yAxis: s.baseline.balancedUpper }]] },
+    })],
+  });
+});
+
+// ---------- Allenamento ----------
+chart('c-weekly', () => {
+  if (!ACTS.length) return null;
+  const weeks = []; for (let w = monday(FROM); w <= TODAY; w = addDays(w, 7)) weeks.push(w);
+  const idx = Object.fromEntries(weeks.map((w, i) => [w, i]));
+  const used = SPORTS.filter(([n]) => ACTS.some(a => sport(a) === n));
+  const rows = used.map(([n]) => { const r = weeks.map(() => 0); ACTS.filter(a => sport(a) === n).forEach(a => r[idx[monday(a.day)]] += (a.distance || 0) / 1000); return r.map(x => +x.toFixed(1)); });
+  return opt({
+    tooltip: { trigger: 'axis', formatter: ps => 'Settimana del ' + tipAxis(x => nf(x, 1) + ' km')(ps) },
+    xAxis: { type: 'category', data: weeks, axisLabel: { formatter: short } }, yAxis: { type: 'value', axisLabel: { formatter: x => x + ' km' } },
+    series: stack(used.map(s => s[0]), used.map(s => s[1]), rows),
+  });
+});
+chart('c-calendar', () => {
+  const from = FROM < addDays(TODAY, -364) ? addDays(TODAY, -364) : FROM;
+  const mins = {}, acts = {};
+  ALL_ACTS.filter(a => a.day >= from).forEach(a => { mins[a.day] = (mins[a.day] || 0) + a.duration / 60; (acts[a.day] ||= []).push(a); });
+  const data = Object.entries(mins).map(([d, m]) => [d, Math.round(m)]);
+  if (!data.length) return null;
+  return {
+    tooltip: { formatter: p => `${fmtDay(p.value[0])}<div class="tt"><b>${p.value[1]} min</b></div><span style="color:${v('--muted')}">${acts[p.value[0]].map(a => esc(a.activityName)).join('<br>')}</span>` },
+    visualMap: { min: 0, max: Math.max(60, ...data.map(d => d[1])), orient: 'horizontal', right: 0, bottom: 0, itemHeight: 120, itemWidth: 10, calculable: false, text: ['più', 'meno'], textStyle: { color: v('--muted') }, inRange: { color: [v('--seq-lo'), v('--seq-hi')] } },
+    calendar: {
+      range: [from, TODAY], top: 22, left: 30, right: 10, bottom: 40, cellSize: ['auto', 'auto'],
+      itemStyle: { color: v('--wash'), borderColor: v('--surface'), borderWidth: 2 }, splitLine: { show: false },
+      dayLabel: { firstDay: 1, nameMap: ['D', 'L', 'M', 'M', 'G', 'V', 'S'], color: v('--muted'), fontSize: 10 },
+      monthLabel: { nameMap: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], color: v('--muted'), fontSize: 11 },
+      yearLabel: { show: false },
+    },
+    series: [{ type: 'heatmap', coordinateSystem: 'calendar', data, cursor: 'pointer' }],
+    onClick: p => openActivity(acts[p.value[0]][0].activityId),
+  };
+});
+chart('c-load', () => {
+  const load = {}; ALL_ACTS.forEach(a => load[a.day] = (load[a.day] || 0) + (a.activityTrainingLoad || 0));
+  if (!Object.keys(load).length) return null;
+  const win = (d, n) => { let s = 0; for (let i = 0; i < n; i++) s += load[addDays(d, -i)] || 0; return s; };
+  return opt({
+    xAxis: dayAxis(), yAxis: { type: 'value' },
+    series: [lineS('Acuto (7g)', DAYS.map(d => Math.round(win(d, 7))), '--s2'), lineS('Cronico (28g)', DAYS.map(d => Math.round(win(d, 28) / 4)), '--s1')],
+  }, x => nf(x));
+});
+chart('c-zones', () => {
+  const z = [1, 2, 3, 4, 5].map(i => sum(ACTS.map(a => a[`hrTimeInZone_${i}`])) / 3600);
+  const tot = sum(z); if (!tot) return null;
+  const zd = (D.hrZones || []).find(x => x.sport === 'DEFAULT') || (D.hrZones || [])[0];
+  const fl = zd ? [zd.zone1Floor, zd.zone2Floor, zd.zone3Floor, zd.zone4Floor, zd.zone5Floor, zd.maxHeartRateUsed] : null;
+  const lbl = i => `Z${i + 1}` + (fl ? `  ${fl[i]}–${fl[i + 1]}` : '');
+  return opt({
+    grid: { left: 4, right: 86, top: 8, bottom: 4, containLabel: true },
+    tooltip: { trigger: 'item', formatter: p => `${p.name} bpm<div class="tt"><b>${nf(p.value, 1)} h</b><span>${nf(p.value / tot * 100)}%</span></div>` },
+    xAxis: { type: 'value', axisLabel: { formatter: x => x + 'h' } },
+    yAxis: { type: 'category', data: z.map((_, i) => lbl(i)), inverse: true },
+    series: [{ type: 'bar', barMaxWidth: 24, data: z.map((x, i) => ({ value: +x.toFixed(2), itemStyle: { color: v(`--z${i + 1}`), borderRadius: [0, 4, 4, 0] } })), label: { show: true, position: 'right', color: v('--text-2'), formatter: p => `${nf(p.value, 1)}h · ${nf(p.value / tot * 100)}%` } }],
+  });
+});
+function actTable() {
+  const q = $('#q').value.trim().toLowerCase();
+  const list = ACTS.filter(a => !q || a.activityName.toLowerCase().includes(q));
+  const rows = list.slice(0, 300).map(a => `<tr class="click" data-id="${a.activityId}"><td>${esc(a.startTimeLocal.slice(0, 16))}</td><td class="name" title="${esc(a.activityName)}"><span class="dot" style="background:${sportColor(a)}"></span>${esc(a.activityName)}</td>
+    <td class="num">${nf((a.distance || 0) / 1000, 2)}</td><td class="num">${a.duration ? clock(a.duration) : '–'}</td><td class="num">${paceOf(a)}</td>
+    <td class="num">${nf(a.averageHR)}</td><td class="num">${nf(a.activityTrainingLoad)}</td><td class="num">${nf(a.aerobicTrainingEffect, 1)}</td><td class="num">${nf(a.calories)}</td></tr>`).join('');
+  $('#t-acts').innerHTML = `<thead><tr><th>Data</th><th>Attività</th><th class="num">km</th><th class="num">Durata</th><th class="num">Ritmo</th><th class="num">FC media</th><th class="num">Carico</th><th class="num">Effetto aerobico</th><th class="num">kcal</th></tr></thead><tbody>${rows}</tbody>`;
+  note('t-acts', `${list.length} attività nel periodo${list.length > 300 ? ' · mostrate le ultime 300' : ''} · clicca una riga per il dettaglio`);
+}
+
+// ---------- Corsa ----------
+function prs() {
+  const runs = ACTS.filter(isRun);
+  const best = k => runs.filter(a => a[k]).sort((a, b) => a[k] - b[k])[0];
+  const tiles = [['1 km', 'fastestSplit_1000'], ['5 km', 'fastestSplit_5000'], ['10 km', 'fastestSplit_10000'], ['mezza', 'fastestSplit_21098'], ['maratona', 'fastestSplit_42195']]
+    .map(([l, k]) => [l, best(k), k]).filter(t => t[1])
+    .map(([l, a, k]) => `<div class="kpi"><span class="lbl">Miglior ${l}</span><span class="val">${clock(a[k])}</span><span class="foot" title="${esc(a.activityName)}">${dayMonth(a.day)} · ${esc(a.activityName)}</span></div>`);
+  const longest = runs.slice().sort((a, b) => b.distance - a.distance)[0];
+  if (longest) tiles.push(`<div class="kpi"><span class="lbl">Corsa più lunga</span><span class="val">${nf(longest.distance / 1000, 1)}<small>km</small></span><span class="foot">${dayMonth(longest.day)} · ${esc(longest.activityName)}</span></div>`);
+  tiles.push(`<div class="kpi"><span class="lbl">Corse nel periodo</span><span class="val">${runs.length}</span><span class="foot">${nf(sum(runs.map(a => a.distance)) / 1000)} km totali</span></div>`);
+  $('#prs').innerHTML = tiles.join('');
+}
+chart('c-pace', () => {
+  const runs = ACTS.filter(a => isRun(a) && a.averageSpeed > 1 && a.distance > 500);
+  if (!runs.length) return null;
+  return opt({
+    tooltip: { trigger: 'item', formatter: p => { const a = p.data.a; return `${fmtDay(a.day)}<div class="tt"><b>${clock(p.value[1])} /km</b><span>${nf(a.distance / 1000, 1)} km · FC ${nf(a.averageHR)}</span></div><span style="color:${v('--muted')}">${esc(a.activityName)}</span>`; } },
+    xAxis: { type: 'time' }, yAxis: { type: 'value', inverse: true, scale: true, axisLabel: { formatter: clock } },
+    series: [{ type: 'scatter', cursor: 'pointer', data: runs.map(a => ({ value: [a.day, Math.round(1000 / a.averageSpeed)], a })), symbolSize: (_, p) => Math.min(22, 7 + Math.sqrt(p.data.a.distance / 1000) * 2.2), itemStyle: { color: v('--s1'), opacity: .85, borderColor: v('--surface'), borderWidth: 2 } }],
+    onClick: p => openActivity(p.data.a.activityId),
+  });
+});
+const dyn = (id, key, d = 0) => chart(id, () => {
+  const runs = ACTS.filter(a => isRun(a) && a[key]).reverse();
+  if (!runs.length) return null;
+  const pts = runs.map(a => ({ value: [a.day, +a[key].toFixed(d)], a }));
+  return opt({
+    grid: { left: 4, right: 10, top: 10, bottom: 4, containLabel: true },
+    xAxis: { type: 'time', axisLabel: { formatter: '{dd}/{MM}' } }, yAxis: { type: 'value', scale: true },
+    series: [
+      { type: 'scatter', name: '_', cursor: 'pointer', data: pts, symbolSize: 7, itemStyle: { color: v('--s1'), borderColor: v('--surface'), borderWidth: 1.5 } },
+      lineS('media mobile', rolling(pts.map(p => p.value[1]), 8).map((y, i) => [pts[i].value[0], +y.toFixed(d)]), '--s2'),
+    ],
+    tooltip: { trigger: 'item', formatter: p => `${fmtDay(p.value[0])}<div class="tt"><i style="background:${p.color}"></i><b>${nf(p.value[1], d)}</b><span>${p.seriesName === '_' ? esc(p.data.a.activityName) : p.seriesName}</span></div>` },
+    onClick: p => p.data?.a && openActivity(p.data.a.activityId),
+  });
+});
+dyn('c-cad', 'averageRunningCadenceInStepsPerMinute'); dyn('c-stride', 'avgStrideLength'); dyn('c-gct', 'avgGroundContactTime');
+dyn('c-vr', 'avgVerticalRatio', 1); dyn('c-vo', 'avgVerticalOscillation', 1); dyn('c-pow', 'avgPower');
+
+// ---------- Sonno ----------
+chart('c-stages', () => {
+  const k = ['deepSleepSeconds', 'lightSleepSeconds', 'remSleepSeconds', 'awakeSleepSeconds'];
+  const rows = k.map(key => col(SLP, s => s.sleepTimeSeconds ? +(s[key] / 3600).toFixed(2) : null));
+  if (!rows[0].some(x => x != null)) return null;
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', axisLabel: { formatter: x => x + 'h' } }, series: stack(['Profondo', 'Leggero', 'REM', 'Sveglio'], ['--s1', '--s3', '--s7', '--s5'], rows) }, x => hm(x * 3600));
+});
+const QUAL = { EXCELLENT: 'Eccellente', GOOD: 'Buono', FAIR: 'Discreto', POOR: 'Scarso' };
+chart('c-sscore', () => {
+  const s = col(SLP, x => x.sleepScores?.overall?.value); if (!s.some(x => x != null)) return null;
+  const [, q] = last(SLP, x => x.sleepScores?.overall?.qualifierKey);
+  note('c-sscore', `Ultima notte: ${QUAL[q] || q || '–'} · ${per()} ${nf(avg(s))}`);
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', min: e => Math.max(0, Math.floor(e.min / 10) * 10 - 10), max: 100 }, series: [lineS('Punteggio', s, '--s7', area('--s7')), lineS('Media 7 notti', rolling(s, 7).map(x => x && Math.round(x)), '--s4')] }, x => nf(x));
+});
+chart('c-stimes', () => {
+  // ore dalle 18:00 (i timestamp "locali" di Garmin vanno letti come UTC)
+  const h = ts => { const d = new Date(ts); return (d.getUTCHours() + d.getUTCMinutes() / 60 - 18 + 24) % 24; };
+  const st = col(SLP, s => s.sleepStartTimestampLocal && s.sleepTimeSeconds ? h(s.sleepStartTimestampLocal) : null);
+  const en = col(SLP, s => s.sleepEndTimestampLocal && s.sleepTimeSeconds ? h(s.sleepEndTimestampLocal) : null);
+  if (!st.some(x => x != null)) return null;
+  const lab = x => { const t = (x + 18) % 24, m = Math.round(t % 1 * 60); return `${Math.floor(t) + (m === 60 ? 1 : 0)}:${String(m % 60).padStart(2, '0')}`; };
+  const lo = Math.floor(Math.min(...st.filter(x => x != null))), hi = Math.ceil(Math.max(...en.filter(x => x != null)));
+  return opt({
+    tooltip: { trigger: 'axis', formatter: ps => { const i = ps[0].dataIndex; return st[i] == null ? fmtDay(DAYS[i]) : `${fmtDay(DAYS[i])}<div class="tt"><b>${lab(st[i])} → ${lab(en[i])}</b></div>`; } },
+    xAxis: dayAxis(), yAxis: { type: 'value', inverse: true, min: lo, max: hi, interval: 2, axisLabel: { formatter: x => `${(x + 18) % 24}:00` } },
+    series: [
+      { type: 'bar', name: '_base', stack: 't', data: st, itemStyle: { color: 'transparent' }, emphasis: { disabled: true } },
+      { type: 'bar', name: '_dur', stack: 't', barMaxWidth: 14, data: en.map((e, i) => e != null && st[i] != null ? +(e - st[i]).toFixed(2) : null), itemStyle: { color: v('--s7'), borderRadius: 4 } },
+    ],
+  });
+});
+chart('c-sneed', () => {
+  const slept = col(SLP, s => s.sleepTimeSeconds ? +(s.sleepTimeSeconds / 3600).toFixed(2) : null);
+  const need = col(SLP, s => s.sleepNeed?.actual ? +(s.sleepNeed.actual / 60).toFixed(2) : null);
+  if (!slept.some(x => x != null)) return null;
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', axisLabel: { formatter: x => x + 'h' } }, series: [{ ...BAR, name: 'Dormito', data: slept, itemStyle: { ...BAR.itemStyle, color: v('--s1') } }, lineS('Necessario', need, '--s2', { step: 'middle' })] }, x => hm(x * 3600));
+});
+const dayLine = (id, map, f, color, fmt = x => nf(x, 1)) => chart(id, () => {
+  const s = col(map, f); if (!s.some(x => x != null)) return null;
+  return opt({ grid: { left: 4, right: 10, top: 10, bottom: 4, containLabel: true }, xAxis: dayAxis(), yAxis: { type: 'value', scale: true }, series: [lineS('_', s, color, area(color)), lineS('media 7 giorni', rolling(s, 7), '--s2', { lineStyle: { color: v('--s2'), width: 1.5 } })] }, fmt);
+});
+dayLine('c-shr', SLP, s => s.avgHeartRate, '--s8', x => nf(x) + ' bpm');
+dayLine('c-sresp', SLP, s => s.averageRespirationValue, '--s3');
+dayLine('c-sstress', SLP, s => s.avgSleepStress, '--s4', x => nf(x));
+
+// ---------- Recupero ----------
+chart('c-hrv', () => {
+  const night = col(HRV, h => h.lastNightAvg); if (!night.some(x => x != null)) return null;
+  const lo = col(HRV, h => h.baseline?.balancedLow), up = col(HRV, h => h.baseline?.balancedUpper);
+  return opt({
+    tooltip: { trigger: 'axis', formatter: ps => { const i = ps[0].dataIndex, h = HRV[DAYS[i]]; return fmtDay(DAYS[i]) + (h ? `<div class="tt"><i style="background:${v('--s1')}"></i><b>${nf(h.lastNightAvg)} ms</b><span>notte</span></div><div class="tt"><i style="background:${v('--s2')}"></i><b>${nf(h.weeklyAvg)} ms</b><span>media 7 giorni</span></div><div class="tt"><span>range bilanciato ${nf(lo[i])}–${nf(up[i])} · ${esc((HRV_STATUS[h.status] || [h.status])[0])}</span></div>` : ''); } },
+    xAxis: dayAxis(), yAxis: { type: 'value', scale: true },
+    series: [
+      { type: 'line', name: '_lo', stack: 'band', data: lo, symbol: 'none', lineStyle: { opacity: 0 }, connectNulls: true },
+      { type: 'line', name: 'Range bilanciato', stack: 'band', data: up.map((u, i) => u != null && lo[i] != null ? u - lo[i] : null), symbol: 'none', lineStyle: { opacity: 0 }, itemStyle: { color: v('--s3') }, areaStyle: { color: v('--s3'), opacity: .14 }, connectNulls: true },
+      lineS('Notte', night, '--s1', { symbol: 'circle', symbolSize: 5, showSymbol: DAYS.length <= 90 }),
+      lineS('Media 7 giorni', col(HRV, h => h.weeklyAvg), '--s2'),
+    ],
+  });
+});
+chart('c-rhr', () => {
+  const r = col(SUM, s => s.heartRate?.restingValue); if (!r.some(x => x != null)) return null;
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', scale: true }, series: [lineS('Riposo', r, '--s8', area('--s8')), lineS('Media 7 giorni', rolling(r, 7).map(x => x && +x.toFixed(1)), '--s1')] }, x => nf(x, 1) + ' bpm');
+});
+chart('c-bb', () => {
+  const mn = col(SUM, s => s.bodyBattery?.minValue), mx = col(SUM, s => s.bodyBattery?.maxValue);
+  if (!mx.some(x => x != null)) return null;
+  return opt({
+    tooltip: { trigger: 'axis', formatter: ps => { const i = ps[0].dataIndex, b = SUM[DAYS[i]]?.bodyBattery || {}; return fmtDay(DAYS[i]) + (b.maxValue != null ? `<div class="tt"><b>${b.minValue} → ${b.maxValue}</b><span>min → max</span></div><div class="tt"><span>+${b.chargedValue ?? '–'} caricata · −${b.drainedValue ?? '–'} consumata</span></div>` : ''); } },
+    xAxis: dayAxis(), yAxis: { type: 'value', min: 0, max: 100 },
+    series: [
+      { type: 'bar', name: '_base', stack: 'b', data: mn, itemStyle: { color: 'transparent' }, emphasis: { disabled: true } },
+      { type: 'bar', name: '_rng', stack: 'b', barMaxWidth: 14, data: mx.map((x, i) => x != null && mn[i] != null ? x - mn[i] : null), itemStyle: { color: v('--s1'), borderRadius: 4 } },
+    ],
+  });
+});
+chart('c-stress', () => {
+  const k = ['restDurationInMillis', 'lowStressDurationInMillis', 'mediumStressDurationInMillis', 'highStressDurationInMillis'];
+  const rows = k.map(key => col(SUM, s => s.stress?.[key] != null ? +(s.stress[key] / 3.6e6).toFixed(2) : null));
+  if (!rows[0].some(x => x != null)) return null;
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', axisLabel: { formatter: x => x + 'h' } }, series: stack(['Riposo', 'Basso', 'Medio', 'Alto'], ['--s1', '--st1', '--st2', '--st3'], rows) }, x => hm(x * 3600));
+});
+dayLine('c-stresslvl', SUM, s => s.stress?.avgLevel, '--st2', x => nf(x));
+dayLine('c-resp', SUM, s => s.respiration?.avgValue, '--s3');
+
+// ---------- Movimento ----------
+chart('c-steps', () => {
+  const s = col(SUM, x => x.movement?.steps?.value), g = col(SUM, x => x.movement?.steps?.goal);
+  if (!s.some(x => x != null)) return null;
+  note('c-steps', `Media ${nf(avg(s.slice(0, -1)))} al giorno · sopra l'obiettivo ${s.filter((x, i) => x != null && g[i] && x >= g[i]).length} giorni su ${s.filter(x => x != null).length}`);
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value', axisLabel: { formatter: x => x >= 1000 ? x / 1000 + 'k' : x } }, series: [{ ...BAR, name: 'Passi', data: s, itemStyle: { ...BAR.itemStyle, color: v('--s1') } }, lineS('Obiettivo', g, '--s2', { step: 'middle', lineStyle: { color: v('--s2'), width: 1.5 } })] }, x => nf(x));
+});
+chart('c-intensity', () => {
+  const weeks = []; for (let w = monday(DAYS[0]); w <= TODAY; w = addDays(w, 7)) weeks.push(w);
+  const agg = f => weeks.map(w => sum([0, 1, 2, 3, 4, 5, 6].map(i => { const s = SUM[addDays(w, i)]; return s ? f(s) : 0; })));
+  const mod = agg(s => s.intensityMinutes?.moderate || 0), vig = agg(s => 2 * (s.intensityMinutes?.vigorous || 0));
+  if (!sum(mod) && !sum(vig)) return null;
+  const goal = last(SUM, s => s.intensityMinutes?.goal)[1] || 150;
+  const o = opt({ xAxis: { type: 'category', data: weeks, axisLabel: { formatter: short } }, yAxis: { type: 'value' }, series: stack(['Moderati', 'Intensi ×2'], ['--s3', '--s2'], [mod, vig]) }, x => nf(x) + ' min');
+  o.series[1].markLine = { silent: true, symbol: 'none', lineStyle: { color: v('--text-2'), type: 'solid', width: 1 }, label: { formatter: `obiettivo ${goal}`, color: v('--text-2'), position: 'insideStartTop' }, data: [{ yAxis: goal }] };
+  return o;
+});
+chart('c-kcal', () => {
+  const r = col(SUM, s => s.calories?.burnedResting), a = col(SUM, s => s.calories?.burnedActive);
+  if (!r.some(x => x != null)) return null;
+  return opt({ xAxis: dayAxis(), yAxis: { type: 'value' }, series: stack(['A riposo', 'Attive'], ['--s1', '--s2'], [r, a]) }, x => nf(x) + ' kcal');
+});
+chart('c-floors', () => {
+  const f = col(SUM, s => s.movement?.floorsAscended?.value); if (!f.some(x => x)) return null;
+  note('c-floors', `Media ${nf(avg(f), 1)} piani al giorno`);
+  return opt({ grid: { left: 4, right: 10, top: 10, bottom: 4, containLabel: true }, xAxis: dayAxis(), yAxis: { type: 'value' }, series: [{ ...BAR, name: 'Piani', data: f, itemStyle: { ...BAR.itemStyle, color: v('--s3') } }] }, x => nf(x));
+});
+
+// ---------- Corpo ----------
+chart('c-weight', () => {
+  const w = (D.weight || []).flatMap(x => x.allWeightMetrics || []).filter(x => x.weight).sort((a, b) => a.date - b.date);
+  if (!w.length) return null;
+  const goal = (D.weightGoals?.userGoals || []).filter(g => g.goalValue).pop();
+  note('c-weight', `${w.length} pesate nell'ultimo anno${goal ? ` · obiettivo ${nf(goal.goalValue / 1000, 1)} kg` : ''}`);
+  const s = lineS('Peso', w.map(x => [x.date, +(x.weight / 1000).toFixed(1)]), '--s1', { symbol: 'circle', symbolSize: 9, showSymbol: true, itemStyle: { color: v('--s1'), borderColor: v('--surface'), borderWidth: 2 } });
+  if (goal) s.markLine = { silent: true, symbol: 'none', lineStyle: { color: v('--s3'), type: 'solid', width: 1.5 }, label: { formatter: 'obiettivo', color: v('--text-2'), position: 'insideStartTop' }, data: [{ yAxis: goal.goalValue / 1000 }] };
+  return opt({ xAxis: { type: 'time' }, yAxis: { type: 'value', scale: true, axisLabel: { formatter: x => x + ' kg' } }, series: [s] }, x => nf(x, 1) + ' kg');
+});
+function staticCards() {
+  const fa = D.fitnessAge, c = fa?.components || {};
+  $('#fitage').innerHTML = fa ? `<div class="big-n">${nf(fa.fitnessAge, 1)} <small style="font-size:16px;font-weight:500;color:var(--text-2)">anni</small></div>
+    <div style="color:var(--text-2)">${nf(fa.chronologicalAge - fa.fitnessAge, 1)} anni in meno della tua età anagrafica (${fa.chronologicalAge})</div>
+    <div class="facts"><div><b>${nf(c.rhr?.value)} bpm</b>FC a riposo</div><div><b>${nf(c.bmi?.value, 1)}</b>BMI</div><div><b>${nf(c.vigorousDaysAvg?.value, 1)}</b>giorni intensi / sett.</div><div><b>${nf(c.vigorousMinutesAvg?.value)} min</b>minuti intensi / sett.</div></div>`
+    : '<p class="sub">Nessun dato</p>';
+  const SP = { DEFAULT: 'Generale', RUNNING: 'Corsa', CYCLING: 'Bici', SWIMMING: 'Nuoto' };
+  const TM = { CUSTOM: 'Personalizzato', HR_MAX_BASED: '% FC max', HR_RESERVE_BASED: '% FC riserva', LACTATE_THRESHOLD_BASED: '% soglia' };
+  $('#t-zones').innerHTML = `<thead><tr><th>Sport</th><th>Metodo</th>${[1, 2, 3, 4, 5].map(i => `<th class="num"><span class="dot" style="background:var(--z${i})"></span>Z${i}</th>`).join('')}<th class="num">FC max</th><th class="num">FC riposo</th><th class="num">Soglia</th></tr></thead><tbody>` +
+    (D.hrZones || []).map(z => `<tr><td>${esc(SP[z.sport] || z.sport)}</td><td>${esc(TM[z.trainingMethod] || z.trainingMethod)}</td>${[1, 2, 3, 4, 5].map(i => `<td class="num">${z[`zone${i}Floor`]}–${i < 5 ? z[`zone${i + 1}Floor`] - 1 : z.maxHeartRateUsed}</td>`).join('')}<td class="num">${z.maxHeartRateUsed}</td><td class="num">${z.restingHeartRateUsed ?? '–'}</td><td class="num">${z.lactateThresholdHeartRateUsed ?? '–'}</td></tr>`).join('') + '</tbody>';
+}
+
+// ---------- dettaglio attività ----------
+const loadDetail = id => garminActivity(id);
+let detailMap = null, openId = null;
+async function openActivity(id) {
+  const a = ACT_BY_ID[id]; if (!a) return;
+  openId = id;
+  const dlg = $('#drawer'), run = isRun(a);
+  const stat = (val, lbl) => val == null ? '' : `<div class="stat"><b>${val}</b><span>${lbl}</span></div>`;
+  closeDetail();
+  dlg.innerHTML = `
+    <div class="panel-h">
+      <div style="flex:1;min-width:0"><span class="chip" style="--c:${sportColor(a)}">${sport(a)} · ${esc(a.activityType?.typeKey?.replace(/_/g, ' '))}</span>
+        <h2>${esc(a.activityName)}</h2><p>${fmtDay(new Date(a.startTimeLocal.replace(' ', 'T')).getTime())}${a.locationName ? ' · ' + esc(a.locationName) : ''}</p></div>
+      <a class="icon-btn" href="https://connect.garmin.com/modern/activity/${a.activityId}" target="_blank" rel="noopener" title="Apri su Garmin Connect">${icon('ext')}</a>
+      <button class="icon-btn" id="d-close" title="Chiudi" aria-label="Chiudi">${icon('close')}</button>
+    </div>
+    <div class="panel-b">
+      <div class="stats">
+        ${stat(a.distance ? nf(a.distance / 1000, 2) + ' km' : null, 'Distanza')}
+        ${stat(clock(a.movingDuration || a.duration), 'Tempo in movimento')}
+        ${stat(a.distance ? paceOf(a) : null, run ? 'Passo medio' : 'Media')}
+        ${stat(a.averageHR ? `${nf(a.averageHR)} / ${nf(a.maxHR)}` : null, 'FC media / max')}
+        ${stat(a.elevationGain != null ? nf(a.elevationGain) + ' m' : null, 'Dislivello +')}
+        ${stat(a.averageRunningCadenceInStepsPerMinute ? nf(a.averageRunningCadenceInStepsPerMinute) + ' spm' : null, 'Cadenza')}
+        ${stat(a.avgPower ? nf(a.avgPower) + ' W' : null, 'Potenza media')}
+        ${stat(a.activityTrainingLoad ? nf(a.activityTrainingLoad) : null, 'Carico')}
+        ${stat(a.aerobicTrainingEffect ? `${nf(a.aerobicTrainingEffect, 1)} / ${nf(a.anaerobicTrainingEffect, 1)}` : null, 'Effetto aer. / anaer.')}
+        ${stat(a.calories ? nf(a.calories) : null, 'kcal')}
+        ${stat(a.differenceBodyBattery != null ? nf(a.differenceBodyBattery) : null, 'Body Battery')}
+      </div>
+      ${zoneBar(a)}
+      <div id="d-detail"><p class="sub">Carico il dettaglio…</p></div>
+    </div>`;
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+  $('#d-close').onclick = () => dlg.close();
+  const det = await loadDetail(id);
+  if (openId === id && dlg.open) renderDetail(a, det);
+}
+function zoneBar(a) {
+  const z = [1, 2, 3, 4, 5].map(i => a[`hrTimeInZone_${i}`] || 0), tot = sum(z);
+  if (!tot) return '';
+  return `<div class="card"><h3>Tempo nelle zone cardio</h3><p class="sub"></p>
+    <div class="zbar">${z.map((x, i) => x ? `<div style="flex:${x};background:var(--z${i + 1})" title="Z${i + 1}: ${clock(x)}"></div>` : '').join('')}</div>
+    <div class="zleg">${z.map((x, i) => `<span><span class="dot" style="background:var(--z${i + 1})"></span>Z${i + 1} <b>${clock(x)}</b> · ${nf(x / tot * 100)}%</span>`).join('')}</div></div>`;
+}
+function closeDetail() {
+  const el = document.getElementById('d-chart');
+  if (el) echarts.getInstanceByDom(el)?.dispose();
+  if (detailMap) { detailMap.remove(); detailMap = null; }
+}
+function renderDetail(a, det) {
+  const box = $('#d-detail');
+  if (!det) { box.innerHTML = '<p class="sub">Dettaglio non disponibile per questa attività (manuale, oppure non ancora scaricata: esegui <code>fetch.py</code>).</p>'; return; }
+  const run = isRun(a), swim = sport(a) === 'Nuoto', R = det.rec || {};
+  const useDist = R.d?.some(x => x > 0) && !swim;
+  box.innerHTML = `${det.gps?.length > 1 ? '<div id="d-map"></div>' : ''}
+    ${R.t?.length > 2 ? '<div class="card" style="margin-top:16px"><h3>Andamento</h3><p class="sub">Passa sopra il grafico: il punto arancione si muove anche sulla mappa</p><div id="d-chart"></div></div>' : ''}
+    ${det.laps?.length > 1 ? `<div class="card" style="margin-top:16px"><h3>Giri</h3><p class="sub">${det.laps.length} giri</p><div class="table-wrap"><table id="d-laps"></table></div></div>` : ''}`;
+
+  let marker = null;
+  if (det.gps?.length > 1) {
+    detailMap = L.map('d-map', { zoomControl: false, scrollWheelZoom: false });
+    L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${isDark() ? 'Dark' : 'Light'}_Gray_Base/MapServer/tile/{z}/{y}/{x}`, { attribution: 'Tiles © Esri', maxZoom: 16 }).addTo(detailMap);
+    const line = L.polyline(det.gps, { color: v('--s1'), weight: 4, opacity: .9 }).addTo(detailMap);
+    const dot = (p, c) => L.circleMarker(p, { radius: 6, color: v('--surface'), weight: 2, fillColor: v(c), fillOpacity: 1 }).addTo(detailMap);
+    dot(det.gps[0], '--s3'); dot(det.gps[det.gps.length - 1], '--s8');
+    marker = L.circleMarker(det.gps[0], { radius: 7, color: v('--surface'), weight: 3, fillColor: v('--s2'), opacity: 0, fillOpacity: 0 }).addTo(detailMap);
+    detailMap.fitBounds(line.getBounds(), { padding: [24, 24] });
+  }
+
+  // pannelli impilati (passo/velocità, FC, quota, potenza) con mirino condiviso: mai due scale sullo stesso grafico
+  if (R.t?.length > 2) {
+    const X = R.t.map((t, i) => useDist ? +((R.d[i] || 0) / 1000).toFixed(3) : +(t / 60).toFixed(2));
+    const smooth = arr => rolling(arr, 3);
+    const panels = [];
+    if (R.spd) {
+      if (run || swim) {
+        const unit = swim ? 100 : 1000;
+        const p = smooth(R.spd.map(s => s > 0.5 ? unit / s : null));
+        const sorted = p.filter(x => x != null).sort((x, y) => x - y), q = f => sorted[Math.floor((sorted.length - 1) * f)];
+        panels.push({ name: swim ? 'Passo /100m' : 'Passo /km', data: p, color: '--s1', inverse: true, min: Math.floor((q(.02) - 10) / 10) * 10, max: Math.ceil((q(.97) + 15) / 10) * 10, fmt: clock });
+      } else panels.push({ name: 'Velocità km/h', data: smooth(R.spd.map(s => s * 3.6)), color: '--s1', fmt: x => nf(x, 1) });
+    }
+    if (R.hr) panels.push({ name: 'FC bpm', data: R.hr, color: '--s8', fmt: x => nf(x) });
+    if (R.alt && !swim) panels.push({ name: 'Quota m', data: R.alt, color: '--s3', fmt: x => nf(x), area: true });
+    if (R.pwr && run) panels.push({ name: 'Potenza W', data: smooth(R.pwr), color: '--s7', fmt: x => nf(x) });
+    const H = 130, el = $('#d-chart');
+    el.style.height = panels.length * H + 30 + 'px';
+    const c = echarts.init(el, 'g');
+    c.setOption({
+      animation: false,
+      axisPointer: { link: [{ xAxisIndex: 'all' }], lineStyle: { color: v('--axis') } },
+      tooltip: { trigger: 'axis', formatter: ps => `${useDist ? nf(ps[0].axisValue, 2) + ' km' : nf(ps[0].axisValue, 0) + ' min'}` + ps.map(p => { const pn = panels[p.seriesIndex]; return `<div class="tt"><i style="background:${p.color}"></i><b>${p.value[1] == null ? '–' : pn.fmt(p.value[1])}</b><span>${pn.name}</span></div>`; }).join('') },
+      grid: panels.map((_, i) => ({ left: 52, right: 12, top: 18 + i * H, height: H - 40 })),
+      xAxis: panels.map((_, i) => ({ type: 'value', gridIndex: i, min: 0, max: X[X.length - 1], axisLabel: { show: i === panels.length - 1, formatter: x => useDist ? x + ' km' : x + ' min' }, splitLine: { show: false } })),
+      yAxis: panels.map((p, i) => ({ type: 'value', gridIndex: i, inverse: !!p.inverse, scale: true, min: p.min, max: p.max, splitNumber: 3, name: p.name, nameLocation: p.inverse ? 'start' : 'end', nameGap: 8, nameTextStyle: { align: 'left', color: v('--muted'), padding: [0, 0, 0, -44] }, axisLabel: { formatter: p.fmt } })),
+      series: panels.map((p, i) => ({ type: 'line', xAxisIndex: i, yAxisIndex: i, showSymbol: false, connectNulls: false, data: X.map((x, j) => [x, p.data[j]]), lineStyle: { width: 1.5, color: v(p.color) }, itemStyle: { color: v(p.color) }, ...(p.area ? { areaStyle: { color: v(p.color), opacity: .12 } } : {}) })),
+    });
+    if (marker) c.on('updateAxisPointer', e => {
+      const x = e.axesInfo?.[0]?.value; if (x == null) return;
+      let i = X.findIndex(x2 => x2 >= x); if (i < 0) i = X.length - 1;
+      const g = det.gps[Math.min(det.gps.length - 1, Math.round(i / (X.length - 1) * (det.gps.length - 1)))];
+      marker.setLatLng(g).setStyle({ opacity: 1, fillOpacity: 1 });
+    });
+  }
+
+  if (det.laps?.length > 1) {
+    const fast = Math.max(...det.laps.map(l => l.spd || 0));
+    const lp = l => !l.spd ? '–' : run ? clock(1000 / l.spd) : swim ? clock(100 / l.spd) : nf(l.spd * 3.6, 1);
+    const rest = l => l.int === 'rest' || l.int === 'recovery';
+    $('#d-laps').innerHTML = `<thead><tr><th>#</th><th class="num">km</th><th class="num">Tempo</th><th class="num">${run ? 'Passo' : swim ? '/100m' : 'km/h'}</th><th style="width:22%"></th><th class="num">FC</th><th class="num">FC max</th><th class="num">Cadenza</th><th class="num">Potenza</th><th class="num">D+</th></tr></thead><tbody>` +
+      det.laps.map((l, i) => `<tr class="${rest(l) ? 'rest' : ''}"><td>${i + 1}</td><td class="num">${nf((l.d || 0) / 1000, 2)}</td><td class="num">${l.t ? clock(l.t) : '–'}</td><td class="num"><b>${lp(l)}</b></td>
+        <td><div class="lapbar" style="width:${l.spd ? Math.round(l.spd / fast * 100) : 0}%;${rest(l) ? 'background:var(--axis)' : ''}"></div></td>
+        <td class="num">${nf(l.hr)}</td><td class="num">${nf(l.mhr)}</td><td class="num">${nf(l.cad)}</td><td class="num">${nf(l.pwr)}</td><td class="num">${nf(l.asc)}</td></tr>`).join('') + '</tbody>';
+  }
+}
+$('#drawer').addEventListener('click', e => { if (e.target.id === 'drawer') e.target.close(); });
+$('#drawer').addEventListener('close', () => { openId = null; closeDetail(); if (location.hash.startsWith('#attivita-')) history.replaceState(null, '', '#' + VIEW); });
+document.addEventListener('click', e => { const t = e.target.closest('[data-id]'); if (t && !t.closest('#drawer')) openActivity(+t.dataset.id); });
+
+// ---------- viste, filtri, avvio ----------
+function render() {
+  scope();
+  drawCharts(document.querySelector(`.view[data-view="${VIEW}"]`));
+  kpis(); hero(); recent(); prs(); actTable();
+}
+function show(view) {
+  VIEW = VIEWS.some(x => x[0] === view) ? view : 'panoramica';
+  document.querySelectorAll('.view').forEach(s => s.hidden = s.dataset.view !== VIEW);
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.view === VIEW));
+  $('#title').textContent = VIEWS.find(x => x[0] === VIEW)[1];
+  render();
+  scrollTo({ top: 0 });
+}
+function setRange(r) {
+  RANGE = r; store.set('range', r);
+  document.querySelectorAll('#range button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === r));
+}
+renderSidebar(true, ALL_ACTS[0]?.ownerFullName, `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}`);
+$('#meta').textContent = `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'long', timeStyle: 'short' })}`;
+$('#range').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setRange(b.dataset.d); render(); } });
+$('#q').addEventListener('input', actTable);
+// #attivita-<id> apre il dettaglio (link dal piano), ogni altro hash è una vista
+const route = () => { const m = location.hash.match(/^#attivita-(\d+)$/); m ? openActivity(+m[1]) : show(location.hash.slice(1)); };
+addEventListener('hashchange', route);
+initTheme(() => { resetCharts(); render(); });
+setRange(RANGE); staticCards();
+show(location.hash.startsWith('#attivita-') ? 'panoramica' : location.hash.slice(1));
+if (location.hash.startsWith('#attivita-')) route();
+})();
+</script>
+</body>
+</html>
