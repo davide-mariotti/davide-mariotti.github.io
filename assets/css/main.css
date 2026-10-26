@@ -141,15 +141,24 @@ p {
 }
 
 .navbar .navbar-brand {
-  color: var(--color-primary);
-  font-family: "Raleway", sans-serif;
-  font-weight: 800;
-  font-size: 35px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-main);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
   transition: all 0.3s ease-out 0s;
 }
 
+.navbar-brand img {
+  display: block;
+  height: 34px;
+  width: auto;
+}
+
 .navbar-brand::after {
-  content: "dm.";
+  content: "";
   display: inline;
 }
 
@@ -160,7 +169,7 @@ p {
 
 @media screen and (max-width: 400px) {
   .navbar-brand:hover::after {
-    content: "DM";
+    content: "";
   }
 }
 
