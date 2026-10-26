@@ -12,7 +12,7 @@ Tutti i dati e il commento sono **privati** (`data/<atleta>/`, mai nella repo pu
 
 | File | Cosa contiene | Chi lo scrive |
 |---|---|---|
-| `data/<atleta>/gare.json` | Le gare che chiudono i blocchi: `{"races": [{"date", "name", "km"}]}` | a mano, una riga per gara |
+| `data/<atleta>/gare.json` | Le gare che chiudono i blocchi: `{"races": [{"date", "name", "km", "effort"?, "note"?}]}` | a mano, una riga per gara |
 | `data/<atleta>/vo2max.json` | VO2max Garmin nel tempo: `{"points": [["AAAA-MM-GG", 50.1], …]}` | dal connettore MCP `garmin` (solo per l'account collegato) |
 | `data/<atleta>/analisi-coach.json` | Il commento: sintesi, verdetto, giudizio per blocco, priorità, numeri da guardare | Claude, dopo aver letto i numeri |
 | `data/<atleta>/analisi.js` | Risultato di `analisi.py` (numeri + commento), letto dalla pagina e pubblicato su Firestore | `analisi.py` |
@@ -22,7 +22,7 @@ Tutti i dati e il commento sono **privati** (`data/<atleta>/`, mai nella repo pu
 ## Procedura
 
 1. **Dati aggiornati.** `.venv\Scripts\python fetch.py --athlete <atleta>` (incrementale; i dettagli FIT/GPX servono per i giri).
-2. **Gare.** Aggiungi la gara nuova a `gare.json` (data, nome, km ufficiali). La gara è la corsa più lunga di quel giorno. Chiedi all'atleta com'è andata: se era malato o accompagnava qualcuno, scrivi `"effort": "invalid"` e una `note`.
+2. **Gare.** Aggiungi la gara nuova a `gare.json` (data, nome, km ufficiali). La gara è la corsa più lunga di quel giorno. Chiedi all'atleta com'è andata e scrivi la risposta in `"effort"` (`max`, `controlled`, `invalid`) con una `note`: vince sulla stima dalla FC.
 3. **VO2max** (se l'atleta è quello collegato al connettore MCP). `mcp__garmin__get_vo2max_trend` accetta al massimo 90 giorni: chiedi finestre consecutive dall'ultimo punto salvato a oggi e aggiungi a `vo2max.json` un valore ogni 2–3 settimane, solo dei giorni ricalcolati (non `carried_forward`). I primi 1–2 mesi di un orologio nuovo sono di calibrazione: escludili e scrivilo in `note`.
 4. **Calcolo.** `.venv\Scripts\python analisi.py <atleta>` e leggi il riassunto stampato (blocchi, gare, FC a passo fisso per periodo).
 5. **Controlli di senso** (sezione sotto) prima di credere a qualsiasi tendenza.
@@ -56,11 +56,13 @@ Tutti i dati e il commento sono **privati** (`data/<atleta>/`, mai nella repo pu
 Una gara misura la forma solo se è corsa a tutta. `analisi.py` confronta la FC media con la soglia (Garmin):
 - **a tutta**: almeno il 98% della soglia in mezza (Davide: ~170 bpm, 101%, chiusura a 175), almeno il 92% in maratona;
 - **controllata**: sotto quelle soglie. Il VDOT della gara è un **minimo**: la forma vera era più alta. Indizio forte: FC che scende negli ultimi 5 km;
-- **non indicativa** (`"effort": "invalid"` in `gare.json`): malattia nei giorni prima, gara corsa accompagnando qualcuno, crisi evidente.
+- **non indicativa** (`"effort": "invalid"` in `gare.json`): malattia nei giorni prima, gara corsa accompagnando qualcuno, crisi evidente, prima volta sulla distanza con tratti camminati.
+
+La FC dà solo una stima: se l'atleta dice com'è andata, `"effort"` in `gare.json` prevale.
 
 Per stimare il potenziale di una gara controllata usa la FC a passo fisso del periodo e il riferimento a tutta della stessa distanza (10 bpm in più valgono indicativamente 15–20 s/km in mezza). **Calibra il piano solo su gare a tutta e su test a tutta**; le gare controllate alzano il minimo, non fissano la forma.
 
-Errori già fatti (26/10/2026): il personale di mezza di marzo 2026 (FC 160, 95% della soglia, in calo nel finale) era stato letto come una gara a tutta con la fascia che leggeva male; Pisa 2026 (post-febbre, da accompagnatore) come un calo di forma. Chiedi sempre all'atleta prima di concludere.
+Errori già fatti (26/10/2026): il personale di mezza di marzo 2026 (FC 160, 95% della soglia, in calo nel finale) era stato letto come una gara a tutta con la fascia che leggeva male; Pisa 2026 (post-febbre, da accompagnatore) come un calo di forma; San Miniato 2024 (prima mezza, ultimi km camminati) usata come punto di partenza del VDOT. Chiedi sempre all'atleta prima di concludere.
 
 ## Controlli di senso (trappole già incontrate)
 

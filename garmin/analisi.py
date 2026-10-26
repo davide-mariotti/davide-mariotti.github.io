@@ -263,10 +263,10 @@ def main():
                      "hr1": mean(hr[:i_half]), "hr2": mean(hr[i_half:])}
         v = a.get("avgGradeAdjustedSpeed") or a["averageSpeed"]
         # sforzo: una gara "controllata" (FC sotto la soglia di sforzo pieno) dà un VDOT minimo, non la forma;
-        # "invalid" in gare.json (malattia, gara da accompagnatore) la esclude
+        # "effort" in gare.json (quello che dice l'atleta) vince sulla stima: "invalid" per malattia, gara da accompagnatore, crisi
         thr = a["averageHR"] / lthr if lthr else None
         full = EFFORT_FULL["marathon" if r["km"] > 30 else "half"]
-        effort = "invalid" if r.get("effort") == "invalid" else "max" if thr and thr >= full else "controlled" if thr else None
+        effort = r.get("effort") or ("max" if thr and thr >= full else "controlled" if thr else None)
         i5 = next((i for i, x in enumerate(d) if x and x >= a["distance"] - 5000), None)
         hr_last5 = mean(hr[i5:]) if i5 is not None else None
         before = lambda n: round(sum(x["distance"] for x in runs if 0 < (date.fromisoformat(r["date"]) - date.fromisoformat(x["day"])).days <= n) / 1000)
