@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analisi</title>
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#18212b">
+<meta name="apple-mobile-web-app-title" content="Garmin">
+<link rel="stylesheet" href="app.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="common.js"></script>
+<script src="auth.js"></script>
+<style>
+.an { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }  /* minmax: le tabelle larghe scorrono invece di allargare la pagina */
+.an h2 { margin: 0; font-size: 28px; font-weight: 800; font-stretch: 75%; line-height: 1.1; }
+.sec-sub { margin: 4px 0 14px; color: var(--text-2); max-width: 75ch; }
+.headline { margin: 0; font-size: 40px; font-weight: 800; font-stretch: 72%; line-height: 1.08; max-width: 26ch; }
+.verdict { display: grid; gap: 0; }
+.verdict article { padding: 16px 0; border-bottom: 1px solid var(--grid); display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.verdict article:first-child { padding-top: 4px; }
+.verdict article:last-child { border-bottom: 0; padding-bottom: 4px; }
+.verdict h3 { font-size: 17px; font-weight: 700; margin: 0; }
+.verdict p { margin: 0; color: var(--text-2); max-width: 85ch; }
+.races { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.race h3 { font-size: 18px; font-weight: 800; font-stretch: 78%; margin: 0; line-height: 1.15; }
+.race .when { color: var(--muted); font-size: 13px; }
+.race .count b { font-size: 54px; }
+.race dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 8px 0 0; font-size: 13px; }
+.race dt { color: var(--muted); } .race dd { margin: 0; font-weight: 600; }
+.r-note { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--grid); color: var(--text-2); font-size: 12.5px; }
+.cmp td.num { font-variant-numeric: tabular-nums; }
+.cmp th:first-child, .cmp td:first-child { position: sticky; left: 0; background: var(--surface); }
+.cmp tr.grp td { background: var(--raised); font-weight: 700; font-size: 12.5px; color: var(--text-2); }
+.blocks { display: grid; gap: 16px; }
+.block-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.block-h .id { font-size: 30px; font-weight: 800; font-stretch: 65%; line-height: 1; }
+.block-h h3 { font-size: 20px; font-weight: 800; font-stretch: 78%; margin: 0; }
+.block-h .when { color: var(--muted); font-size: 13px; flex-basis: 100%; }
+.mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.mini div { padding: 8px 10px; box-shadow: 1px 0 0 var(--border), 0 1px 0 var(--border); font-size: 12.5px; color: var(--muted); }
+.mini b { display: block; font-size: 22px; font-weight: 750; font-stretch: 70%; color: var(--text-1); }
+.gb { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px 24px; }
+.gb h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); font-weight: 650; }
+.gb ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--text-2); font-size: 14px; }
+.gb .bad li::marker { color: var(--critical); } .gb .good li::marker { color: var(--good); }
+.block-t { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); color: var(--text-1); max-width: 85ch; }
+.prio { margin: 0; padding-left: 22px; display: grid; gap: 12px; }
+.prio b { display: block; font-size: 16px; }
+.prio span { color: var(--text-2); }
+.watch td:first-child { font-weight: 600; }
+.method { color: var(--muted); font-size: 13px; max-width: 90ch; }
+.method p { margin: 6px 0 0; }
+@media (max-width: 600px) { .headline { font-size: 31px; } .race .count b { font-size: 46px; } }
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side" id="side"></aside>
+<main class="main">
+  <header class="top">
+    <h1>Analisi<small id="sub"></small></h1>
+    <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
+  </header>
+  <div class="an" id="an">
+    <section class="card"><p class="headline" id="headline"></p><div class="verdict" id="verdict" style="margin-top:18px"></div></section>
+
+    <section><h2>Le gare</h2><p class="sec-sub">Il VDOT traduce ogni tempo in un livello di forma confrontabile tra distanze diverse. Prima di ogni gara: i km corsi nei 7 giorni precedenti.</p>
+      <div class="races" id="races"></div></section>
+
+    <section class="card"><h3>VO2max stimato da Garmin</h3><p class="sub">Le linee verticali sono le gare. L’orologio lo ricalcola sulle uscite a intensità medio-alta: scende se la qualità manca.</p><div class="chart" id="c-vo2"></div></section>
+
+    <section><h2>Efficienza: FC a passo fisso</h2>
+      <p class="sec-sub">Quanto ti costa, in battiti, correre a un certo passo. È la misura più onesta dei progressi: il passo lo scegli tu, la FC è la risposta del corpo. <b>Più bassa è, meglio è.</b> Contano solo i giri “a regime” (almeno 3 minuti, allo stesso passo del giro prima), con il passo corretto per la pendenza.</p>
+      <div class="card"><div class="chart" id="c-eff"></div><div class="table-wrap" style="margin-top:8px"><table class="cmp" id="t-eff"></table></div></div></section>
+
+    <section><h2>Volume e intensità</h2><p class="sec-sub">Quanto hai corso e a che intensità, con le stesse zone di oggi per tutti i blocchi.</p>
+      <div class="bento">
+        <div class="card s8"><h3>Km a settimana</h3><p class="sub">Le linee verticali sono le gare</p><div class="chart" id="c-weekly"></div></div>
+        <div class="card s4"><h3>Tempo nelle zone, per blocco</h3><p class="sub">Solo allenamenti, gare escluse</p><div class="chart" id="c-zones"></div></div>
+      </div></section>
+
+    <section><h2>Blocco per blocco, in numeri</h2><p class="sec-sub">Forma di corsa misurata sulle uscite pianeggianti a passo facile (5:45–6:45), perché cadenza e passo cambiano con la velocità.</p>
+      <div class="card"><div class="table-wrap"><table class="cmp" id="t-blocks"></table></div></div></section>
+
+    <section><h2>Il commento, blocco per blocco</h2><div class="blocks" id="blocks"></div></section>
+
+    <section><h2>Cosa fare adesso</h2><p class="sec-sub">In ordine di importanza.</p>
+      <div class="bento">
+        <div class="card s7"><ol class="prio" id="prio"></ol></div>
+        <div class="card s5"><h3>Da tenere d’occhio</h3><p class="sub">Dove sei oggi e dove devi arrivare</p><div class="table-wrap"><table class="watch" id="t-watch"></table></div></div>
+      </div></section>
+
+    <section class="method card"><h3 style="color:var(--text-1)">Come sono calcolati i numeri</h3>
+      <p>I blocchi vanno dal giorno dopo una gara al giorno della gara successiva. Le zone sono quelle attuali per tutti i blocchi. La FC a passo fisso usa solo giri stabili e passo corretto per la pendenza, e i blocchi più lunghi di 20 settimane sono divisi in due per non mescolare inverno ed estate. Il VO2max è la stima di Garmin. La deriva cardiaca confronta la prima e la seconda metà dei lunghi a passo costante. Il metodo completo, per rifare l’analisi dopo ogni gara, è in <code>garmin/ANALISI.md</code>.</p></section>
+  </div>
+</main>
+</div>
+<script>
+(async () => {
+const D = await garminData(), A = await garminAnalysis();
+await garminPlan();  // solo per la voce "Piano gare" nella barra laterale
+renderSidebar('analisi', (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
+initTheme(() => { resetCharts(); drawCharts(document.body); });
+if (!A) {
+  $('#an').innerHTML = '<div class="card" style="max-width:640px"><h3>Nessuna analisi per questo atleta</h3><p class="sub" style="margin:6px 0 0">L’analisi si crea dopo almeno una gara: elenco delle gare, calcolo dei blocchi con <code>analisi.py</code> e commento scritto. Il procedimento è in <code>garmin/ANALISI.md</code>.</p></div>';
+  return;
+}
+const C = A.coach || {}, pace = s => s ? clock(s) : '–', mY = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('it-IT', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const span = (f, t) => `${mY(f)} – ${mY(t)}`;
+$('#sub').textContent = `${span(A.blocks[0].from, A.blocks.at(-1).to)} · ${A.races.length} gare · aggiornata il ${fmtDay(C.updated || A.generated.slice(0, 10))}`;
+$('#headline').textContent = C.headline || '';
+$('#verdict').innerHTML = (C.verdict || []).map(v => `<article><h3>${esc(v.title)}</h3><p>${esc(v.text)}</p></article>`).join('');
+
+// gare come pettorali
+$('#races').innerHTML = A.races.map(r => `<div class="card bib race"><h3>${esc(r.name)}</h3><span class="when">${fmtDay(r.date)} · ${nf(r.km_real, 1)} km</span>
+  <div class="count"><b>${clock(r.time)}</b></div>
+  <dl><dt>Passo</dt><dd>${pace(r.pace)} /km</dd><dt>FC media</dt><dd>${r.hr} bpm · ${r.hr_pct}%</dd><dt>VDOT</dt><dd>${nf(r.vdot, 1)}</dd>
+  <dt>Metà gara</dt><dd>${r.split ? `${clock(r.split.first)} / ${clock(r.split.second)}` : '–'}</dd>
+  <dt>Cadenza</dt><dd>${nf(r.cad)} spm · ${nf(r.stride)} cm</dd><dt>Contatto</dt><dd>${r.gct ? nf(r.gct) + ' ms' : '–'}</dd>
+  <dt>Prima</dt><dd>${r.load.km7} km in 7 giorni</dd></dl>${r.note ? `<p class="r-note">${esc(r.note)}</p>` : ''}</div>`).join('');
+
+const raceLines = () => ({ silent: true, symbol: 'none', lineStyle: { color: v('--axis'), type: 'dashed', width: 1 },
+  label: { formatter: p => p.name, color: v('--muted'), fontSize: 11, position: 'insideEndTop' },
+  data: A.races.map(r => ({ xAxis: r.date, name: r.name.replace('Mezza di ', '').replace('Maratona di ', 'M ') })) });
+chart('c-vo2', () => {
+  const s = lineS('VO2max', A.series.vo2max, '--s1', { symbol: 'circle', symbolSize: 6, showSymbol: true });
+  s.markLine = raceLines();
+  return opt({ xAxis: { type: 'time' }, yAxis: { type: 'value', scale: true }, series: [s] }, x => nf(x, 1));
+});
+
+// efficienza: una linea per fascia di passo, dal più lento (chiaro) al più veloce (scuro)
+const mix = (a, b, t) => '#' + [0, 2, 4].map(i => Math.round(parseInt(a.slice(1 + i, 3 + i), 16) * (1 - t) + parseInt(b.slice(1 + i, 3 + i), 16) * t).toString(16).padStart(2, '0')).join('');
+const bands = A.pace_bands.map(([lo, hi]) => `${pace(lo)}–${pace(hi)}`);
+const pLabel = p => `${p.id}\n${mY(p.from)}`;
+chart('c-eff', () => {
+  const lo = v('--seq-lo'), hi = v('--seq-hi'), n = bands.length;
+  return opt({
+    xAxis: { type: 'category', data: A.periods.map(pLabel), axisLabel: { interval: 0, lineHeight: 15 } },
+    yAxis: { type: 'value', scale: true, axisLabel: { formatter: x => x + ' bpm' } },
+    tooltip: { trigger: 'axis', formatter: ps => `${esc(A.periods[ps[0].dataIndex].id)} · ${span(A.periods[ps[0].dataIndex].from, A.periods[ps[0].dataIndex].to)}` + ps.filter(p => p.value != null).map(p => `<div class="tt"><i style="background:${p.color}"></i><b>${p.value} bpm</b><span>a ${p.seriesName} /km</span></div>`).join('') },
+    series: bands.map((b, i) => lineS(b, A.periods.map(p => p.bands[i].hr), '--s1', { symbol: 'circle', symbolSize: 7, showSymbol: true, connectNulls: true,
+      itemStyle: { color: mix(lo, hi, .3 + .7 * i / (n - 1)) }, lineStyle: { color: mix(lo, hi, .3 + .7 * i / (n - 1)), width: 2 } })),
+  }, x => nf(x) + ' bpm');
+});
+$('#t-eff').innerHTML = `<thead><tr><th>Periodo</th>${bands.map(b => `<th class="num">${b}</th>`).join('')}</tr></thead><tbody>` +
+  A.periods.map(p => `<tr><td>${p.id} · ${span(p.from, p.to)}</td>${p.bands.map(x => `<td class="num">${x.hr ? `<b>${x.hr}</b> <span style="color:var(--muted)">(${x.n})</span>` : '–'}</td>`).join('')}</tr>`).join('') +
+  '</tbody>';
+
+// volume e zone
+chart('c-weekly', () => {
+  const s = { ...BAR, name: 'Km', data: A.series.weekly, itemStyle: { ...BAR.itemStyle, color: v('--s1') } };
+  s.markLine = raceLines();
+  return opt({ xAxis: { type: 'time' }, yAxis: { type: 'value', axisLabel: { formatter: x => x + ' km' } }, series: [s] }, x => nf(x, 1) + ' km');
+});
+chart('c-zones', () => {
+  const ids = A.blocks.map(b => b.id), z = i => A.blocks.map(b => i === 1 ? b.zones.z1 + b.zones.below : b.zones['z' + i]);
+  return opt({
+    grid: { left: 4, right: 10, top: 38, bottom: 4, containLabel: true },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: ps => esc(ps[0].name) + ps.map(p => `<div class="tt"><i style="background:${p.color}"></i><b>${p.value}%</b><span>${p.seriesName}</span></div>`).join('') },
+    xAxis: { type: 'value', max: 100, axisLabel: { formatter: x => x + '%' } }, yAxis: { type: 'category', data: ids, inverse: true },
+    series: [1, 2, 3, 4, 5].map(i => ({ type: 'bar', stack: 'z', name: 'Z' + i, data: z(i), barMaxWidth: 22, itemStyle: { color: v('--z' + i), borderColor: v('--surface'), borderWidth: 1 } })),
+  }, x => x + '%');
+});
+
+// tabella di confronto tra blocchi
+const B = A.blocks, row = (label, f) => `<tr><td>${label}</td>${B.map(b => `<td class="num">${f(b) ?? '–'}</td>`).join('')}</tr>`, grp = l => `<tr class="grp"><td colspan="${B.length + 1}">${l}</td></tr>`;
+const p6 = A.periods, hr6 = b => { const ps = p6.filter(p => p.id.startsWith(b.id)).map(p => p.bands[1].hr).filter(Boolean); return ps.length ? ps.join(' → ') : null; };
+$('#t-blocks').innerHTML = `<thead><tr><th></th>${B.map(b => `<th class="num">${b.id}<br><span style="font-weight:400">${b.race ? esc(b.race.name.replace('Mezza di ', 'Mezza ')) : 'in corso'}</span></th>`).join('')}</tr></thead><tbody>` +
+  grp('Volume') + row('Settimane', b => nf(b.weeks)) + row('Km a settimana', b => nf(b.volume.km_week)) + row('Uscite a settimana', b => nf(b.volume.runs_week, 1)) +
+  row('Lunghi ≥ 18 km', b => b.volume.long_runs) + row('Corsa più lunga', b => nf(b.volume.longest, 1) + ' km') + row('Altri sport', b => nf(b.volume.other_hours) + ' h') +
+  grp('Intensità') + row('Z1–Z2', b => (b.zones.below + b.zones.z1 + b.zones.z2) + '%') + row('Z3', b => b.zones.z3 + '%') + row('Z4–Z5', b => (b.zones.z4 + b.zones.z5) + '%') +
+  grp('Efficienza') + row('FC a 5:55–6:15', hr6) + row('Deriva sui lunghi costanti', b => b.decoupling.n ? nf(b.decoupling.median, 1) + '% (' + b.decoupling.n + ')' : null) +
+  row('VO2max inizio → fine', b => b.vo2max.start ? `${nf(b.vo2max.start, 1)} → ${nf(b.vo2max.end ?? b.vo2max.start, 1)}` : null) +
+  grp('Forma a passo facile') + row('Uscite misurate', b => b.form.easy.n) + row('Cadenza', b => b.form.easy.cad && nf(b.form.easy.cad) + ' spm') + row('Lunghezza del passo', b => b.form.easy.stride && nf(b.form.easy.stride) + ' cm') +
+  row('Contatto al suolo', b => b.form.easy.gct && nf(b.form.easy.gct) + ' ms') + row('Oscillazione verticale', b => b.form.easy.vo && nf(b.form.easy.vo, 1) + ' cm') + row('Rapporto verticale', b => b.form.easy.vr && nf(b.form.easy.vr, 1) + '%') +
+  grp('Corpo e recupero') + row('Peso (mediana)', b => b.health.weight && nf(b.health.weight, 1) + ' kg') + row('FC a riposo', b => nf(b.health.rhr, 1)) + row('HRV notturna', b => nf(b.health.hrv)) +
+  row('Sonno', b => b.health.sleep_h && hm(b.health.sleep_h * 3600)) + row('Stress medio', b => nf(b.health.stress)) + '</tbody>';
+
+// commento per blocco
+$('#blocks').innerHTML = B.map(b => { const c = (C.blocks || {})[b.id] || {}; return `<article class="card">
+  <div class="block-h"><span class="id">${b.id}</span><h3>${esc(c.title || '')}</h3><span class="when">${fmtDay(b.from)} – ${fmtDay(b.to)} · ${b.race ? esc(b.race.name) : 'in corso'}</span></div>
+  <div class="mini"><div><b>${nf(b.volume.km_week)}</b>km a settimana</div><div><b>${nf(b.volume.runs_week, 1)}</b>uscite a settimana</div><div><b>${b.volume.long_runs}</b>lunghi ≥ 18 km</div>
+    <div><b>${b.zones.below + b.zones.z1 + b.zones.z2}%</b>in Z1–Z2</div><div><b>${b.vo2max.end ? nf(b.vo2max.end, 1) : '–'}</b>VO2max a fine blocco</div></div>
+  <div class="gb"><div><h4>Ha funzionato</h4><ul class="good">${(c.good || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><h4>Non ha funzionato</h4><ul class="bad">${(c.bad || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></div>
+  ${c.text ? `<p class="block-t">${esc(c.text)}</p>` : ''}</article>`; }).join('');
+$('#prio').innerHTML = (C.priorities || []).map(p => `<li><b>${esc(p.title)}</b><span>${esc(p.text)}</span></li>`).join('');
+$('#t-watch').innerHTML = `<thead><tr><th>Cosa</th><th>Oggi</th><th>Obiettivo</th></tr></thead><tbody>${(C.watch || []).map(w => `<tr><td>${esc(w.metric)}</td><td>${esc(w.now)}</td><td style="white-space:normal">${esc(w.target)}</td></tr>`).join('')}</tbody>`;
+drawCharts(document.body);
+})();
+</script>
+</body>
+</html>

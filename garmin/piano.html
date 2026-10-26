@@ -74,6 +74,16 @@
 .why b { color: var(--text-1); }
 .rules { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; color: var(--text-2); }
 .rules b { color: var(--text-1); }
+/* obiettivo a lungo termine: tappe del passo a 145 bpm */
+.dream h2 { margin: 2px 0 0; font-size: 30px; font-weight: 800; font-stretch: 72%; line-height: 1.1; }
+.d-why { margin: 6px 0 0; color: var(--text-2); max-width: 80ch; }
+.d-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 14px 0 10px; }
+.d-steps div { padding: 10px 14px; box-shadow: 1px 0 0 var(--border), 0 1px 0 var(--border); display: flex; flex-direction: column; }
+.d-steps span { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.d-steps b { font-size: 34px; font-weight: 800; font-stretch: 65%; line-height: 1.1; }
+.d-steps small { color: var(--text-2); font-size: 12.5px; }
+.d-steps .now { background: var(--raised); }
+.d-ref { margin: 0; color: var(--muted); font-size: 13px; max-width: 90ch; }
 /* su telefono ogni settimana diventa una scheda con il suo bordo: date in alto, sedute su due colonne col nome del giorno */
 @media (max-width: 700px) {
   .card.weeks { background: none; border: 0; padding: 0; }
@@ -113,6 +123,7 @@
 
   <div class="bento">
     <div class="s12 bento" id="races" style="gap:16px"></div>
+    <div class="card s12 dream" id="dream" hidden></div>
 
     <div class="card s8">
       <h3>I tuoi ritmi</h3><p class="sub" id="zones-sub"></p>
@@ -198,6 +209,17 @@ function races() {
   }).join('');
 }
 
+// ---------- obiettivo a lungo termine ----------
+function dream() {
+  const d = P.dream, el = $('#dream');
+  if (!d) return;
+  el.hidden = false;
+  el.innerHTML = `<span class="label">Obiettivo a lungo termine</span><h2>${esc(d.title)}</h2><p class="d-why">${esc(d.why)}</p>
+    <div class="d-steps"><div class="now"><span>Oggi</span><b>${esc(d.now.pace)}</b><small>${esc(d.now.note)}</small></div>
+      ${d.steps.map(s => `<div><span>${esc(s.when)}</span><b>${esc(s.pace)}</b><small>a 145 bpm · VDOT ${s.vdot} · ${esc(s.race)}</small></div>`).join('')}</div>
+    <p class="d-ref">${esc(d.ref)} Lo misura il “Test aerobico a 145” nelle settimane di scarico.</p>`;
+}
+
 // ---------- ritmi e calibrazione ----------
 const ZONE_ROWS = ['E', 'L', 'MZ', 'G32', 'HMP', 'T', 'I', 'R', 'S'];
 function zonesTable() {
@@ -206,7 +228,7 @@ function zonesTable() {
   $('#t-zones').innerHTML = `<thead><tr><th>Zona</th><th class="num">Passo</th><th class="num">FC</th><th>A cosa serve</th></tr></thead><tbody>` +
     ZONE_ROWS.map(k => { const z = Z[k]; return `<tr><td><span class="sw" style="background:var(--z${z.lvl})"></span>${z.name}</td><td class="num">${paceRange(z.pace) || '–'}</td><td class="num">${hrRange(z.hr) || '–'}</td><td style="white-space:normal;color:var(--text-2)">${esc(z.desc)}</td></tr>`; }).join('') + '</tbody>';
 }
-const HM_GOALS = [6000, 5940, 5880, 5820, 5760, 5700];  // 1:40 … 1:35
+const HM_GOALS = [6240, 6180, 6120, 6060, 6000, 5940, 5880];  // 1:44 … 1:38
 function calibration() {
   const c = P.calib();
   $('#vdot').innerHTML = `${nf(c.vdot, 1)} <small style="font-size:14px;font-weight:500;color:var(--text-2)">VDOT</small>`;
@@ -348,7 +370,7 @@ addEventListener('hashchange', () => { const m = location.hash.match(/^#s-(.+)$/
 // ---------- avvio ----------
 function render() {
   Z = P.zones(); SESS = P.sessions(Z);
-  races(); zonesTable(); calibration(); today(); weeksTable();
+  races(); dream(); zonesTable(); calibration(); today(); weeksTable();
   drawCharts(document.body);
 }
 renderSidebar('piano', (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');

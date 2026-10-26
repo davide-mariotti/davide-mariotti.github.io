@@ -62,6 +62,11 @@ def main():
         doc.collection("blobs").document("plan").set({"d": gzip.compress(plan.read_bytes())})
         print(f"{athlete}: piano aggiornato")
 
+    analysis = base / "analisi.js"  # analisi a blocchi di analisi.py: privata, solo da locale (in GitHub Actions non c'è e resta quella online)
+    if analysis.exists():
+        doc.collection("blobs").document("analysis").set({"d": gzip.compress(json_from_js(analysis, "window.ANALISI = ").encode())})
+        print(f"{athlete}: analisi aggiornata")
+
     have = {d.id for d in doc.collection("acts").list_documents()}
     new = [f for f in sorted((base / "act").glob("*.js")) if f.stem not in have]
     db = firestore.client()

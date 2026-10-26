@@ -6,7 +6,7 @@ global.window = global; global.addEventListener = () => {};
 for (const f of ['common.js', 'piano.js', 'data/davide-mariotti/garmin.js'])
   if (fs.existsSync(`${__dirname}/${f}`)) vm.runInThisContext(fs.readFileSync(`${__dirname}/${f}`, 'utf8'));
 const P = window.PLAN, Z = P.zones(), S = P.sessions(Z), START = P.weeks[0].start;
-const EASY = ['E', 'L', 'MZ', 'J'], HARD = ['Q', 'M', 'T', 'G'], QUALITY = ['Q', 'M'];
+const EASY = ['E', 'L', 'MZ', 'J', 'A'], HARD = ['Q', 'M', 'T', 'G'], QUALITY = ['Q', 'M'];
 
 // corsa più lunga per giorno e km per settimana
 const longest = {}, weekKm = {};

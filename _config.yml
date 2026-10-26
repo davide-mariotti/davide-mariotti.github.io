@@ -20,3 +20,4 @@ exclude:
   - garmin/requirements.txt
   - garmin/garmin-export.js
   - garmin/check-plan.js
+  - garmin/*.md

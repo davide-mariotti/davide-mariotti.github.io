@@ -101,6 +101,14 @@ window.garminActivity = async id => {
   return doc ? JSON.parse(await gunzip([doc.d.toUint8Array()])) : null;
 };
 
+// analisi a blocchi (analisi.py): privata come i dati, online sta su Firestore
+window.garminAnalysis = async () => {
+  if (SAMPLE) return null;
+  if (LOCAL) { await loadScript(`data/${ATHLETE}/analisi.js`).catch(() => {}); return window.ANALISI || null; }
+  const doc = await read('athletes', ATHLETE, 'blobs', 'analysis').catch(() => null);
+  return doc ? (window.ANALISI = JSON.parse(await gunzip([doc.d.toUint8Array()]))) : null;
+};
+
 // piano gare: solo di PLAN_OWNER; online sta su Firestore perché piano.js non è nella repo pubblica
 window.garminPlan = async () => {
   if (window.PLAN || ATHLETE !== PLAN_OWNER) return window.PLAN || null;
