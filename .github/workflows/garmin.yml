@@ -20,7 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { athlete: davide-mariotti, key: GARMIN_KEY_DAVIDE_MARIOTTI }
+          # since: inizio della storia da scaricare ogni giorno; senza, gli ultimi 365 giorni
+          - { athlete: davide-mariotti, key: GARMIN_KEY_DAVIDE_MARIOTTI, since: '2024-08-29' }
           - { athlete: andrea-prosperi, key: GARMIN_KEY_ANDREA_PROSPERI }
     defaults:
       run:
@@ -41,5 +42,5 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           if [ ${#GARMIN_KEY} -lt 20 ]; then echo "Secret ${{ matrix.key }} mancante o segnaposto: salto."; exit 0; fi
-          python fetch.py --athlete ${{ matrix.athlete }} --details-days ${{ inputs.giorni_dettaglio || 14 }}
+          python fetch.py --athlete ${{ matrix.athlete }} ${{ matrix.since && format('--since {0}', matrix.since) || '' }} --details-days ${{ inputs.giorni_dettaglio || 14 }}
           python publish.py ${{ matrix.athlete }}

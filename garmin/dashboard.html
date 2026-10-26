@@ -168,6 +168,7 @@ const TODAY = D.generated.slice(0, 10);
 const ALL_ACTS = (D.activities || []).map(a => ({ ...a, day: a.startTimeLocal.slice(0, 10) }));
 const ACT_BY_ID = Object.fromEntries(ALL_ACTS.map(a => [a.activityId, a]));
 const sportColor = a => v(SPORTS.find(s => s[0] === sport(a))[1]);
+const stressLvl = s => s.stress?.avgLevel >= 0 ? s.stress.avgLevel : null;  // Garmin scrive -1 quando non ha dati sufficienti
 
 // stato del filtro: ricalcolato a ogni render
 let RANGE = store.get('range') || '90', VIEW = 'panoramica', FROM, DAYS, ACTS;
@@ -204,7 +205,7 @@ function kpis() {
   const sd = col(SLP, s => s.sleepTimeSeconds || null), [, sdL] = last(SLP, s => s.sleepTimeSeconds || null);
   const bb = col(SUM, s => s.bodyBattery?.maxValue), [, bbL] = last(SUM, s => s.bodyBattery?.maxValue, Y);
   const steps = col(SUM, s => s.movement?.steps?.value).slice(0, -1);
-  const stress = col(SUM, s => s.stress?.avgLevel), [, stL] = last(SUM, s => s.stress?.avgLevel, Y);
+  const stress = col(SUM, stressLvl), [, stL] = last(SUM, stressLvl, Y);
   const runs = ACTS.filter(isRun), km = sum(runs.map(a => a.distance)) / 1000;
   $('#kpis').innerHTML = [
     tile('FC a riposo', nf(rhrL), 'bpm', `${per()} ${nf(avg(rhr))}`, spark(rhr)),
@@ -448,7 +449,7 @@ chart('c-stress', () => {
   if (!rows[0].some(x => x != null)) return null;
   return opt({ xAxis: dayAxis(), yAxis: { type: 'value', axisLabel: { formatter: x => x + 'h' } }, series: stack(['Riposo', 'Basso', 'Medio', 'Alto'], ['--s1', '--st1', '--st2', '--st3'], rows) }, x => hm(x * 3600));
 });
-dayLine('c-stresslvl', SUM, s => s.stress?.avgLevel, '--st2', x => nf(x));
+dayLine('c-stresslvl', SUM, stressLvl, '--st2', x => nf(x));
 dayLine('c-resp', SUM, s => s.respiration?.avgValue, '--s3');
 
 // ---------- Movimento ----------
@@ -484,7 +485,7 @@ chart('c-weight', () => {
   const w = (D.weight || []).flatMap(x => x.allWeightMetrics || []).filter(x => x.weight).sort((a, b) => a.date - b.date);
   if (!w.length) return null;
   const goal = (D.weightGoals?.userGoals || []).filter(g => g.goalValue).pop();
-  note('c-weight', `${w.length} pesate nell'ultimo anno${goal ? ` · obiettivo ${nf(goal.goalValue / 1000, 1)} kg` : ''}`);
+  note('c-weight', `${w.length} pesate dal ${fmtDay(new Date(w[0].date).toLocaleDateString('sv-SE'))}${goal ? ` · obiettivo ${nf(goal.goalValue / 1000, 1)} kg` : ''}`);
   const s = lineS('Peso', w.map(x => [x.date, +(x.weight / 1000).toFixed(1)]), '--s1', { symbol: 'circle', symbolSize: 9, showSymbol: true, itemStyle: { color: v('--s1'), borderColor: v('--surface'), borderWidth: 2 } });
   if (goal) s.markLine = { silent: true, symbol: 'none', lineStyle: { color: v('--s3'), type: 'solid', width: 1.5 }, label: { formatter: 'obiettivo', color: v('--text-2'), position: 'insideStartTop' }, data: [{ yAxis: goal.goalValue / 1000 }] };
   return opt({ xAxis: { type: 'time' }, yAxis: { type: 'value', scale: true, axisLabel: { formatter: x => x + ' kg' } }, series: [s] }, x => nf(x, 1) + ' kg');
