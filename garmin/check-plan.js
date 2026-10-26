@@ -6,7 +6,7 @@ global.window = global; global.addEventListener = () => {};
 for (const f of ['common.js', 'piano.js', 'data/davide-mariotti/garmin.js'])
   if (fs.existsSync(`${__dirname}/${f}`)) vm.runInThisContext(fs.readFileSync(`${__dirname}/${f}`, 'utf8'));
 const P = window.PLAN, Z = P.zones(), S = P.sessions(Z), START = P.weeks[0].start;
-const EASY = ['E', 'L', 'MZ', 'J'], HARD = ['Q', 'T', 'G'];
+const EASY = ['E', 'L', 'MZ', 'J'], HARD = ['Q', 'M', 'T', 'G'], QUALITY = ['Q', 'M'];
 
 // corsa più lunga per giorno e km per settimana
 const longest = {}, weekKm = {};
@@ -33,8 +33,8 @@ for (const w of P.weeks) {
   const down = ref3 > 0 && km <= ref3 * 0.8;
   build = down ? 0 : build + 1;
   if (build > 3) errors.push(`${w.start} ${build}ª settimana di carico di fila: serve uno scarico ≤ ${nf(ref3 * 0.8)} km`);
-  if (down && ss.filter(s => s.type === 'Q').length > 1 && !ss.some(s => s.type === 'G')) warnings.push(`${w.start} settimana di scarico con più di una qualità`);
-  // 4. sedute dure: al massimo 2 a settimana (qualità, test, gara) e mai due giorni di fila (contando anche il lungo)
+  if (down && ss.filter(s => QUALITY.includes(s.type)).length > 1 && !ss.some(s => s.type === 'G')) warnings.push(`${w.start} settimana di scarico con più di una qualità`);
+  // 4. sedute dure: al massimo 2 a settimana (qualità, tempo, test, gara) e mai due giorni di fila (contando anche il lungo)
   if (ss.filter(s => HARD.includes(s.type)).length > 2) errors.push(`${w.start} più di 2 sedute dure`);
   // 6. linee guida: ~80% del volume facile; soglia ≤ 10%, intervalli ≤ 8%, ripetute ≤ 5% del volume settimanale (Daniels)
   const zk = {}; ss.forEach(s => { const o = zoneKm(s.steps); for (const k in o) zk[k] = (zk[k] || 0) + o[k]; });
@@ -60,7 +60,7 @@ for (const g of S.filter(s => s.type === 'G')) {
   const rw = (weekKm[raceWeek] || 0) - g.km, bw = weekKm[before] || 0;
   if (bw > peak * 0.8 + 0.5) errors.push(`${g.title}: settimana prima ${nf(bw)} km, oltre l'80% del picco (${nf(peak)} km)`);
   if (rw > peak * 0.6 + 0.5) errors.push(`${g.title}: settimana gara ${nf(rw)} km senza la gara, oltre il 60% del picco (${nf(peak)} km)`);
-  for (const w of [before, raceWeek]) if (!S.some(s => s.week.start === w && s.type === 'Q')) warnings.push(`${g.title}: nella settimana del ${w} manca una seduta di qualità (l'intensità va mantenuta)`);
+  for (const w of [before, raceWeek]) if (!S.some(s => s.week.start === w && QUALITY.includes(s.type))) warnings.push(`${g.title}: nella settimana del ${w} manca una seduta di qualità (l'intensità va mantenuta)`);
 }
 
 console.table(rows);

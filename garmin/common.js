@@ -1,4 +1,4 @@
-// Condiviso da dashboard.html e piano.html: formattazione, tema, sidebar, helper ECharts.
+// Condiviso da dashboard.html, piano.html e wiki.html: formattazione, tema, sidebar, helper ECharts.
 
 // ---------- utilità ----------
 const v = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -46,20 +46,24 @@ const ICONS = {
   movimento: '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
   corpo: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   piano: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>',
+  wiki: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5Z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>',
   theme: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>',
   close: '<path d="M18 6 6 18M6 6l12 12"/>',
   ext: '<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
 };
 const icon = name => `<svg class="ico" viewBox="0 0 24 24">${ICONS[name]}</svg>`;
 const VIEWS = [['panoramica', 'Panoramica'], ['allenamento', 'Allenamento'], ['corsa', 'Corsa'], ['sonno', 'Sonno'], ['recupero', 'Recupero e stress'], ['movimento', 'Movimento'], ['corpo', 'Corpo']];
-function renderSidebar(onDashboard, who, foot) {
-  const base = onDashboard ? '' : 'dashboard.html' + location.search;
+// page: 'dashboard', 'piano' o 'wiki'
+function renderSidebar(page, who, foot) {
+  const base = page === 'dashboard' ? '' : 'dashboard.html' + location.search;
+  const link = (id, label) => `<a href="${id}.html${location.search}" data-view="${id}"${page === id ? ' class="active"' : ''}>${icon(id)}${label}</a>`;
   $('#side').innerHTML = `
     <a class="brand" href="index.html" title="Tutti gli atleti"><span class="logo">◆</span><span>Garmin<small>${esc(who || '')}</small></span></a>
     <nav class="nav">
       ${VIEWS.map(([id, label]) => `<a href="${base}#${id}" data-view="${id}">${icon(id)}${label}</a>`).join('')}
-      ${window.PLAN ? `<div class="sep"></div>
-      <a href="piano.html${location.search}" data-view="piano"${onDashboard ? '' : ' class="active"'}>${icon('piano')}Piano gare</a>` : ''}
+      <div class="sep"></div>
+      ${window.PLAN ? link('piano', 'Piano gare') : ''}
+      ${link('wiki', 'Wiki')}
     </nav>
     <div class="side-foot"><span>${esc(foot || '')}</span>${window.garminSignOut ? '<button class="link" id="signout">Esci</button>' : ''}</div>`;
   $('#signout')?.addEventListener('click', window.garminSignOut);
@@ -87,6 +91,7 @@ function initTheme(onChange) {
 // ---------- ECharts ----------
 const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 function registerTheme() {
+  if (!window.echarts) return;  // wiki.html non ha grafici
   const ax = { axisLine: { lineStyle: { color: v('--axis') } }, axisTick: { show: false }, axisLabel: { color: v('--muted'), hideOverlap: true }, splitLine: { lineStyle: { color: v('--grid') } }, nameTextStyle: { color: v('--muted') } };
   echarts.registerTheme('g', {
     color: ['--s1', '--s2', '--s3', '--s4', '--s5', '--s7', '--s8'].map(v),

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiki dei piani</title>
+<link rel="stylesheet" href="app.css">
+<script src="common.js"></script>
+<script src="auth.js"></script>
+<style>
+.wiki { display: grid; gap: 28px; }
+.wiki h2 { margin: 0; font-size: 18px; font-weight: 680; letter-spacing: -.01em; }
+.sec-sub { margin: 4px 0 14px; color: var(--text-2); max-width: 75ch; }
+.cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.rule { display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 90px; }
+.rule h3 { display: flex; align-items: center; gap: 10px; }
+.rule .n { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: color-mix(in srgb, var(--c, var(--s1)) 16%, transparent); color: var(--text-1); font-weight: 700; font-size: 13px; }
+.rule .what { margin: 0; color: var(--text-1); font-weight: 600; font-size: 14.5px; }
+.rule p { margin: 0; color: var(--text-2); }
+.rule .meta { margin-top: auto; padding-top: 6px; font-size: 12.5px; color: var(--muted); }
+.rule:target { outline: 2px solid var(--s1); outline-offset: 2px; }
+.intro ol { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--text-2); max-width: 80ch; }
+.intro b { color: var(--text-1); }
+.zrow { display: grid; grid-template-columns: 14px 34px minmax(120px, 180px) 1fr; gap: 4px 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--grid); }
+.zrow:last-child { border-bottom: 0; }
+.zrow i { width: 12px; height: 12px; border-radius: 3px; align-self: center; }
+.zrow span { color: var(--text-2); }
+.dec { display: grid; gap: 0; }
+.dec article { display: grid; grid-template-columns: 96px 1fr; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--grid); }
+.dec article:last-child { border-bottom: 0; }
+.dec time { color: var(--muted); font-size: 12.5px; padding-top: 2px; }
+.dec h3 { font-size: 14.5px; }
+.dec p { margin: 4px 0 0; color: var(--text-2); max-width: 80ch; }
+.refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ref { font-size: 12px; padding: 2px 9px; border-radius: 999px; background: var(--wash); color: var(--text-2); text-decoration: none; }
+.ref:hover { color: var(--text-1); }
+.bib { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--text-2); max-width: 90ch; }
+.bib li { scroll-margin-top: 90px; }
+.bib li:target { color: var(--text-1); }
+.bib b { color: var(--text-1); font-weight: 600; }
+@media (max-width: 600px) {
+  .dec article { grid-template-columns: 1fr; }
+  .zrow { grid-template-columns: 14px 30px 1fr; }
+  .zrow span:last-child { grid-column: 3; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side" id="side"></aside>
+<main class="main">
+  <header class="top">
+    <h1>Wiki<small>Come costruiamo i piani: regole, motivazioni e fonti</small></h1>
+    <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
+  </header>
+
+  <div class="wiki">
+    <section class="card intro">
+      <h3>Come funziona</h3>
+      <ol>
+        <li>Le <b>regole ferree</b> valgono per ogni piano: uno script le controlla prima di pubblicare il piano o caricare le sedute sull'orologio, e se una salta il piano non parte.</li>
+        <li>Le <b>linee guida</b> danno solo un avviso: si possono superare, ma il motivo va scritto.</li>
+        <li>Ogni scelta del piano finisce nel <b>registro delle decisioni</b>, con le regole e le fonti su cui si basa.</li>
+      </ol>
+    </section>
+
+    <section id="regole">
+      <h2>Regole ferree</h2>
+      <p class="sec-sub">Le soglie vengono dalla richiesta di partenza (+10% di volume, uno scarico ogni 3–4 settimane), rese più precise con gli studi disponibili.</p>
+      <div class="cards">
+        <article class="card rule" id="r1">
+          <h3><span class="n">1</span>Volume settimanale</h3>
+          <p class="what">Al massimo +10% rispetto alla settimana più alta delle 4 precedenti.</p>
+          <p>È la prudenza classica degli allenatori, non un limite dimostrato: l'unico studio controllato, su principianti, non ha trovato meno infortuni con il +10% rispetto a circa +24% a settimana. Aumenti oltre il 30% in due settimane, invece, sono associati a più infortuni.</p>
+          <p>Il riferimento è il massimo delle 4 settimane, non la settimana prima: dopo uno scarico si torna al livello di prima, e solo da lì si aggiunge il 10%.</p>
+          <div class="meta">Fonti: <a href="#src-buist">Buist 2008</a> · <a href="#src-nielsen">Nielsen 2014</a></div>
+        </article>
+        <article class="card rule" id="r2">
+          <h3><span class="n">2</span>Settimane di scarico</h3>
+          <p class="what">Al massimo 3 settimane di carico di fila, poi una con almeno il 20% di volume in meno e al più una seduta di qualità.</p>
+          <p>Il carico accumula fatica; lo scarico la smaltisce e lascia che gli adattamenti si fissino. Lo schema 3:1 (2:1 per chi si infortuna spesso) è comune ai principali allenatori, ma nessuno studio indica la riduzione ottimale: usiamo il 20–30%. I test si mettono qui, a gambe fresche.</p>
+          <div class="meta">Fonti: <a href="#src-coaches">Johnston, Koop, Roches</a></div>
+        </article>
+        <article class="card rule" id="r3">
+          <h3><span class="n">3</span>Corsa più lunga</h3>
+          <p class="what">Nessuna corsa oltre +10% della più lunga dei 30 giorni precedenti (meglio +5–8%).</p>
+          <p>È la regola con più prove. Su 5.205 runner seguiti con Garmin per 18 mesi (588.000 corse), superare del 10–30% la corsa più lunga del mese porta il 64% di infortuni da sovraccarico in più; tra +30 e +100% il 52% in più, oltre il +100% più del doppio. L'aumento del volume settimanale, invece, non risultava collegato.</p>
+          <p>Una gara lunga "copre" il mese successivo. Per le gare è solo un avviso, perché la distanza la decide la gara: sono i lunghi a dover arrivare vicini.</p>
+          <div class="meta">Fonti: <a href="#src-frandsen">Frandsen 2025</a></div>
+        </article>
+        <article class="card rule" id="r4">
+          <h3><span class="n">4</span>Sedute dure</h3>
+          <p class="what">Al massimo 2 a settimana (qualità, test, gara) e mai due giorni di fila, contando anche il lungo.</p>
+          <p>Alternare duro e facile lascia almeno un giorno di recupero tra due stimoli forti: è il principio "hard/easy" alla base dei metodi classici. Una seduta dura sulle gambe stanche allena meno e logora di più.</p>
+          <div class="meta">Fonti: <a href="#src-daniels">Daniels</a></div>
+        </article>
+        <article class="card rule" id="r5">
+          <h3><span class="n">5</span>Avvicinamento alla gara</h3>
+          <p class="what">Settimana prima al massimo 80% del picco delle 4 settimane precedenti; settimana della gara, gara esclusa, al massimo 60%. Intensità e frequenza restano.</p>
+          <p>La meta-analisi più citata (27 studi) indica come strategia più efficace 2 settimane con il volume ridotto del 41–60%, a scendere, senza toccare intensità e numero di uscite: la forma resta, la fatica se ne va.</p>
+          <div class="meta">Fonti: <a href="#src-bosquet">Bosquet 2007</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="linee-guida">
+      <h2>Linee guida</h2>
+      <p class="sec-sub">Lo script le segnala come avvisi. Superarle è possibile, ma va motivato nel registro delle decisioni.</p>
+      <div class="cards">
+        <article class="card rule" id="r6" style="--c:var(--s4)">
+          <h3><span class="n">6</span>Quota facile</h3>
+          <p class="what">Circa l'80% del volume in zona facile.</p>
+          <p>Descrive come si allenano gli atleti d'élite. Nelle meta-analisi l'allenamento polarizzato vince nei blocchi sotto le 12 settimane, poi i modelli si equivalgono. Con 4 uscite a settimana il 70–80% è normale.</p>
+          <div class="meta">Fonti: <a href="#src-polarized">meta-analisi 2024</a></div>
+        </article>
+        <article class="card rule" id="r7" style="--c:var(--s4)">
+          <h3><span class="n">7</span>Tetti per seduta</h3>
+          <p class="what">Soglia ≤ 10% del volume settimanale (e ≤ 60'), intervalli ≤ 8% (e ≤ 10 km), ripetute ≤ 5% (e ≤ 8 km).</p>
+          <p>Evitano che una sola seduta pesi troppo sulla settimana. Sono pensati per chi corre molto: a 50 km a settimana una qualità vale spesso il 10–15%.</p>
+          <div class="meta">Fonti: <a href="#src-daniels">Daniels</a></div>
+        </article>
+        <article class="card rule" id="r8" style="--c:var(--s4)">
+          <h3><span class="n">8</span>Buon senso</h3>
+          <p class="what">Non alzare volume e intensità nella stessa settimana; dopo uno stop di oltre 4 settimane ripartire da circa metà del volume; al massimo 6 settimane nella stessa fase.</p>
+          <p>Non le controlla lo script: si verificano a mano quando si scrive il piano.</p>
+          <div class="meta">Fonti: <a href="#src-coaches">Johnston, Koop</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="zone">
+      <h2>Ritmi e zone</h2>
+      <p class="sec-sub">I passi vengono dalla VDOT (formule di Daniels e Gilbert), calcolata da gare e test; le frequenze cardiache dalla soglia. Dopo ogni test i ritmi si ricalibrano. I colori delle zone sono quelli di Garmin Connect.</p>
+      <div class="card">
+        <div class="zrow"><i style="background:var(--z1)"></i><b>Z1</b><b>Riscaldamento</b><span>Trotto dei recuperi tra le ripetute.</span></div>
+        <div class="zrow"><i style="background:var(--z2)"></i><b>Z2</b><b>Facile</b><span>Facili, lunghi e maratona in compagnia: comanda la FC, il passo viene di conseguenza.</span></div>
+        <div class="zrow"><i style="background:var(--z3)"></i><b>Z3</b><b>Aerobico</b><span>Passo gara di Massa e della mezza.</span></div>
+        <div class="zrow"><i style="background:var(--z4)"></i><b>Z4</b><b>Soglia</b><span>Soglia e cruise interval: "comodamente duro".</span></div>
+        <div class="zrow"><i style="background:var(--z5)"></i><b>Z5</b><b>Massimo</b><span>Intervalli VO2max, ripetute brevi, allunghi e test.</span></div>
+      </div>
+    </section>
+
+    <section id="decisioni">
+      <h2>Registro delle decisioni</h2>
+      <p class="sec-sub">Cosa è stato deciso nel piano, perché, e con quali regole e fonti. Dalla più recente.</p>
+      <div class="card dec" id="dec"></div>
+    </section>
+
+    <section id="fonti">
+      <h2>Fonti</h2>
+      <div class="card">
+        <ol class="bib">
+          <li id="src-frandsen"><b>Frandsen et al., 2025.</b> <i>How much running is too much? Identifying high-risk running sessions in a 5200-person cohort study.</i> British Journal of Sports Medicine 59(17):1203–1210. <a href="https://pure.au.dk/portal/en/publications/how-much-running-is-too-much-identifying-high-risk-running-sessio/" target="_blank" rel="noopener">Articolo</a> · <a href="https://blogs.bmj.com/bjsm/?p=11751" target="_blank" rel="noopener">sintesi sul blog BJSM</a></li>
+          <li id="src-buist"><b>Buist et al., 2008.</b> <i>No effect of a graded training program on the number of running-related injuries in novice runners: a randomized controlled trial.</i> American Journal of Sports Medicine. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=No+effect+of+a+graded+training+program+on+the+number+of+running-related+injuries+in+novice+runners" target="_blank" rel="noopener">PubMed</a></li>
+          <li id="src-nielsen"><b>Nielsen et al., 2014.</b> <i>Excessive progression in weekly running distance and risk of running-related injuries: an association which varies according to type of injury.</i> Journal of Orthopaedic &amp; Sports Physical Therapy. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Excessive+progression+in+weekly+running+distance+and+risk+of+running-related+injuries" target="_blank" rel="noopener">PubMed</a></li>
+          <li id="src-bosquet"><b>Bosquet et al., 2007.</b> <i>Effects of tapering on performance: a meta-analysis.</i> Medicine &amp; Science in Sports &amp; Exercise 39(8):1358–1365. <a href="https://pubmed.ncbi.nlm.nih.gov/17762369/" target="_blank" rel="noopener">PubMed</a></li>
+          <li id="src-polarized"><b>Meta-analisi, 2024.</b> <i>Comparison of polarized versus other types of endurance training intensity distribution on athletes' endurance performance: a systematic review with meta-analysis.</i> <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11329428/" target="_blank" rel="noopener">PMC</a></li>
+          <li id="src-daniels"><b>Jack Daniels.</b> <i>Daniels' Running Formula.</i> Human Kinetics. VDOT, ritmi di allenamento, tetti per tipo di seduta, principio duro/facile.</li>
+          <li id="src-coaches"><b>Johnston, Koop, Roches, Magness</b>, riassunti con l'evidenza classificata (ricerca o euristica) nella base di conoscenza di switchback-running: <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/volume-progression.md" target="_blank" rel="noopener">progressione del volume</a> · <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/periodization.md" target="_blank" rel="noopener">periodizzazione</a> · <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/taper.md" target="_blank" rel="noopener">taper</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="repo">
+      <h2>Progetti open source di riferimento</h2>
+      <p class="sec-sub">Nessuno ha un insieme di regole da adottare così com'è: servono per consultazione. Il caricamento degli allenamenti sull'orologio qui è già coperto.</p>
+      <div class="cards">
+        <div class="card"><h3><a href="https://github.com/rlacombe/switchback-running" target="_blank" rel="noopener">switchback-running</a></h3><p class="sub">Licenza MIT</p><p style="margin:0;color:var(--text-2)">Base di conoscenza su progressione, periodizzazione, lunghi e taper, con ogni soglia classificata come ricerca o euristica. La più utile per ragionare su una regola nuova.</p></div>
+        <div class="card"><h3><a href="https://github.com/felixrieseberg/claude-coach" target="_blank" rel="noopener">claude-coach</a></h3><p class="sub">Licenza MIT</p><p style="margin:0;color:var(--text-2)">Genera piani personalizzati per corsa e triathlon ed esporta gli allenamenti anche in formato .fit per Garmin.</p></div>
+        <div class="card"><h3><a href="https://pypi.org/project/paicer/" target="_blank" rel="noopener">paicer</a></h3><p class="sub">Plugin per Claude Code</p><p style="margin:0;color:var(--text-2)">Piani scritti in YAML, sincronizzati come allenamenti strutturati sull'orologio Garmin.</p></div>
+        <div class="card"><h3><a href="https://github.com/mkuthan/garmin-workouts" target="_blank" rel="noopener">garmin-workouts</a></h3><p class="sub">CLI Python</p><p style="margin:0;color:var(--text-2)">Carica su Garmin Connect allenamenti descritti in YAML.</p></div>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<script>
+(async () => {
+const D = await garminData(), P = await garminPlan();
+const SRC = { frandsen: 'Frandsen 2025', buist: 'Buist 2008', nielsen: 'Nielsen 2014', bosquet: 'Bosquet 2007', polarized: 'Meta-analisi 2024', daniels: 'Daniels', coaches: 'Johnston, Koop, Roches' };
+const decisions = [...(P?.decisions || [])].sort((a, b) => b.date.localeCompare(a.date));
+$('#dec').innerHTML = decisions.length ? decisions.map(d => `<article>
+    <time datetime="${d.date}">${fmtDay(d.date)}</time>
+    <div><h3>${esc(d.title)}</h3><p>${esc(d.text)}</p>
+      <div class="refs">${(d.rules || []).map(r => `<a class="ref" href="#r${r}">Regola ${r}</a>`).join('')}${(d.sources || []).map(s => `<a class="ref" href="#src-${s}">${esc(SRC[s] || s)}</a>`).join('')}</div></div>
+  </article>`).join('')
+  : '<p class="sub" style="margin:0">Questo atleta non ha un piano gare. Per chi ce l’ha, qui c’è il registro delle scelte del piano: cosa è stato deciso, perché, con quali regole e fonti.</p>';
+renderSidebar('wiki', (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
+initTheme(() => {});
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+})();
+</script>
+</body>
+</html>

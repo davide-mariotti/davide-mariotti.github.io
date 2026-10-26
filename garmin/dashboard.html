@@ -641,7 +641,7 @@ function setRange(r) {
   RANGE = r; store.set('range', r);
   document.querySelectorAll('#range button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === r));
 }
-renderSidebar(true, ALL_ACTS[0]?.ownerFullName, `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}`);
+renderSidebar('dashboard', ALL_ACTS[0]?.ownerFullName, `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}`);
 $('#meta').textContent = ATHLETE === 'sample' ? 'Dati di esempio: atleta e numeri sono finti' : `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'long', timeStyle: 'short' })}`;
 $('#range').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setRange(b.dataset.d); render(); } });
 $('#q').addEventListener('input', actTable);

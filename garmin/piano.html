@@ -341,7 +341,7 @@ function render() {
   races(); zonesTable(); calibration(); today(); weeksTable();
   drawCharts(document.body);
 }
-renderSidebar(false, (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
+renderSidebar('piano', (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
 initTheme(() => { resetCharts(); render(); });
 render();
 const deep = location.hash.match(/^#s-(.+)$/);
