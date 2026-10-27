@@ -121,7 +121,7 @@
 <aside class="side" id="side"></aside>
 <main class="main">
   <header class="top">
-    <h1>Piano gare<small>Firenze → Massa → Firenze → Pisa · 4–5 sedute a settimana, ritmi calibrati sui tuoi dati</small></h1>
+    <h1>Piano gare<small>Firenze → Massa → Firenze → Pisa · 4 sedute a settimana, ritmi calibrati sui tuoi dati</small></h1>
     <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
   </header>
 
@@ -305,7 +305,7 @@ function weeksTable() {
     if (w.phase !== phase) { phase = w.phase; html += `<tr class="phase"><td colspan="9">${esc(phase)}<span>${esc(PHASES[phase] || '')}</span></td></tr>`; }
     const end = addDays(w.start, 6), now = TODAY >= w.start && TODAY <= end;
     const ss = SESS.filter(s => s.week === w);
-    html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">W${P.weekNo(w.start)} · ${dayMonth(w.start)} – ${dayMonth(end)}</div>
+    html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">${P.weekLabel(w.start)} · ${dayMonth(w.start)} – ${dayMonth(end)}</div>
       <div class="focus">${esc(w.focus || w.note || '')}</div>${now ? '<span class="pill">Questa settimana</span>' : ''}</td>`;
     P.DAYS.forEach((d, i) => {
       const s = ss.find(x => x.date === addDays(w.start, i));
@@ -316,7 +316,7 @@ function weeksTable() {
   $('#t-weeks').innerHTML = html + '</tbody>';
 }
 const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite e prima soglia', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
-  'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e 5 uscite a settimana', 'Specifico Pisa': 'soglia, passo mezza e lunghi fino a 24 km' };
+  'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e passo 10 km', 'Specifico Pisa': 'soglia, passo mezza e lunghi fino a 24 km' };
 function actual(s) {
   const runs = RUNS[s.date];
   if (!runs || s.date > TODAY) return null;

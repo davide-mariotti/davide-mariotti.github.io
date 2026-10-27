@@ -36,7 +36,12 @@ for (const w of P.weeks) {
   if (down && ss.filter(s => QUALITY.includes(s.type)).length > 1 && !ss.some(s => s.type === 'G')) warnings.push(`${w.start} settimana di scarico con più di una qualità`);
   // 4. sedute dure: al massimo 2 a settimana (qualità, tempo, test, gara) e mai due giorni di fila (contando anche il lungo)
   if (ss.filter(s => HARD.includes(s.type)).length > 2) errors.push(`${w.start} più di 2 sedute dure`);
-  // 6. linee guida: ~80% del volume facile; soglia ≤ 10%, intervalli ≤ 8%, ripetute ≤ 5% del volume settimanale (Daniels)
+  // 6. al massimo 4 sedute a settimana (Davide non riesce a farne 5)
+  if (ss.length > 4) errors.push(`${w.start} ${ss.length} sedute: al massimo 4 a settimana`);
+  // 7. bilanciamento: se il lungo ha tratti sopra la Z2, in settimana al massimo un'altra seduta dura
+  const varied = ss.some(s => s.type === 'L' && Object.keys(zoneKm(s.steps)).some(z => ![...EASY, 'S'].includes(z)));
+  if (varied && ss.filter(s => HARD.includes(s.type)).length > 1) errors.push(`${w.start} lungo variato e ${ss.filter(s => HARD.includes(s.type)).length} sedute dure: con un lungo veloce, una sola qualità in settimana`);
+  // 8–9. linee guida: ~80% del volume facile; soglia ≤ 10%, intervalli ≤ 8%, ripetute ≤ 5% del volume settimanale (Daniels)
   const zk = {}; ss.forEach(s => { const o = zoneKm(s.steps); for (const k in o) zk[k] = (zk[k] || 0) + o[k]; });
   const easy = EASY.reduce((a, k) => a + (zk[k] || 0), 0) / km;
   if (km && easy < 0.8 && !ss.some(s => ['G', 'T'].includes(s.type))) warnings.push(`${w.start} facile ${Math.round(easy * 100)}% del volume (riferimento 80%)`);
