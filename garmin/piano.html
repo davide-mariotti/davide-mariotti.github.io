@@ -227,7 +227,7 @@ function dream() {
 }
 
 // ---------- ritmi e calibrazione ----------
-const ZONE_ROWS = ['E', 'L', 'MZ', 'G32', 'HMP', 'T', 'I', 'R', 'S'];
+const ZONE_ROWS = ['E', 'L', 'MZ', 'G32', 'MP', 'HMP', 'T', 'I', 'R', 'S'];
 function zonesTable() {
   const c = P.calib();
   $('#zones-sub').textContent = `Calcolati da VDOT ${nf(c.vdot, 1)} e soglia ${c.lthr} bpm · i passi sono il riferimento, la FC il limite`;
@@ -305,7 +305,7 @@ function weeksTable() {
     if (w.phase !== phase) { phase = w.phase; html += `<tr class="phase"><td colspan="9">${esc(phase)}<span>${esc(PHASES[phase] || '')}</span></td></tr>`; }
     const end = addDays(w.start, 6), now = TODAY >= w.start && TODAY <= end;
     const ss = SESS.filter(s => s.week === w);
-    html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">${dayMonth(w.start)} – ${dayMonth(end)}</div>
+    html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">W${P.weekNo(w.start)} · ${dayMonth(w.start)} – ${dayMonth(end)}</div>
       <div class="focus">${esc(w.focus || w.note || '')}</div>${now ? '<span class="pill">Questa settimana</span>' : ''}</td>`;
     P.DAYS.forEach((d, i) => {
       const s = ss.find(x => x.date === addDays(w.start, i));
