@@ -7,6 +7,7 @@ for (const f of ['common.js', 'piano.js', 'data/davide-mariotti/garmin.js'])
   if (fs.existsSync(`${__dirname}/${f}`)) vm.runInThisContext(fs.readFileSync(`${__dirname}/${f}`, 'utf8'));
 const P = window.PLAN, Z = P.zones(), S = P.sessions(Z), START = P.weeks[0].start;
 const EASY = ['E', 'L', 'MZ', 'J', 'A'], HARD = ['Q', 'M', 'T', 'G'], QUALITY = ['Q', 'M'];
+const SPECIFIC = ['Base', 'Specifico Massa', 'Specifico mezza', 'Specifico Pisa'], spec = {};  // fasi verso mezza, 32 km e maratona (regola 11)
 
 // corsa più lunga per giorno e km per settimana
 const longest = {}, weekKm = {};
@@ -51,6 +52,11 @@ for (const w of P.weeks) {
       if (o[k] > km * cap + 0.3) warnings.push(`${s.date} ${s.title}: ${nf(o[k], 1)} km di ${name}, ${Math.round(o[k] / km * 100)}% della settimana (Daniels: ≤ ${cap * 100}%)`);
     });
   }
+  // 11. linea guida: lungo specifico (tratti sopra la Z2) entro il 60% del lungo e 18 km; nelle fasi SPECIFIC in 2 settimane di carico su 3
+  const lg = ss.find(s => s.type === 'L'), fast = lg ? Object.entries(zoneKm(lg.steps)).filter(([z]) => ![...EASY, 'S'].includes(z)).reduce((a, [, v]) => a + v, 0) : 0;
+  if (fast > Math.min(18, lg?.km * 0.6) + 0.3) warnings.push(`${lg.date} ${lg.title}: ${nf(fast, 1)} km sopra la Z2 su ${nf(lg.km)} (riferimento ≤ 60% del lungo e ≤ 18 km)`);
+  const taper = S.some(s => s.type === 'G' && [w.start, addDays(w.start, 7)].includes(s.week.start));
+  if (SPECIFIC.includes(w.phase) && !down && !taper) (spec[w.phase] ||= [0, 0])[varied ? 0 : 1]++;
   rows.push({ settimana: w.start, fase: w.phase, km: Math.round(km), 'vs max 4 sett.': ref ? pct(km / ref - 1) : '–', scarico: down ? 'sì' : '', 'facile %': km ? Math.round(easy * 100) : '–', lungo: Math.round(Math.max(0, ...ss.map(s => s.km))) });
 }
 // 3. lungo: nessuna seduta oltre +10% della corsa più lunga dei 30 giorni prima (Frandsen 2025); per le gare è un avviso
@@ -58,6 +64,7 @@ for (const s of S) {
   const max30 = Math.max(0, ...[...Array(30).keys()].map(i => longest[addDays(s.date, -(i + 1))] || 0));
   if (max30 && s.km > max30 * 1.1 + 0.05) (s.type === 'G' ? warnings : errors).push(`${s.date} ${s.title}: ${nf(s.km, 1)} km, ${pct(s.km / max30 - 1)} sulla corsa più lunga dei 30 giorni prima (${nf(max30, 1)} km), limite +10%`);
 }
+for (const [ph, [yes, no]] of Object.entries(spec)) if (yes < Math.round((yes + no) * 2 / 3)) warnings.push(`${ph}: lungo specifico in ${yes} settimane di carico su ${yes + no} (riferimento 2 su 3)`);
 S.forEach((s, i) => { const n = S[i + 1]; if (n && daysBetween(s.date, n.date) === 1 && [...HARD, 'L'].includes(s.type) && [...HARD, 'L'].includes(n.type)) errors.push(`${s.date} e ${n.date}: due sedute dure di fila (${s.title}, ${n.title})`); });
 // 5. avvicinamento alle gare: settimana prima ≤ 80% e settimana gara (senza la gara) ≤ 60% del picco delle 4 settimane precedenti, qualità mantenuta
 for (const g of S.filter(s => s.type === 'G')) {

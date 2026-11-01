@@ -315,8 +315,8 @@ function weeksTable() {
   }
   $('#t-weeks').innerHTML = html + '</tbody>';
 }
-const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite e prima soglia', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
-  'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e passo 10 km', 'Specifico Pisa': 'soglia, passo mezza e lunghi fino a 24 km' };
+const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite, prima soglia e lunghi con blocchi a 5:30', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
+  'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e passo 10 km', 'Specifico Pisa': 'soglia, passo mezza e lunghi con blocchi a ritmo gara' };
 function actual(s) {
   const runs = RUNS[s.date];
   if (!runs || s.date > TODAY) return null;
