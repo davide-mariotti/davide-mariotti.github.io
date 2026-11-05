@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forza</title>
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#18212b">
+<meta name="apple-mobile-web-app-title" content="Garmin">
+<link rel="stylesheet" href="app.css">
+<script src="common.js"></script>
+<script src="auth.js"></script>
+<style>
+.why { margin: 0 0 12px; color: var(--text-2); }
+/* esercizi: nome e consiglio a sinistra, numeri a destra */
+.ex td { white-space: normal; vertical-align: top; }
+.ex td:first-child b { font-weight: 650; }
+.ex small { display: block; color: var(--muted); font-size: 12.5px; }
+.ex td.num { white-space: nowrap; }
+/* gif dell'esercizio (ExerciseGymGifsDB, sfondo bianco): al click si apre grande */
+.ex .gif { float: left; margin: 0 12px 4px 0; line-height: 0; }
+.ex .gif img { width: 84px; height: 84px; object-fit: contain; background: #fff; border: 1px solid var(--border); border-radius: 8px; }
+/* calendario: una riga per settimana, martedì e venerdì */
+.fz { table-layout: fixed; }
+.fz th:first-child { width: 36%; }
+.fz td { vertical-align: top; white-space: normal; padding: 10px 6px; }
+.fz td:first-child { padding-left: 10px; }
+.fz .dates { font-weight: 650; }
+.fz .ph { color: var(--muted); font-size: 12.5px; }
+.fz tr.now td { background: color-mix(in srgb, var(--ink) 4%, var(--surface)); }
+.fz tr.now td:first-child { box-shadow: inset 4px 0 0 var(--ink); }
+.it { display: block; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); border-left: 4px solid var(--ink); font-size: 12.5px; line-height: 1.3; scroll-margin-top: 90px; }
+.it.light { border-left-color: var(--axis); }
+.it.skip { border-left-color: var(--grid); color: var(--muted); font-style: italic; }
+.it b { display: block; font-weight: 650; font-style: normal; color: var(--text-1); }
+.it span { color: var(--text-2); }
+.it .done { display: block; color: var(--text-1); margin-top: 3px; }
+.it .miss { display: block; color: var(--muted); margin-top: 3px; }
+.it:target { outline: 2px solid var(--ink); outline-offset: 1px; }
+.rules { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; color: var(--text-2); }
+.rules b { color: var(--text-1); }
+@media (max-width: 700px) {
+  .ex thead, .fz thead { display: none; }
+  .ex tbody, .fz tbody { display: block; }
+  .ex tr { display: flex; flex-wrap: wrap; gap: 2px 14px; padding: 9px 0; border-bottom: 1px solid var(--grid); }
+  .ex td { padding: 0; border: 0; }
+  .ex td:first-child { flex-basis: 100%; }
+  .ex td.num { text-align: left; color: var(--text-2); }
+  .ex td[data-l]::before { content: attr(data-l); color: var(--muted); }
+  .fz tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--grid); }
+  .fz td, .fz td:first-child { display: block; width: auto; padding: 0; border: 0; }
+  .fz td:first-child { grid-column: 1 / -1; }
+  .fz tr.now { box-shadow: inset 4px 0 0 var(--ink); padding-left: 10px; }
+  .fz tr.now td, .fz tr.now td:first-child { background: none; box-shadow: none; }
+  .fz td[data-day]::before { content: attr(data-day); display: block; color: var(--muted); font-size: 11.5px; font-weight: 600; margin-bottom: 3px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side" id="side"></aside>
+<main class="main">
+  <header class="top">
+    <h1>Forza<small>Martedì e venerdì, subito dopo la corsa · tappetino e due manubri da 10 kg · le sedute sono anche sul Forerunner</small></h1>
+    <button class="icon-btn" id="theme" title="Tema chiaro/scuro" aria-label="Cambia tema"></button>
+  </header>
+
+  <div class="bento">
+    <div class="kpis s12" id="kpis"></div>
+    <div class="card s6" id="ses-A"></div>
+    <div class="card s6" id="ses-B"></div>
+
+    <div class="card s12">
+      <h3>Calendario</h3><p class="sub">Settimana per settimana, con le sedute registrate su Garmin. Le serie scendono a 2 negli scarichi e nelle settimane di gara.</p>
+      <div class="table-wrap scroll"><table class="fz" id="t-cal"></table></div>
+    </div>
+
+    <div class="card s6">
+      <h3>Le regole</h3>
+      <ol class="rules">
+        <li><b>Subito dopo la corsa facile</b>, non prima: la corsa resta la priorità e lunedì, giovedì e sabato restano di riposo.</li>
+        <li><b>Martedì poche gambe</b> (mercoledì c’è la qualità), <b>venerdì le gambe</b>: sabato si riposa e il lungo arriva dopo 48 ore.</li>
+        <li><b>3 serie, 2 nelle settimane leggere</b>: le prime due (gambe a corpo libero), gli scarichi e le settimane con gara o test.</li>
+        <li><b>Mai nei 2 giorni prima di una gara o di un test, né nei 2 dopo una gara</b> (regola 12 della Wiki).</li>
+        <li>Ogni serie si chiude con <b>2–3 ripetizioni ancora in canna</b>: forza, non sfinimento. Se il giorno dopo c’è una qualità e le gambe sono dure, togli una serie.</li>
+      </ol>
+    </div>
+    <div class="card s6">
+      <h3>Come progredire con 10 kg</h3>
+      <ol class="rules">
+        <li>Il peso non sale, quindi sale tutto il resto. Quando chiudi tutte le serie con 3 ripetizioni in canna, cambia una cosa sola, in quest’ordine.</li>
+        <li><b>Più lento</b>: discesa in 3–4 secondi e una pausa di 1 secondo in basso.</li>
+        <li><b>Più ripetizioni</b>: +2 a serie, fino a 15 sugli esercizi a una gamba.</li>
+        <li><b>Variante più dura</b>: split squat col piede dietro su una sedia (bulgaro), stacco a una gamba con due manubri, polpacci con ginocchio piegato.</li>
+        <li>Sull’orologio annota ripetizioni e peso a fine serie: la storia resta in Garmin Connect.</li>
+      </ol>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+(async () => {
+const D = await garminData(), P = await garminPlan();
+renderSidebar('forza', (D?.activities || [])[0]?.ownerFullName, D ? `Dati del ${new Date(D.generated).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}` : '');
+initTheme(() => {});
+if (!P?.strength) {
+  document.querySelector('.bento').innerHTML = '<div class="card s12" style="max-width:560px"><h3>Forza non disponibile</h3><p class="sub">Il programma di forza fa parte del piano, che esiste solo per la dashboard di Davide.</p></div>';
+  return;
+}
+const TODAY = TODAY_REAL, F = P.strength(), DAY = { tue: 'martedì', fri: 'venerdì' };
+const ACTS = (D?.activities || []).filter(a => /strength/.test(a.activityType?.typeKey || '')).map(a => ({ ...a, day: a.startTimeLocal.slice(0, 10) }));
+// seduta fatta: attività di forza dello stesso giorno o, se spostata, della stessa settimana con il nome della seduta Garmin
+const doneOf = f => ACTS.filter(a => a.day === f.date || a.day >= f.week.start && a.day <= addDays(f.week.start, 6) && a.activityName?.includes(f.name));
+const GIF = 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/';
+const mins = s => `~${Math.round(s / 60)}'`;
+const qty = e => (typeof e.q === 'number' ? `${e.q}` : `${P.secs(e.q)}"`) + (e.side ? ' per lato' : '');
+
+// ---------- KPI ----------
+const live = F.filter(f => !f.skip), next = live.find(f => f.date >= TODAY);
+const from = addDays(TODAY, -27), past = live.filter(f => f.date >= from && f.date <= TODAY), planned = past.length;
+const done = past.filter(f => doneOf(f).length).length;
+const lastA = ACTS.sort((a, b) => a.day.localeCompare(b.day)).at(-1), last = lastA?.day;
+const sample = live.find(f => f.sets === 3) || live[0];
+$('#kpis').innerHTML = [
+  ['Prossima seduta', next ? dayMonth(next.date) : '–', next ? `Forza ${next.kind} · ${next.sets} serie · ${mins(next.sec)}` : ''],
+  ['Ultime 4 settimane', `${done}<small>/ ${planned}</small>`, 'sedute fatte su quelle in programma'],
+  ['Durata', mins(sample.sec), `3 serie · ${mins(F.find(f => f.sets === 2 && f.kind === sample.kind).sec)} con 2 serie`],
+  ['Ultima registrata', last ? dayMonth(last) : '–', last ? `${esc(lastA.activityName)} · ${last.slice(0, 4)}` : 'nessuna attività di forza'],
+].map(([l, v, f]) => `<div class="kpi"><span class="lbl">${l}</span><span class="val">${v}</span><span class="foot">${f}</span></div>`).join('');
+
+// ---------- le due sedute ----------
+for (const k of ['A', 'B']) {
+  const f = F.find(x => x.kind === k && x.sets === 3) || F.find(x => x.kind === k);
+  const light = F.find(x => x.kind === k && x.sets === 2);
+  $(`#ses-${k}`).innerHTML = `<h3>Forza ${k} · ${DAY[f.day]}</h3><p class="sub">${esc(f.label)} · ${mins(f.sec)} con 3 serie, ${mins(light.sec)} con 2 · su Garmin «${esc(f.name)}»</p>
+    <p class="why">${esc(f.why)}</p>
+    <div class="table-wrap"><table class="ex"><thead><tr><th>Esercizio</th><th class="num">Ripetizioni</th><th class="num">Recupero</th><th class="num">Carico</th></tr></thead><tbody>
+    ${f.ex.map(e => `<tr><td><a class="gif" href="${GIF}${e.gif}.gif" target="_blank" rel="noopener" title="Apri la gif"><img src="${GIF}${e.gif}.gif" alt="${esc(e.name)}: esecuzione" loading="lazy" width="84" height="84"></a><b>${esc(e.name)}</b><small>${esc(e.note)}</small></td><td class="num">${qty(e)}</td><td class="num" data-l="recupero ">${e.rest}"</td>
+      <td class="num">${e.kg ? `${e.kg} kg` : 'corpo libero'}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+// ---------- calendario ----------
+function item(f) {
+  if (!f) return '';
+  if (f.skip) return `<span class="it skip" id="f-${f.date}"><b>Forza ${f.kind}: niente</b>${esc(f.skip)}</span>`;
+  const a = doneOf(f), past = f.date < TODAY;
+  return `<span class="it${f.sets < 3 ? ' light' : ''}" id="f-${f.date}"><b>Forza ${f.kind}</b><span>${f.sets} serie · ${mins(f.sec)}${f.intro && f.kind === 'B' ? ' · gambe a corpo libero' : ''}</span>
+    ${a.length ? `<span class="done">✓ fatta${a[0].day !== f.date ? ` ${dayMonth(a[0].day)}` : ''} · ${Math.round(sum(a.map(x => x.duration)) / 60)}'</span>` : past ? '<span class="miss">non registrata</span>' : ''}</span>`;
+}
+const weeks = P.weeks.filter(w => F.some(f => f.week === w));
+$('#t-cal').innerHTML = '<thead><tr><th>Settimana</th><th>Martedì</th><th>Venerdì</th></tr></thead><tbody>' + weeks.map(w => {
+  const end = addDays(w.start, 6), now = TODAY >= w.start && TODAY <= end, ff = F.filter(f => f.week === w);
+  return `<tr class="${now ? 'now' : ''}"><td><div class="dates">${P.weekLabel(w.start)} · ${dayMonth(w.start)} – ${dayMonth(end)}</div><div class="ph">${esc(w.phase)}</div></td>
+    <td data-day="Martedì">${item(ff.find(f => f.kind === 'A'))}</td><td data-day="Venerdì">${item(ff.find(f => f.kind === 'B'))}</td></tr>`;
+}).join('') + '</tbody>';
+document.getElementById(location.hash.slice(1) || '-')?.scrollIntoView({ block: 'center' });
+})();
+</script>
+</body>
+</html>

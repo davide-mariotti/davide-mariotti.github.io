@@ -6,7 +6,8 @@ global.window = global; global.addEventListener = () => {};
 for (const f of ['common.js', 'piano.js']) vm.runInThisContext(fs.readFileSync(`${__dirname}/${f}`, 'utf8'));
 const [from, to] = process.argv.slice(2);
 if (!from || !to) { console.error('Uso: node garmin-export.js AAAA-MM-GG AAAA-MM-GG'); process.exit(1); }
-const out = window.PLAN.sessions().filter(s => s.date >= from && s.date <= to)
-  .map(s => ({ calendar_date: s.date, workout_data: window.PLAN.toGarmin(s) }));
+const P = window.PLAN;
+const out = [...P.sessions(), ...P.strength().filter(f => !f.skip)].filter(s => s.date >= from && s.date <= to)
+  .sort((a, b) => a.date.localeCompare(b.date)).map(s => ({ calendar_date: s.date, workout_data: P.toGarmin(s) }));
 console.error(`${out.length} sedute (VDOT ${window.PLAN.BASE.vdot}): ${out.map(o => o.workout_data.workoutName).join(' | ')}`);
 process.stdout.write(JSON.stringify(out));

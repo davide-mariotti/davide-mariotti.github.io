@@ -62,6 +62,8 @@
 .ses .done { display: block; color: var(--text-1); margin-top: 3px; }
 .ses .miss { display: block; color: var(--muted); margin-top: 3px; }
 .own { color: var(--muted); font-size: 12px; font-style: italic; }
+.fzl { display: block; margin-top: 6px; padding: 4px 9px; border-radius: 8px; border: 1px dashed var(--axis); font-size: 12px; color: var(--text-2); text-decoration: none; }
+.fzl:hover { color: var(--text-1); border-color: var(--text-2); }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-2); }
 .prof { display: flex; align-items: flex-end; gap: 2px; height: 96px; padding: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
 .prof div { border-radius: 3px 3px 0 0; min-width: 2px; }
@@ -166,7 +168,7 @@
         <li><b>Nelle qualità rispetta il passo</b>, non andare più forte: l'ultima ripetuta deve venire come la prima.</li>
         <li><b>Ascolta i dati del mattino</b>: con HRV bassa o sonno scarso sposta la qualità di un giorno (vedi "Come stai oggi").</li>
         <li><b>Ricalibra dopo i test</b> di gennaio (5 km) e marzo (10 km): i ritmi successivi si aggiornano da soli.</li>
-        <li><b>Forza e mobilità</b>: 2 × 20 minuti a settimana (core, glutei, polpacci) nei giorni facili o di riposo.</li>
+        <li><b>Forza</b>: martedì e venerdì subito dopo la facile, 30–40 minuti con tappetino e manubri (vedi la pagina Forza).</li>
         <li><b>Settimana gara</b>: niente di nuovo. Scarpe, gel e colazione già provati nei lunghi.</li>
       </ol>
     </div>
@@ -175,8 +177,8 @@
       <p style="color:var(--text-2);margin:8px 0 0">La Personal API di Garmin è <b>in sola lettura</b>: questa pagina non può scrivere sul tuo account.
       Gli allenamenti però si possono caricare su Garmin Connect con passo e FC come target, tramite il connettore Garmin di Claude:
       compaiono nel calendario e sul Forerunner 255S, e l'orologio ti guida passo per passo.</p>
-      <p style="color:var(--text-2)"><b>Caricate il 26/10:</b> le 20 sedute dal 27/10 alla maratona (nome "PG gg/mm …").
-      Le sedute W9–W10 dell'altro piano sono state tolte dal calendario e restano nella libreria Garmin.
+      <p style="color:var(--text-2)"><b>Caricate:</b> la corsa fino alla maratona (W31–W35) e la forza del martedì e del venerdì fino al 24/11.
+      In calendario ci sono solo le sedute di questo piano.
       Le settimane dopo la maratona si caricano più avanti, dopo aver ricalibrato i ritmi.</p>
     </div>
   </div>
@@ -198,7 +200,7 @@ const pace = s => s == null ? '' : clock(s);
 const paceRange = p => p ? `${pace(p[0])}–${pace(p[1])} /km` : '';
 const hrRange = h => h ? `${h[0]}–${h[1]} bpm` : '';
 const typeColor = t => `var(${P.TYPES[t][1]})`;
-let Z, SESS;
+let Z, SESS, STR;
 
 // ---------- gare ----------
 function races() {
@@ -227,7 +229,7 @@ function dream() {
 }
 
 // ---------- ritmi e calibrazione ----------
-const ZONE_ROWS = ['E', 'L', 'MZ', 'G32', 'MP', 'HMP', 'T', 'I', 'R', 'S'];
+const ZONE_ROWS = ['E', 'L', 'MR', 'G32', 'MP', 'HMP', 'T', 'I', 'R', 'S'];
 function zonesTable() {
   const c = P.calib();
   $('#zones-sub').textContent = `Calcolati da VDOT ${nf(c.vdot, 1)} e soglia ${c.lthr} bpm · i passi sono il riferimento, la FC il limite`;
@@ -308,14 +310,14 @@ function weeksTable() {
     html += `<tr class="${now ? 'now' : ''}" id="w-${w.start}"><td><div class="dates">${P.weekLabel(w.start)} · ${dayMonth(w.start)} – ${dayMonth(end)}</div>
       <div class="focus">${esc(w.focus || w.note || '')}</div>${now ? '<span class="pill">Questa settimana</span>' : ''}</td>`;
     P.DAYS.forEach((d, i) => {
-      const s = ss.find(x => x.date === addDays(w.start, i));
-      html += `<td data-day="${DAY_LBL[i]}">${s ? sesChip(s) : ''}</td>`;
+      const date = addDays(w.start, i), s = ss.find(x => x.date === date), f = STR.find(x => x.date === date && !x.skip);
+      html += `<td data-day="${DAY_LBL[i]}">${s ? sesChip(s) : ''}${f ? `<a class="fzl" href="forza.html${location.search}#f-${date}" title="${f.sets} serie · ~${Math.round(f.sec / 60)}'">+ Forza ${f.kind}</a>` : ''}</td>`;
     });
     html += `<td class="num" data-day="km della settimana">${ss.length ? nf(sum(ss.map(s => s.km))) : w.own ? '<span class="own">tuo piano</span>' : ''}</td></tr>`;
   }
   $('#t-weeks').innerHTML = html + '</tbody>';
 }
-const PHASES = { 'Maratona': 'picco, scarico e maratona in Z2 con l’amico', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite, prima soglia e lunghi con blocchi a 5:30', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
+const PHASES = { 'Maratona': 'picco, scarico e maratona sotto le 4 ore', 'Recupero': 'solo corsa facile', 'Base': 'aerobica, salite, prima soglia e lunghi con blocchi a 5:30', 'Specifico Massa': 'lunghi con blocchi a 5:30', 'Specifico mezza': 'velocità, soglia e passo mezza',
   'Blocco 5 km': 'ripetute brevi e intervalli a passo 5 km', 'Blocco 10 km': 'soglia, intervalli lunghi e passo 10 km', 'Specifico Pisa': 'soglia, passo mezza e lunghi con blocchi a ritmo gara' };
 function actual(s) {
   const runs = RUNS[s.date];
@@ -376,7 +378,7 @@ addEventListener('hashchange', () => { const m = location.hash.match(/^#s-(.+)$/
 
 // ---------- avvio ----------
 function render() {
-  Z = P.zones(); SESS = P.sessions(Z);
+  Z = P.zones(); SESS = P.sessions(Z); STR = P.strength?.(Z) || [];
   races(); dream(); zonesTable(); calibration(); today(); weeksTable();
   drawCharts(document.body);
 }

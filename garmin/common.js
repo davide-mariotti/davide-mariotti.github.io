@@ -46,6 +46,7 @@ const ICONS = {
   movimento: '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
   corpo: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   piano: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>',
+  forza: '<path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>',
   wiki: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5Z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>',
   analisi: '<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
   theme: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>',
@@ -54,7 +55,7 @@ const ICONS = {
 };
 const icon = name => `<svg class="ico" viewBox="0 0 24 24">${ICONS[name]}</svg>`;
 const VIEWS = [['panoramica', 'Panoramica'], ['allenamento', 'Allenamento'], ['corsa', 'Corsa'], ['sonno', 'Sonno'], ['recupero', 'Recupero e stress'], ['movimento', 'Movimento'], ['corpo', 'Corpo']];
-// page: 'dashboard', 'piano', 'analisi' o 'wiki'
+// page: 'dashboard', 'piano', 'forza', 'analisi' o 'wiki'
 function renderSidebar(page, who, foot) {
   const base = page === 'dashboard' ? '' : 'dashboard.html' + location.search;
   const link = (id, label) => `<a href="${id}.html${location.search}" data-view="${id}"${page === id ? ' class="active"' : ''}>${icon(id)}${label}</a>`;
@@ -64,6 +65,7 @@ function renderSidebar(page, who, foot) {
       ${VIEWS.map(([id, label]) => `<a href="${base}#${id}" data-view="${id}">${icon(id)}${label}</a>`).join('')}
       <div class="sep"></div>
       ${window.PLAN ? link('piano', 'Piano gare') : ''}
+      ${window.PLAN?.strength ? link('forza', 'Forza') : ''}
       ${link('analisi', 'Analisi')}
       ${link('wiki', 'Wiki')}
     </nav>

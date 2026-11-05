@@ -75,6 +75,16 @@ for (const g of S.filter(s => s.type === 'G')) {
   for (const w of [before, raceWeek]) if (!S.some(s => s.week.start === w && QUALITY.includes(s.type))) warnings.push(`${g.title}: nella settimana del ${w} manca una seduta di qualità (l'intensità va mantenuta)`);
 }
 
+// 12. forza: al massimo 2 a settimana, mai nei 2 giorni prima di una gara o di un test né nei 2 dopo una gara
+const F = P.strength(Z).filter(f => !f.skip);
+for (const f of F) {
+  const g = S.find(s => ['G', 'T'].includes(s.type) && [1, 2].includes(daysBetween(f.date, s.date)) || s.type === 'G' && [0, 1, 2].includes(daysBetween(s.date, f.date)));
+  if (g) errors.push(`${f.date} ${f.title}: forza troppo vicina a ${g.title} (${g.date})`);
+}
+P.weeks.forEach(w => { if (F.filter(f => f.week === w).length > 2) errors.push(`${w.start} più di 2 sedute di forza`); });
+// ogni esercizio ha un riferimento visivo (gif di ExerciseGymGifsDB, regola 15 di CLAUDE.md)
+new Set(F.flatMap(f => f.ex).filter(e => !e.gif).map(e => e.name)).forEach(n => errors.push(`${n}: manca la gif dell'esercizio`));
+
 console.table(rows);
 console.log(errors.length ? `\nREGOLE FERREE VIOLATE (${errors.length}):\n- ${errors.join('\n- ')}` : '\nRegole ferree: tutte rispettate.');
 if (warnings.length) console.log(`\nAvvisi (${warnings.length}):\n- ${warnings.join('\n- ')}`);

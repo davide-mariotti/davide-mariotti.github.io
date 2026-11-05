@@ -119,6 +119,12 @@
           <p>Un lungo con blocchi a ritmo è già una seduta di qualità. Bilanciarlo con la settimana tiene simile il carico di intensità e lascia sempre un giorno facile tra due stimoli forti.</p>
           <div class="meta">Proposta di Davide · principio hard/easy: <a href="#src-daniels">Daniels</a></div>
         </article>
+        <article class="card rule" id="r12">
+          <h3><span class="n">12</span>Forza lontano da gare e test</h3>
+          <p class="what">Al massimo 2 sedute di forza a settimana, mai nei 2 giorni prima di una gara o di un test né nei 2 dopo una gara.</p>
+          <p>La forza due volte a settimana riduce gli infortuni e migliora l’economia di corsa, ma lascia le gambe pesanti per un giorno o due: a ridosso di una gara o di un test si salta, nelle settimane leggere si fanno 2 serie invece di 3. Si fa subito dopo le facili, così i giorni di riposo restano di riposo.</p>
+          <div class="meta">Scelta dell'atleta · Fonti: <a href="#src-lauersen">Lauersen 2014</a> · <a href="#src-blagrove">Blagrove 2018</a></div>
+        </article>
       </div>
     </section>
 
@@ -180,6 +186,8 @@
           <li id="src-nielsen"><b>Nielsen et al., 2014.</b> <i>Excessive progression in weekly running distance and risk of running-related injuries: an association which varies according to type of injury.</i> Journal of Orthopaedic &amp; Sports Physical Therapy. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Excessive+progression+in+weekly+running+distance+and+risk+of+running-related+injuries" target="_blank" rel="noopener">PubMed</a></li>
           <li id="src-bosquet"><b>Bosquet et al., 2007.</b> <i>Effects of tapering on performance: a meta-analysis.</i> Medicine &amp; Science in Sports &amp; Exercise 39(8):1358–1365. <a href="https://pubmed.ncbi.nlm.nih.gov/17762369/" target="_blank" rel="noopener">PubMed</a></li>
           <li id="src-polarized"><b>Meta-analisi, 2024.</b> <i>Comparison of polarized versus other types of endurance training intensity distribution on athletes' endurance performance: a systematic review with meta-analysis.</i> <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11329428/" target="_blank" rel="noopener">PMC</a></li>
+          <li id="src-lauersen"><b>Lauersen et al., 2014.</b> <i>The effectiveness of exercise interventions to prevent sports injuries: a systematic review and meta-analysis of randomised controlled trials.</i> British Journal of Sports Medicine 48(11):871–877. Negli studi controllati l’allenamento di forza ha ridotto gli infortuni a meno di un terzo. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=The+effectiveness+of+exercise+interventions+to+prevent+sports+injuries+Lauersen" target="_blank" rel="noopener">PubMed</a></li>
+          <li id="src-blagrove"><b>Blagrove et al., 2018.</b> <i>Effects of strength training on the physiological determinants of middle- and long-distance running performance: a systematic review.</i> Sports Medicine 48(5):1117–1149. Forza e pliometria migliorano l’economia di corsa. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Effects+of+Strength+Training+on+the+Physiological+Determinants+of+Middle-+and+Long-Distance+Running+Performance" target="_blank" rel="noopener">PubMed</a></li>
           <li id="src-daniels"><b>Jack Daniels.</b> <i>Daniels' Running Formula.</i> Human Kinetics. VDOT, ritmi di allenamento, tetti per tipo di seduta, principio duro/facile.</li>
           <li id="src-coaches"><b>Johnston, Koop, Roches, Magness</b>, riassunti con l'evidenza classificata (ricerca o euristica) nella base di conoscenza di switchback-running: <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/volume-progression.md" target="_blank" rel="noopener">progressione del volume</a> · <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/periodization.md" target="_blank" rel="noopener">periodizzazione</a> · <a href="https://github.com/rlacombe/switchback-running/blob/main/knowledge/taper.md" target="_blank" rel="noopener">taper</a></li>
         </ol>
@@ -203,7 +211,7 @@
 <script>
 (async () => {
 const D = await garminData(), P = await garminPlan();
-const SRC = { frandsen: 'Frandsen 2025', buist: 'Buist 2008', nielsen: 'Nielsen 2014', bosquet: 'Bosquet 2007', polarized: 'Meta-analisi 2024', daniels: 'Daniels', coaches: 'Johnston, Koop, Roches' };
+const SRC = { frandsen: 'Frandsen 2025', buist: 'Buist 2008', nielsen: 'Nielsen 2014', bosquet: 'Bosquet 2007', polarized: 'Meta-analisi 2024', daniels: 'Daniels', coaches: 'Johnston, Koop, Roches', lauersen: 'Lauersen 2014', blagrove: 'Blagrove 2018' };
 const decisions = [...(P?.decisions || [])].sort((a, b) => b.date.localeCompare(a.date));
 $('#dec').innerHTML = decisions.length ? decisions.map(d => `<article>
     <time datetime="${d.date}">${fmtDay(d.date)}</time>
