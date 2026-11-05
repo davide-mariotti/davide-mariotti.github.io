@@ -84,7 +84,8 @@
       <ol class="rules">
         <li><b>Subito dopo la corsa facile</b>, non prima: la corsa resta la priorità e lunedì, giovedì e sabato restano di riposo.</li>
         <li><b>Martedì poche gambe</b> (mercoledì c’è la qualità), <b>venerdì le gambe</b>: sabato si riposa e il lungo arriva dopo 48 ore.</li>
-        <li><b>3 serie, 2 nelle settimane leggere</b>: le prime due (gambe a corpo libero), gli scarichi e le settimane con gara o test.</li>
+        <li><b>3 serie, 2 nelle settimane leggere</b>: le prime due, gli scarichi e le settimane con gara o test.</li>
+        <li><b>Gambe a carico graduale</b>: la prima seduta B a corpo libero, poi un manubrio solo (10 kg, al petto negli squat e negli affondi) fino al 6/12, dal 7/12 il carico pieno. Niente pesi nuovi a ridosso della maratona.</li>
         <li><b>Carico</b>: «2 × 10 kg» vuol dire un manubrio per mano, «1 × 10 kg» un manubrio solo. Sull’orologio c’è il totale. Negli esercizi a tempo per lato hai 10" per cambiare lato prima che riparta il tempo.</li>
         <li><b>Mai nei 2 giorni prima di una gara o di un test, né nei 2 dopo una gara</b> (regola 12 della Wiki).</li>
         <li>Ogni serie si chiude con <b>2–3 ripetizioni ancora in canna</b>: forza, non sfinimento. Se il giorno dopo c’è una qualità e le gambe sono dure, togli una serie.</li>
@@ -150,7 +151,7 @@ function item(f) {
   if (!f) return '';
   if (f.skip) return `<span class="it skip" id="f-${f.date}"><b>Forza ${f.kind}: niente</b>${esc(f.skip)}</span>`;
   const a = doneOf(f), past = f.date < TODAY;
-  return `<span class="it${f.sets < 3 ? ' light' : ''}" id="f-${f.date}"><b>Forza ${f.kind}</b><span>${f.sets} serie · ${mins(f.sec)}${f.intro && f.kind === 'B' ? ' · gambe a corpo libero' : ''}</span>
+  return `<span class="it${f.sets < 3 ? ' light' : ''}" id="f-${f.date}"><b>Forza ${f.kind}</b><span>${f.sets} serie · ${mins(f.sec)}${f.kind === 'B' && f.legs < 2 ? (f.legs ? ' · un manubrio solo' : ' · gambe a corpo libero') : ''}</span>
     ${a.length ? `<span class="done">✓ fatta${a[0].day !== f.date ? ` ${dayMonth(a[0].day)}` : ''} · ${Math.round(sum(a.map(x => x.duration)) / 60)}'</span>` : past ? '<span class="miss">non registrata</span>' : ''}</span>`;
 }
 const weeks = P.weeks.filter(w => F.some(f => f.week === w));
