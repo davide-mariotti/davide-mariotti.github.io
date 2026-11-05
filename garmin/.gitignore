@@ -8,3 +8,5 @@ __pycache__/
 CLAUDE.md
 piano.js
 firestore.rules
+CHROME.md
+chrome/

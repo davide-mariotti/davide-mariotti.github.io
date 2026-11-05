@@ -22,6 +22,7 @@
 .ex td.num { white-space: nowrap; }
 /* gif dell'esercizio (ExerciseGymGifsDB, sfondo bianco): al click si apre grande */
 .ex .gif { float: left; margin: 0 12px 4px 0; line-height: 0; }
+.ex .exn { overflow: hidden; }  /* nome e nota restano accanto alla gif, non sotto */
 .ex .gif img { width: 84px; height: 84px; object-fit: contain; background: #fff; border: 1px solid var(--border); border-radius: 8px; }
 /* calendario: una riga per settimana, martedì e venerdì */
 .fz { table-layout: fixed; }
@@ -84,6 +85,7 @@
         <li><b>Subito dopo la corsa facile</b>, non prima: la corsa resta la priorità e lunedì, giovedì e sabato restano di riposo.</li>
         <li><b>Martedì poche gambe</b> (mercoledì c’è la qualità), <b>venerdì le gambe</b>: sabato si riposa e il lungo arriva dopo 48 ore.</li>
         <li><b>3 serie, 2 nelle settimane leggere</b>: le prime due (gambe a corpo libero), gli scarichi e le settimane con gara o test.</li>
+        <li><b>Carico</b>: «2 × 10 kg» vuol dire un manubrio per mano, «1 × 10 kg» un manubrio solo. Sull’orologio c’è il totale. Negli esercizi a tempo per lato hai 10" per cambiare lato prima che riparta il tempo.</li>
         <li><b>Mai nei 2 giorni prima di una gara o di un test, né nei 2 dopo una gara</b> (regola 12 della Wiki).</li>
         <li>Ogni serie si chiude con <b>2–3 ripetizioni ancora in canna</b>: forza, non sfinimento. Se il giorno dopo c’è una qualità e le gambe sono dure, togli una serie.</li>
       </ol>
@@ -139,8 +141,8 @@ for (const k of ['A', 'B']) {
   $(`#ses-${k}`).innerHTML = `<h3>Forza ${k} · ${DAY[f.day]}</h3><p class="sub">${esc(f.label)} · ${mins(f.sec)} con 3 serie, ${mins(light.sec)} con 2 · su Garmin «${esc(f.name)}»</p>
     <p class="why">${esc(f.why)}</p>
     <div class="table-wrap"><table class="ex"><thead><tr><th>Esercizio</th><th class="num">Ripetizioni</th><th class="num">Recupero</th><th class="num">Carico</th></tr></thead><tbody>
-    ${f.ex.map(e => `<tr><td><a class="gif" href="${GIF}${e.gif}.gif" target="_blank" rel="noopener" title="Apri la gif"><img src="${GIF}${e.gif}.gif" alt="${esc(e.name)}: esecuzione" loading="lazy" width="84" height="84"></a><b>${esc(e.name)}</b><small>${esc(e.note)}</small></td><td class="num">${qty(e)}</td><td class="num" data-l="recupero ">${e.rest}"</td>
-      <td class="num">${e.kg ? `${e.kg} kg` : 'corpo libero'}</td></tr>`).join('')}</tbody></table></div>`;
+    ${f.ex.map(e => `<tr><td><a class="gif" href="${GIF}${e.gif}.gif" target="_blank" rel="noopener" title="Apri la gif"><img src="${GIF}${e.gif}.gif" alt="${esc(e.name)}: esecuzione" loading="lazy" width="84" height="84"></a><div class="exn"><b>${esc(e.name)}</b><small>${esc(e.note)}</small></div></td><td class="num">${qty(e)}</td><td class="num" data-l="recupero ">${e.rest}"${e.side && typeof e.q !== 'number' ? `<small>+ ${P.SWITCH}" al cambio lato</small>` : ''}</td>
+      <td class="num">${e.kg ? `${e.n || 1} × ${e.kg} kg` : 'corpo libero'}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
 // ---------- calendario ----------
