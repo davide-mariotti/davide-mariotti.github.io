@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { localize, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const EMAIL = 'd.mariotti1991@gmail.com';
+const UPDATED = '2026-11-17';
+
+// Every statement here must match what the game's code does (scripts/Ads.gd, Backend.gd, Purchases.gd, Meta.gd).
+const c = {
+  en: {
+    title: 'AscendKeep privacy policy',
+    description: 'What AscendKeep stores, what Google AdMob, Firebase and Google Play receive, and how to delete your data.',
+    kicker: 'AscendKeep · privacy',
+    h: 'Privacy policy',
+    updated: `Last updated: ${UPDATED}`,
+    intro: `AscendKeep is a game made by Davide Mariotti, an independent developer in Italy (contact: <a href="mailto:${EMAIL}">${EMAIL}</a>). This page explains, without legalese, what the game stores and what it shares.`,
+    sections: [
+      { h: 'On your phone', p: ['Your progress (Souls, upgrades, tiers, settings) is saved in a file on your device. Uninstalling the game deletes it. "Reset Progress" in the menu clears it too.'] },
+      { h: 'Cloud save (Firebase)', p: [
+        'To keep your progress if you change phone, the game signs you in to <strong>Firebase Authentication</strong> (Google) with an anonymous account: a random ID, no name, no email. Your progress is stored under that ID in <strong>Cloud Firestore</strong> (Google).',
+        'If you choose "Sign in with Google", the anonymous account is linked to your Google account, so Firebase also receives your Google account ID and email address. Nobody else can read your save: the database rules only let each account read and write its own document.',
+      ] },
+      { h: 'Ads (Google AdMob)', p: [
+        'The only ads are rewarded videos you choose to watch by tapping "Watch an ad". When an ad is requested, <strong>Google AdMob</strong> may collect your device\'s advertising ID, IP address and information about the ad and your device, to show and measure ads and to prevent fraud.',
+        'If you are in the European Economic Area, the UK or Switzerland, the game shows Google\'s consent form before any ad: you choose whether ads can be personalised. You can change your choice at any time in <em>Settings → Privacy choices</em>. More in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from apps that use its services</a>.',
+      ] },
+      { h: 'Purchases (Google Play)', p: ['Optional purchases go through <strong>Google Play Billing</strong>. Google handles the payment; the game only receives the confirmation that you own an item. It never sees your card or payment details.'] },
+      { h: 'What the game does not do', p: ['No analytics, no tracking SDK besides the ones above, no selling or sharing of your data with anyone else. The game is not directed at children under 13.'] },
+      { h: 'Deleting your data', p: [
+        'Local data: uninstall the game or use "Reset Progress".',
+        `Cloud save: write to <a href="mailto:${EMAIL}?subject=AscendKeep%20data%20deletion">${EMAIL}</a> with the subject "AscendKeep data deletion". If you linked a Google account, write from that address and both the account and the save are deleted within 30 days. Anonymous accounts can't be traced back to you, and after you uninstall nobody can reach that save again; to have its cloud copy removed too, include the Cloud save ID shown in Settings.`,
+      ] },
+      { h: 'Your rights', p: ['Under the GDPR you can ask to access, correct or delete your data, or object to its processing, by writing to the address above. You can also complain to the Italian data protection authority (Garante per la protezione dei dati personali).'] },
+      { h: 'Changes', p: ['If this policy changes, this page is updated and the date at the top changes with it.'] },
+    ],
+    back: '← Back to AscendKeep',
+  },
+  it: {
+    title: 'Informativa privacy di AscendKeep',
+    description: 'Cosa salva AscendKeep, cosa ricevono Google AdMob, Firebase e Google Play, e come cancellare i tuoi dati.',
+    kicker: 'AscendKeep · privacy',
+    h: 'Informativa sulla privacy',
+    updated: `Ultimo aggiornamento: ${UPDATED}`,
+    intro: `AscendKeep è un gioco di Davide Mariotti, sviluppatore indipendente in Italia (contatto: <a href="mailto:${EMAIL}">${EMAIL}</a>). Questa pagina spiega, senza giri di parole, cosa salva il gioco e cosa condivide.`,
+    sections: [
+      { h: 'Sul tuo telefono', p: ['I progressi (Souls, potenziamenti, tier, impostazioni) sono salvati in un file sul dispositivo. Disinstallando il gioco si cancellano. Anche "Reset Progress" nel menu li azzera.'] },
+      { h: 'Salvataggio online (Firebase)', p: [
+        'Per non perdere i progressi se cambi telefono, il gioco ti collega a <strong>Firebase Authentication</strong> (Google) con un account anonimo: un ID casuale, niente nome, niente email. I progressi sono salvati sotto quell\'ID in <strong>Cloud Firestore</strong> (Google).',
+        'Se scegli "Sign in with Google", l\'account anonimo viene collegato al tuo account Google, quindi Firebase riceve anche l\'ID e l\'indirizzo email dell\'account Google. Nessun altro può leggere il tuo salvataggio: le regole del database permettono a ogni account di leggere e scrivere solo il proprio documento.',
+      ] },
+      { h: 'Pubblicità (Google AdMob)', p: [
+        'Le uniche pubblicità sono video premiati che scegli tu di guardare toccando "Watch an ad". Quando si chiede un annuncio, <strong>Google AdMob</strong> può raccogliere l\'ID pubblicitario del dispositivo, l\'indirizzo IP e informazioni sull\'annuncio e sul dispositivo, per mostrare e misurare gli annunci e prevenire le frodi.',
+        'Se ti trovi nello Spazio economico europeo, nel Regno Unito o in Svizzera, prima di qualsiasi annuncio il gioco mostra il modulo di consenso di Google: scegli tu se gli annunci possono essere personalizzati. Puoi cambiare scelta in qualsiasi momento da <em>Settings → Privacy choices</em>. Altre informazioni in <a href="https://policies.google.com/technologies/partner-sites?hl=it" target="_blank" rel="noopener">Come Google utilizza le informazioni dei siti o delle app che utilizzano i propri servizi</a>.',
+      ] },
+      { h: 'Acquisti (Google Play)', p: ['Gli acquisti facoltativi passano da <strong>Google Play Billing</strong>. Il pagamento lo gestisce Google; il gioco riceve solo la conferma che possiedi un oggetto. Non vede mai la carta né i dati di pagamento.'] },
+      { h: 'Cosa il gioco non fa', p: ['Niente statistiche, nessun altro strumento di tracciamento oltre a quelli qui sopra, nessuna vendita o condivisione dei tuoi dati con altri. Il gioco non è pensato per bambini sotto i 13 anni.'] },
+      { h: 'Cancellare i tuoi dati', p: [
+        'Dati sul telefono: disinstalla il gioco o usa "Reset Progress".',
+        `Salvataggio online: scrivi a <a href="mailto:${EMAIL}?subject=AscendKeep%20data%20deletion">${EMAIL}</a> con oggetto "AscendKeep data deletion". Se hai collegato un account Google, scrivi da quell'indirizzo: account e salvataggio vengono cancellati entro 30 giorni. Gli account anonimi non sono riconducibili a te, e dopo la disinstallazione nessuno può più raggiungere quel salvataggio; per cancellare anche la copia online, indica il Cloud save ID che trovi nelle Impostazioni.`,
+      ] },
+      { h: 'I tuoi diritti', p: ['In base al GDPR puoi chiedere di accedere ai tuoi dati, correggerli o cancellarli, o opporti al trattamento, scrivendo all\'indirizzo qui sopra. Puoi anche presentare reclamo al Garante per la protezione dei dati personali.'] },
+      { h: 'Modifiche', p: ['Se questa informativa cambia, la pagina viene aggiornata insieme alla data in alto.'] },
+    ],
+    back: '← Torna ad AscendKeep',
+  },
+}[lang];
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/apps/ascendkeep/privacy/">
+  <article class="wrap max-w-3xl pb-24 pt-40">
+    <p class="kicker">{c.kicker}</p>
+    <h1 class="h-section mt-4">{c.h}</h1>
+    <p class="mt-3 text-sm text-faint">{c.updated}</p>
+    <div class="prose-dm mt-8 text-lg">
+      <p set:html={c.intro} />
+      {c.sections.map((s) => (
+        <section class="mt-10">
+          <h2 class="text-xl font-semibold tracking-tight text-ink">{s.h}</h2>
+          {s.p.map((t) => <p set:html={t} />)}
+        </section>
+      ))}
+    </div>
+    <a href={localize(lang, '/apps/ascendkeep/')} class="btn btn-ghost mt-12">{c.back}</a>
+  </article>
+</Layout>

@@ -1,7 +1,7 @@
 ---
 import { Check, X, Construction, Ghost, Crown, FlaskConical, Network, Cloud, Coffee, ArrowUpRight } from '@lucide/astro';
 import Layout from '../../layouts/Layout.astro';
-import { SOCIAL, type Lang } from '../../i18n';
+import { SOCIAL, localize, type Lang } from '../../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -102,7 +102,7 @@ const shots = ['home', 'upgrades', 'battle'];
         <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
           <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}<ArrowUpRight /></a>
         </div>
-        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta} · <a href={localize(lang, '/apps/ascendkeep/privacy/')} class="underline underline-offset-2 hover:text-ink">{lang === 'it' ? 'Informativa privacy' : 'Privacy policy'}</a></p>
       </div>
       <div class="blur-word relative mx-auto" style="--i:3">
         <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#5b21b6] opacity-60 blur-3xl"></div>
