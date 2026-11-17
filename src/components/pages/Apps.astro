@@ -8,21 +8,23 @@ const { lang } = Astro.props;
 const c = {
   en: {
     title: 'Apps',
-    description: 'Desktop apps by Davide Mariotti. Small, free, no install, built because he needed them.',
-    h: ['Small apps,', 'written because I needed them.'],
-    lead: 'Free, tiny, no installer, no account, nothing phoning home. Now they\'re yours too.',
+    description: 'Apps by Davide Mariotti: Sentinel, a tiny Windows utility, and AscendKeep, an Android game in development.',
+    h: ['Apps I made', 'because I needed them, or wanted to play them.'],
+    lead: 'Sentinel runs on Windows and asks for nothing. AscendKeep is a game for Android, still in the oven.',
     sentinel: 'Keeps your Windows PC awake. Lunch break, battery alerts, an eye in the tray that tells you what it\'s doing.',
     discover: 'Discover',
-    soon: 'More on the way. They tend to show up when something annoys me enough.',
+    ascendkeep: 'A tower defense where losing is part of the plan: waves of Voidborn, 100 tiers, bosses, a skill tree.',
+    dev: 'in development',
   },
   it: {
     title: 'App',
-    description: 'App desktop di Davide Mariotti. Piccole, gratuite, senza installazione, scritte perché gli servivano.',
-    h: ['Piccole app,', 'scritte perché mi servivano.'],
-    lead: 'Gratis, leggerissime, senza installazione, senza account, senza niente che chiama casa. Adesso sono anche tue.',
+    description: 'Le app di Davide Mariotti: Sentinel, una piccola utility per Windows, e AscendKeep, un gioco Android in sviluppo.',
+    h: ['App che ho fatto', 'perché mi servivano, o perché volevo giocarci.'],
+    lead: 'Sentinel gira su Windows e non chiede niente. AscendKeep è un gioco per Android, ancora in forno.',
     sentinel: "Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, un occhio nella tray che ti dice cosa sta facendo.",
     discover: 'Scopri',
-    soon: 'Altre in arrivo. Di solito nascono quando qualcosa mi dà abbastanza fastidio.',
+    ascendkeep: 'Un tower defense dove perdere fa parte del piano: ondate di Voidborn, 100 tier, boss, un albero delle skill.',
+    dev: 'in sviluppo',
   },
 }[lang];
 ---
@@ -43,8 +45,14 @@ const c = {
         <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </div>
     </a>
-    <div class="reveal grid place-items-center rounded-3xl border border-dashed border-line-strong p-8 text-center" style="--d:90ms">
-      <p class="max-w-xs text-muted"><span class="serif text-2xl text-ink">…</span><br />{c.soon}</p>
-    </div>
+    <a href={localize(lang, '/apps/ascendkeep/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center" style="--d:90ms">
+      <img src="/assets/icons/apps/ascendkeep.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(91_33_182/0.5)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+      <div>
+        <div class="flex flex-wrap gap-2"><span class="chip">Android</span><span class="chip">Godot</span><span class="chip">{c.dev}</span></div>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight">AscendKeep</h2>
+        <p class="mt-2 text-muted">{c.ascendkeep}</p>
+        <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+    </a>
   </section>
 </Layout>

@@ -1,0 +1,177 @@
+---
+import { Check, X, Construction, Ghost, Crown, FlaskConical, Network, Cloud, Coffee, ArrowUpRight } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const REPO = 'https://github.com/davide-mariotti/AscendKeep';
+
+const c = {
+  en: {
+    description: 'AscendKeep, a tower defense for Android made in Godot: waves of Voidborn, 100 tiers, bosses, a skill tree. In development.',
+    kicker: 'Android game · in development',
+    tagline: ['A tower defense', 'where losing is part of the plan.'],
+    source: 'Source code',
+    meta: 'Godot 4.7 · Android · not on the Play Store yet',
+    lore: 'The world was swallowed by the Void. The Keep is the last thing standing, and it isn\'t a building: it\'s alive, it remembers every fall, and each time the Voidborn tear it down it absorbs their Souls and comes back stronger. You don\'t win AscendKeep. You come back better.',
+    shots: ['The Keep', 'Reconstruction', 'A wave of Voidborn'],
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Waves of Voidborn walk to the Core; the Core shoots the closest one in range. Every cleared wave drops Souls.',
+      'Tiers of 100 waves, a boss every 10. Reach wave 50 and the next tier opens.',
+      '10 upgrades in Souls, a skill tree of 150 hand-written nodes, 103 Lab researches.',
+      'Cloud save on Firebase, with an anonymous account by default.',
+    ],
+    doesntList: [
+      'Show ads unless you tap "Watch an ad". The only ones are optional rewarded videos.',
+      'Sell power you can\'t earn by playing: the paid items are conveniences and two cosmetic skins.',
+      'Run on iOS, or sit on the Play Store. Not yet.',
+      'End. There are 100 tiers. Good luck.',
+    ],
+    loopTitle: ['Fall, absorb,', 'come back stronger.'],
+    loop: [
+      { t: 'Souls', d: 'Dropped by every wave, spent on permanent Reconstruction upgrades between runs.' },
+      { t: 'Skill Points', d: 'Bosses drop them, plus one a day from an ad. They open a tree of three branches, fifty nodes each.' },
+      { t: 'Lab', d: 'One-shot researches in a lab voice: Swift Tides, Voidsight, Overcharge Core and a hundred more.' },
+      { t: 'Tiers', d: 'Each tier is a 100-wave gauntlet. Old tiers stay open, new ones hit harder and pay better.' },
+    ],
+    statusTitle: 'Before the Play Store',
+    status: [
+      'GDPR consent form for ads (AdMob UMP) and a privacy policy.',
+      'The four in-app products on Play Console, and a test on a real phone.',
+      'Google sign-in for cloud save: wired in, waiting for the Firebase Android app.',
+    ],
+    coffeeTitle: ['Want to see it', 'on the Play Store?'],
+    coffeeText: 'AscendKeep is built in the evenings. A coffee on Ko-fi buys a few more waves of development.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: 'AscendKeep, un tower defense per Android fatto in Godot: ondate di Voidborn, 100 tier, boss, un albero delle skill. In sviluppo.',
+    kicker: 'Gioco Android · in sviluppo',
+    tagline: ['Un tower defense', 'dove perdere fa parte del piano.'],
+    source: 'Codice sorgente',
+    meta: 'Godot 4.7 · Android · non ancora sul Play Store',
+    lore: 'Il mondo è stato inghiottito dal Vuoto. La Keep è l\'ultima cosa ancora in piedi, e non è un edificio: è viva, ricorda ogni caduta, e ogni volta che i Voidborn la abbattono assorbe le loro Souls e torna più forte. AscendKeep non si vince. Si ritorna più forti.',
+    shots: ['La Keep', 'Reconstruction', "Un'ondata di Voidborn"],
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Ondate di Voidborn camminano verso il Core; il Core spara al più vicino nel raggio. Ogni ondata superata lascia Souls.',
+      'Tier da 100 ondate, un boss ogni 10. Alla wave 50 si apre il tier successivo.',
+      '10 potenziamenti in Souls, un albero di 150 nodi scritti a mano, 103 ricerche del Lab.',
+      'Salvataggio online su Firebase, con un account anonimo di base.',
+    ],
+    doesntList: [
+      'Non mostra pubblicità se non tocchi "Watch an ad". Le uniche sono video premiati facoltativi.',
+      'Non vende potenza che non puoi guadagnare giocando: gli acquisti sono comodità e due skin estetiche.',
+      'Non gira su iOS e non è sul Play Store. Non ancora.',
+      'Non finisce. I tier sono 100. In bocca al lupo.',
+    ],
+    loopTitle: ['Cadere, assorbire,', 'tornare più forti.'],
+    loop: [
+      { t: 'Souls', d: 'Le lascia ogni ondata, si spendono in potenziamenti permanenti di Reconstruction tra una partita e l\'altra.' },
+      { t: 'Skill Points', d: 'Le lasciano i boss, più una al giorno da una pubblicità. Aprono un albero di tre rami, cinquanta nodi ciascuno.' },
+      { t: 'Lab', d: 'Ricerche una tantum con la voce di un laboratorio: Swift Tides, Voidsight, Overcharge Core e altre cento.' },
+      { t: 'Tier', d: 'Ogni tier è una prova da 100 ondate. I vecchi restano aperti, i nuovi picchiano più forte e pagano meglio.' },
+    ],
+    statusTitle: 'Prima del Play Store',
+    status: [
+      'Il consenso GDPR per le pubblicità (AdMob UMP) e una privacy policy.',
+      'I quattro prodotti in-app su Play Console, e una prova su un telefono vero.',
+      "L'accesso con Google per il salvataggio online: collegato, aspetta l'app Android su Firebase.",
+    ],
+    coffeeTitle: ['Vuoi vederlo', 'sul Play Store?'],
+    coffeeText: 'AscendKeep nasce di sera. Un caffè su Ko-fi vale qualche ondata di sviluppo in più.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const loopIcons = [Ghost, Crown, FlaskConical, Network];
+const shots = ['home', 'upgrades', 'battle'];
+---
+<Layout lang={lang} title="AscendKeep" description={c.description} path="/apps/ascendkeep/">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[5%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#5b21b6]/30 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-20 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="chip blur-word w-fit"><Construction class="size-3.5 text-accent" />{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">AscendKeep<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}<ArrowUpRight /></a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#5b21b6] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/ascendkeep.svg" alt="AscendKeep icon" width="300" height="300" class="relative w-[min(300px,66vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- LORE + SCREENSHOTS -->
+  <section class="wrap pb-12">
+    <p class="reveal max-w-4xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted"><span class="serif text-ink">“</span>{c.lore}</p>
+    <div class="mt-14 grid grid-cols-3 gap-3 sm:gap-6">
+      {shots.map((s, i) => (
+        <figure class="reveal" style={`--d:${i * 90}ms`}>
+          <img src={`/assets/img/ascendkeep/${s}.webp`} alt={c.shots[i]} width="405" height="720" loading="lazy" class="w-full rounded-2xl border border-line shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)]" />
+          <figcaption class="kicker mt-3 text-center !text-[0.65rem] sm:!text-xs">{c.shots[i]}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- THE LOOP -->
+  <section class="wrap py-24">
+    <h2 class="h-section reveal">{c.loopTitle[0]} <span class="serif grad">{c.loopTitle[1]}</span></h2>
+    <div class="mt-14 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      {c.loop.map((l, i) => {
+        const Icon = loopIcons[i];
+        return (
+          <div class="reveal bg-bg p-8" style={`--d:${i * 80}ms`}>
+            <Icon class="size-7 text-accent" />
+            <h3 class="mt-5 text-xl font-semibold tracking-tight">{l.t}</h3>
+            <p class="mt-2 leading-relaxed text-muted">{l.d}</p>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  <section class="wrap py-12">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><Cloud /></div>
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight">{c.statusTitle}</h2>
+        <ul class="mt-4 space-y-2">{c.status.map((t) => <li class="flex gap-3 text-muted"><span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent"></span>{t}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#5b21b6]/30 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

@@ -147,6 +147,7 @@
 
   /* words that rise out of a blur, staggered by --i (hero titles) */
   .blur-word { display: inline-block; animation: blur-in 1s var(--ease-out-expo) both; animation-delay: calc(var(--intro-delay, 0ms) + var(--i, 0) * 70ms + 150ms); }
+  .chip.blur-word { display: inline-flex; } /* the animation must not break the chip's icon + text row */
 
   .prose-dm p { margin-block: 1em; line-height: 1.75; color: var(--color-muted); }
   .prose-dm strong { color: var(--color-ink); font-weight: 600; }
