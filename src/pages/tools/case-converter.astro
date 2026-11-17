@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="Case Converter" description="Instantly convert text between sentence case, upper case, lower case, camel case, and more." path="/tools/case-converter/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/case-converter.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+        <div class="converter-container">
+            <div class="text-center mb-5">
+                <h1 class="section-title display-4">Case <span class="text-gradient">Converter</span></h1>
+                <p class="lead text-white opacity-75">Transform your text between various case styles instantly with my
+                    premium tool.</p>
+            </div>
+
+            <div class="glass-panel mb-4">
+                <div class="mb-3">
+                    <label class="form-label text-white small opacity-75 mb-2">Input Text</label>
+                    <textarea id="inputText" placeholder="Paste or type your text here..."
+                        oninput="updateCharacterCount()"></textarea>
+                    <div id="characterCount">0 Characters</div>
+                </div>
+
+                <div class="tool-buttons">
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToSentenceCase()">Sentence
+                        case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToLowercase()">Lower
+                        case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToUppercase()">Upper
+                        case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToCamelcase()">Camel
+                        case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToInverseCase()">Inverse
+                        Case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToTitleCase()">Title
+                        Case</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="convertToTextForUpload()">Clean for
+                        Upload</button>
+                    <button class="btn btn-outline-light rounded-pill" onclick="resetText()">Reset</button>
+                </div>
+
+                <div class="mt-5">
+                    <label class="form-label text-white small opacity-75 mb-2">Output Result</label>
+                    <textarea id="outputText" readonly placeholder="Result will appear here..."></textarea>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-glow px-5 py-3 rounded-pill" onclick="copyToClipboard()">
+                            <span class="me-2">📋</span> Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <script is:inline src="/assets/js/tools/clipboard.js" crossorigin="anonymous"></script>
+  <script is:inline src="/assets/js/tools/case-converter.js" crossorigin="anonymous"></script>
+</Layout>

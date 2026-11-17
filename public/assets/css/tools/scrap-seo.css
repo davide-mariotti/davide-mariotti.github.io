@@ -1,0 +1,221 @@
+/* - - - - - - - - - - */
+/* - - scrap-seo - - - */
+/* - - - - - - - - - - */
+
+.tool-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#scrap-seo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#scrap-seo input[type="text"],
+#scrap-seo select,
+#scrap-seo textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#scrap-seo input:focus,
+#scrap-seo select:focus,
+#scrap-seo textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 15px var(--color-primary-glow);
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.advanced-options {
+  margin-top: 1.5rem;
+}
+
+.advanced-options .accordion-item {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.advanced-options .accordion-button {
+  background: rgba(255, 255, 255, 0.03);
+  color: white;
+  box-shadow: none;
+  padding: 1rem;
+}
+
+.advanced-options .accordion-button:not(.collapsed) {
+  background: rgba(34, 139, 34, 0.1);
+  color: var(--color-primary);
+}
+
+.advanced-options .accordion-button::after {
+  filter: invert(1);
+}
+
+.accordion-body {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+}
+
+/* Modal Styling */
+#infoModal {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+#infoModal .modal-content {
+  background: var(--color-bg-surface-glass);
+  border: 1px solid var(--color-primary);
+  border-radius: 20px;
+  color: white;
+  max-width: 700px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+#infoModal .modal-content h3 {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+#infoModal .close {
+  color: white;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+#infoModal .close:hover {
+  opacity: 1;
+}
+
+/* Results Table */
+#results {
+  margin-top: 3rem;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.results-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.results-header th {
+  padding: 15px 20px;
+  text-align: left;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.result-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.result-row:hover {
+  background: rgba(34, 139, 34, 0.05);
+  transform: scale(1.01);
+}
+
+.result-row td {
+  padding: 20px;
+  vertical-align: top;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.result-row td:first-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px 0 0 12px;
+}
+
+.result-row td:last-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0 12px 12px 0;
+}
+
+.result-title {
+  font-weight: 700;
+  color: white;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.result-snippet {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.result-url {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.result-url:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Friendly Results */
+@media (max-width: 768px) {
+  .results-header {
+    display: none;
+  }
+
+  .result-row td {
+    display: block;
+    padding: 15px 20px;
+  }
+
+  .result-row td:first-child {
+    border-radius: 12px 12px 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: none;
+  }
+
+  .result-row td:last-child {
+    border-radius: 0 0 12px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+  }
+}
+
+/* Info Button */
+.btn-info-small {
+  background: rgba(34, 139, 34, 0.2);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+.btn-info-small:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+}

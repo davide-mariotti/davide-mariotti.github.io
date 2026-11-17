@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="Image Optimizer" description="Compress and optimize images locally in your browser, no upload required." path="/tools/img-optimization/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/img-optimization.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+    <div class="optimizer-container">
+      <div class="text-center mb-5">
+        <h1 class="section-title display-4"><span class="text-gradient">IMG</span> Optimizer</h1>
+        <p class="lead text-white opacity-75">Compress and optimize your images instantly, right in your browser.</p>
+      </div>
+
+      <div class="glass-panel">
+        <div id="img-optimization">
+          <!-- Drop Zone -->
+          <div class="upload-zone" id="dropZone" onclick="document.getElementById('inputFile').click()">
+            <span class="upload-icon">🖼️</span>
+            <h3>Click or Drag Image Here</h3>
+            <p class="opacity-50">Supports: JPG, PNG, WEBP</p>
+            <input type="file" id="inputFile" accept="image/*" style="display: none;">
+            <span id="fileNameDisplay">Selected File: No File Uploaded</span>
+          </div>
+
+          <!-- Settings -->
+          <div class="settings-pane text-center">
+            <label for="qualityInput" class="h5 mb-3 d-block">Compression Quality</label>
+            <div class="slider-container">
+              <input type="range" id="qualityInput" min="0" max="1" step="0.1" value="0.9"
+                oninput="updateQualityDisplay()">
+              <div id="qualityDisplay">90%</div>
+            </div>
+
+            <button onclick="optimizeImage()" class="btn btn-primary btn-glow px-5 py-3 rounded-pill mt-4 w-100"
+              id="optimizeButton" disabled>
+              Optimize & Download
+            </button>
+          </div>
+
+          <!-- Preview -->
+          <div class="text-center mt-3">
+            <canvas id="outputCanvasIMG"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+    <script is:inline src="/assets/js/tools/img-optimization.js" crossorigin="anonymous"></script>
+</Layout>

@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="Image Extractor" description="Extract and download all images from any webpage with a single click. Paste a URL and get instant access to every image on the page." path="/tools/img-extractor/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/img-extractor.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+        <div class="tool-container">
+            <div class="text-center mb-5">
+                <h1 class="section-title display-4"><span class="text-gradient">Image</span> Extractor</h1>
+                <p class="lead text-white opacity-75">Extract and download all images from any webpage instantly.</p>
+            </div>
+
+            <div class="glass-panel">
+                <div id="img-extractor">
+                    <div class="input-row">
+                        <input type="url" id="urlInput" placeholder="https://example.com" autocomplete="off">
+                        <button class="btn btn-primary btn-glow px-4 py-2 rounded-pill" id="extractBtn" onclick="extractImages()">
+                            Extract
+                        </button>
+                    </div>
+
+                    <div class="filter-row mt-3">
+                        <div class="filter-chips">
+                            <button class="chip active" data-filter="all" onclick="setFilter('all')">All</button>
+                            <button class="chip" data-filter="jpg" onclick="setFilter('jpg')">JPG</button>
+                            <button class="chip" data-filter="png" onclick="setFilter('png')">PNG</button>
+                            <button class="chip" data-filter="gif" onclick="setFilter('gif')">GIF</button>
+                            <button class="chip" data-filter="svg" onclick="setFilter('svg')">SVG</button>
+                            <button class="chip" data-filter="webp" onclick="setFilter('webp')">WEBP</button>
+                        </div>
+                        <div id="countBadge" class="count-badge d-none">
+                            <span id="visibleCount">0</span> images
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results"></div>
+        </div>
+    </div>
+  </div>
+    <script is:inline src="/assets/js/tools/img-extractor.js" crossorigin="anonymous"></script>
+</Layout>

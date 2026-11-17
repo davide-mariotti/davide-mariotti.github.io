@@ -1,0 +1,71 @@
+/* Old Bootstrap-based tool pages, inside the new site.
+   Bootstrap (scoped to .legacy-tool, see legacy-bootstrap.css) lives in the "legacy" layer: above Tailwind's reset, below the site's components and utilities,
+   so the tools keep working while header, footer and buttons follow the new design. */
+@import url("legacy-bootstrap.css") layer(legacy);
+
+@layer legacy {
+  :root {
+    /* the old site's variables, mapped onto the new palette (tool CSS files still use them) */
+    --color-bg-base: #050706;
+    --color-bg-surface: #0b0f0d;
+    --color-bg-surface-glass: rgb(11 15 13 / 0.7);
+    --color-primary: #2fe37f;
+    --color-primary-dim: #12a150;
+    --color-primary-glow: rgb(47 227 127 / 0.35);
+    --color-secondary: #c6f36b;
+    --color-text-main: #ecf3ee;
+    --glass-border: 1px solid rgb(255 255 255 / 0.08);
+    --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.5);
+    --glass-blur: blur(16px);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --font-heading: "Geist Variable", system-ui, sans-serif;
+    --font-body: "Geist Variable", system-ui, sans-serif;
+  }
+  body { background: transparent; color: #ecf3ee; font-family: "Geist Variable", system-ui, sans-serif; }
+  .legacy-tool, .legacy-tool[data-bs-theme=dark] {
+    background: transparent;
+    --bs-body-bg: transparent;
+    --bs-tertiary-bg: rgb(255 255 255 / 0.03);
+    --bs-secondary-bg: rgb(255 255 255 / 0.05);
+    --bs-body-color: #ecf3ee;
+    --bs-border-color: rgb(255 255 255 / 0.1);
+    --bs-primary: #2fe37f;
+    --bs-primary-rgb: 47, 227, 127;
+    --bs-link-color-rgb: 47, 227, 127;
+    --bs-link-hover-color-rgb: 198, 243, 107;
+    padding-top: 2rem;
+  }
+  .legacy-tool .glass-panel {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0.01)), #0b0f0d;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1.5rem;
+    padding: 1.75rem;
+  }
+  .legacy-tool .text-gradient {
+    background: linear-gradient(100deg, #2fe37f, #c6f36b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .legacy-tool .section-title { font-weight: 600; letter-spacing: -0.04em; margin-bottom: 1rem; }
+  .legacy-tool .btn-glow, .legacy-tool .btn-primary {
+    background: #2fe37f;
+    color: #04140a !important;
+    border: 0;
+    box-shadow: 0 10px 40px -10px rgb(47 227 127 / 0.6);
+  }
+  .legacy-tool .btn-glow:hover, .legacy-tool .btn-primary:hover { background: #4ff094; }
+  .legacy-tool .btn-outline-light { border: 1px solid rgb(255 255 255 / 0.16); color: #ecf3ee; background: rgb(255 255 255 / 0.03); }
+  .legacy-tool .btn-outline-light:hover { border-color: rgb(47 227 127 / 0.5); background: rgb(47 227 127 / 0.08); color: #ecf3ee; }
+  .legacy-tool .form-control, .legacy-tool .form-select {
+    background-color: rgb(255 255 255 / 0.03);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    color: #ecf3ee;
+    border-radius: 1rem;
+  }
+  .legacy-tool .form-control:focus, .legacy-tool .form-select:focus { border-color: rgb(47 227 127 / 0.6); box-shadow: 0 0 0 3px rgb(47 227 127 / 0.15); }
+  .legacy-tool .form-check-input:checked { background-color: #2fe37f; border-color: #2fe37f; }
+}

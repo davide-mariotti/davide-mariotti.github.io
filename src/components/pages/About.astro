@@ -1,0 +1,128 @@
+---
+import { ArrowUpRight, MapPin, Briefcase, GraduationCap, Gamepad2, PenLine, Plane } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { localize, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const groups = {
+  code: [['html5', 'HTML5'], ['css', 'CSS'], ['javascript', 'JavaScript'], ['typescript', 'TypeScript'], ['react', 'React'], ['astro', 'Astro'], ['nodejs', 'Node.js'], ['python', 'Python'], ['csharp', 'C#']],
+  ship: [['vite', 'Vite'], ['tailwind', 'Tailwind CSS'], ['bootstrap', 'Bootstrap'], ['firebase', 'Firebase'], ['godot', 'Godot'], ['git', 'Git'], ['vscode', 'VS Code']],
+  design: [['figma', 'Figma'], ['photoshop', 'Photoshop'], ['illustrator', 'Illustrator'], ['aftereffects', 'After Effects'], ['premiere', 'Premiere Pro']],
+};
+
+const c = {
+  en: {
+    title: 'About',
+    description: 'Davide Mariotti, front-end developer at Adiacent, from San Miniato. No degree, almost ten years of work, a lot of side projects.',
+    kicker: 'About',
+    h: ['Hi, I\'m Davide.', 'I make the web feel quick.'],
+    p: [
+      'I come from the hills of San Miniato, in Tuscany. My way into the digital world wasn\'t a straight line: it was mostly the stubborn urge to build things and see them work.',
+      'Today I\'m a front-end developer at <strong>Adiacent</strong>, where I help shape the digital presence of very different brands: corporate sites, e-commerce, components for Adobe Experience Manager, the odd internal tool. Over time I went from building pages to designing how people move through them.',
+      'I don\'t have a degree. I have specialised courses at <strong>IED</strong> and <strong>SSTI</strong> in Florence, which gave me a base in design thinking and technical execution, and almost ten years of real projects on top.',
+      'After hours I keep building: desktop apps, browser tools, games. Right now I\'m spending time with React, Astro and Node.js, and this site is the proof.',
+    ],
+    facts: [
+      { icon: MapPin, k: 'Based in', v: 'San Miniato, Tuscany' },
+      { icon: Briefcase, k: 'Working at', v: 'Adiacent, front-end developer' },
+      { icon: GraduationCap, k: 'Studied at', v: 'IED and SSTI, Florence' },
+    ],
+    skills: 'What I work with',
+    groups: { code: 'Code', ship: 'Build and ship', design: 'Design and video' },
+    off: 'When the laptop is closed',
+    hobbies: [
+      { icon: Gamepad2, t: 'Gaming', d: 'AAA and retro. Also a good excuse to make a few of my own.' },
+      { icon: PenLine, t: 'Writing', d: 'Tech notes, mostly to remember how I solved something.' },
+      { icon: Plane, t: 'Travelling', d: 'New places, new food, and a laptop in the backpack anyway.' },
+    ],
+    cta: 'Want to work together?',
+    ctaBtn: 'Get in touch',
+  },
+  it: {
+    title: 'Chi sono',
+    description: 'Davide Mariotti, front-end developer in Adiacent, di San Miniato. Niente laurea, quasi dieci anni di lavoro, tanti progetti personali.',
+    kicker: 'Chi sono',
+    h: ['Ciao, sono Davide.', 'Faccio in modo che il web sia veloce.'],
+    p: [
+      'Vengo dalle colline di San Miniato, in Toscana. La mia strada verso il digitale non è stata dritta: è stata soprattutto la voglia testarda di costruire cose e vederle funzionare.',
+      'Oggi sono front-end developer in <strong>Adiacent</strong>, dove aiuto a dare forma alla presenza digitale di brand molto diversi: siti corporate, e-commerce, componenti per Adobe Experience Manager, qualche strumento interno. Col tempo sono passato dal costruire pagine al progettare come le persone ci si muovono dentro.',
+      'Non ho una laurea. Ho corsi di specializzazione all\'<strong>IED</strong> e alla <strong>SSTI</strong> di Firenze, che mi hanno dato una base di design thinking ed esecuzione tecnica, e sopra quasi dieci anni di progetti veri.',
+      'Fuori orario continuo a costruire: app desktop, strumenti per il browser, giochi. In questo periodo passo il tempo con React, Astro e Node.js, e questo sito ne è la prova.',
+    ],
+    facts: [
+      { icon: MapPin, k: 'Vivo a', v: 'San Miniato, Toscana' },
+      { icon: Briefcase, k: 'Lavoro in', v: 'Adiacent, front-end developer' },
+      { icon: GraduationCap, k: 'Ho studiato a', v: 'IED e SSTI, Firenze' },
+    ],
+    skills: 'Con cosa lavoro',
+    groups: { code: 'Codice', ship: 'Build e pubblicazione', design: 'Grafica e video' },
+    off: 'Quando il portatile è chiuso',
+    hobbies: [
+      { icon: Gamepad2, t: 'Videogiochi', d: 'AAA e retro. E una buona scusa per farne qualcuno anch\'io.' },
+      { icon: PenLine, t: 'Scrivere', d: 'Appunti tecnici, soprattutto per ricordarmi come ho risolto una cosa.' },
+      { icon: Plane, t: 'Viaggiare', d: 'Posti nuovi, cibo nuovo, e comunque il portatile nello zaino.' },
+    ],
+    cta: 'Lavoriamo insieme?',
+    ctaBtn: 'Scrivimi',
+  },
+}[lang];
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/about/">
+  <section class="wrap pb-16 pt-40">
+    <p class="kicker blur-word">{c.kicker}</p>
+    <h1 class="h-display mt-6 !text-[clamp(2.6rem,7vw,6.5rem)]">
+      <span class="blur-word" style="--i:1">{c.h[0]}</span><br />
+      <span class="blur-word serif grad" style="--i:3">{c.h[1]}</span>
+    </h1>
+  </section>
+
+  <section class="wrap grid gap-16 pb-24 lg:grid-cols-[1.5fr_1fr]">
+    <div class="prose-dm max-w-2xl text-lg">
+      {c.p.map((t, i) => <p class="reveal" style={`--d:${i * 60}ms`} set:html={t} />)}
+    </div>
+    <aside class="space-y-4 lg:pt-4">
+      {c.facts.map((f, i) => (
+        <div class="spot reveal flex items-center gap-4 p-5" style={`--d:${i * 80}ms`}>
+          <div class="icon-tile shrink-0"><f.icon /></div>
+          <div><p class="kicker">{f.k}</p><p class="mt-1 font-medium">{f.v}</p></div>
+        </div>
+      ))}
+    </aside>
+  </section>
+
+  <section class="wrap py-24">
+    <h2 class="h-section reveal">{c.skills}</h2>
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      {Object.entries(groups).map(([key, items], gi) => (
+        <div class="spot reveal p-7" style={`--d:${gi * 90}ms`}>
+          <p class="kicker">{c.groups[key as keyof typeof groups]}</p>
+          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-4">
+            {items.map(([file, name]) => (
+              <li class="flex items-center gap-3 text-sm"><img src={`/logos/${file}.svg`} alt="" width="22" height="22" loading="lazy" class="size-[22px] object-contain" />{name}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap py-24">
+    <h2 class="h-section reveal">{c.off}</h2>
+    <div class="mt-12 grid gap-px overflow-hidden rounded-3xl border border-line bg-line md:grid-cols-3">
+      {c.hobbies.map((h, i) => (
+        <div class="reveal bg-bg p-8" style={`--d:${i * 90}ms`}>
+          <h.icon class="size-7 text-accent" />
+          <h3 class="mt-5 text-xl font-semibold tracking-tight">{h.t}</h3>
+          <p class="mt-2 leading-relaxed text-muted">{h.d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap py-24 text-center">
+    <h2 class="h-section reveal">{c.cta}</h2>
+    <a href={localize(lang, '/contact/')} class="btn btn-primary reveal mt-8" style="--d:80ms">{c.ctaBtn}<ArrowUpRight /></a>
+  </section>
+</Layout>

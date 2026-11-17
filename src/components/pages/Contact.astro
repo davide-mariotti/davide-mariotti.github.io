@@ -1,0 +1,70 @@
+---
+import { Send, Coffee, ArrowUpRight } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: 'Contact',
+    description: 'Write to Davide Mariotti: projects, collaborations, bugs found in his apps, or just a hello.',
+    kicker: 'Contact',
+    h: ['Let\'s talk.', 'I answer, promise.'],
+    lead: 'A project, a collaboration, a bug in one of my apps, or just a hello. Write here and the message lands straight in my inbox.',
+    email: 'Your email',
+    message: 'Message',
+    placeholder: 'Hi Davide, ...',
+    send: 'Send message',
+    elsewhere: 'Or find me here',
+    coffee: 'Buy me a coffee',
+    subject: 'Contact request from davide-mariotti.github.io',
+  },
+  it: {
+    title: 'Contatti',
+    description: 'Scrivi a Davide Mariotti: progetti, collaborazioni, bug trovati nelle sue app, o anche solo un saluto.',
+    kicker: 'Contatti',
+    h: ['Parliamone.', 'Rispondo, promesso.'],
+    lead: 'Un progetto, una collaborazione, un bug in una delle mie app, o anche solo un saluto. Scrivi qui e il messaggio arriva dritto nella mia casella.',
+    email: 'La tua email',
+    message: 'Messaggio',
+    placeholder: 'Ciao Davide, ...',
+    send: 'Invia messaggio',
+    elsewhere: 'Oppure trovami qui',
+    coffee: 'Offrimi un caffè',
+    subject: 'Richiesta di contatto da davide-mariotti.github.io',
+  },
+}[lang];
+const field = 'w-full rounded-2xl border border-line bg-white/[0.03] px-5 py-4 text-ink placeholder:text-faint transition focus:border-accent/60 focus:bg-white/[0.05] focus:outline-none';
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/contact/">
+  <section class="wrap grid gap-16 pb-24 pt-40 lg:grid-cols-2">
+    <div>
+      <p class="kicker blur-word">{c.kicker}</p>
+      <h1 class="h-display mt-6 !text-[clamp(2.6rem,6.5vw,5.75rem)]">
+        <span class="blur-word" style="--i:1">{c.h[0]}</span><br /><span class="blur-word serif grad" style="--i:2">{c.h[1]}</span>
+      </h1>
+      <p class="lead blur-word mt-8 max-w-md" style="--i:3">{c.lead}</p>
+      <p class="kicker blur-word mt-12" style="--i:4">{c.elsewhere}</p>
+      <div class="blur-word mt-4 flex flex-wrap gap-3" style="--i:5">
+        <a href={SOCIAL.linkedin} target="_blank" rel="noopener" class="btn btn-ghost !text-sm"><img src="/logos/linkedin.svg" alt="" width="16" height="16" class="size-4" />LinkedIn</a>
+        <a href={SOCIAL.github} target="_blank" rel="noopener" class="btn btn-ghost !text-sm"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />GitHub</a>
+        <a href={SOCIAL.instagram} target="_blank" rel="noopener" class="btn btn-ghost !text-sm"><img src="/logos/instagram.svg" alt="" width="16" height="16" class="size-4" />Instagram</a>
+        <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-ghost !text-sm"><Coffee class="text-accent" />{c.coffee}<ArrowUpRight class="!size-3.5" /></a>
+      </div>
+    </div>
+
+    <form action="https://formspree.io/f/xgegdzdy" method="POST" class="spot blur-word self-start p-6 md:p-8" style="--i:3">
+      <input type="hidden" name="_subject" value={c.subject} />
+      <label class="block">
+        <span class="kicker">{c.email}</span>
+        <input type="email" name="_replyto" required autocomplete="email" placeholder="name@example.com" class={`${field} mt-3`} />
+      </label>
+      <label class="mt-6 block">
+        <span class="kicker">{c.message}</span>
+        <textarea name="message" rows="7" required placeholder={c.placeholder} class={`${field} mt-3 resize-y`}></textarea>
+      </label>
+      <button type="submit" class="btn btn-primary mt-6 w-full justify-center !py-4">{c.send}<Send /></button>
+    </form>
+  </section>
+</Layout>

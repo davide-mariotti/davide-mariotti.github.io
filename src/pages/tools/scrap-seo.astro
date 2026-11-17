@@ -1,0 +1,96 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="Scrap SEO" description="Fetch and analyze Google Custom Search results for any query." path="/tools/scrap-seo/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/scrap-seo.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+        <div class="tool-container">
+            <div class="text-center mb-5">
+                <h1 class="section-title display-4"><span class="text-gradient">Scrap</span> SEO</h1>
+                <p class="lead text-white opacity-75">Analyze your domain's indexing via Google Custom Search API.</p>
+            </div>
+
+            <div class="glass-panel">
+                <div id="scrap-seo">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-8">
+                            <label for="domainInput" class="form-label text-white small opacity-75">Domain to
+                                analyze</label>
+                            <input type="text" id="domainInput" placeholder="www.example.com"
+                                value="davidemariotti.com">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="pageCount" class="form-label text-white small opacity-75">Results count</label>
+                            <select id="pageCount">
+                                <option value="10">10 Results</option>
+                                <option value="20">20 Results</option>
+                                <option value="50">50 Results</option>
+                                <option value="100">100 Results</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="advanced-options mt-4">
+                        <div class="accordion" id="scrapOptions">
+                            <div class="accordion-item shadow-none">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseSettings">
+                                        Advanced Configuration (API Keys)
+                                    </button>
+                                </h2>
+                                <div id="collapseSettings" class="accordion-collapse collapse"
+                                    data-bs-parent="#scrapOptions">
+                                    <div class="accordion-body">
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <label class="text-white small opacity-75">Google API Key</label>
+                                                <button class="btn-info-small"
+                                                    onclick="showInfoModal('apiKey')">?</button>
+                                            </div>
+                                            <input type="text" id="apiKeyInput"
+                                                placeholder="Paste your Google API key">
+                                        </div>
+                                        <div class="mb-0">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <label class="text-white small opacity-75">Engine ID (CX)</label>
+                                                <button class="btn-info-small" onclick="showInfoModal('cx')">?</button>
+                                            </div>
+                                            <input type="text" id="cxInput" placeholder="Paste your Search Engine ID (CX)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-glow px-5 py-3 rounded-pill w-100" onclick="fetchPages()">
+                            Analyze Search Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close btn-close-white ms-auto" onclick="hideInfoModal()"></button>
+                </div>
+                <div class="modal-body p-4 pt-0">
+                    <div id="modalText"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <script is:inline src="/assets/js/tools/scrap-seo.js" crossorigin="anonymous"></script>
+</Layout>

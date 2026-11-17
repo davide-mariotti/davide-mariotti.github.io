@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="WCAG Contrast Calculator" description="Check color contrast ratios against WCAG accessibility standards." path="/tools/wcag-contrast-calculator/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/wcag-contrast-calculator.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+    <div class="calculator-container">
+      <div class="text-center mb-5">
+        <h1 class="section-title display-4"><span class="text-gradient">WCAG</span> Calculator</h1>
+        <p class="lead text-white opacity-75">Ensure your color choices meet web accessibility standards instantly.</p>
+      </div>
+
+      <div class="glass-panel">
+        <div id="wcag-contrast-calculator">
+          <div id="colorInputs">
+            <div class="color-input-group">
+              <label for="color1">Text Color</label>
+              <input type="color" id="color1" value="#00FFA3">
+              <input type="text" id="color1Value" class="hex-input" value="#00FFA3" aria-label="Text color hex value">
+            </div>
+
+            <div id="result">
+              <span>Contrast Ratio</span>
+              <b id="contrast-ratio-display">--</b>
+            </div>
+
+            <div class="color-input-group">
+              <label for="color2">Background</label>
+              <input type="color" id="color2" value="#05140A">
+              <input type="text" id="color2Value" class="hex-input" value="#05140A" aria-label="Background color hex value">
+            </div>
+          </div>
+
+          <div id="colorExample" class="text-center">
+            <!-- Preview text will be injected here -->
+          </div>
+
+          <div id="colorExampleResult">
+            <!-- Compliance results will be injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+    <script is:inline src="/assets/js/tools/wcag-contrast-calculator.js" crossorigin="anonymous"></script>
+</Layout>

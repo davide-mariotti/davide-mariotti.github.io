@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout lang="en" title="Password Generator" description="Generate strong, secure passwords instantly with customizable options." path="/tools/psw-generator/" alt="/tools/" legacy>
+  <link slot="head" rel="stylesheet" href="/assets/css/tools/psw-generator.css" />
+  <div class="legacy-tool" data-bs-theme="dark">
+    <div class="container py-5 mt-5">
+        <div class="generator-container">
+            <div class="text-center mb-5">
+                <h1 class="section-title display-4">Password <span class="text-gradient">Generator</span></h1>
+                <p class="lead text-white opacity-75">Create high-entropy, secure passwords tailored to your
+                    requirements.</p>
+            </div>
+
+            <div class="glass-panel">
+                <div id="pswGenerator">
+                    <div class="control-group">
+                        <label for="length" class="text-white opacity-75">Password Length</label>
+                        <input type="number" id="length" name="length" min="4" max="64" value="16">
+                    </div>
+
+                    <div class="control-group form-check form-switch px-0">
+                        <label for="uppercase" class="text-white opacity-75">Include Uppercase (A-Z)</label>
+                        <input class="form-check-input ms-0" type="checkbox" id="uppercase" checked>
+                    </div>
+
+                    <div class="control-group form-check form-switch px-0">
+                        <label for="lowercase" class="text-white opacity-75">Include Lowercase (a-z)</label>
+                        <input class="form-check-input ms-0" type="checkbox" id="lowercase" checked>
+                    </div>
+
+                    <div class="control-group form-check form-switch px-0">
+                        <label for="numbers" class="text-white opacity-75">Include Numbers (0-9)</label>
+                        <input class="form-check-input ms-0" type="checkbox" id="numbers" checked>
+                    </div>
+
+                    <div class="control-group form-check form-switch px-0">
+                        <label for="symbols" class="text-white opacity-75">Include Symbols (!@#$%^&*)</label>
+                        <input class="form-check-input ms-0" type="checkbox" id="symbols" checked>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-glow px-5 py-3 rounded-pill w-100"
+                            onclick="generatePassword()">
+                            Generate Secure Password
+                        </button>
+                    </div>
+
+                    <div class="mt-4">
+                        <input type="text" id="password" readonly placeholder="Click Generate...">
+
+                        <div class="strength-legend">
+                            <div class="legend-item">
+                                <div class="dot red"></div> Weak
+                            </div>
+                            <div class="legend-item">
+                                <div class="dot yellow"></div> Medium
+                            </div>
+                            <div class="legend-item">
+                                <div class="dot green"></div> Strong
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-light rounded-pill px-4" onclick="copyToClipboard()">
+                                📋 Copy to Clipboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <script is:inline src="/assets/js/tools/clipboard.js" crossorigin="anonymous"></script>
+  <script is:inline src="/assets/js/tools/psw-generator.js" crossorigin="anonymous"></script>
+</Layout>

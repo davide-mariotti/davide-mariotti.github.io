@@ -1,0 +1,15 @@
+---
+import { ArrowLeft } from '@lucide/astro';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout lang="en" title="Page not found" description="This page doesn't exist, or it moved." path="/404/" alt="/">
+  <section class="wrap grid min-h-[80svh] place-items-center pt-24 text-center">
+    <div>
+      <p class="kicker blur-word">Error 404</p>
+      <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Lost?</span> <span class="blur-word serif grad" style="--i:2">So is this page.</span></h1>
+      <p class="lead blur-word mx-auto mt-8 max-w-lg" style="--i:3">It doesn't exist, or it moved when the site got its new look. The home page is still where you left it.</p>
+      <p class="blur-word mt-2 text-sm text-faint" style="--i:4">Questa pagina non esiste, o si è spostata col nuovo sito.</p>
+      <a href="/" class="btn btn-primary blur-word mt-10" style="--i:5"><ArrowLeft />Back home</a>
+    </div>
+  </section>
+</Layout>

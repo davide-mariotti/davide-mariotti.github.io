@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Intro from '../components/Intro.astro';
+import { localize, otherLang, ui, SOCIAL, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string;            // page path without /it, e.g. "/about/"
+  alt?: string;            // same page in the other language when the path differs (EN-only tools)
+  image?: string;
+  legacy?: boolean;        // old Bootstrap-based tool pages
+  jsonLd?: boolean;
+}
+const { lang, title, description, path, alt, image = '/og.png', legacy = false, jsonLd = false } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(localize(lang, path), site).href;
+const fullTitle = path === '/' ? title : `${title} · Davide Mariotti`;
+const other = otherLang(lang);
+const translated = alt === undefined;
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Davide Mariotti',
+  jobTitle: 'Front-end Developer',
+  url: site.href,
+  address: { '@type': 'PostalAddress', addressLocality: 'San Miniato', addressCountry: 'IT' },
+  sameAs: [SOCIAL.github, SOCIAL.linkedin, SOCIAL.instagram],
+};
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8" />
+  <!-- layer order first: the old tools' Bootstrap must sit above the reset and below the site's own styles -->
+  <style is:inline>@layer theme, base, legacy, components, utilities;</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {translated && <>
+    <link rel="alternate" hreflang="en" href={new URL(localize('en', path), site).href} />
+    <link rel="alternate" hreflang="it" href={new URL(localize('it', path), site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(path, site).href} />
+  </>}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Davide Mariotti" />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(image, site).href} />
+  <meta property="og:locale" content={lang === 'it' ? 'it_IT' : 'en_US'} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#050706" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
+  <script is:inline>
+    document.documentElement.classList.add('js');
+    try {
+      if (!sessionStorage.getItem('dm-intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.setAttribute('data-intro', '');
+        sessionStorage.setItem('dm-intro', '1');
+      }
+    } catch (e) {}
+  </script>
+  {legacy && <>
+    <link rel="stylesheet" href="/assets/css/legacy.css" />
+    <slot name="head" />
+  </>}
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-55L4063MVS"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-55L4063MVS');
+  </script>
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[95] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-bg">{ui[lang].skip}</a>
+  <Intro />
+  <Header lang={lang} path={path} alt={alt} />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer lang={lang} />
+  {legacy && <script is:inline src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>}
+  <script>
+    import '../scripts/ui';
+  </script>
+</body>
+</html>

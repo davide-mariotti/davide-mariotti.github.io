@@ -1,0 +1,49 @@
+---
+import * as Icons from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { TOOLS } from '../../tools';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: 'Tools',
+    description: 'Free browser tools by Davide Mariotti: password generator, colour converter, WCAG contrast, image optimizer and more.',
+    h: ['Small tools,', 'big five minutes saved.'],
+    lead: 'Things I needed often enough to build them once. They run in your browser, free, no sign-up.',
+    open: 'Open',
+    note: '',
+  },
+  it: {
+    title: 'Strumenti',
+    description: 'Strumenti gratuiti nel browser di Davide Mariotti: generatore di password, conversione colori, contrasto WCAG, ottimizzazione immagini e altro.',
+    h: ['Piccoli strumenti,', 'cinque minuti risparmiati.'],
+    lead: 'Cose che mi servivano abbastanza spesso da costruirle una volta per tutte. Girano nel browser, gratis, senza registrazione.',
+    open: 'Apri',
+    note: "L'interfaccia degli strumenti è in inglese.",
+  },
+}[lang];
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/tools/">
+  <section class="wrap pb-16 pt-40">
+    <p class="kicker blur-word">{c.title}</p>
+    <h1 class="h-display mt-6 !text-[clamp(2.6rem,7vw,6.5rem)]"><span class="blur-word" style="--i:1">{c.h[0]}</span><br /><span class="blur-word serif grad" style="--i:2">{c.h[1]}</span></h1>
+    <p class="lead blur-word mt-8 max-w-xl" style="--i:3">{c.lead}</p>
+    {c.note && <p class="chip blur-word mt-6" style="--i:4">{c.note}</p>}
+  </section>
+
+  <section class="wrap grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {TOOLS.map((tool, i) => {
+      const Icon = (Icons as any)[tool.icon];
+      return (
+        <a href={`/tools/${tool.slug}/`} class="spot reveal group flex flex-col p-7" style={`--d:${(i % 3) * 80}ms`}>
+          <div class="icon-tile transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110"><Icon /></div>
+          <h2 class="mt-6 text-xl font-semibold tracking-tight">{tool.name}</h2>
+          <p class="mt-2 text-muted">{tool[lang]}</p>
+          <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.open}<Icons.ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+        </a>
+      );
+    })}
+  </section>
+</Layout>

@@ -1,0 +1,206 @@
+---
+import { Download, Check, X, Clock, Power, Keyboard, Eye, Moon, BatteryExclamationPoint, Coffee, ArrowUpRight, ShieldExclamationPoint } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const EXE = 'https://github.com/davide-mariotti/Sentinel/raw/main/Sentinel.exe';
+const REPO = 'https://github.com/davide-mariotti/Sentinel';
+
+const c = {
+  en: {
+    description: 'Sentinel keeps your Windows PC awake. A 75 KB tray app, no install, no internet. What it does, what it doesn\'t, how it works.',
+    kicker: 'Windows app · v2.4.0',
+    tagline: ['Keeps your Windows PC awake.', 'That\'s it, that\'s the app.'],
+    download: 'Download (75 KB)',
+    source: 'Source code',
+    meta: 'Windows 10 and 11 · nothing to install · free, MIT license',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Stops Windows from sleeping, turning off the screen or starting the screensaver, as long as it\'s on.',
+      'Keeps Teams, Slack and friends from marking you "away" while you read a long document without touching anything.',
+      'Takes a lunch break if you want: during a time slot of your choice the PC is free to sleep.',
+      'When you lock the PC the screen can turn off, but downloads and builds keep going.',
+      'Optional battery alerts for laptops: unplug at X%, plug in at Y%.',
+      'Starts with Windows if you ask, quietly, and speaks Italian or English.',
+    ],
+    doesntList: [
+      'Move the mouse or type anything you\'d see.',
+      'Ask for admin rights, install itself or touch your power plan.',
+      'Connect to the internet. Ever. No telemetry, no auto-updates, no account.',
+      'Stop you from locking or shutting down the PC. Turn it off and Windows is back in charge.',
+      'Run on macOS or Linux.',
+      'Do your work for you. I tried.',
+    ],
+    howKicker: 'How it works',
+    howTitle: ['Two things Windows looks at,', 'once a minute.'],
+    howLead: 'Windows decides to sleep by checking whether some program asked it to stay awake, and how long ago you last touched mouse or keyboard. Sentinel takes care of both.',
+    steps: [
+      { t: 'Is it lunch time?', d: 'Every 60 seconds Sentinel checks the scheduled pause. Inside the slot it lets go completely and Windows does what it would normally do.' },
+      { t: 'Stay awake, please', d: 'It asks Windows to keep the system and the screen on, the same official call video players use (SetThreadExecutionState). With the PC locked it asks for the system only, so the screen can rest.' },
+      { t: 'A key nobody has', d: 'If mouse and keyboard have been still for 55 seconds, it presses and releases F15. Real keyboards stopped at F12, so no app reacts, but the idle timers start again from zero.' },
+    ],
+    trayTitle: 'One look at the tray',
+    on: ['Eye open', 'it\'s working, the PC won\'t sleep.'],
+    off: ['Eye crossed out', 'it\'s off, or on its lunch break.'],
+    trayNote: 'Hover the icon for the state and, on laptops, the battery level. Double-click for the settings, right-click to exit.',
+    settingsTitle: 'The whole settings window',
+    settings: [
+      ['Active', 'the main switch.'],
+      ['Start with Windows', 'at login it goes straight to the tray, no window.'],
+      ['Scheduled pause', 'from/to, across midnight too. 13:00-14:00 out of the box, for obvious reasons.'],
+      ['Battery alerts', 'high and low threshold, and how long the "unplug me" alert keeps nagging.'],
+    ],
+    settingsNote: 'Changes are saved immediately in one registry key of your user, HKCU\\SOFTWARE\\SentinelApp. No Save button to forget.',
+    firstTitle: 'First run',
+    first: 'Put Sentinel.exe in a folder that stays put, not in Downloads, and double-click it. SmartScreen may complain because the exe isn\'t signed: More info, then Run anyway. A signing certificate costs more than all the coffees this app has earned so far, which brings us to the next box.',
+    coffeeTitle: ['Did it save your', 'presentation?'],
+    coffeeText: 'Sentinel is free and stays free. If it spared you an "appears away" or a screensaver in front of a client, a coffee on Ko-fi is how the next app gets written.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: 'Sentinel tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, senza installazione, senza internet. Cosa fa, cosa non fa, come funziona.',
+    kicker: 'App per Windows · v2.4.0',
+    tagline: ['Tiene sveglio il tuo PC Windows.', 'Tutto qui, questa è l\'app.'],
+    download: 'Scarica (75 KB)',
+    source: 'Codice sorgente',
+    meta: 'Windows 10 e 11 · niente da installare · gratis, licenza MIT',
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Impedisce a Windows di andare in standby, spegnere lo schermo o far partire lo screensaver, finché è attivo.',
+      'Evita che Teams, Slack e compagnia ti segnino "assente" mentre leggi un documento lungo senza toccare niente.',
+      'Va in pausa pranzo, se vuoi: in una fascia oraria a tua scelta il PC è libero di dormire.',
+      'Quando blocchi il PC lo schermo si può spegnere, ma download e build vanno avanti.',
+      'Avvisi batteria per i portatili, se li accendi: stacca al X%, attacca al Y%.',
+      'Si avvia con Windows se glielo chiedi, in silenzio, e parla italiano o inglese.',
+    ],
+    doesntList: [
+      'Non muove il mouse e non scrive niente che si veda.',
+      'Non chiede permessi da amministratore, non si installa, non tocca il risparmio energia.',
+      'Non si collega a internet. Mai. Niente telemetria, niente aggiornamenti automatici, niente account.',
+      'Non ti impedisce di bloccare o spegnere il PC. Lo spegni e Windows torna a decidere.',
+      'Non gira su macOS o Linux.',
+      'Non fa il lavoro al posto tuo. Ci ho provato.',
+    ],
+    howKicker: 'Come funziona',
+    howTitle: ['Due cose che Windows guarda,', 'una volta al minuto.'],
+    howLead: 'Windows decide di andare in standby controllando se qualche programma gli ha chiesto di restare sveglio, e da quanto non tocchi mouse o tastiera. Sentinel si occupa di tutte e due.',
+    steps: [
+      { t: 'È ora di pranzo?', d: 'Ogni 60 secondi Sentinel guarda la pausa programmata. Dentro la fascia lascia perdere del tutto e Windows fa quello che farebbe di solito.' },
+      { t: 'Resta sveglio, per favore', d: 'Chiede a Windows di tenere acceso sistema e schermo, con la stessa chiamata ufficiale dei lettori video (SetThreadExecutionState). Con il PC bloccato chiede solo il sistema, così lo schermo riposa.' },
+      { t: 'Un tasto che nessuno ha', d: 'Se mouse e tastiera sono fermi da 55 secondi, preme e rilascia F15. Le tastiere vere si fermano a F12, quindi nessun programma reagisce, ma i contatori di inattività ripartono da zero.' },
+    ],
+    trayTitle: 'Uno sguardo alla tray',
+    on: ['Occhio aperto', 'sta lavorando, il PC non va in standby.'],
+    off: ['Occhio barrato', 'è spento, o in pausa pranzo.'],
+    trayNote: "Passa sopra l'icona per vedere lo stato e, sui portatili, la batteria. Doppio clic per le impostazioni, tasto destro per uscire.",
+    settingsTitle: 'Tutta la finestra delle impostazioni',
+    settings: [
+      ['Attivo', "l'interruttore principale."],
+      ['Avvia con Windows', 'al login va dritto nella tray, senza finestre.'],
+      ['Pausa programmata', 'da/a, anche a cavallo della mezzanotte. 13:00-14:00 di base, per ovvi motivi.'],
+      ['Avvisi batteria', 'soglia alta e bassa, e quanto insiste l\'avviso "staccami".'],
+    ],
+    settingsNote: 'Le modifiche si salvano subito in una chiave di registro del tuo utente, HKCU\\SOFTWARE\\SentinelApp. Nessun tasto Salva da dimenticare.',
+    firstTitle: 'Primo avvio',
+    first: 'Metti Sentinel.exe in una cartella che non sposti, non in Download, e fai doppio clic. SmartScreen potrebbe lamentarsi perché l\'exe non è firmato: Ulteriori informazioni, poi Esegui comunque. Il certificato per firmarlo costa più di tutti i caffè che questa app ha guadagnato finora, il che ci porta al prossimo riquadro.',
+    coffeeTitle: ['Ti ha salvato la', 'presentazione?'],
+    coffeeText: 'Sentinel è gratis e resta gratis. Se ti ha risparmiato un "sembri assente" o uno screensaver davanti a un cliente, un caffè su Ko-fi è il modo in cui nasce la prossima app.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const stepIcons = [Clock, Power, Keyboard];
+const settingIcons = [Eye, Power, Moon, BatteryExclamationPoint];
+---
+<Layout lang={lang} title="Sentinel" description={c.description} path="/apps/sentinel/" image="/og-sentinel.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#0e7490]/25 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-24 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Sentinel</span><span class="blur-word text-accent" style="--i:2">.</span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={EXE} class="btn btn-primary"><Download />{c.download}</a>
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#0e7490] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/sentinel.svg" alt="Sentinel icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.howKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.howLead}</p>
+    <ol class="mt-14 grid gap-4 md:grid-cols-3">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 100}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- TRAY + SETTINGS -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-[1fr_1.4fr]">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.trayTitle}</h2>
+      <div class="mt-6 flex items-center gap-4"><img src="/assets/icons/apps/sentinel.svg" alt="" width="52" height="52" /><p class="text-muted"><strong class="text-ink">{c.on[0]}</strong>: {c.on[1]}</p></div>
+      <div class="mt-4 flex items-center gap-4"><img src="/assets/icons/apps/sentinel-off.svg" alt="" width="52" height="52" /><p class="text-muted"><strong class="text-ink">{c.off[0]}</strong>: {c.off[1]}</p></div>
+      <p class="mt-6 text-sm text-faint">{c.trayNote}</p>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.settingsTitle}</h2>
+      <ul class="mt-6 space-y-4">
+        {c.settings.map(([k, v], i) => { const Icon = settingIcons[i]; return <li class="flex gap-3 text-muted"><Icon class="mt-0.5 size-5 shrink-0 text-accent" /><span><strong class="text-ink">{k}</strong>: {v}</span></li>; })}
+      </ul>
+      <p class="mt-6 text-sm text-faint">{c.settingsNote}</p>
+    </div>
+  </section>
+
+  <!-- FIRST RUN -->
+  <section class="wrap py-12">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><ShieldExclamationPoint /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.firstTitle}</h2><p class="mt-3 max-w-3xl leading-relaxed text-muted">{c.first}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

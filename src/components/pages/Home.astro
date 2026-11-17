@@ -1,0 +1,212 @@
+---
+import { ArrowUpRight, ArrowDown, MousePointerClick, CodeXml, Wrench, Gamepad2, Coffee, Mail, Swords } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import GlyphBackground from '../GlyphBackground';
+import Marquee from '../Marquee.astro';
+import { localize, SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const L = (p: string) => localize(lang, p);
+
+const c = {
+  en: {
+    title: 'Davide Mariotti · Front-end developer',
+    description: 'Front-end developer from San Miniato, Italy. Fast, accessible websites by day; small apps, browser tools and games by night.',
+    badge: 'Front-end developer at Adiacent',
+    sub: ['Websites that load fast and read well,', 'by day.', 'Small apps and games,', 'by night.'],
+    cta: 'See the work',
+    talk: "Let's talk",
+    where: 'San Miniato, Tuscany',
+    click: 'Click anywhere',
+    stack: 'Tools of the trade',
+    workKicker: 'Selected work',
+    workTitle: ['Things I made', 'because I needed them'],
+    sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. A 75 KB tray app with a lunch break, battery alerts and zero internet.', cta: 'Discover Sentinel' },
+    tools: { title: '9 browser tools', text: 'Passwords, colours, contrast checks, images, HTML. Small things that save five minutes a day.', cta: 'Open the toolbox' },
+    games: { title: 'The arcade', text: 'Snake, Maze, Jump, War Run, a Wordle in Italian and a few party games.', cta: 'Play' },
+    lupo: { title: 'Lupo Solitario', text: 'Gamebooks, playable in the browser: dice, inventory and saves included.', cta: 'Start the adventure' },
+    site: { title: 'This website', text: 'Astro, Tailwind and a WebGL field of characters. Go back up and click on it.', cta: 'Back to the top' },
+    doKicker: 'What I do',
+    doTitle: ['Three things,', 'done properly'],
+    do: [
+      { t: 'Websites that perform', d: 'Brand sites, e-commerce and AEM components at Adiacent. Accessibility and speed are part of the job, not a phase two.' },
+      { t: 'Tools and automation', d: 'When a task repeats, I write the script. Browser tools, Python, bots that do the boring bits.' },
+      { t: 'Apps and games', d: 'Desktop utilities in C#, games in JavaScript and Godot. The fun side, with the same care.' },
+    ],
+    aboutKicker: 'About',
+    about: ['No degree. Almost ten years of work, courses at IED and SSTI in Florence,', 'and everything else learnt by building things, breaking them and building them again.'],
+    aboutCta: 'More about me',
+    contactTitle: ['Got a project,', 'a bug, or a coffee to spare?'],
+    write: 'Write to me',
+    coffee: 'Buy me a coffee',
+  },
+  it: {
+    title: 'Davide Mariotti · Front-end developer',
+    description: 'Front-end developer di San Miniato. Di giorno siti veloci e accessibili, di sera piccole app, strumenti per il browser e giochi.',
+    badge: 'Front-end developer in Adiacent',
+    sub: ['Siti che si caricano in fretta e si leggono bene,', 'di giorno.', 'Piccole app e giochi,', 'di sera.'],
+    cta: 'Guarda i lavori',
+    talk: 'Parliamone',
+    where: 'San Miniato, Toscana',
+    click: 'Clicca dove vuoi',
+    stack: 'Gli attrezzi del mestiere',
+    workKicker: 'Lavori scelti',
+    workTitle: ['Cose che ho fatto', 'perché mi servivano'],
+    sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, con pausa pranzo, avvisi batteria e zero internet.', cta: 'Scopri Sentinel' },
+    tools: { title: '9 strumenti nel browser', text: 'Password, colori, contrasti, immagini, HTML. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
+    games: { title: 'La sala giochi', text: 'Snake, Maze, Jump, War Run, un Wordle in italiano e qualche gioco da serata.', cta: 'Gioca' },
+    lupo: { title: 'Lupo Solitario', text: 'I librogame, giocabili nel browser: dadi, inventario e salvataggi compresi.', cta: "Inizia l'avventura" },
+    site: { title: 'Questo sito', text: 'Astro, Tailwind e un campo di caratteri in WebGL. Torna su e cliccaci sopra.', cta: 'Torna su' },
+    doKicker: 'Cosa faccio',
+    doTitle: ['Tre cose,', 'fatte bene'],
+    do: [
+      { t: 'Siti che funzionano', d: 'Siti di brand, e-commerce e componenti AEM in Adiacent. Accessibilità e velocità fanno parte del lavoro, non di una fase due.' },
+      { t: 'Strumenti e automazioni', d: 'Se un lavoro si ripete, scrivo lo script. Strumenti nel browser, Python, bot che fanno la parte noiosa.' },
+      { t: 'App e giochi', d: 'Utility desktop in C#, giochi in JavaScript e Godot. Il lato divertente, con la stessa cura.' },
+    ],
+    aboutKicker: 'Chi sono',
+    about: ['Niente laurea. Quasi dieci anni di lavoro, corsi all\'IED e alla SSTI di Firenze,', 'e tutto il resto imparato costruendo cose, rompendole e ricostruendole.'],
+    aboutCta: 'Di più su di me',
+    contactTitle: ['Hai un progetto,', 'un bug, o un caffè da offrire?'],
+    write: 'Scrivimi',
+    coffee: 'Offrimi un caffè',
+  },
+}[lang];
+
+const name = ['Davide', 'Mariotti'];
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/" jsonLd>
+  <!-- HERO -->
+  <!-- The glyph field is its own layer: the text lets the pointer through (buttons excepted), so trail and ripples work everywhere. -->
+  <section id="top" class="relative isolate min-h-svh overflow-hidden">
+    <GlyphBackground client:load className="!absolute inset-0" />
+    <div aria-hidden="true" class="pointer-events-none absolute left-[8%] top-[30%] -z-0 h-[36rem] w-[36rem] rounded-full bg-accent/[0.07] blur-[140px]"></div>
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_65%_at_50%_45%,transparent_30%,var(--color-bg)_100%)]"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-bg"></div>
+
+      <div class="hero-content wrap pointer-events-none relative flex min-h-svh flex-col justify-center pb-24 pt-32">
+        <p class="chip w-fit blur-word" style="--i:0">
+          <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60"></span><span class="relative inline-flex size-2 rounded-full bg-accent"></span></span>
+          {c.badge}
+        </p>
+
+        <h1 class="h-display mt-7">
+          <span class="blur-word" style="--i:1">{name[0]}</span>{' '}<span class="blur-word" style="--i:2">{name[1]}<span class="text-accent">.</span></span>
+        </h1>
+
+        <p class="mt-7 max-w-2xl text-[clamp(1.25rem,2.6vw,2rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:4">{c.sub[0]}</span>{' '}
+          <span class="blur-word serif text-ink" style="--i:5">{c.sub[1]}</span>{' '}
+          <span class="blur-word" style="--i:6">{c.sub[2]}</span>{' '}
+          <span class="blur-word serif grad" style="--i:7">{c.sub[3]}</span>
+        </p>
+
+        <div class="blur-word pointer-events-auto mt-10 flex w-fit flex-wrap gap-3" style="--i:8">
+          <a href="#work" class="btn btn-primary">{c.cta}<ArrowDown /></a>
+          <a href={L('/contact/')} class="btn btn-ghost">{c.talk}<ArrowUpRight /></a>
+        </div>
+
+        <div class="blur-word absolute inset-x-0 bottom-8" style="--i:10">
+          <div class="wrap flex items-end justify-between">
+            <p class="kicker">{c.where} <span class="text-faint">· 43.68°N 10.85°E</span></p>
+            <p class="kicker hidden items-center gap-2 sm:flex"><MousePointerClick class="size-4 text-accent" />{c.click}</p>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <!-- STACK -->
+  <section class="py-14" aria-label={c.stack}>
+    <p class="kicker reveal mb-8 text-center">{c.stack}</p>
+    <Marquee />
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="wrap scroll-mt-24 py-24">
+    <p class="kicker reveal">{c.workKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.workTitle[0]}<br /><span class="serif text-muted">{c.workTitle[1]}</span></h2>
+
+    <div class="mt-14 grid gap-4 md:grid-cols-3">
+      <a href={L('/apps/sentinel/')} class="spot reveal group flex flex-col p-8 md:col-span-2 md:flex-row md:items-center md:gap-10">
+        <img src="/assets/icons/apps/sentinel.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(14_116_144/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
+        <div class="mt-6 md:mt-0">
+          <div class="flex flex-wrap gap-2"><span class="chip">C#</span><span class="chip">.NET</span><span class="chip">Windows</span></div>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.sentinel.title}</h3>
+          <p class="mt-2 max-w-md text-muted">{c.sentinel.text}</p>
+          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.sentinel.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+        </div>
+      </a>
+
+      <a href={L('/tools/')} class="spot reveal group flex flex-col p-8" style="--d:80ms">
+        <div class="icon-tile"><Wrench /></div>
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.tools.title}</h3>
+        <p class="mt-2 text-muted">{c.tools.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.tools.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href="/games/" class="spot reveal group flex flex-col p-8">
+        <div class="icon-tile"><Gamepad2 /></div>
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.games.title}</h3>
+        <p class="mt-2 text-muted">{c.games.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.games.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href="/games/LupoSolitario/" class="spot reveal group relative flex flex-col overflow-hidden p-8" style="--d:80ms">
+        <span aria-hidden="true" class="serif pointer-events-none absolute -right-4 -top-10 text-[9rem] leading-none text-white/[0.04] transition-colors group-hover:text-accent/10">LS</span>
+        <div class="icon-tile"><Swords /></div>
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.lupo.title}</h3>
+        <p class="mt-2 text-muted">{c.lupo.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.lupo.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href="#top" class="spot reveal group flex flex-col p-8" style="--d:160ms">
+        <div class="icon-tile"><CodeXml /></div>
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.site.title}</h3>
+        <p class="mt-2 text-muted">{c.site.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.site.cta}<ArrowUpRight class="size-4 -rotate-45 transition-transform group-hover:-translate-y-0.5" /></p>
+      </a>
+    </div>
+  </section>
+
+  <!-- WHAT I DO -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.doKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.doTitle[0]} <span class="serif grad">{c.doTitle[1]}</span></h2>
+    <div class="mt-14 grid gap-px overflow-hidden rounded-3xl border border-line bg-line md:grid-cols-3">
+      {c.do.map((item, i) => {
+        const Icon = [CodeXml, Wrench, Gamepad2][i];
+        return (
+          <div class="reveal bg-bg p-8 md:p-10" style={`--d:${i * 90}ms`}>
+            <span class="kicker text-faint">0{i + 1}</span>
+            <Icon class="mt-6 size-7 text-accent" />
+            <h3 class="mt-5 text-xl font-semibold tracking-tight">{item.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{item.d}</p>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.aboutKicker}</p>
+    <p class="reveal mt-6 max-w-5xl text-[clamp(1.6rem,3.6vw,3rem)] leading-[1.15] tracking-tight" style="--d:80ms">
+      {c.about[0]} <span class="serif text-muted">{c.about[1]}</span>
+    </p>
+    <a href={L('/about/')} class="btn btn-ghost reveal mt-10" style="--d:160ms">{c.aboutCta}<ArrowUpRight /></a>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16 md:py-28">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <h2 class="h-section mx-auto max-w-3xl">{c.contactTitle[0]} <span class="serif grad">{c.contactTitle[1]}</span></h2>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href={L('/contact/')} class="btn btn-primary"><Mail />{c.write}</a>
+        <a href={SOCIAL.linkedin} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/linkedin.svg" alt="" width="16" height="16" class="size-4" />LinkedIn</a>
+        <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-ghost"><Coffee class="text-accent" />{c.coffee}</a>
+      </div>
+    </div>
+  </section>
+</Layout>

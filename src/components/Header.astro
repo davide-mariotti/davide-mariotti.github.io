@@ -1,0 +1,88 @@
+---
+import { Menu, X, ArrowUpRight } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { ui, localize, otherLang, type Lang } from '../i18n';
+
+// path: current page without /it; alt: same page in the other language, when it's not the same path
+interface Props { lang: Lang; path: string; alt?: string }
+const { lang, path, alt = path } = Astro.props;
+const t = ui[lang];
+const links = [
+  { href: localize(lang, '/apps/'), label: t.nav.apps, key: '/apps' },
+  { href: localize(lang, '/tools/'), label: t.nav.tools, key: '/tools' },
+  { href: '/games/', label: t.nav.games, key: '/games' },
+  { href: localize(lang, '/about/'), label: t.nav.about, key: '/about' },
+];
+const other = otherLang(lang);
+---
+<header class="site-header" data-header>
+  <div class="wrap flex h-16 items-center justify-between gap-6">
+    <a href={localize(lang, '/')} class="relative z-10 shrink-0" aria-label="Home">
+      <Logo class="h-7 w-auto text-ink" />
+    </a>
+
+    <nav class="hidden md:block" aria-label="Main">
+      <ul class="flex items-center gap-1 rounded-full border border-line bg-white/[0.03] p-1 backdrop-blur-md">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} class:list={['nav-link', path.startsWith(l.key) && 'is-active']} aria-current={path.startsWith(l.key) ? 'page' : undefined}>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="hidden items-center gap-3 md:flex">
+      <a href={localize(other, alt)} hreflang={other} lang={other} class="kicker transition-colors hover:text-ink" title={t.switchTo}>
+        {other.toUpperCase()}
+      </a>
+      <a href={localize(lang, '/contact/')} class="btn btn-primary !py-2 !text-sm">
+        {t.nav.contact}<ArrowUpRight />
+      </a>
+    </div>
+
+    <button class="relative z-10 grid size-10 place-items-center rounded-full border border-line md:hidden" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label={t.menu}>
+      <Menu class="size-5 menu-open" /><X class="size-5 menu-close" />
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu md:hidden">
+    <ul class="wrap flex flex-col gap-2 pt-24">
+      {[...links, { href: localize(lang, '/contact/'), label: t.nav.contact, key: '/contact' }].map((l, i) => (
+        <li style={`--i:${i}`}><a href={l.href} class="block py-2 text-4xl font-semibold tracking-tight">{l.label}</a></li>
+      ))}
+      <li style="--i:5" class="pt-6"><a href={localize(other, alt)} hreflang={other} class="kicker">{t.switchTo}</a></li>
+    </ul>
+  </div>
+</header>
+
+<script is:inline>
+  (() => {
+    const h = document.querySelector('[data-header]');
+    const b = h.querySelector('[data-menu-toggle]');
+    const onScroll = () => h.classList.toggle('scrolled', scrollY > 24);
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    b.addEventListener('click', () => {
+      const open = h.toggleAttribute('data-open');
+      b.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+  })();
+</script>
+
+<style>
+  .site-header { position: fixed; inset: 0 0 auto; z-index: 50; transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s; border-bottom: 1px solid transparent; }
+  .site-header.scrolled { background: rgb(5 7 6 / 0.72); backdrop-filter: blur(14px) saturate(1.4); border-color: var(--color-line); }
+  .nav-link { display: block; padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.9rem; color: var(--color-muted); transition: color 0.2s, background 0.2s; }
+  .nav-link:hover { color: var(--color-ink); }
+  .nav-link.is-active { color: var(--color-ink); background: rgb(255 255 255 / 0.07); }
+  .menu-close { display: none; }
+  [data-open] .menu-open { display: none; }
+  [data-open] .menu-close { display: block; }
+  .mobile-menu { position: fixed; inset: 0; background: var(--color-bg); opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0.35s; }
+  [data-open] .mobile-menu { opacity: 1; visibility: visible; }
+  .mobile-menu li { opacity: 0; transform: translateY(16px); transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo); transition-delay: calc(var(--i) * 50ms); }
+  [data-open] .mobile-menu li { opacity: 1; transform: none; }
+</style>

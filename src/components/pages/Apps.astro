@@ -1,0 +1,50 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { localize, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: 'Apps',
+    description: 'Desktop apps by Davide Mariotti. Small, free, no install, built because he needed them.',
+    h: ['Small apps,', 'written because I needed them.'],
+    lead: 'Free, tiny, no installer, no account, nothing phoning home. Now they\'re yours too.',
+    sentinel: 'Keeps your Windows PC awake. Lunch break, battery alerts, an eye in the tray that tells you what it\'s doing.',
+    discover: 'Discover',
+    soon: 'More on the way. They tend to show up when something annoys me enough.',
+  },
+  it: {
+    title: 'App',
+    description: 'App desktop di Davide Mariotti. Piccole, gratuite, senza installazione, scritte perché gli servivano.',
+    h: ['Piccole app,', 'scritte perché mi servivano.'],
+    lead: 'Gratis, leggerissime, senza installazione, senza account, senza niente che chiama casa. Adesso sono anche tue.',
+    sentinel: "Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, un occhio nella tray che ti dice cosa sta facendo.",
+    discover: 'Scopri',
+    soon: 'Altre in arrivo. Di solito nascono quando qualcosa mi dà abbastanza fastidio.',
+  },
+}[lang];
+---
+<Layout lang={lang} title={c.title} description={c.description} path="/apps/">
+  <section class="wrap pb-16 pt-40">
+    <p class="kicker blur-word">{c.title}</p>
+    <h1 class="h-display mt-6 !text-[clamp(2.6rem,7vw,6.5rem)]"><span class="blur-word" style="--i:1">{c.h[0]}</span><br /><span class="blur-word serif grad" style="--i:2">{c.h[1]}</span></h1>
+    <p class="lead blur-word mt-8 max-w-xl" style="--i:3">{c.lead}</p>
+  </section>
+
+  <section class="wrap grid gap-4 pb-12 md:grid-cols-2">
+    <a href={localize(lang, '/apps/sentinel/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center">
+      <img src="/assets/icons/apps/sentinel.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(14_116_144/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+      <div>
+        <div class="flex flex-wrap gap-2"><span class="chip">Windows</span><span class="chip">v2.4.0</span><span class="chip">75 KB</span></div>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight">Sentinel</h2>
+        <p class="mt-2 text-muted">{c.sentinel}</p>
+        <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+    </a>
+    <div class="reveal grid place-items-center rounded-3xl border border-dashed border-line-strong p-8 text-center" style="--d:90ms">
+      <p class="max-w-xs text-muted"><span class="serif text-2xl text-ink">…</span><br />{c.soon}</p>
+    </div>
+  </section>
+</Layout>
