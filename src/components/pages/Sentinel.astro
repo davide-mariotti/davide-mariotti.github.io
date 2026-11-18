@@ -1,19 +1,21 @@
 ---
-import { Download, Check, X, Clock, Power, Keyboard, Eye, Moon, BatteryExclamationPoint, Coffee, ArrowUpRight, ShieldExclamationPoint } from '@lucide/astro';
+import { Download, Check, X, Clock, Power, Keyboard, Eye, Moon, BatteryExclamationPoint, Coffee, ArrowUpRight, ShieldExclamationPoint, Usb } from '@lucide/astro';
 import Layout from '../../layouts/Layout.astro';
 import { SOCIAL, type Lang } from '../../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const EXE = 'https://github.com/davide-mariotti/Sentinel/raw/main/Sentinel.exe';
+const ZIP = 'https://github.com/davide-mariotti/Sentinel/raw/main/Sentinel-portable.zip';
 const REPO = 'https://github.com/davide-mariotti/Sentinel';
 
 const c = {
   en: {
     description: 'Sentinel keeps your Windows PC awake. A 75 KB tray app, no install, no internet. What it does, what it doesn\'t, how it works.',
-    kicker: 'Windows app · v2.4.1',
+    kicker: 'Windows app · v2.5.0',
     tagline: ['Keeps your Windows PC awake.', 'That\'s it, that\'s the app.'],
     download: 'Download (75 KB)',
+    portable: 'Portable (zip)',
     source: 'Source code',
     meta: 'Windows 10 and 11 · nothing to install · free, MIT license',
     does: 'What it does', doesnt: "What it doesn't",
@@ -54,16 +56,17 @@ const c = {
     ],
     settingsNote: 'Changes are saved immediately in one registry key of your user, HKCU\\SOFTWARE\\SentinelApp. No Save button to forget.',
     firstTitle: 'First run',
-    first: 'Put Sentinel.exe in a folder that stays put, not in Downloads, and double-click it. SmartScreen may complain because the exe isn\'t signed: More info, then Run anyway. A signing certificate costs more than all the coffees this app has earned so far, which brings us to the next box.',
+    first: 'Put Sentinel.exe in a folder that stays put, not in Downloads, and double-click it. SmartScreen may complain because the exe isn\'t signed: More info, then Run anyway. A signing certificate costs more than all the coffees this app has earned so far, which brings us to the next box. Rather leave no trace? The portable zip keeps its settings in Sentinel.ini next to the exe and never touches the registry, so it also can\'t start with Windows.',
     coffeeTitle: ['Did it save your', 'presentation?'],
     coffeeText: 'Sentinel is free and stays free. If it spared you an "appears away" or a screensaver in front of a client, a coffee on Ko-fi is how the next app gets written.',
     coffeeBtn: 'Buy me a coffee',
   },
   it: {
     description: 'Sentinel tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, senza installazione, senza internet. Cosa fa, cosa non fa, come funziona.',
-    kicker: 'App per Windows · v2.4.1',
+    kicker: 'App per Windows · v2.5.0',
     tagline: ['Tiene sveglio il tuo PC Windows.', 'Tutto qui, questa è l\'app.'],
     download: 'Scarica (75 KB)',
+    portable: 'Portable (zip)',
     source: 'Codice sorgente',
     meta: 'Windows 10 e 11 · niente da installare · gratis, licenza MIT',
     does: 'Cosa fa', doesnt: 'Cosa non fa',
@@ -104,7 +107,7 @@ const c = {
     ],
     settingsNote: 'Le modifiche si salvano subito in una chiave di registro del tuo utente, HKCU\\SOFTWARE\\SentinelApp. Nessun tasto Salva da dimenticare.',
     firstTitle: 'Primo avvio',
-    first: 'Metti Sentinel.exe in una cartella che non sposti, non in Download, e fai doppio clic. SmartScreen potrebbe lamentarsi perché l\'exe non è firmato: Ulteriori informazioni, poi Esegui comunque. Il certificato per firmarlo costa più di tutti i caffè che questa app ha guadagnato finora, il che ci porta al prossimo riquadro.',
+    first: 'Metti Sentinel.exe in una cartella che non sposti, non in Download, e fai doppio clic. SmartScreen potrebbe lamentarsi perché l\'exe non è firmato: Ulteriori informazioni, poi Esegui comunque. Il certificato per firmarlo costa più di tutti i caffè che questa app ha guadagnato finora, il che ci porta al prossimo riquadro. Non vuoi lasciare tracce? Lo zip portable tiene le impostazioni in Sentinel.ini accanto all\'exe e non tocca mai il registro, quindi non parte nemmeno con Windows.',
     coffeeTitle: ['Ti ha salvato la', 'presentazione?'],
     coffeeText: 'Sentinel è gratis e resta gratis. Se ti ha risparmiato un "sembri assente" o uno screensaver davanti a un cliente, un caffè su Ko-fi è il modo in cui nasce la prossima app.',
     coffeeBtn: 'Offrimi un caffè',
@@ -126,6 +129,7 @@ const settingIcons = [Eye, Power, Moon, BatteryExclamationPoint];
         </p>
         <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
           <a href={EXE} class="btn btn-primary"><Download />{c.download}</a>
+          <a href={ZIP} class="btn btn-ghost"><Usb />{c.portable}</a>
           <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}</a>
         </div>
         <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
