@@ -38,8 +38,8 @@ const c = {
     ],
     statusTitle: 'Before the Play Store',
     status: [
-      'Done: ad consent (AdMob UMP), privacy policy, Google sign-in, store listing. An internal test is live.',
-      'Next: the four in-app products on Play Console and a test on a real phone.',
+      'Done: ad consent (AdMob UMP), privacy policy, Google sign-in, store listing, the four in-app products. An internal test is live.',
+      'Next: a build with real ads and a test on a real phone.',
       'Then: a closed test with 12 testers for 14 days, which Google asks of every new account.',
     ],
     coffeeTitle: ['Want to see it', 'on the Play Store?'],
@@ -76,8 +76,8 @@ const c = {
     ],
     statusTitle: 'Prima del Play Store',
     status: [
-      "Fatto: consenso per le pubblicità (AdMob UMP), informativa privacy, accesso con Google, scheda dello Store. È partito un test interno.",
-      'Poi: i quattro prodotti in-app su Play Console e una prova su un telefono vero.',
+      "Fatto: consenso per le pubblicità (AdMob UMP), informativa privacy, accesso con Google, scheda dello Store, i quattro acquisti in-app. È partito un test interno.",
+      'Poi: una build con le pubblicità vere e una prova su un telefono vero.',
       'Infine: un test chiuso con 12 tester per 14 giorni, che Google chiede a ogni account nuovo.',
     ],
     coffeeTitle: ['Vuoi vederlo', 'sul Play Store?'],
@@ -118,7 +118,7 @@ const shots = ['home', 'upgrades', 'battle'];
       {shots.map((s, i) => (
         <figure class="reveal" style={`--d:${i * 90}ms`}>
           <img src={`/assets/img/ascendkeep/${s}.webp`} alt={c.shots[i]} width="405" height="720" loading="lazy" class="w-full rounded-2xl border border-line shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)]" />
-          <figcaption class="kicker mt-3 text-center !text-[0.65rem] sm:!text-xs">{c.shots[i]}</figcaption>
+          <figcaption class="kicker mt-3 text-center !text-[0.65rem] !tracking-[0.04em] [overflow-wrap:anywhere] sm:!text-xs sm:!tracking-[0.14em]">{c.shots[i]}</figcaption>
         </figure>
       ))}
     </div>

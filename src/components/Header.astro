@@ -50,7 +50,7 @@ const other = otherLang(lang);
   <div id="mobile-menu" class="mobile-menu md:hidden">
     <ul class="wrap flex flex-col gap-2 pt-24">
       {[...links, { href: localize(lang, '/contact/'), label: t.nav.contact, key: '/contact' }].map((l, i) => (
-        <li style={`--i:${i}`}><a href={l.href} class="block py-2 text-4xl font-semibold tracking-tight">{l.label}</a></li>
+        <li style={`--i:${i}`}><a href={l.href} class:list={['block py-2 text-4xl font-semibold tracking-tight', path.startsWith(l.key) && 'text-accent']} aria-current={path.startsWith(l.key) ? 'page' : undefined}>{l.label}</a></li>
       ))}
       <li style="--i:5" class="pt-6"><a href={localize(other, alt)} hreflang={other} class="kicker">{t.switchTo}</a></li>
     </ul>
@@ -64,24 +64,31 @@ const other = otherLang(lang);
     const onScroll = () => h.classList.toggle('scrolled', scrollY > 24);
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    b.addEventListener('click', () => {
-      const open = h.toggleAttribute('data-open');
+    const set = (open) => {
+      h.toggleAttribute('data-open', open);
       b.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
-    });
+    };
+    b.addEventListener('click', () => set(!h.hasAttribute('data-open')));
+    addEventListener('keydown', (e) => e.key === 'Escape' && set(false));
+    // the back button can bring the page back from cache with the menu still open
+    addEventListener('pageshow', () => set(false));
+    matchMedia('(min-width: 48rem)').addEventListener('change', (e) => e.matches && set(false));
   })();
 </script>
 
 <style>
-  .site-header { position: fixed; inset: 0 0 auto; z-index: 50; transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s; border-bottom: 1px solid transparent; }
-  .site-header.scrolled { background: rgb(5 7 6 / 0.72); backdrop-filter: blur(14px) saturate(1.4); border-color: var(--color-line); }
+  .site-header { position: fixed; inset: 0 0 auto; z-index: 50; }
+  /* the bar lives on ::before: a backdrop-filter on the header itself would trap the fixed mobile menu inside its 64 px */
+  .site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; border-bottom: 1px solid transparent; transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s; }
+  .site-header.scrolled::before { background: rgb(5 7 6 / 0.72); backdrop-filter: blur(14px) saturate(1.4); border-color: var(--color-line); }
   .nav-link { display: block; padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.9rem; color: var(--color-muted); transition: color 0.2s, background 0.2s; }
   .nav-link:hover { color: var(--color-ink); }
   .nav-link.is-active { color: var(--color-ink); background: rgb(255 255 255 / 0.07); }
   .menu-close { display: none; }
   [data-open] .menu-open { display: none; }
   [data-open] .menu-close { display: block; }
-  .mobile-menu { position: fixed; inset: 0; background: var(--color-bg); opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0.35s; }
+  .mobile-menu { position: fixed; inset: 0; overflow-y: auto; padding-bottom: 2rem; background: var(--color-bg); opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0.35s; }
   [data-open] .mobile-menu { opacity: 1; visibility: visible; }
   .mobile-menu li { opacity: 0; transform: translateY(16px); transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo); transition-delay: calc(var(--i) * 50ms); }
   [data-open] .mobile-menu li { opacity: 1; transform: none; }
