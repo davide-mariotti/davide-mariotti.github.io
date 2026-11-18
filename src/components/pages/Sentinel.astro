@@ -11,7 +11,7 @@ const REPO = 'https://github.com/davide-mariotti/Sentinel';
 const c = {
   en: {
     description: 'Sentinel keeps your Windows PC awake. A 75 KB tray app, no install, no internet. What it does, what it doesn\'t, how it works.',
-    kicker: 'Windows app · v2.4.0',
+    kicker: 'Windows app · v2.4.1',
     tagline: ['Keeps your Windows PC awake.', 'That\'s it, that\'s the app.'],
     download: 'Download (75 KB)',
     source: 'Source code',
@@ -26,7 +26,7 @@ const c = {
       'Starts with Windows if you ask, quietly, and speaks Italian or English.',
     ],
     doesntList: [
-      'Move the mouse or type anything you\'d see.',
+      'Move the pointer or press any key, so it can\'t touch what\'s under your cursor.',
       'Ask for admin rights, install itself or touch your power plan.',
       'Connect to the internet. Ever. No telemetry, no auto-updates, no account.',
       'Stop you from locking or shutting down the PC. Turn it off and Windows is back in charge.',
@@ -34,12 +34,12 @@ const c = {
       'Do your work for you. I tried.',
     ],
     howKicker: 'How it works',
-    howTitle: ['Two things Windows looks at,', 'once a minute.'],
+    howTitle: ['Two things Windows looks at,', 'three times a minute.'],
     howLead: 'Windows decides to sleep by checking whether some program asked it to stay awake, and how long ago you last touched mouse or keyboard. Sentinel takes care of both.',
     steps: [
-      { t: 'Is it lunch time?', d: 'Every 60 seconds Sentinel checks the scheduled pause. Inside the slot it lets go completely and Windows does what it would normally do.' },
+      { t: 'Is it lunch time?', d: 'Every 20 seconds Sentinel checks the scheduled pause. Inside the slot it lets go completely and Windows does what it would normally do.' },
       { t: 'Stay awake, please', d: 'It asks Windows to keep the system and the screen on, the same official call video players use (SetThreadExecutionState). With the PC locked it asks for the system only, so the screen can rest.' },
-      { t: 'A key nobody has', d: 'If mouse and keyboard have been still for 55 seconds, it presses and releases F15. Real keyboards stopped at F12, so no app reacts, but the idle timers start again from zero.' },
+      { t: 'A move of zero pixels', d: 'If mouse and keyboard have been still for 30 seconds, it sends a mouse movement of zero pixels. The pointer stays where it is and no app receives anything, but the idle timers start again from zero.' },
     ],
     trayTitle: 'One look at the tray',
     on: ['Eye open', 'it\'s working, the PC won\'t sleep.'],
@@ -61,7 +61,7 @@ const c = {
   },
   it: {
     description: 'Sentinel tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, senza installazione, senza internet. Cosa fa, cosa non fa, come funziona.',
-    kicker: 'App per Windows · v2.4.0',
+    kicker: 'App per Windows · v2.4.1',
     tagline: ['Tiene sveglio il tuo PC Windows.', 'Tutto qui, questa è l\'app.'],
     download: 'Scarica (75 KB)',
     source: 'Codice sorgente',
@@ -76,7 +76,7 @@ const c = {
       'Si avvia con Windows se glielo chiedi, in silenzio, e parla italiano o inglese.',
     ],
     doesntList: [
-      'Non muove il mouse e non scrive niente che si veda.',
+      'Non sposta il puntatore e non preme nessun tasto, quindi non tocca quello che hai sotto il cursore.',
       'Non chiede permessi da amministratore, non si installa, non tocca il risparmio energia.',
       'Non si collega a internet. Mai. Niente telemetria, niente aggiornamenti automatici, niente account.',
       'Non ti impedisce di bloccare o spegnere il PC. Lo spegni e Windows torna a decidere.',
@@ -84,12 +84,12 @@ const c = {
       'Non fa il lavoro al posto tuo. Ci ho provato.',
     ],
     howKicker: 'Come funziona',
-    howTitle: ['Due cose che Windows guarda,', 'una volta al minuto.'],
+    howTitle: ['Due cose che Windows guarda,', 'tre volte al minuto.'],
     howLead: 'Windows decide di andare in standby controllando se qualche programma gli ha chiesto di restare sveglio, e da quanto non tocchi mouse o tastiera. Sentinel si occupa di tutte e due.',
     steps: [
-      { t: 'È ora di pranzo?', d: 'Ogni 60 secondi Sentinel guarda la pausa programmata. Dentro la fascia lascia perdere del tutto e Windows fa quello che farebbe di solito.' },
+      { t: 'È ora di pranzo?', d: 'Ogni 20 secondi Sentinel guarda la pausa programmata. Dentro la fascia lascia perdere del tutto e Windows fa quello che farebbe di solito.' },
       { t: 'Resta sveglio, per favore', d: 'Chiede a Windows di tenere acceso sistema e schermo, con la stessa chiamata ufficiale dei lettori video (SetThreadExecutionState). Con il PC bloccato chiede solo il sistema, così lo schermo riposa.' },
-      { t: 'Un tasto che nessuno ha', d: 'Se mouse e tastiera sono fermi da 55 secondi, preme e rilascia F15. Le tastiere vere si fermano a F12, quindi nessun programma reagisce, ma i contatori di inattività ripartono da zero.' },
+      { t: 'Un movimento di zero pixel', d: 'Se mouse e tastiera sono fermi da 30 secondi, manda un movimento del mouse di zero pixel. Il puntatore resta dov\'è e nessun programma riceve niente, ma i contatori di inattività ripartono da zero.' },
     ],
     trayTitle: 'Uno sguardo alla tray',
     on: ['Occhio aperto', 'sta lavorando, il PC non va in standby.'],
