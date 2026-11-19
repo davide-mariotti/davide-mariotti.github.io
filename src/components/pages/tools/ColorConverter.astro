@@ -1,0 +1,108 @@
+---
+import { Shuffle } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Colour', 'converter.'],
+    description: 'Convert colours between HEX, RGB, HSL and CMYK in your browser. Paste any CSS colour, copy the format you need.',
+    kicker: 'Runs on your device',
+    lead: 'Paste a colour in any format, get it back in all the others. HEX, RGB, HSL, CMYK, and any CSS colour name your browser knows.',
+    input: 'Any colour', picker: 'Pick a colour', placeholder: '#2fe37f, rgb(47 227 127), tomato…', invalid: "That's not a colour I can read. Try #2fe37f, rgb(47, 227, 127) or cmyk(79%, 0%, 44%, 11%).",
+    random: 'Random colour', copy: 'Copy',
+    does: [
+      'Reads HEX (with or without #), rgb(), hsl(), cmyk(), colour names like "tomato", and newer CSS formats like oklch().',
+      'Gives back HEX, RGB, HSL and CMYK, each one a click away from your clipboard.',
+      'Keeps transparency: an alpha below 1 shows up in HEX, RGB and HSL.',
+      'Lets you pick with the system colour picker, or roll a random colour when you\'re out of ideas.',
+    ],
+    doesnt: [
+      'Send anything anywhere. The browser itself parses the colour.',
+      'Match print colours exactly: this CMYK is the plain formula, not a colour profile. Your printer will have opinions.',
+      'Show colours outside sRGB: oklch() and friends get squeezed into the screen\'s usual range.',
+    ],
+  },
+  it: {
+    title: ['Convertitore di', 'colori.'],
+    description: 'Converti i colori tra HEX, RGB, HSL e CMYK nel browser. Incolla qualsiasi colore CSS e copia il formato che ti serve.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Incolla un colore in qualsiasi formato e lo ritrovi in tutti gli altri. HEX, RGB, HSL, CMYK e ogni nome di colore CSS che il browser conosce.',
+    input: 'Un colore qualsiasi', picker: 'Scegli un colore', placeholder: '#2fe37f, rgb(47 227 127), tomato…', invalid: 'Questo colore non lo riconosco. Prova #2fe37f, rgb(47, 227, 127) o cmyk(79%, 0%, 44%, 11%).',
+    random: 'Colore a caso', copy: 'Copia',
+    does: [
+      'Legge HEX (con o senza #), rgb(), hsl(), cmyk(), nomi come "tomato" e i formati CSS più nuovi come oklch().',
+      'Restituisce HEX, RGB, HSL e CMYK, ognuno a un clic dagli appunti.',
+      'Tiene la trasparenza: un alfa sotto 1 compare in HEX, RGB e HSL.',
+      'Puoi scegliere con il selettore di sistema, o tirare a sorte un colore quando le idee finiscono.',
+    ],
+    doesnt: [
+      'Non invia niente a nessuno. Il colore lo interpreta il browser stesso.',
+      'Non garantisce i colori di stampa: questo CMYK è la formula semplice, non un profilo colore. La tipografia avrà da ridire.',
+      'Non mostra i colori fuori da sRGB: oklch() e simili vengono riportati nella gamma normale dello schermo.',
+    ],
+  },
+}[lang];
+const formats = ['HEX', 'RGB', 'HSL', 'CMYK'];
+---
+<ToolPage lang={lang} slug="color-converter" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div class="spot grid gap-8 p-6 sm:p-8 md:grid-cols-[1fr_1.3fr]">
+    <div id="cc-swatch" class="grid min-h-48 place-items-center rounded-2xl border border-line font-mono text-xl transition-colors md:min-h-full" aria-hidden="true"></div>
+    <div class="grid gap-5">
+      <div>
+        <label class="label" for="cc-in">{c.input}</label>
+        <div class="flex gap-2">
+          <input id="cc-in" class="field font-mono" value="#2fe37f" placeholder={c.placeholder} autocomplete="off" spellcheck="false" aria-describedby="cc-err" data-invalid={c.invalid} />
+          <input id="cc-pick" type="color" value="#2fe37f" aria-label={c.picker} title={c.picker} />
+        </div>
+        <p id="cc-err" class="mt-2 text-sm text-[#fca5a5]" aria-live="polite"></p>
+      </div>
+      {formats.map((f) => (
+        <div>
+          <label class="label" for={`cc-${f.toLowerCase()}`}>{f}</label>
+          <div class="flex gap-2">
+            <input id={`cc-${f.toLowerCase()}`} class="field font-mono" readonly />
+            <CopyButton target={`#cc-${f.toLowerCase()}`} label={`${c.copy} ${f}`} iconOnly />
+          </div>
+        </div>
+      ))}
+      <button type="button" id="cc-random" class="btn btn-ghost justify-self-start"><Shuffle />{c.random}</button>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { parse, toHex, toRgb, toHsl, toCmyk, luminance, type RGB } from '../../../scripts/tools/color';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const input = $('cc-in'), pick = $('cc-pick'), err = $('cc-err'), swatch = $('cc-swatch');
+
+  function show(col: RGB) {
+    const hex = toHex(col);
+    $('cc-hex').value = hex;
+    $('cc-rgb').value = toRgb(col);
+    $('cc-hsl').value = toHsl(col);
+    $('cc-cmyk').value = toCmyk(col);
+    pick.value = hex.slice(0, 7).toLowerCase();
+    swatch.style.background = hex;
+    swatch.style.color = luminance(col) > 0.18 && col.a >= 0.5 ? '#050706' : '#ffffff';
+    swatch.textContent = hex;
+  }
+  function read() {
+    const col = parse(input.value);
+    err.textContent = col || !input.value.trim() ? '' : input.dataset.invalid!;
+    input.setAttribute('aria-invalid', String(!col));
+    if (col) show(col);
+  }
+  input.addEventListener('input', read);
+  pick.addEventListener('input', () => { input.value = pick.value; read(); });
+  $('cc-random').addEventListener('click', () => {
+    const [r, g, b] = crypto.getRandomValues(new Uint8Array(3));
+    input.value = toHex({ r, g, b, a: 1 });
+    read();
+  });
+  read();
+</script>

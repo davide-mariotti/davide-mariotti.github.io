@@ -1,0 +1,136 @@
+---
+import { ArrowUpDown, Check, X } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['WCAG', 'contrast.'],
+    description: 'Check the contrast ratio of text and background colours against WCAG 2.2 AA and AAA, in your browser. Any CSS colour works.',
+    kicker: 'Runs on your device',
+    lead: 'Two colours in, one ratio out, and a clear pass or fail for every WCAG level. Before the client asks, ideally.',
+    fg: 'Text colour', bg: 'Background', pickFg: 'Pick the text colour', pickBg: 'Pick the background', swap: 'Swap colours',
+    ratio: 'Contrast ratio', invalid: 'Not a colour I can read.',
+    sample: 'The quick brown fox jumps over the lazy dog.', sampleLarge: 'Large text, 24 px or 19 px bold',
+    rows: [
+      ['Normal text', 'AA', 4.5], ['Normal text', 'AAA', 7], ['Large text', 'AA', 3], ['Large text', 'AAA', 4.5], ['Icons and UI parts', 'AA', 3],
+    ],
+    pass: 'Pass', fail: 'Fail',
+    does: [
+      'Computes the contrast ratio with the WCAG 2.2 formula, from 1:1 to 21:1.',
+      'Checks normal text, large text (24 px, or 19 px bold) and icons or UI borders, which need 3:1.',
+      'Reads any CSS colour: HEX, rgb(), hsl(), names, oklch().',
+      'Never rounds up: 4.499:1 fails AA, as the standard says.',
+    ],
+    doesnt: [
+      'Send your colours anywhere.',
+      'Blend transparent colours: alpha is ignored, so check the colour you actually see.',
+      'Use APCA, the WCAG 3 draft. Laws and audits still ask for WCAG 2.',
+      'Make a design accessible on its own. Contrast is one rule out of many.',
+    ],
+  },
+  it: {
+    title: ['Contrasto', 'WCAG.'],
+    description: 'Controlla il contrasto tra testo e sfondo secondo le WCAG 2.2 AA e AAA, nel browser. Va bene qualsiasi colore CSS.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Due colori, un rapporto di contrasto, e per ogni livello WCAG un passa o non passa chiaro. Possibilmente prima che lo chieda il cliente.',
+    fg: 'Colore del testo', bg: 'Sfondo', pickFg: 'Scegli il colore del testo', pickBg: 'Scegli lo sfondo', swap: 'Scambia i colori',
+    ratio: 'Rapporto di contrasto', invalid: 'Questo colore non lo riconosco.',
+    sample: 'Ma la volpe col suo balzo ha raggiunto il quieto Fido.', sampleLarge: 'Testo grande, 24 px o 19 px in grassetto',
+    rows: [
+      ['Testo normale', 'AA', 4.5], ['Testo normale', 'AAA', 7], ['Testo grande', 'AA', 3], ['Testo grande', 'AAA', 4.5], ['Icone e componenti', 'AA', 3],
+    ],
+    pass: 'Passa', fail: 'Non passa',
+    does: [
+      'Calcola il rapporto di contrasto con la formula delle WCAG 2.2, da 1:1 a 21:1.',
+      'Controlla testo normale, testo grande (24 px, o 19 px in grassetto) e icone o bordi dei componenti, che chiedono 3:1.',
+      'Legge qualsiasi colore CSS: HEX, rgb(), hsl(), nomi, oklch().',
+      'Non arrotonda mai per eccesso: 4,499:1 non passa AA, come dice lo standard.',
+    ],
+    doesnt: [
+      'Non invia i tuoi colori da nessuna parte.',
+      'Non mescola i colori trasparenti: l\'alfa viene ignorato, quindi controlla il colore che vedi davvero.',
+      'Non usa APCA, la bozza delle WCAG 3. Leggi e verifiche chiedono ancora le WCAG 2.',
+      'Non rende accessibile un progetto da solo. Il contrasto è una regola tra tante.',
+    ],
+  },
+}[lang];
+const pair = [['fg', c.fg, c.pickFg, '#9aaba1'], ['bg', c.bg, c.pickBg, '#0b0f0d']];
+---
+<ToolPage lang={lang} slug="wcag-contrast-calculator" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="wc" class="spot grid gap-8 p-6 sm:p-8 lg:grid-cols-2" data-pass={c.pass} data-fail={c.fail}>
+    <div class="grid content-start gap-5">
+      {pair.map(([k, label, pickLabel, value], i) => (
+        <>
+          {i === 1 && <button type="button" id="wc-swap" class="btn btn-ghost !py-2 justify-self-start"><ArrowUpDown />{c.swap}</button>}
+          <div>
+            <label class="label" for={`wc-${k}`}>{label}</label>
+            <div class="flex gap-2">
+              <input id={`wc-${k}`} class="field font-mono" value={value} autocomplete="off" spellcheck="false" aria-describedby={`wc-${k}-err`} />
+              <input id={`wc-${k}-pick`} type="color" value={value} aria-label={pickLabel} title={pickLabel} />
+            </div>
+            <p id={`wc-${k}-err`} class="mt-2 text-sm text-[#fca5a5]" aria-live="polite" data-msg={c.invalid}></p>
+          </div>
+        </>
+      ))}
+      <div class="mt-2">
+        <p class="label">{c.ratio}</p>
+        <output id="wc-ratio" class="block font-mono text-5xl font-semibold tracking-tight sm:text-6xl" aria-live="polite"></output>
+      </div>
+    </div>
+
+    <div class="grid content-start gap-4">
+      <div id="wc-sample" class="rounded-2xl border border-line p-6 transition-colors">
+        <p class="text-base">{c.sample}</p>
+        <p class="mt-3 text-2xl font-semibold">{c.sampleLarge}</p>
+      </div>
+      <ul class="divide-y divide-line rounded-2xl border border-line">
+        {c.rows.map(([what, level, min]) => (
+          <li class="flex items-center justify-between gap-3 px-4 py-3" data-min={min}>
+            <span>{what} <span class="text-muted">· {level} {min}:1</span></span>
+            <span class="wc-badge group inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs uppercase data-[ok=false]:bg-[#f87171]/15 data-[ok=false]:text-[#fca5a5] data-[ok=true]:bg-accent/15 data-[ok=true]:text-accent"><Check class="size-4 group-data-[ok=false]:hidden" /><X class="size-4 group-data-[ok=true]:hidden" /><span></span></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { parse, toHex, contrast, ratioText, type RGB } from '../../../scripts/tools/color';
+
+  const root = document.getElementById('wc')!;
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const sample = $('wc-sample');
+  const last: Record<string, RGB> = {};
+
+  function update() {
+    for (const k of ['fg', 'bg']) {
+      const col = parse($(`wc-${k}`).value);
+      const err = $(`wc-${k}-err`);
+      err.textContent = col ? '' : err.dataset.msg!;
+      if (col) { last[k] = { ...col, a: 1 }; $(`wc-${k}-pick`).value = toHex(last[k]).toLowerCase(); }
+    }
+    const ratio = contrast(last.fg, last.bg);
+    ($('wc-ratio') as unknown as HTMLOutputElement).value = ratioText(ratio);
+    sample.style.color = toHex(last.fg);
+    sample.style.background = toHex(last.bg);
+    root.querySelectorAll<HTMLElement>('[data-min]').forEach((row) => {
+      const ok = ratio >= +row.dataset.min!;
+      const badge = row.querySelector<HTMLElement>('.wc-badge')!;
+      badge.dataset.ok = String(ok);
+      badge.lastElementChild!.textContent = ok ? root.dataset.pass! : root.dataset.fail!;
+    });
+  }
+  for (const k of ['fg', 'bg']) {
+    $(`wc-${k}`).addEventListener('input', update);
+    $(`wc-${k}-pick`).addEventListener('input', () => { $(`wc-${k}`).value = $(`wc-${k}-pick`).value; update(); });
+  }
+  $('wc-swap').addEventListener('click', () => {
+    [$('wc-fg').value, $('wc-bg').value] = [$('wc-bg').value, $('wc-fg').value];
+    update();
+  });
+  update();
+</script>
