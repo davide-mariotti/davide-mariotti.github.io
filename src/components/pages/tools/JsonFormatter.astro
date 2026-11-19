@@ -1,0 +1,111 @@
+---
+import { LocateFixed } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['JSON', 'formatter.'],
+    description: 'Format, minify, validate and sort JSON in your browser, with the exact line and column of any error. Big numbers stay exact.',
+    kicker: 'Runs on your device',
+    lead: 'Paste JSON, get it indented, minified or sorted. If it is broken, you get the line and column, not a shrug.',
+    input: 'Your JSON', output: 'Result', indent: 'Indent', sort: 'Sort keys A-Z', copy: 'Copy result', goto: 'Go to the error',
+    indents: [['  ', '2 spaces'], ['    ', '4 spaces'], ['\t', 'Tab'], ['', 'Minify']],
+    valid: 'Valid JSON · {a} → {b}', at: 'line {line}, column {col}',
+    does: [
+      'Indents with 2 or 4 spaces or tabs, or squeezes everything onto one line.',
+      'Sorts keys alphabetically at every level, handy before comparing two files.',
+      'Points at the exact line and column when the JSON is not valid.',
+      'Keeps integers longer than 15 digits exact, where most formatters quietly round them.',
+    ],
+    doesnt: [
+      'Send your data anywhere: the browser parses it.',
+      'Accept comments or trailing commas. That is JSON5 or JSONC, not JSON.',
+      'Fix broken JSON on its own. It tells you where, the fixing is yours.',
+    ],
+  },
+  it: {
+    title: ['Formatta', 'JSON.'],
+    description: 'Formatta, minifica, valida e ordina JSON nel browser, con riga e colonna esatte di ogni errore. I numeri grandi restano esatti.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Incolla un JSON e lo ritrovi indentato, minificato o ordinato. Se è rotto, hai riga e colonna, non un\'alzata di spalle.',
+    input: 'Il tuo JSON', output: 'Risultato', indent: 'Rientro', sort: 'Chiavi in ordine A-Z', copy: 'Copia il risultato', goto: 'Vai all\'errore',
+    indents: [['  ', '2 spazi'], ['    ', '4 spazi'], ['\t', 'Tab'], ['', 'Minificato']],
+    valid: 'JSON valido · {a} → {b}', at: 'riga {line}, colonna {col}',
+    does: [
+      'Rientra con 2 o 4 spazi o con le tabulazioni, oppure mette tutto su una riga.',
+      'Ordina le chiavi in ordine alfabetico a ogni livello, comodo prima di confrontare due file.',
+      'Indica riga e colonna esatte quando il JSON non è valido.',
+      'Tiene esatti gli interi con più di 15 cifre, che quasi tutti i formattatori arrotondano senza dirlo.',
+    ],
+    doesnt: [
+      'Non invia i tuoi dati da nessuna parte: li legge il browser.',
+      'Non accetta commenti o virgole finali. Quello è JSON5 o JSONC, non JSON.',
+      'Non ripara da solo il JSON rotto. Ti dice dove, la riparazione è tua.',
+    ],
+  },
+}[lang];
+const sample = '{"name":"Davide","tools":12,"stack":["Astro","Tailwind"],"id":12345678901234567890,"remote":true}';
+---
+<ToolPage lang={lang} slug="json-formatter" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="jf" class="spot grid gap-6 p-6 sm:p-8" data-t={JSON.stringify({ valid: c.valid, at: c.at })}>
+    <div class="flex flex-wrap items-end gap-4">
+      <div>
+        <label class="label" for="jf-indent">{c.indent}</label>
+        <select id="jf-indent" class="field !w-auto">{c.indents.map(([v, l]) => <option value={v}>{l}</option>)}</select>
+      </div>
+      <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-line px-4 py-3 transition-colors hover:border-accent/40"><input id="jf-sort" type="checkbox" />{c.sort}</label>
+      <CopyButton target="#jf-out" label={c.copy} class="sm:ml-auto" />
+    </div>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div>
+        <label class="label" for="jf-in">{c.input}</label>
+        <textarea id="jf-in" class="field" rows="18" spellcheck="false" aria-describedby="jf-msg">{sample}</textarea>
+      </div>
+      <div>
+        <label class="label" for="jf-out">{c.output}</label>
+        <textarea id="jf-out" class="field whitespace-pre" rows="18" readonly spellcheck="false" wrap="off"></textarea>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <p id="jf-msg" class="font-mono text-sm" aria-live="polite"></p>
+      <button type="button" id="jf-goto" class="btn btn-ghost !py-2 !text-sm" hidden><LocateFixed />{c.goto}</button>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { formatJson, errorAt } from '../../../scripts/tools/json';
+  import { formatBytes } from '../../../scripts/tools/image';
+
+  const t = JSON.parse(document.getElementById('jf')!.dataset.t!);
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const input = $<HTMLTextAreaElement>('jf-in'), output = $<HTMLTextAreaElement>('jf-out'), msg = $('jf-msg'), go = $('jf-goto');
+  const indent = $<HTMLSelectElement>('jf-indent'), sort = $<HTMLInputElement>('jf-sort');
+  const size = (s: string) => formatBytes(new TextEncoder().encode(s).length, document.documentElement.lang);
+  let errOffset = 0;
+
+  function run() {
+    go.hidden = true;
+    if (!input.value.trim()) { output.value = msg.textContent = ''; return; }
+    try {
+      output.value = formatJson(input.value, indent.value, sort.checked);
+      msg.className = 'font-mono text-sm text-accent';
+      msg.textContent = t.valid.replace('{a}', size(input.value)).replace('{b}', size(output.value));
+    } catch (e) {
+      const text = (e as Error).message;
+      const at = errorAt(input.value);
+      msg.className = 'font-mono text-sm text-[#fca5a5]';
+      msg.textContent = at ? `${text.replace(/\s*\(line \d+ column \d+\)/, '')} · ${t.at.replace('{line}', at.line).replace('{col}', at.col)}` : text;
+      if (at) { errOffset = at.offset; go.hidden = false; }
+    }
+  }
+  input.addEventListener('input', run);
+  indent.addEventListener('change', run);
+  sort.addEventListener('change', run);
+  go.addEventListener('click', () => { input.focus(); input.setSelectionRange(errOffset, errOffset + 1); });
+  run();
+</script>
