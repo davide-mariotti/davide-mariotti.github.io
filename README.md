@@ -47,10 +47,12 @@ src/components/pages/   one component per page, with the EN and IT copy side by 
 src/pages/              the routes: /, /about/, /apps/, /tools/, /contact/ and the same under /it/
 src/components/         header, footer, intro, logo, the glyph background
 src/styles/global.css   design tokens (one green, #2fe37f), type, buttons, cards
-public/assets/          app icons, the old tools' JS and CSS
+src/components/pages/tools/   one component per tool, served at /tools/<slug>/ and /it/tools/<slug>/
+src/scripts/tools/      the tools' logic, plus `npm test` to check it
+public/assets/          app icons and screenshots
 ```
 
-The nine tools are the original pages, moved inside the new layout. Their Bootstrap is scoped to `.legacy-tool` (`public/assets/css/legacy-bootstrap.css`), so it can't leak into the rest of the site.
+The eight tools share one frame (`ToolPage.astro`: what it does, what it doesn't, a coffee) and are listed in `src/tools.ts`. They run in the browser with no libraries; only Weather talks to a server (Open-Meteo), and its page says so. A new tool is a component in `src/components/pages/tools/`, named after its slug in PascalCase, plus a line in `src/tools.ts`.
 
 ### Credits
 
@@ -100,10 +102,12 @@ src/components/pages/   un componente per pagina, con i testi IT ed EN uno accan
 src/pages/              le rotte: /, /about/, /apps/, /tools/, /contact/ e le stesse sotto /it/
 src/components/         header, footer, intro, logo, lo sfondo di caratteri
 src/styles/global.css   i token del design (un solo verde, #2fe37f), tipografia, bottoni, card
-public/assets/          icone delle app, JS e CSS dei vecchi strumenti
+src/components/pages/tools/   un componente per strumento, servito su /tools/<slug>/ e /it/tools/<slug>/
+src/scripts/tools/      la logica degli strumenti, più `npm test` per controllarla
+public/assets/          icone e schermate delle app
 ```
 
-I nove strumenti sono le pagine originali, spostate dentro il nuovo layout. Il loro Bootstrap vale solo dentro `.legacy-tool` (`public/assets/css/legacy-bootstrap.css`), così non tocca il resto del sito.
+Gli otto strumenti condividono la stessa cornice (`ToolPage.astro`: cosa fa, cosa non fa, un caffè) e sono elencati in `src/tools.ts`. Girano nel browser senza librerie; solo il Meteo parla con un server (Open-Meteo), e la sua pagina lo dice. Uno strumento nuovo è un componente in `src/components/pages/tools/`, con il nome dello slug in PascalCase, più una riga in `src/tools.ts`.
 
 ### Riconoscimenti
 
