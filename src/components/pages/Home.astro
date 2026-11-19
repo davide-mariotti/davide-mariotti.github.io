@@ -25,6 +25,7 @@ const c = {
     workTitle: ['Things I made', 'because I needed them'],
     vigil: { title: 'Vigil', text: 'Temperatures, fans and power draw of your PC, from the tray. And the fans do what you say: Auto, Fixed, or a curve you drag.', cta: 'Discover Vigil' },
     sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. Lunch break, battery alerts, zero internet.', cta: 'Discover Sentinel' },
+    hoard: { title: 'Hoard', text: 'What fills your disk, on a map: every folder a tile as big as the space it takes, coloured by kind of file. And a tray icon that speaks up when a drive runs low.', cta: 'Discover Hoard' },
     tools: { title: `${TOOLS.length} browser tools`, text: 'Passwords, colours, contrast, images, SEO, JSON, regex, weather. Small things that save five minutes a day.', cta: 'Open the toolbox' },
     games: { title: 'The arcade', text: 'Snake, Maze, Jump, War Run, a Wordle in Italian and a few party games.', cta: 'Play' },
     lupo: { title: 'Lupo Solitario', text: 'Gamebooks, playable in the browser: dice, inventory and saves included.', cta: 'Start the adventure' },
@@ -57,6 +58,7 @@ const c = {
     workTitle: ['Cose che ho fatto', 'perché mi servivano'],
     vigil: { title: 'Vigil', text: 'Temperature, ventole e consumi del tuo PC, dalla tray. E le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini.', cta: 'Scopri Vigil' },
     sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, zero internet.', cta: 'Scopri Sentinel' },
+    hoard: { title: 'Hoard', text: 'Cosa riempie il disco, su una mappa: ogni cartella un riquadro grande quanto lo spazio che occupa, colorato per tipo di file. E un\'icona nella tray che ti avvisa quando un disco si riempie.', cta: 'Scopri Hoard' },
     tools: { title: `${TOOLS.length} strumenti nel browser`, text: 'Password, colori, contrasti, immagini, SEO, JSON, regex, meteo. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
     games: { title: 'La sala giochi', text: 'Snake, Maze, Jump, War Run, un Wordle in italiano e qualche gioco da serata.', cta: 'Gioca' },
     lupo: { title: 'Lupo Solitario', text: 'I librogame, giocabili nel browser: dadi, inventario e salvataggi compresi.', cta: "Inizia l'avventura" },
@@ -170,11 +172,21 @@ const name = ['Davide', 'Mariotti'];
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.lupo.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </a>
 
-      <a href="#top" class="spot reveal group flex flex-col p-8 md:col-span-3">
+      <a href="#top" class="spot reveal group flex flex-col p-8">
         <div class="icon-tile"><CodeXml /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.site.title}</h3>
         <p class="mt-2 text-muted">{c.site.text}</p>
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.site.cta}<ArrowUpRight class="size-4 -rotate-45 transition-transform group-hover:-translate-y-0.5" /></p>
+      </a>
+
+      <a href={L('/apps/hoard/')} class="spot reveal group flex flex-col p-8 md:col-span-2 md:flex-row md:items-center md:gap-10" style="--d:80ms">
+        <img src="/assets/icons/apps/hoard.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(190_24_93/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
+        <div class="mt-6 md:mt-0">
+          <div class="flex flex-wrap gap-2"><span class="chip">C#</span><span class="chip">WebView2</span><span class="chip">Windows</span></div>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.hoard.title}</h3>
+          <p class="mt-2 max-w-md text-muted">{c.hoard.text}</p>
+          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.hoard.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+        </div>
       </a>
     </div>
   </section>
