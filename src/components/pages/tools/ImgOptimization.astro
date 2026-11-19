@@ -1,0 +1,153 @@
+---
+import { ImageUp, Download } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Image', 'optimizer.'],
+    description: 'Compress images in your browser: WebP or JPEG, the quality you choose, optional resize, size before and after. No upload.',
+    kicker: 'Runs on your device · no upload',
+    lead: 'Drop an image, pick format and quality, download a lighter one. The file never leaves your computer.',
+    drop: 'Drop an image here, or click to choose one', types: 'JPG, PNG, WebP, GIF, AVIF',
+    format: 'Format', quality: 'Quality', max: 'Longest side (px)', maxPh: 'Original size',
+    original: 'Original', result: 'Result', download: 'Download', working: 'Working…',
+    bigger: 'The result is bigger than the original: keep the original, or lower the quality.',
+    notImage: "That doesn't look like an image.", unreadable: "Your browser can't read this image.",
+    saved: 'smaller', preview: 'Preview of the optimized image',
+    does: [
+      'Re-encodes JPG, PNG, WebP, GIF and AVIF images as WebP or JPEG, at the quality you choose.',
+      'Shrinks the longest side to the size you set, if you set one, keeping the proportions.',
+      'Shows the size before and after, and tells you when the result is bigger than the original.',
+      'Fills transparent areas with white for JPEG, which has no transparency. WebP keeps it.',
+    ],
+    doesnt: [
+      'Upload your image. Your browser decodes and re-encodes it, on your device.',
+      'Keep EXIF data such as camera, date and GPS position. Usually that\'s a feature.',
+      'Keep animations: GIFs and animated WebP come out as their first frame.',
+      'Work on a whole folder at once. One image at a time.',
+    ],
+  },
+  it: {
+    title: ['Ottimizza', 'immagini.'],
+    description: 'Comprimi le immagini nel browser: WebP o JPEG, la qualità che scegli, ridimensionamento facoltativo, peso prima e dopo. Nessun caricamento.',
+    kicker: 'Gira sul tuo dispositivo · nessun caricamento',
+    lead: 'Trascina un\'immagine, scegli formato e qualità, scarica la versione più leggera. Il file non esce dal tuo computer.',
+    drop: 'Trascina qui un\'immagine, o fai clic per sceglierla', types: 'JPG, PNG, WebP, GIF, AVIF',
+    format: 'Formato', quality: 'Qualità', max: 'Lato lungo (px)', maxPh: 'Dimensione originale',
+    original: 'Originale', result: 'Risultato', download: 'Scarica', working: 'Ci sto lavorando…',
+    bigger: 'Il risultato pesa più dell\'originale: tieni l\'originale, o abbassa la qualità.',
+    notImage: 'Questo non sembra un\'immagine.', unreadable: 'Il tuo browser non riesce a leggere questa immagine.',
+    saved: 'in meno', preview: 'Anteprima dell\'immagine ottimizzata',
+    does: [
+      'Ricodifica immagini JPG, PNG, WebP, GIF e AVIF in WebP o JPEG, alla qualità che scegli.',
+      'Riduce il lato lungo alla misura che imposti, se la imposti, senza deformare.',
+      'Mostra il peso prima e dopo, e ti avvisa se il risultato pesa più dell\'originale.',
+      'Riempie di bianco le parti trasparenti per il JPEG, che la trasparenza non ce l\'ha. Il WebP la tiene.',
+    ],
+    doesnt: [
+      'Non carica l\'immagine da nessuna parte. La decodifica e la ricodifica il tuo browser, sul tuo dispositivo.',
+      'Non tiene i dati EXIF come fotocamera, data e posizione GPS. Di solito è un pregio.',
+      'Non tiene le animazioni: GIF e WebP animati escono col primo fotogramma.',
+      'Non lavora su una cartella intera. Un\'immagine alla volta.',
+    ],
+  },
+}[lang];
+---
+<ToolPage lang={lang} slug="img-optimization" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="io" class="spot grid gap-6 p-6 sm:p-8" data-t={JSON.stringify({ working: c.working, bigger: c.bigger, notImage: c.notImage, unreadable: c.unreadable, saved: c.saved })}>
+    <label id="io-drop" class="flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-dashed border-line-strong px-6 py-12 text-center transition-colors hover:border-accent/60 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent [&.over]:border-accent [&.over]:bg-accent/5">
+      <span class="icon-tile"><ImageUp /></span>
+      <span class="text-lg font-medium">{c.drop}</span>
+      <span id="io-name" class="kicker normal-case">{c.types}</span>
+      <input id="io-file" type="file" accept="image/*" class="sr-only" />
+    </label>
+
+    <div class="grid gap-5 sm:grid-cols-3">
+      <div>
+        <label class="label" for="io-format">{c.format}</label>
+        <select id="io-format" class="field"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option></select>
+      </div>
+      <div>
+        <div class="flex items-baseline justify-between"><label class="label" for="io-q">{c.quality}</label><output id="io-q-out" for="io-q" class="font-mono">80%</output></div>
+        <input id="io-q" type="range" min="10" max="100" step="5" value="80" />
+      </div>
+      <div>
+        <label class="label" for="io-max">{c.max}</label>
+        <input id="io-max" type="number" min="16" max="16384" step="1" inputmode="numeric" class="field" placeholder={c.maxPh} />
+      </div>
+    </div>
+
+    <p id="io-msg" class="text-sm text-muted empty:hidden" aria-live="polite"></p>
+
+    <div id="io-out" class="grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-center" hidden>
+      <img id="io-preview" alt={c.preview} class="max-h-[28rem] w-full rounded-2xl border border-line bg-[repeating-conic-gradient(#1a201d_0_25%,#111714_0_50%)] bg-[length:20px_20px] object-contain" />
+      <div class="grid gap-4">
+        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 font-mono text-sm">
+          <dt class="text-muted">{c.original}</dt><dd id="io-before"></dd>
+          <dt class="text-muted">{c.result}</dt><dd id="io-after"></dd>
+        </dl>
+        <p id="io-gain" class="text-4xl font-semibold tracking-tight"></p>
+        <a id="io-dl" class="btn btn-primary justify-self-start"><Download />{c.download}</a>
+      </div>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { fitSize, outName, formatBytes } from '../../../scripts/tools/image';
+
+  const root = document.getElementById('io')!;
+  const t = JSON.parse(root.dataset.t!);
+  const lang = document.documentElement.lang;
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const drop = $('io-drop'), input = $('io-file'), format = $('io-format'), q = $('io-q'), max = $('io-max'), msg = $('io-msg');
+  const preview = document.getElementById('io-preview') as HTMLImageElement;
+  const dl = document.getElementById('io-dl') as HTMLAnchorElement;
+  let file: File | null = null, bitmap: ImageBitmap | null = null, url = '', job = 0;
+
+  async function load(f?: File) {
+    if (!f) return;
+    if (!f.type.startsWith('image/')) { msg.textContent = t.notImage; return; }
+    try { bitmap = await createImageBitmap(f); } catch { msg.textContent = t.unreadable; return; }
+    file = f;
+    $('io-name').textContent = f.name;
+    encode();
+  }
+
+  async function encode() {
+    if (!file || !bitmap) return;
+    const id = ++job;
+    msg.textContent = t.working;
+    const [w, h] = fitSize(bitmap.width, bitmap.height, +max.value || 0);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d')!;
+    if (format.value === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, format.value, +q.value / 100));
+    if (id !== job) return; // a newer setting is already being encoded
+    if (!blob) { msg.textContent = t.unreadable; return; }
+    URL.revokeObjectURL(url);
+    url = URL.createObjectURL(blob);
+    preview.src = dl.href = url;
+    dl.download = outName(file.name, blob.type);
+    const kind = (b: Blob) => (b.type.split('/')[1] || '?').toUpperCase().replace('JPEG', 'JPG');
+    $('io-before').textContent = `${formatBytes(file.size, lang)} · ${bitmap.width}×${bitmap.height} · ${kind(file)}`;
+    $('io-after').textContent = `${formatBytes(blob.size, lang)} · ${w}×${h} · ${kind(blob)}`;
+    const gain = Math.round((1 - blob.size / file.size) * 100);
+    $('io-gain').textContent = gain > 0 ? `−${gain}% ${t.saved}` : '';
+    msg.textContent = gain > 0 ? '' : t.bigger;
+    $('io-out').hidden = false;
+  }
+
+  input.addEventListener('change', () => load(input.files?.[0]));
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); load(e.dataTransfer?.files[0]); });
+  q.addEventListener('input', () => (($('io-q-out') as unknown as HTMLOutputElement).value = q.value + '%'));
+  for (const el of [format, q, max]) el.addEventListener('change', encode);
+</script>
