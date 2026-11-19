@@ -1,0 +1,151 @@
+---
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Regex', 'tester.'],
+    description: 'Test JavaScript regular expressions in your browser: live highlighting, every match with its groups, and a replace preview.',
+    kicker: 'Runs on your device',
+    lead: 'Write the pattern, paste the text, see every match light up as you type. With groups and a replace preview, before it goes into your code.',
+    pattern: 'Pattern', flags: 'Flags', text: 'Test text', replace: 'Replace with', result: 'After replacing', copy: 'Copy result',
+    sampleText: 'Born on 17/11/1991, site rebuilt on 19/11/2026, coffee at 8/1/2027.',
+    count: '{n} matches', one: '1 match', none: 'No matches.', limit: 'Showing the first {n}.', group: 'group',
+    flagNames: { g: 'global, every match', i: 'ignore case', m: 'multiline ^ and $', s: 'dot matches newlines', u: 'Unicode' },
+    does: [
+      'Runs your pattern with the browser\'s own JavaScript engine, so it behaves exactly as in your code.',
+      'Highlights matches as you type and lists each one with its position, numbered and named groups.',
+      'Previews a replace, with $1 or $<name> for the groups.',
+      'Tells you what is wrong when the pattern doesn\'t compile.',
+    ],
+    doesnt: [
+      'Send your pattern or text anywhere.',
+      'Speak other dialects: PCRE, Python or .NET have features JavaScript doesn\'t, and the other way round.',
+      'Save you from catastrophic backtracking: a pattern like (a+)+$ on a long text can freeze the tab, just as it would freeze your app.',
+    ],
+  },
+  it: {
+    title: ['Tester di', 'regex.'],
+    description: 'Prova le espressioni regolari JavaScript nel browser: evidenziazione mentre scrivi, ogni corrispondenza con i suoi gruppi e l\'anteprima della sostituzione.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Scrivi il pattern, incolla il testo, guarda accendersi ogni corrispondenza mentre scrivi. Con i gruppi e l\'anteprima della sostituzione, prima che finisca nel codice.',
+    pattern: 'Pattern', flags: 'Flag', text: 'Testo di prova', replace: 'Sostituisci con', result: 'Dopo la sostituzione', copy: 'Copia il risultato',
+    sampleText: 'Nato il 17/11/1991, sito rifatto il 19/11/2026, caffè l\'8/1/2027.',
+    count: '{n} corrispondenze', one: '1 corrispondenza', none: 'Nessuna corrispondenza.', limit: 'Mostro le prime {n}.', group: 'gruppo',
+    flagNames: { g: 'globale, tutte le corrispondenze', i: 'ignora maiuscole', m: '^ e $ su ogni riga', s: 'il punto prende anche gli a capo', u: 'Unicode' },
+    does: [
+      'Esegue il pattern con il motore JavaScript del browser, quindi si comporta esattamente come nel tuo codice.',
+      'Evidenzia le corrispondenze mentre scrivi e le elenca con posizione, gruppi numerati e con nome.',
+      'Mostra l\'anteprima di una sostituzione, con $1 o $<nome> per i gruppi.',
+      'Ti dice cosa non va quando il pattern non compila.',
+    ],
+    doesnt: [
+      'Non invia pattern o testo da nessuna parte.',
+      'Non parla altri dialetti: PCRE, Python o .NET hanno funzioni che JavaScript non ha, e viceversa.',
+      'Non ti salva dal backtracking catastrofico: un pattern come (a+)+$ su un testo lungo può bloccare la scheda, come bloccherebbe la tua app.',
+    ],
+  },
+}[lang];
+const t = { count: c.count, one: c.one, none: c.none, limit: c.limit, group: c.group };
+const SHOWN = 100;
+---
+<ToolPage lang={lang} slug="regex-tester" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="rx" class="spot grid gap-6 p-6 sm:p-8" data-t={JSON.stringify(t)} data-shown={SHOWN}>
+    <div>
+      <label class="label" for="rx-src">{c.pattern}</label>
+      <div class="flex items-center gap-2 font-mono">
+        <span class="text-xl text-muted" aria-hidden="true">/</span>
+        <input id="rx-src" class="field font-mono" value="(?<d>\d{1,2})/(?<m>\d{1,2})/(?<y>\d{4})" autocomplete="off" spellcheck="false" aria-describedby="rx-err" />
+        <span class="text-xl text-muted" aria-hidden="true">/</span>
+      </div>
+      <p id="rx-err" class="mt-2 font-mono text-sm text-[#fca5a5] empty:hidden" aria-live="polite"></p>
+    </div>
+    <fieldset class="flex flex-wrap gap-2">
+      <legend class="label">{c.flags}</legend>
+      {Object.entries(c.flagNames).map(([f, name]) => (
+        <label class="flex cursor-pointer items-center gap-2 rounded-xl border border-line px-3 py-2 text-sm transition-colors hover:border-accent/40" title={name}>
+          <input type="checkbox" name="flag" value={f} checked={f === 'g'} /><span class="font-mono">{f}</span><span class="text-muted">{name}</span>
+        </label>
+      ))}
+    </fieldset>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div>
+        <label class="label" for="rx-text">{c.text}</label>
+        <textarea id="rx-text" class="field !font-sans !text-base" rows="7" spellcheck="false">{c.sampleText}</textarea>
+      </div>
+      <div>
+        <p class="label" id="rx-count" aria-live="polite"></p>
+        <div id="rx-view" class="field min-h-[11.5rem] whitespace-pre-wrap break-words !font-sans !text-base [&_mark]:rounded [&_mark]:bg-accent/25 [&_mark]:text-ink [&_mark]:outline [&_mark]:outline-1 [&_mark]:outline-accent/60"></div>
+      </div>
+    </div>
+    <ol id="rx-list" class="grid gap-2 font-mono text-sm empty:hidden"></ol>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div>
+        <label class="label" for="rx-rep">{c.replace}</label>
+        <input id="rx-rep" class="field font-mono" value="$<y>-$<m>-$<d>" autocomplete="off" spellcheck="false" />
+      </div>
+      <div>
+        <label class="label" for="rx-out">{c.result}</label>
+        <div class="flex gap-2">
+          <input id="rx-out" class="field" readonly />
+          <CopyButton target="#rx-out" label={c.copy} iconOnly />
+        </div>
+      </div>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { findMatches, type Match } from '../../../scripts/tools/regex';
+
+  const root = document.getElementById('rx')!;
+  const t = JSON.parse(root.dataset.t!);
+  const SHOWN = +root.dataset.shown!;
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const src = $<HTMLInputElement>('rx-src'), text = $<HTMLTextAreaElement>('rx-text'), rep = $<HTMLInputElement>('rx-rep');
+  const view = $('rx-view'), list = $('rx-list'), err = $('rx-err'), count = $('rx-count');
+
+  // the text with every non-empty match wrapped in <mark>, built from text nodes (no innerHTML)
+  function highlight(s: string, matches: Match[]) {
+    const parts: Node[] = [];
+    let at = 0;
+    for (const m of matches) {
+      if (!m.text) continue;
+      parts.push(document.createTextNode(s.slice(at, m.index)), Object.assign(document.createElement('mark'), { textContent: m.text }));
+      at = m.index + m.text.length;
+    }
+    parts.push(document.createTextNode(s.slice(at)));
+    view.replaceChildren(...parts);
+  }
+
+  function run() {
+    const flags = [...root.querySelectorAll<HTMLInputElement>('input[name=flag]:checked')].map((f) => f.value).join('');
+    const s = text.value;
+    let matches: Match[] = [];
+    err.textContent = '';
+    src.removeAttribute('aria-invalid');
+    try {
+      if (src.value) matches = findMatches(src.value, flags, s);
+      $<HTMLInputElement>('rx-out').value = src.value ? s.replace(new RegExp(src.value, flags), rep.value) : s;
+    } catch (e) {
+      err.textContent = (e as Error).message;
+      src.setAttribute('aria-invalid', 'true');
+    }
+    highlight(s, matches);
+    count.textContent = !matches.length ? t.none : matches.length === 1 ? t.one : t.count.replace('{n}', matches.length);
+    list.replaceChildren(...matches.slice(0, SHOWN).map((m, i) => {
+      const li = document.createElement('li');
+      li.className = 'rounded-xl border border-line px-4 py-2';
+      const groups = m.named ? Object.entries(m.named).map(([k, v]) => `${k}: ${v ?? '∅'}`) : m.groups.map((g, j) => `${t.group} ${j + 1}: ${g ?? '∅'}`);
+      li.textContent = [`#${i + 1} @${m.index}  "${m.text}"`, ...groups].join('   ');
+      return li;
+    }));
+    if (matches.length > SHOWN) list.append(Object.assign(document.createElement('li'), { className: 'text-muted', textContent: t.limit.replace('{n}', SHOWN) }));
+  }
+  for (const el of [src, text, rep]) el.addEventListener('input', run);
+  root.addEventListener('change', run);
+  run();
+</script>
