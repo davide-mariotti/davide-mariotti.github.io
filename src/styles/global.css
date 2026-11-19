@@ -43,6 +43,9 @@
   body { min-height: 100svh; }
   ::selection { background: var(--color-accent); color: var(--color-bg); }
   :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 6px; }
+  /* Tailwind 4 leaves buttons with the arrow cursor: everything clickable gets the hand */
+  button:not(:disabled), [role="button"], summary, select, label[for], label:has(> input),
+  input:is([type="checkbox"], [type="radio"], [type="range"], [type="file"]) { cursor: pointer; }
   /* film grain over everything: cheap, and it kills the flat-gradient look */
   body::after {
     content: "";
@@ -70,6 +73,9 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* the gradient only paints inside the box: room for descenders (g, p) and the italic overhang, cancelled by the margins */
+    padding: 0.05em 0.12em 0.22em 0;
+    margin: -0.05em -0.12em -0.22em 0;
   }
   .h-display { font-size: clamp(3rem, 9.5vw, 9rem); line-height: 0.92; letter-spacing: -0.05em; font-weight: 600; }
   .h-section { font-size: clamp(2rem, 4.6vw, 3.6rem); line-height: 1.02; letter-spacing: -0.035em; font-weight: 600; }
@@ -144,8 +150,9 @@
   .js .reveal.in { opacity: 1; transform: none; filter: none; }
 
   /* words that rise out of a blur, staggered by --i (hero titles) */
-  .blur-word { display: inline-block; animation: blur-in 1s var(--ease-out-expo) both; animation-delay: calc(var(--intro-delay, 0ms) + var(--i, 0) * 70ms + 150ms); }
-  .chip.blur-word { display: inline-flex; } /* the animation must not break the chip's icon + text row */
+  .blur-word { animation: blur-in 1s var(--ease-out-expo) both; animation-delay: calc(var(--intro-delay, 0ms) + var(--i, 0) * 70ms + 150ms); }
+  /* inline-block so plain words can move; :where() keeps it weaker than any class that sets its own display (.icon-tile, .btn, .chip) */
+  :where(.blur-word) { display: inline-block; }
 
   /* tool forms: native controls, dressed in the site's colours */
   .field {
