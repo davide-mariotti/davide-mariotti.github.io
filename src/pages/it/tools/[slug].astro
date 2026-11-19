@@ -1,0 +1,8 @@
+---
+import { TOOLS, component } from '../../../tools';
+
+export const getStaticPaths = () => TOOLS.map((t) => ({ params: { slug: t.slug } }));
+const pages: Record<string, any> = import.meta.glob('../../../components/pages/tools/*.astro', { eager: true });
+const Page = pages[`../../../components/pages/tools/${component(Astro.params.slug!)}.astro`].default;
+---
+<Page lang="it" />

@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://davide-mariotti.github.io',
+  // SEO Scraper was removed (Google closed the Custom Search JSON API): old links land on the tools page
+  redirects: { '/tools/scrap-seo': '/tools/' },
   integrations: [
     react(),
     sitemap({
