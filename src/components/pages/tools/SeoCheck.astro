@@ -1,0 +1,184 @@
+---
+import { SearchCheck, FileUp, CircleCheck, TriangleExclamationPoint, CircleX, Info } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['SEO', 'check.'],
+    description: 'On-page SEO check in your browser: title, meta description, headings, canonical, robots, Open Graph, alt text, links and structured data, with a Google snippet preview.',
+    kicker: 'Runs on your device',
+    lead: 'Paste the source of a page and see what Google sees first: title, description, headings, the tags that decide indexing. With a preview of the search result.',
+    url: 'Page address', urlHint: 'Optional: it tells internal links from external ones and fills the result preview.',
+    source: 'Page source (HTML)', file: 'Or load an .html file',
+    how: 'Open the page, press Ctrl+U (Option+Cmd+U on a Mac), select all, copy, paste here.',
+    go: 'Check the page', empty: 'Paste the source of a page first.',
+    preview: 'In Google, more or less', noTitle: '(no title)', noDesc: '(no description: Google will pick some text from the page)',
+    summary: '{fail} to fix · {warn} to improve · {pass} fine',
+    status: { pass: 'Fine', warn: 'Improve', fail: 'Fix', info: 'Info' },
+    m: {
+      title: { label: 'Title', ok: '{n} characters: fits in a Google result.', short: '{n} characters: a bit short, aim for 30 to 60.', long: '{n} characters: Google will likely cut it around 60.', missing: 'Missing. Every page needs a <title>.' },
+      description: { label: 'Meta description', ok: '{n} characters: a good length.', short: '{n} characters: short, aim for 70 to 160.', long: '{n} characters: Google will likely cut it around 160.', missing: 'Missing: Google will pick a piece of the page text instead.' },
+      h1: { label: 'Main heading (h1)', one: '"{text}"', many: '{n} h1 tags: one is clearer, for people and for Google.', none: 'No h1: the page has no main heading.' },
+      headings: { label: 'Heading order', ok: 'Headings: {n}, no level skipped.', skips: 'Skipped levels, like h2 straight to h4: {n}.' },
+      lang: { label: 'Language', ok: 'lang="{text}"', missing: 'The html tag has no lang: screen readers and Google have to guess.' },
+      viewport: { label: 'Viewport', ok: 'Set: the page can fit a phone screen.', missing: 'Missing: phones will show the desktop layout, zoomed out.' },
+      canonical: { label: 'Canonical', ok: '{text}', missing: 'No canonical link. Fine for a page with one address, risky with parameters or copies.' },
+      robots: { label: 'Robots', ok: 'Nothing stops indexing.', noindex: 'robots says noindex: Google will leave this page out.', nofollow: "robots says nofollow: Google won't follow the links on this page." },
+      og: { label: 'Open Graph', ok: 'og:title, og:description and og:image are there: shared links get a card.', missing: 'Missing {text}: shared links will look plain.' },
+      images: { label: 'Image alt text', ok: 'Every image has an alt attribute ({m}).', noalt: 'Images without an alt attribute: {n} of {m}.', none: 'No images.' },
+      links: { label: 'Links', count: 'Links: {n} ({int} to this site, {ext} elsewhere).', countNoHost: 'Links: {n}. Add the page address to tell internal from external.', mute: 'Links with no text that Google or a screen reader can read: {n}.' },
+      jsonld: { label: 'Structured data', ok: 'JSON-LD blocks, all valid JSON: {n}.', invalid: 'JSON-LD blocks that are not valid JSON: {n}.', none: 'No structured data. Optional, but it can earn richer results.' },
+      words: { label: 'Text', count: 'Words of visible text: {n}.' },
+    },
+    does: [
+      'Checks title and description length, the h1, heading order, language, viewport, canonical and robots.',
+      'Spots images without alt text, links with nothing to read, Open Graph tags and broken JSON-LD.',
+      'Shows roughly how the page would look in Google results.',
+      'Says what to fix first: red blocks indexing or looks broken, amber is worth improving.',
+    ],
+    doesnt: [
+      'Fetch the page for you, or send the HTML anywhere. Your browser reads it, and no script inside it runs.',
+      'Know your ranking, backlinks or keywords. That needs Search Console and time.',
+      'See what JavaScript adds after loading. Save the page with Ctrl+S and load the .html file to check the final version.',
+      'Promise the first page of Google. Nobody honest can.',
+    ],
+  },
+  it: {
+    title: ['Controllo', 'SEO.'],
+    description: 'Controllo SEO della pagina nel browser: title, meta description, titoli, canonical, robots, Open Graph, testi alternativi, link e dati strutturati, con l\'anteprima del risultato su Google.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Incolla il sorgente di una pagina e guarda quello che Google vede per primo: titolo, descrizione, intestazioni, i tag che decidono l\'indicizzazione. Con l\'anteprima del risultato di ricerca.',
+    url: 'Indirizzo della pagina', urlHint: 'Facoltativo: serve a distinguere i link interni da quelli esterni e a completare l\'anteprima.',
+    source: 'Sorgente della pagina (HTML)', file: 'Oppure carica un file .html',
+    how: 'Apri la pagina, premi Ctrl+U (Opzione+Cmd+U su Mac), seleziona tutto, copia e incolla qui.',
+    go: 'Controlla la pagina', empty: 'Prima incolla il sorgente di una pagina.',
+    preview: 'Su Google, più o meno', noTitle: '(senza titolo)', noDesc: '(senza descrizione: Google prenderà un pezzo di testo dalla pagina)',
+    summary: '{fail} da sistemare · {warn} da migliorare · {pass} a posto',
+    status: { pass: 'A posto', warn: 'Migliorare', fail: 'Sistemare', info: 'Info' },
+    m: {
+      title: { label: 'Titolo', ok: '{n} caratteri: ci sta in un risultato di Google.', short: '{n} caratteri: un po\' corto, meglio tra 30 e 60.', long: '{n} caratteri: Google probabilmente lo taglia intorno ai 60.', missing: 'Manca. Ogni pagina ha bisogno di un <title>.' },
+      description: { label: 'Meta description', ok: '{n} caratteri: lunghezza giusta.', short: '{n} caratteri: corta, meglio tra 70 e 160.', long: '{n} caratteri: Google probabilmente la taglia intorno ai 160.', missing: 'Manca: Google prenderà un pezzo del testo della pagina.' },
+      h1: { label: 'Titolo principale (h1)', one: '"{text}"', many: '{n} tag h1: uno solo è più chiaro, per le persone e per Google.', none: 'Nessun h1: la pagina non ha un titolo principale.' },
+      headings: { label: 'Ordine dei titoli', ok: 'Titoli: {n}, nessun livello saltato.', skips: 'Livelli saltati, per esempio da h2 direttamente a h4: {n}.' },
+      lang: { label: 'Lingua', ok: 'lang="{text}"', missing: 'Il tag html non ha lang: screen reader e Google devono indovinare la lingua.' },
+      viewport: { label: 'Viewport', ok: 'Impostato: la pagina si adatta al telefono.', missing: 'Manca: sul telefono si vedrà la versione desktop rimpicciolita.' },
+      canonical: { label: 'Canonical', ok: '{text}', missing: 'Nessun link canonical. Va bene per una pagina con un solo indirizzo, rischioso con parametri o copie.' },
+      robots: { label: 'Robots', ok: 'Niente blocca l\'indicizzazione.', noindex: 'robots dice noindex: Google lascerà fuori questa pagina.', nofollow: 'robots dice nofollow: Google non seguirà i link di questa pagina.' },
+      og: { label: 'Open Graph', ok: 'og:title, og:description e og:image ci sono: i link condivisi hanno la loro scheda.', missing: 'Mancano {text}: i link condivisi saranno spogli.' },
+      images: { label: 'Testo alternativo', ok: 'Ogni immagine ha l\'attributo alt ({m}).', noalt: 'Immagini senza attributo alt: {n} su {m}.', none: 'Nessuna immagine.' },
+      links: { label: 'Link', count: 'Link: {n} ({int} verso questo sito, {ext} verso altri).', countNoHost: 'Link: {n}. Aggiungi l\'indirizzo della pagina per distinguere interni ed esterni.', mute: 'Link senza un testo che Google o uno screen reader possano leggere: {n}.' },
+      jsonld: { label: 'Dati strutturati', ok: 'Blocchi JSON-LD, tutti JSON valido: {n}.', invalid: 'Blocchi JSON-LD che non sono JSON valido: {n}.', none: 'Nessun dato strutturato. Facoltativi, ma possono dare risultati più ricchi.' },
+      words: { label: 'Testo', count: 'Parole di testo visibile: {n}.' },
+    },
+    does: [
+      'Controlla lunghezza di titolo e descrizione, h1, ordine dei titoli, lingua, viewport, canonical e robots.',
+      'Trova immagini senza testo alternativo, link senza niente da leggere, tag Open Graph e JSON-LD rotto.',
+      'Mostra più o meno come apparirebbe la pagina nei risultati di Google.',
+      'Dice cosa sistemare prima: il rosso blocca l\'indicizzazione o sembra rotto, il giallo vale la pena migliorarlo.',
+    ],
+    doesnt: [
+      'Non scarica la pagina al posto tuo e non invia l\'HTML da nessuna parte. Lo legge il tuo browser, e nessuno script al suo interno viene eseguito.',
+      'Non conosce posizionamento, backlink o parole chiave. Per quelli servono Search Console e tempo.',
+      'Non vede quello che JavaScript aggiunge dopo il caricamento. Salva la pagina con Ctrl+S e carica il file .html per controllare la versione finale.',
+      'Non promette la prima pagina di Google. Nessuno onesto può.',
+    ],
+  },
+}[lang];
+const t = { empty: c.empty, summary: c.summary, status: c.status, m: c.m, noTitle: c.noTitle, noDesc: c.noDesc };
+const icons = { pass: CircleCheck, warn: TriangleExclamationPoint, fail: CircleX, info: Info };
+---
+<ToolPage lang={lang} slug="seo-check" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <form id="seo" class="spot grid gap-5 p-6 sm:p-8" data-t={JSON.stringify(t)} novalidate>
+    <div>
+      <label class="label" for="seo-url">{c.url}</label>
+      <input id="seo-url" type="url" class="field" placeholder="https://example.com/page" autocomplete="url" aria-describedby="seo-url-hint" />
+      <p id="seo-url-hint" class="mt-2 text-sm text-muted">{c.urlHint}</p>
+    </div>
+    <div>
+      <label class="label" for="seo-src">{c.source}</label>
+      <textarea id="seo-src" class="field" rows="8" spellcheck="false" placeholder="<!doctype html>…" aria-describedby="seo-how"></textarea>
+      <p id="seo-how" class="mt-2 text-sm text-muted">{c.how}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button class="btn btn-primary"><SearchCheck />{c.go}</button>
+      <label class="btn btn-ghost cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"><FileUp />{c.file}<input id="seo-file" type="file" accept=".html,.htm,text/html" class="sr-only" /></label>
+    </div>
+    <p id="seo-msg" class="text-sm text-muted empty:hidden" aria-live="polite"></p>
+  </form>
+
+  <div id="seo-out" class="mt-6 grid gap-4" hidden>
+    <section class="spot p-6 sm:p-8" aria-labelledby="seo-h-preview">
+      <h2 id="seo-h-preview" class="kicker">{c.preview}</h2>
+      <div class="mt-5 max-w-[600px] rounded-2xl bg-white p-5 font-[family-name:Arial,sans-serif] text-[#4d5156]">
+        <p id="seo-p-url" class="truncate text-sm text-[#202124]"></p>
+        <p id="seo-p-title" class="mt-1 truncate text-xl text-[#1a0dab]"></p>
+        <p id="seo-p-desc" class="mt-1 line-clamp-2 text-sm leading-snug"></p>
+      </div>
+    </section>
+    <section class="spot p-6 sm:p-8" aria-labelledby="seo-summary">
+      <h2 id="seo-summary" class="text-xl font-semibold tracking-tight" aria-live="polite"></h2>
+      <ul id="seo-list" class="mt-4 divide-y divide-line"></ul>
+    </section>
+  </div>
+  {Object.entries(icons).map(([k, Icon]) => <template data-icon={k}><Icon /></template>)}
+</ToolPage>
+
+<script>
+  import { checkSeo, type Check } from '../../../scripts/tools/seo';
+
+  const form = document.getElementById('seo') as HTMLFormElement;
+  const t = JSON.parse(form.dataset.t!);
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const src = $<HTMLTextAreaElement>('seo-src'), page = $<HTMLInputElement>('seo-url'), msg = $('seo-msg');
+  const COLORS = { pass: 'text-accent', warn: 'text-[#fbbf24]', fail: 'text-[#fca5a5]', info: 'text-muted' };
+  const fill = (s: string, vals: Check['vals']) => s.replace(/\{(\w+)\}/g, (_, k) => String(vals[k] ?? ''));
+
+  function row(ch: Check) {
+    const li = document.createElement('li');
+    li.className = 'grid gap-1 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4';
+    const head = document.createElement('p');
+    head.className = `flex items-center gap-2 font-medium ${COLORS[ch.status]}`;
+    const icon = document.querySelector<HTMLTemplateElement>(`template[data-icon="${ch.status}"]`)!.content.firstElementChild!.cloneNode(true) as SVGElement;
+    icon.setAttribute('class', 'size-5 shrink-0');
+    icon.setAttribute('aria-label', t.status[ch.status]);
+    icon.setAttribute('role', 'img');
+    const label = document.createElement('span');
+    label.className = 'text-ink';
+    label.textContent = t.m[ch.id].label;
+    head.append(icon, label);
+    const text = document.createElement('p');
+    text.className = 'break-words text-muted';
+    text.textContent = fill(t.m[ch.id][ch.key], ch.vals);
+    li.append(head, text);
+    return li;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!src.value.trim()) { msg.textContent = t.empty; $('seo-out').hidden = true; return; }
+    msg.textContent = '';
+    let url = page.value.trim();
+    if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+    const res = checkSeo(src.value, url);
+    const order = { fail: 0, warn: 1, pass: 2, info: 3 };
+    const sorted = [...res.checks].sort((a, b) => order[a.status] - order[b.status]);
+    const n = (s: string) => res.checks.filter((c) => c.status === s).length;
+    $('seo-summary').textContent = fill(t.summary, { fail: n('fail'), warn: n('warn'), pass: n('pass') });
+    $('seo-list').replaceChildren(...sorted.map(row));
+    let shown = res.url;
+    try { const u = new URL(res.url); shown = u.host + u.pathname.replace(/\/$/, '').split('/').join(' › '); } catch {}
+    $('seo-p-url').textContent = shown || 'example.com';
+    $('seo-p-title').textContent = res.title || t.noTitle;
+    $('seo-p-desc').textContent = res.desc || t.noDesc;
+    $('seo-out').hidden = false;
+  });
+  $<HTMLInputElement>('seo-file').addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    src.value = await f.text();
+    form.requestSubmit();
+  });
+</script>
