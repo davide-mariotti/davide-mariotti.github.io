@@ -1,0 +1,252 @@
+---
+import { Download, Check, X, FileText, ShieldCheck, FolderOpen, Tags, Lock, Coffee, ArrowUpRight, Upload, Zap, Wallet } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ZIP = 'https://github.com/davide-mariotti/Money/archive/refs/heads/main.zip';
+const REPO = 'https://github.com/davide-mariotti/Money';
+const img = (name: string) => `/assets/img/money/${name}-${lang}.webp`;
+
+const c = {
+  en: {
+    description: 'Money reads your bank statements, bills and payslips on your own PC, sorts every expense into categories and shows where the money goes. Free, open source, nothing leaves your PC.',
+    kicker: 'Windows · open source · in development',
+    tagline: ['Statements, bills and payslips,', 'all in one place.'],
+    download: 'Download (zip)',
+    source: 'Source code',
+    meta: 'Windows · Python 3.12+ · free, MIT license · interface in Italian',
+    shotAlt: 'Money\'s overview: spending, income and savings of the month, the last 12 months as a chart, where the money goes by category',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Reads the statements, exports and bills your bank and suppliers already give you, and payslips too.',
+      'Checks every file against the totals printed on it: if they don\'t add up, the file doesn\'t get in.',
+      'Files each document in the right folder, renamed and compressed. Importing it twice changes nothing.',
+      'Sorts every movement into categories on three levels. You pick a category for a merchant once, then it\'s automatic.',
+      'Shows the month against the 12 before, where the money goes, budgets, a savings goal, bills, car, salary, mortgage.',
+      'Counts nothing twice: the card\'s debit on the account and transfers between your accounts stay out of spending.',
+    ],
+    doesntList: [
+      'Connect to your bank. No credentials, no open banking: you download the statements, Money reads them.',
+      'Send your data anywhere. No cloud, no account, no telemetry, the page reachable only from your PC.',
+      'Read every bank in the world. For now Nexi, Crédit Agricole, Hype, Revolut, PayPal, Eni Plenitude, Acque SpA, Zucchetti.',
+      'Speak English yet: the interface is in Italian.',
+      'Install in one click yet: today it runs on Python. A Windows app of its own is on its way.',
+      'Give financial advice. It tells you where the money went; getting it back is up to you.',
+    ],
+    limitsKicker: 'Where the money goes',
+    limitsTitle: ['Where you can', 'cut back.'],
+    limitsLead: 'Money puts the last three months against the twelve before and shows the expenses you decide on (no rent, car, health or taxes) that are growing, with how much more a year. Next to them, every subscription and what it costs in a year. Then budgets per category and a savings goal: what\'s free, how much a month it takes, when you get there at your pace.',
+    limitsAlt: 'Where you can cut back: spending above the usual, active subscriptions, budgets of the month and the savings goal',
+    catKicker: 'Categories',
+    catTitle: ['Click a category,', 'go down a level.'],
+    catLead: 'Every category opens into its subcategories, month by month, down to the single movements and the merchants where you spend the most. Up again with the path at the top.',
+    catAlt: 'The Restaurants category in Money: total, month by month, subcategories, movements and merchants',
+    billsKicker: 'Home and bills',
+    billsTitle: ['Not just what you paid:', 'what you used.'],
+    billsLead: 'Electricity, gas and water bills don\'t become movements: they go in a table of their own, with period, consumption and price. Money matches each one to its payment on the account, then shows consumption against the same months a year before and the real price per kWh, Smc and cubic metre, with the TV licence left out.',
+    billsAlt: 'Home and bills: utilities month by month, year by year, payments, consumption and the real unit price',
+    howKicker: 'How it works',
+    howTitle: ['Drop the files,', 'Money does the rest.'],
+    howLead: 'The new window, on its way as a Windows app, does just this: you drop statements, bills and payslips, it tells you what it read.',
+    windowAlt: 'Money\'s new window: drop your files, and each one comes back read, filed, a duplicate or unknown',
+    steps: [
+      { t: 'Recognised', d: 'Each document is recognised from its text, not from its name: a Nexi statement, a bank CSV, an electricity bill, a payslip.' },
+      { t: 'Checked', d: 'The movements must add up to the printed total and the balances must follow. If something doesn\'t add up, the file stays out and you\'re told why.' },
+      { t: 'Filed', d: 'Renamed by month, compressed, moved into its folder. A duplicate, the same file or the same text, is dropped.' },
+      { t: 'Sorted', d: 'Rules turn merchants into categories. The unknown ones wait in a list: one choice each, and the rule is there for good.' },
+    ],
+    formats: 'Reads today',
+    privacyTitle: 'Nothing leaves your PC',
+    privacy: 'Statements are about as private as it gets. Money runs on your PC, the page answers only to your PC, Streamlit\'s telemetry is off, and there is no account and no bank login. The one optional exception is yours to set up: a copy of the PDFs and a backup on your own Google Drive.',
+    firstTitle: 'First run',
+    first: 'Install Python 3.12 or newer, ticking Add python.exe to PATH. Download the code and unzip it in a folder that stays put. Double-click Money.bat: the first time it installs what it needs, a few minutes, then the browser opens on Money. Put your files in data\\nuovi or drag them into Importa.',
+    coffeeTitle: ['Did it find the subscription', 'you\'d forgotten about?'],
+    coffeeText: 'Money is free and stays free. If it showed you where the money goes, a coffee on Ko-fi is how the next app gets written.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: 'Money legge estratti conto, bollette e buste paga sul tuo PC, smista ogni spesa in categorie e ti fa vedere dove vanno i soldi. Gratis, open source, niente esce dal tuo PC.',
+    kicker: 'Windows · open source · in sviluppo',
+    tagline: ['Estratti, bollette e buste paga,', 'messi in fila.'],
+    download: 'Scarica (zip)',
+    source: 'Codice sorgente',
+    meta: 'Windows · Python 3.12+ · gratis, licenza MIT · interfaccia in italiano',
+    shotAlt: 'La panoramica di Money: uscite, entrate e risparmio del mese, gli ultimi 12 mesi in un grafico, dove vanno i soldi per categoria',
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Legge gli estratti, gli export e le bollette che la banca e i fornitori ti danno già, e anche le buste paga.',
+      'Controlla ogni file sui totali stampati: se non tornano, il file non entra.',
+      'Archivia ogni documento nella cartella giusta, rinominato e compresso. Importarlo due volte non cambia niente.',
+      'Smista ogni movimento in categorie su tre livelli. La categoria di un esercente la scegli una volta, poi va da sola.',
+      'Ti fa vedere il mese contro i 12 prima, dove vanno i soldi, budget, obiettivo di risparmio, bollette, auto, stipendio, mutuo.',
+      'Non conta niente due volte: l\'addebito della carta sul conto e i giroconti tra i tuoi conti restano fuori dalle spese.',
+    ],
+    doesntList: [
+      'Non si collega alla banca. Niente credenziali, niente open banking: gli estratti li scarichi tu, Money li legge.',
+      'Non manda i tuoi dati da nessuna parte. Niente cloud, niente account, niente telemetria, la pagina raggiungibile solo dal tuo PC.',
+      'Non legge tutte le banche del mondo. Per ora Nexi, Crédit Agricole, Hype, Revolut, PayPal, Eni Plenitude, Acque SpA, Zucchetti.',
+      'Non parla ancora inglese: l\'interfaccia è in italiano.',
+      'Non si installa ancora con un clic: oggi gira con Python. Un\'app per Windows tutta sua è in arrivo.',
+      'Non dà consigli finanziari. Ti dice dove sono finiti i soldi; riprenderli tocca a te.',
+    ],
+    limitsKicker: 'Dove vanno i soldi',
+    limitsTitle: ['Dove puoi', 'limitarti.'],
+    limitsLead: 'Money mette gli ultimi tre mesi contro i dodici prima e ti fa vedere le spese che decidi tu (niente affitto, auto, salute o tasse) che stanno crescendo, con quanto in più all\'anno. Accanto, ogni abbonamento e quanto costa in un anno. Poi i budget per categoria e un obiettivo di risparmio: quanto è libero, quanto serve al mese, quando ci arrivi al tuo ritmo.',
+    limitsAlt: 'Dove puoi limitarti: spese sopra il solito, abbonamenti attivi, budget del mese e obiettivo di risparmio',
+    catKicker: 'Categorie',
+    catTitle: ['Clicchi una categoria,', 'scendi di un livello.'],
+    catLead: 'Ogni categoria si apre nelle sue sottocategorie, mese per mese, fino ai singoli movimenti e agli esercenti dove spendi di più. Si risale con il percorso in alto.',
+    catAlt: 'La categoria Ristorazione in Money: totale, mese per mese, sottocategorie, movimenti ed esercenti',
+    billsKicker: 'Casa e bollette',
+    billsTitle: ['Non solo quanto hai pagato:', 'quanto hai consumato.'],
+    billsLead: 'Le bollette di luce, gas e acqua non diventano movimenti: finiscono in una tabella loro, con periodo, consumi e prezzo. Money abbina ognuna al suo pagamento sul conto, poi ti fa vedere i consumi contro gli stessi mesi di un anno prima e il prezzo vero per kWh, Smc e metro cubo, canone RAI escluso.',
+    billsAlt: 'Casa e bollette: utenze mese per mese, anno per anno, pagamenti, consumi e prezzo vero per unità',
+    howKicker: 'Come funziona',
+    howTitle: ['Trascini i file,', 'Money fa il resto.'],
+    howLead: 'La finestra nuova, in arrivo come app per Windows, fa proprio questo: trascini estratti, bollette e buste paga, lei ti dice cosa ha letto.',
+    windowAlt: 'La finestra nuova di Money: trascini i file, e ognuno torna letto, archiviato, doppione o sconosciuto',
+    steps: [
+      { t: 'Riconosciuto', d: 'Ogni documento viene riconosciuto dal testo, non dal nome: un estratto Nexi, un CSV della banca, una bolletta della luce, una busta paga.' },
+      { t: 'Controllato', d: 'I movimenti devono fare il totale stampato e i saldi devono tornare. Se qualcosa non torna, il file resta fuori e ti viene detto perché.' },
+      { t: 'Archiviato', d: 'Rinominato per mese, compresso, spostato nella sua cartella. Un doppione, stesso file o stesso testo, viene scartato.' },
+      { t: 'Smistato', d: 'Le regole trasformano gli esercenti in categorie. Quelli sconosciuti aspettano in un elenco: una scelta ciascuno, e la regola resta per sempre.' },
+    ],
+    formats: 'Legge già',
+    privacyTitle: 'Niente esce dal tuo PC',
+    privacy: 'Gli estratti conto sono quanto di più privato ci sia. Money gira sul tuo PC, la pagina risponde solo al tuo PC, la telemetria di Streamlit è spenta, e non c\'è nessun account né accesso alla banca. L\'unica eccezione è facoltativa e la configuri tu: una copia dei PDF e un backup sul tuo Google Drive.',
+    firstTitle: 'Primo avvio',
+    first: 'Installa Python 3.12 o più recente, spuntando Add python.exe to PATH. Scarica il codice e scompattalo in una cartella che non sposti. Doppio clic su Money.bat: la prima volta installa quello che serve, qualche minuto, poi si apre il browser su Money. Metti i tuoi file in data\\nuovi o trascinali in Importa.',
+    coffeeTitle: ['Ti ha fatto ritrovare l\'abbonamento', 'di cui ti eri dimenticato?'],
+    coffeeText: 'Money è gratis e resta gratis. Se ti ha fatto vedere dove vanno i soldi, un caffè su Ko-fi è il modo in cui nasce la prossima app.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const formats = ['Nexi', 'Crédit Agricole', 'Hype', 'Revolut', 'PayPal', 'Eni Plenitude', 'Acque SpA', 'Zucchetti'];
+const stepIcons = [FileText, ShieldCheck, FolderOpen, Tags];
+const frame = 'w-full rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+---
+<Layout lang={lang} title="Money" description={c.description} path="/apps/money/" image="/og-money.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#1d4ed8]/25 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Money<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-primary"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4 invert" />{c.source}</a>
+          <a href={ZIP} class="btn btn-ghost"><Download />{c.download}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#1d4ed8] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/money.svg" alt="Money icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE APP -->
+  <section class="wrap pb-12">
+    <img src={img('overview')} alt={c.shotAlt} width="1600" height="1017" class={`reveal ${frame}`} />
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- WHERE YOU CAN CUT BACK -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.limitsKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.limitsTitle[0]} <span class="serif grad">{c.limitsTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.limitsLead}</p>
+    <img src={img('limits')} alt={c.limitsAlt} width="1600" height="1307" loading="lazy" class={`reveal mt-14 ${frame}`} />
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <p class="kicker reveal">{c.catKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.catTitle[0]} <span class="serif grad">{c.catTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.catLead}</p>
+      </div>
+      <img src={img('category')} alt={c.catAlt} width="1600" height="1714" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+  </section>
+
+  <!-- BILLS -->
+  <section class="wrap py-24">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.6fr_1fr]">
+      <img src={img('bills')} alt={c.billsAlt} width="1600" height="2263" loading="lazy" class={`reveal order-2 lg:order-1 ${frame}`} />
+      <div class="order-1 lg:order-2">
+        <p class="kicker reveal">{c.billsKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.billsTitle[0]} <span class="serif grad">{c.billsTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.billsLead}</p>
+        <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><Zap class="size-3.5 text-accent" />kWh · Smc · m³</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="kicker reveal">{c.howKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.howLead}</p>
+        <p class="kicker reveal mt-10 text-faint" style="--d:160ms">{c.formats}</p>
+        <div class="reveal mt-4 flex flex-wrap gap-2" style="--d:200ms">{formats.map((f) => <span class="chip"><Upload class="size-3.5 text-accent" />{f}</span>)}</div>
+      </div>
+      <img src={img('window')} alt={c.windowAlt} width="1600" height="1716" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+    <ol class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- PRIVACY + FIRST RUN -->
+  <section class="wrap grid gap-4 py-24 lg:grid-cols-2">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><Lock /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.privacyTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.privacy}</p></div>
+    </div>
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start" style="--d:90ms">
+      <div class="icon-tile shrink-0"><Wallet /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.firstTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.first}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

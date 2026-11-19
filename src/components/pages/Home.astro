@@ -25,6 +25,7 @@ const c = {
     workTitle: ['Things I made', 'because I needed them'],
     vigil: { title: 'Vigil', text: 'Temperatures, fans and power draw of your PC, from the tray. And the fans do what you say: Auto, Fixed, or a curve you drag.', cta: 'Discover Vigil' },
     sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. Lunch break, battery alerts, zero internet.', cta: 'Discover Sentinel' },
+    money: { title: 'Money', text: 'Bank statements, bills and payslips read on your own PC: every expense sorted, and charts that show where the money goes.', cta: 'Discover Money', dev: 'in development' },
     hush: { title: 'Hush', text: 'One key switches your microphone off in every app, and it tells you who is listening and who is watching.', cta: 'Discover Hush' },
     hoard: { title: 'Hoard', text: 'What fills your disk, on a map: every folder a tile as big as the space it takes, coloured by kind of file. And a tray icon that speaks up when a drive runs low.', cta: 'Discover Hoard' },
     tools: { title: `${TOOLS.length} browser tools`, text: 'Passwords, colours, contrast, images, SEO, JSON, regex, weather. Small things that save five minutes a day.', cta: 'Open the toolbox' },
@@ -59,6 +60,7 @@ const c = {
     workTitle: ['Cose che ho fatto', 'perché mi servivano'],
     vigil: { title: 'Vigil', text: 'Temperature, ventole e consumi del tuo PC, dalla tray. E le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini.', cta: 'Scopri Vigil' },
     sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, zero internet.', cta: 'Scopri Sentinel' },
+    money: { title: 'Money', text: 'Estratti conto, bollette e buste paga letti sul tuo PC: ogni spesa al suo posto, e grafici che ti fanno vedere dove vanno i soldi.', cta: 'Scopri Money', dev: 'in sviluppo' },
     hush: { title: 'Hush', text: 'Un tasto spegne il microfono in tutte le app, e ti dice chi ti sta ascoltando e chi ti sta guardando.', cta: 'Scopri Hush' },
     hoard: { title: 'Hoard', text: 'Cosa riempie il disco, su una mappa: ogni cartella un riquadro grande quanto lo spazio che occupa, colorato per tipo di file. E un\'icona nella tray che ti avvisa quando un disco si riempie.', cta: 'Scopri Hoard' },
     tools: { title: `${TOOLS.length} strumenti nel browser`, text: 'Password, colori, contrasti, immagini, SEO, JSON, regex, meteo. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
@@ -191,7 +193,18 @@ const name = ['Davide', 'Mariotti'];
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.lupo.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </a>
 
-      <a href="#top" class="spot reveal group flex flex-col p-8 md:col-span-3">
+
+      <a href={L('/apps/money/')} class="spot reveal group flex flex-col p-8 md:col-span-2 md:flex-row md:items-center md:gap-10">
+        <img src="/assets/icons/apps/money.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(29_78_216/0.5)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
+        <div class="mt-6 md:mt-0">
+          <div class="flex flex-wrap gap-2"><span class="chip">Python</span><span class="chip">Streamlit</span><span class="chip">{c.money.dev}</span></div>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.money.title}</h3>
+          <p class="mt-2 max-w-md text-muted">{c.money.text}</p>
+          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.money.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+        </div>
+      </a>
+
+      <a href="#top" class="spot reveal group flex flex-col p-8" style="--d:80ms">
         <div class="icon-tile"><CodeXml /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.site.title}</h3>
         <p class="mt-2 text-muted">{c.site.text}</p>
