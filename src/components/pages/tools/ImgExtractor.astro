@@ -1,0 +1,194 @@
+---
+import { ScanSearch, FileUp, Download, ExternalLink, ImageOff } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Image', 'extractor.'],
+    description: 'List every image in a web page\'s source: img, srcset, CSS backgrounds, og:image, icons. Paste the HTML, filter by type, copy or save. No proxy, no server.',
+    kicker: 'Runs on your device · previews load from the original site',
+    lead: 'Paste the source of a page and get every image it points to, ready to copy or save. Nothing goes through my server, or anyone else\'s.',
+    url: 'Page address', urlHint: 'Needed to turn relative paths like /img/logo.png into full links.',
+    source: 'Page source (HTML)', file: 'Or load an .html file',
+    how: 'Open the page, press Ctrl+U (Option+Cmd+U on a Mac) to see its source, select all, copy, paste here.',
+    go: 'Find images', all: 'All', list: 'All links, one per line', copy: 'Copy the links',
+    found: '{n} images found.', none: 'No images in this source. If the page builds itself with JavaScript, save it with Ctrl+S and load the .html file.',
+    skipped: '{n} relative paths skipped: add the page address above.', empty: 'Paste the source of a page first.',
+    open: 'Open', save: 'Save', noPreview: 'No preview',
+    does: [
+      'Finds images in img and picture tags, srcset, lazy-loading attributes, CSS backgrounds, og:image and twitter:image, icons and video posters.',
+      'Turns relative paths into full links, using the address you give it.',
+      'Filters by type (JPG, PNG, SVG, WebP…) and copies every link in one go.',
+      'Saves an image with one click, or opens it in a new tab when the site doesn\'t allow direct downloads.',
+    ],
+    doesnt: [
+      'Fetch the page for you. A browser can\'t read another site without a server in the middle, and I\'d rather not be that server.',
+      'Send the HTML anywhere: it is read in your browser, and no script inside it runs.',
+      'Hide where the previews come from: they load straight from the site that hosts the images, as they would if you opened the page.',
+      'Download everything as a zip. Copy the links into a download manager instead.',
+    ],
+  },
+  it: {
+    title: ['Estrai', 'immagini.'],
+    description: 'Elenca tutte le immagini nel sorgente di una pagina web: img, srcset, sfondi CSS, og:image, icone. Incolli l\'HTML, filtri per tipo, copi o salvi. Niente proxy, niente server.',
+    kicker: 'Gira sul tuo dispositivo · le anteprime arrivano dal sito originale',
+    lead: 'Incolla il sorgente di una pagina e trovi tutte le immagini che usa, pronte da copiare o salvare. Non passa niente dal mio server, né da quello di altri.',
+    url: 'Indirizzo della pagina', urlHint: 'Serve a trasformare i percorsi relativi come /img/logo.png in link completi.',
+    source: 'Sorgente della pagina (HTML)', file: 'Oppure carica un file .html',
+    how: 'Apri la pagina, premi Ctrl+U (Opzione+Cmd+U su Mac) per vederne il sorgente, seleziona tutto, copia e incolla qui.',
+    go: 'Trova le immagini', all: 'Tutte', list: 'Tutti i link, uno per riga', copy: 'Copia i link',
+    found: '{n} immagini trovate.', none: 'Nessuna immagine in questo sorgente. Se la pagina si costruisce con JavaScript, salvala con Ctrl+S e carica il file .html.',
+    skipped: '{n} percorsi relativi saltati: aggiungi l\'indirizzo della pagina qui sopra.', empty: 'Prima incolla il sorgente di una pagina.',
+    open: 'Apri', save: 'Salva', noPreview: 'Niente anteprima',
+    does: [
+      'Trova le immagini nei tag img e picture, in srcset, negli attributi di caricamento differito, negli sfondi CSS, in og:image e twitter:image, nelle icone e nelle copertine dei video.',
+      'Trasforma i percorsi relativi in link completi, usando l\'indirizzo che gli dai.',
+      'Filtra per tipo (JPG, PNG, SVG, WebP…) e copia tutti i link in un colpo solo.',
+      'Salva un\'immagine con un clic, o la apre in una nuova scheda quando il sito non permette il download diretto.',
+    ],
+    doesnt: [
+      'Non scarica la pagina al posto tuo. Un browser non può leggere un altro sito senza un server in mezzo, e preferisco non essere io quel server.',
+      'Non invia l\'HTML da nessuna parte: lo legge il tuo browser, e nessuno script al suo interno viene eseguito.',
+      'Non nasconde da dove arrivano le anteprime: si caricano dal sito che ospita le immagini, come se aprissi la pagina.',
+      'Non scarica tutto in uno zip. Copia i link in un download manager, piuttosto.',
+    ],
+  },
+}[lang];
+const t = { found: c.found, none: c.none, skipped: c.skipped, empty: c.empty, all: c.all };
+---
+<ToolPage lang={lang} slug="img-extractor" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <form id="ie" class="spot grid gap-5 p-6 sm:p-8" data-t={JSON.stringify(t)} novalidate>
+    <div>
+      <label class="label" for="ie-url">{c.url}</label>
+      <input id="ie-url" type="url" class="field" placeholder="https://example.com/page" autocomplete="url" aria-describedby="ie-url-hint" />
+      <p id="ie-url-hint" class="mt-2 text-sm text-muted">{c.urlHint}</p>
+    </div>
+    <div>
+      <label class="label" for="ie-src">{c.source}</label>
+      <textarea id="ie-src" class="field" rows="8" spellcheck="false" placeholder="<!doctype html>…" aria-describedby="ie-how"></textarea>
+      <p id="ie-how" class="mt-2 text-sm text-muted">{c.how}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button class="btn btn-primary"><ScanSearch />{c.go}</button>
+      <label class="btn btn-ghost cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"><FileUp />{c.file}<input id="ie-file" type="file" accept=".html,.htm,text/html" class="sr-only" /></label>
+    </div>
+    <p id="ie-msg" class="text-sm text-muted empty:hidden" aria-live="polite"></p>
+  </form>
+
+  <div id="ie-out" class="mt-6 grid gap-5" hidden>
+    <div class="flex flex-wrap items-center gap-2" id="ie-filters" role="group"></div>
+    <details class="spot p-5">
+      <summary class="cursor-pointer text-muted">{c.list}</summary>
+      <textarea id="ie-list" class="field mt-4" rows="6" readonly spellcheck="false" aria-label={c.list}></textarea>
+      <CopyButton target="#ie-list" label={c.copy} class="mt-3" />
+    </details>
+    <ul id="ie-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"></ul>
+  </div>
+
+  <template id="ie-card">
+    <li class="spot flex flex-col">
+      <a class="ie-thumb relative block aspect-square bg-[repeating-conic-gradient(#1a201d_0_25%,#111714_0_50%)] bg-[length:20px_20px]" target="_blank" rel="noopener noreferrer" tabindex="-1">
+        <img class="absolute inset-0 size-full object-contain p-2" loading="lazy" referrerpolicy="no-referrer" alt="" />
+        <span class="ie-nopreview absolute inset-0 hidden flex-col items-center justify-center gap-2 text-sm text-muted"><ImageOff />{c.noPreview}</span>
+      </a>
+      <div class="grid gap-2 p-3">
+        <p class="flex min-w-0 items-center gap-2 text-sm"><span class="ie-ext chip shrink-0 uppercase"></span><span class="ie-name truncate"></span></p>
+        <div class="flex gap-2">
+          <button type="button" class="ie-save btn btn-ghost flex-1 justify-center !px-3 !py-2 !text-sm"><Download />{c.save}</button>
+          <a class="ie-open btn btn-ghost !p-2.5" target="_blank" rel="noopener noreferrer" aria-label={c.open} title={c.open}><ExternalLink /></a>
+        </div>
+      </div>
+    </li>
+  </template>
+</ToolPage>
+
+<script>
+  import { extractImages, extOf, fileName } from '../../../scripts/tools/extract';
+
+  const form = document.getElementById('ie') as HTMLFormElement;
+  const t = JSON.parse(form.dataset.t!);
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const src = $<HTMLTextAreaElement>('ie-src'), pageUrl = $<HTMLInputElement>('ie-url'), msg = $('ie-msg');
+  const out = $('ie-out'), grid = $('ie-grid'), filters = $('ie-filters'), list = $<HTMLTextAreaElement>('ie-list');
+  const card = $<HTMLTemplateElement>('ie-card');
+  let filter = 'all';
+
+  function render(urls: string[]) {
+    grid.replaceChildren(...urls.map((url) => {
+      const li = card.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
+      const name = fileName(url);
+      li.dataset.ext = extOf(url);
+      li.dataset.url = url;
+      li.querySelector<HTMLAnchorElement>('.ie-thumb')!.href = li.querySelector<HTMLAnchorElement>('.ie-open')!.href = url;
+      const img = li.querySelector('img')!;
+      img.src = url;
+      img.alt = name;
+      img.onerror = () => { img.remove(); li.querySelector('.ie-nopreview')!.classList.replace('hidden', 'flex'); };
+      li.querySelector('.ie-ext')!.textContent = li.dataset.ext;
+      li.querySelector('.ie-name')!.textContent = name;
+      li.querySelector<HTMLElement>('.ie-name')!.title = url;
+      li.querySelector('.ie-save')!.addEventListener('click', () => save(url, name));
+      return li;
+    }));
+    const counts = new Map<string, number>([['all', urls.length]]);
+    for (const u of urls) counts.set(extOf(u), (counts.get(extOf(u)) ?? 0) + 1);
+    filter = 'all';
+    filters.replaceChildren(...[...counts].map(([ext, n]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn-ghost !px-4 !py-2 !text-sm uppercase';
+      b.dataset.ext = ext;
+      b.textContent = `${ext === 'all' ? t.all : ext} · ${n}`;
+      return b;
+    }));
+    applyFilter();
+  }
+
+  function applyFilter() {
+    const shown: string[] = [];
+    grid.querySelectorAll<HTMLElement>('li').forEach((li) => {
+      li.hidden = filter !== 'all' && li.dataset.ext !== filter;
+      if (!li.hidden) shown.push(li.dataset.url!);
+    });
+    filters.querySelectorAll<HTMLElement>('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ext === filter)));
+    list.value = shown.join('\n');
+  }
+
+  // Same-origin or CORS-friendly images download; the others open in a new tab, where they can be saved by hand.
+  async function save(url: string, name: string) {
+    try {
+      const res = await fetch(url, { referrerPolicy: 'no-referrer' });
+      if (!res.ok) throw new Error();
+      const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(await res.blob()), download: name });
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    } catch {
+      open(url, '_blank', 'noopener');
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!src.value.trim()) { msg.textContent = t.empty; out.hidden = true; return; }
+    let page = pageUrl.value.trim();
+    if (page && !/^https?:\/\//i.test(page)) page = 'https://' + page;
+    const { urls, skipped } = extractImages(src.value, page);
+    msg.textContent = [urls.length ? t.found.replace('{n}', urls.length) : t.none, skipped ? t.skipped.replace('{n}', skipped) : ''].join(' ').trim();
+    out.hidden = !urls.length;
+    render(urls);
+  });
+  filters.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLElement>('button');
+    if (b) { filter = b.dataset.ext!; applyFilter(); }
+  });
+  $<HTMLInputElement>('ie-file').addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    src.value = await f.text();
+    form.requestSubmit();
+  });
+</script>
