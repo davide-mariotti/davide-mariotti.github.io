@@ -1,0 +1,157 @@
+---
+import { FileUp } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Base64, URL', 'and JWT.'],
+    description: 'Encode and decode Base64 (UTF-8 safe) and URL text, turn a file into a data URI, and read a JWT header and payload, in your browser.',
+    kicker: 'Runs on your device',
+    lead: 'Encode or decode Base64 and URLs, turn a file into a data URI, peek inside a JWT. The three things you keep searching for.',
+    mode: 'Format', dir: 'Direction', encode: 'Encode', decode: 'Decode',
+    input: 'Input', output: 'Result', copy: 'Copy result', file: 'Or turn a file into a data URI',
+    errB64: "That's not Base64, or it doesn't decode to text.", errUrl: "That's not valid URL encoding: a % must be followed by two hex digits.",
+    errJwt: 'Not a JWT: it should be three Base64URL parts separated by dots.', fileDone: '{name} · {size} → {out} of text',
+    claims: { exp: 'Expires', iat: 'Issued', nbf: 'Valid from' }, expired: 'expired', valid: 'still valid',
+    does: [
+      'Encodes and decodes Base64 with UTF-8, so accents and emoji survive. Reads the URL-safe variant and missing padding too.',
+      'Encodes and decodes URL components (encodeURIComponent and back).',
+      'Turns any file into a data URI to paste into CSS or HTML.',
+      'Decodes a JWT header and payload and shows when it expires.',
+    ],
+    doesnt: [
+      'Send anything anywhere, tokens included. Still, think twice before pasting a production token into any website.',
+      'Verify a JWT signature: that needs the secret or the public key, and it says nothing about who sent it.',
+      'Encrypt anything. Base64 is packaging, not a lock.',
+    ],
+  },
+  it: {
+    title: ['Base64, URL', 'e JWT.'],
+    description: 'Codifica e decodifica Base64 (UTF-8) e testo URL, trasforma un file in data URI e leggi header e payload di un JWT, nel browser.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Codifica o decodifica Base64 e URL, trasforma un file in data URI, sbircia dentro un JWT. Le tre cose che finisci sempre per cercare.',
+    mode: 'Formato', dir: 'Direzione', encode: 'Codifica', decode: 'Decodifica',
+    input: 'Testo di partenza', output: 'Risultato', copy: 'Copia il risultato', file: 'Oppure trasforma un file in data URI',
+    errB64: 'Questo non è Base64, o non diventa testo.', errUrl: 'Codifica URL non valida: dopo un % servono due cifre esadecimali.',
+    errJwt: 'Non è un JWT: dovrebbero essere tre parti Base64URL separate da punti.', fileDone: '{name} · {size} → {out} di testo',
+    claims: { exp: 'Scade', iat: 'Emesso', nbf: 'Valido dal' }, expired: 'scaduto', valid: 'ancora valido',
+    does: [
+      'Codifica e decodifica Base64 in UTF-8, così accenti ed emoji arrivano sani. Legge anche la variante URL-safe e il padding mancante.',
+      'Codifica e decodifica i componenti URL (encodeURIComponent e ritorno).',
+      'Trasforma qualsiasi file in un data URI da incollare in CSS o HTML.',
+      'Decodifica header e payload di un JWT e mostra quando scade.',
+    ],
+    doesnt: [
+      'Non invia niente a nessuno, token compresi. Comunque, pensaci due volte prima di incollare un token di produzione in un sito.',
+      'Non verifica la firma di un JWT: servono il segreto o la chiave pubblica, e non dice chi l\'ha mandato.',
+      'Non cifra niente. Base64 è un imballaggio, non un lucchetto.',
+    ],
+  },
+}[lang];
+const t = { errB64: c.errB64, errUrl: c.errUrl, errJwt: c.errJwt, fileDone: c.fileDone, claims: c.claims, expired: c.expired, valid: c.valid };
+---
+<ToolPage lang={lang} slug="encoder" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="en" class="spot grid gap-6 p-6 sm:p-8" data-t={JSON.stringify(t)}>
+    <div class="flex flex-wrap gap-x-8 gap-y-4">
+      <div>
+        <p class="label" id="en-mode-l">{c.mode}</p>
+        <div role="group" aria-labelledby="en-mode-l" class="flex flex-wrap gap-2">
+          {['base64', 'url', 'jwt'].map((m, i) => <button type="button" class="btn btn-ghost !px-4 !py-2 !text-sm" data-mode={m} aria-pressed={String(i === 0)}>{m === 'base64' ? 'Base64' : m.toUpperCase()}</button>)}
+        </div>
+      </div>
+      <div id="en-dir-box">
+        <p class="label" id="en-dir-l">{c.dir}</p>
+        <div role="group" aria-labelledby="en-dir-l" class="flex flex-wrap gap-2">
+          <button type="button" class="btn btn-ghost !px-4 !py-2 !text-sm" data-dir="encode" aria-pressed="true">{c.encode}</button>
+          <button type="button" class="btn btn-ghost !px-4 !py-2 !text-sm" data-dir="decode" aria-pressed="false">{c.decode}</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div>
+        <label class="label" for="en-in">{c.input}</label>
+        <textarea id="en-in" class="field" rows="10" spellcheck="false" aria-describedby="en-msg">Perché no? ☕</textarea>
+        <label id="en-file-box" class="btn btn-ghost mt-3 cursor-pointer !py-2.5 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"><FileUp />{c.file}<input id="en-file" type="file" class="sr-only" /></label>
+      </div>
+      <div>
+        <label class="label" for="en-out">{c.output}</label>
+        <textarea id="en-out" class="field break-all" rows="10" readonly spellcheck="false"></textarea>
+        <CopyButton target="#en-out" label={c.copy} class="mt-3" />
+      </div>
+    </div>
+    <p id="en-msg" class="text-sm empty:hidden" aria-live="polite"></p>
+    <dl id="en-claims" class="grid gap-2 font-mono text-sm empty:hidden"></dl>
+  </div>
+</ToolPage>
+
+<script>
+  import { b64encode, b64decode, decodeJwt } from '../../../scripts/tools/encode';
+  import { formatBytes } from '../../../scripts/tools/image';
+
+  const root = document.getElementById('en')!;
+  const t = JSON.parse(root.dataset.t!);
+  const lang = document.documentElement.lang;
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const input = $<HTMLTextAreaElement>('en-in'), output = $<HTMLTextAreaElement>('en-out'), msg = $('en-msg'), claims = $('en-claims');
+  let mode = 'base64', dir = 'encode';
+
+  function showClaims(payload: Record<string, unknown>) {
+    const when = new Intl.DateTimeFormat(lang, { dateStyle: 'medium', timeStyle: 'short' });
+    claims.replaceChildren(...['exp', 'iat', 'nbf'].filter((k) => typeof payload[k] === 'number').map((k) => {
+      const d = new Date((payload[k] as number) * 1000);
+      const row = document.createElement('div');
+      row.className = 'flex flex-wrap gap-x-3';
+      const dt = Object.assign(document.createElement('dt'), { className: 'text-muted', textContent: t.claims[k] });
+      const dd = Object.assign(document.createElement('dd'), { textContent: when.format(d) + (k === 'exp' ? ` · ${d < new Date() ? t.expired : t.valid}` : '') });
+      row.append(dt, dd);
+      return row;
+    }));
+  }
+
+  function run() {
+    const s = input.value;
+    msg.textContent = '';
+    claims.replaceChildren();
+    msg.className = 'text-sm text-[#fca5a5] empty:hidden';
+    try {
+      if (mode === 'jwt') {
+        const { header, payload } = decodeJwt(s);
+        output.value = `${JSON.stringify(header, null, 2)}\n\n${JSON.stringify(payload, null, 2)}`;
+        showClaims(payload);
+      } else if (mode === 'url') output.value = dir === 'encode' ? encodeURIComponent(s) : decodeURIComponent(s);
+      else output.value = dir === 'encode' ? b64encode(s) : b64decode(s);
+    } catch {
+      output.value = '';
+      if (s.trim()) msg.textContent = mode === 'jwt' ? t.errJwt : mode === 'url' ? t.errUrl : t.errB64;
+    }
+  }
+
+  root.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLElement>('[data-mode], [data-dir]');
+    if (!b) return;
+    if (b.dataset.mode) mode = b.dataset.mode;
+    if (b.dataset.dir) dir = b.dataset.dir;
+    root.querySelectorAll<HTMLElement>('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.mode === mode)));
+    root.querySelectorAll<HTMLElement>('[data-dir]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.dir === dir)));
+    $('en-dir-box').hidden = mode === 'jwt';
+    $('en-file-box').hidden = mode !== 'base64' || dir !== 'encode';
+    run();
+  });
+  input.addEventListener('input', run);
+  $<HTMLInputElement>('en-file').addEventListener('change', (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      output.value = reader.result as string;
+      msg.className = 'text-sm text-muted';
+      msg.textContent = t.fileDone.replace('{name}', f.name).replace('{size}', formatBytes(f.size, lang)).replace('{out}', formatBytes(output.value.length, lang));
+    };
+    reader.readAsDataURL(f);
+  });
+  run();
+</script>
