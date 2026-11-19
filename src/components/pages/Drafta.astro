@@ -1,0 +1,223 @@
+---
+import { Check, X, Users, ListOrdered, Timer, Trophy, Lock, Smartphone, Coffee, ArrowUpRight, BellRing, Shirt } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const APP = 'https://drafta-dm.github.io';
+const REPO = 'https://github.com/drafta-dm/drafta-dm.github.io';
+const img = (name: string) => `/assets/img/drafta/${name}.webp`;
+
+const c = {
+  en: {
+    description: 'Drafta runs your fantasy football draft live and in turns: you open a room, your friends join from their phones, everyone picks when it is their turn. Free, open source, in the browser.',
+    kicker: 'Web app · open source · free',
+    tagline: ['Your fantasy football draft,', 'live and in turns.'],
+    open: 'Open Drafta',
+    source: 'Source code',
+    meta: 'Browser and phone · Google sign-in · free, MIT license · interface in Italian',
+    shotAlt: 'Drafta during a draft: the player on stage, the free players of the role the team needs, eight rosters with the team on turn first',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Runs a Serie A fantasy football draft for 4 to 20 teams, live: every pick shows up on everyone\'s screen at once.',
+      'One code and a password, or a single link for the group chat. The host gives each friend a team and a colour.',
+      'Turns in order: the host shuffles the first round, then whoever spent less picks first.',
+      'Optional role order (3 keepers, 8 defenders, 8 midfielders, 6 forwards) and goalkeeper block.',
+      'A timer per pick, with an automatic pick when it runs out. Pause, undo, chat, the history of every pick.',
+      'Players and prices from Fantacalcio.it, updated every day. CSV export, and import for a repair draft.',
+    ],
+    doesntList: [
+      'Run an auction. Nobody bids: each player costs his price, and the turn order does the balancing.',
+      'Run your league. No line-ups, no match days, no scores: it ends when the rosters are full.',
+      'Speak English: the app is in Italian, like the game it\'s for.',
+      'Work offline, or without a Google account.',
+      'Show ads or count you. Rooms, names and chat stay in Firebase, readable only by the people in the room.',
+      'Notify an iPhone that hasn\'t added it to the Home screen. Apple\'s rule, not mine.',
+    ],
+    lobbyKicker: 'The lobby',
+    lobbyTitle: ['Everyone in,', 'one team each.'],
+    lobbyLead: 'The host sends one link in the group chat: whoever opens it is in the room. Then a tap on a friend, a tap on a slot, and that team has a coach. The pencil changes name and colour. A green dot says who has Drafta open right now.',
+    lobbyAlt: 'The lobby of Drafta: participants with their online dot, eight team slots with name and coach',
+    phoneKicker: 'On the phone',
+    phoneTitle: ['Put it on the Home screen,', 'it taps you on the shoulder.'],
+    phoneLead: 'Drafta installs like an app, and when it\'s your turn a notification arrives even with the phone in your pocket. Whoever falls asleep on a pick gets a nudge from the others. One panel at a time: players, teams, chat, history.',
+    phoneAlt: 'Drafta on three phones: the list of free players, the team rosters, the chat',
+    howKicker: 'How it works',
+    howTitle: ['One room,', 'everyone on the same page.'],
+    howLead: 'Each draft is a single document in Firestore that every phone listens to. A pick is one write, and in a moment it\'s on every screen.',
+    steps: [
+      { t: 'The room', d: 'Created by the host, readable only by who joined with the right password. The rules are checked by Firebase, not by the page.' },
+      { t: 'The turns', d: 'The team on turn always first. Full teams are skipped, the list shows only who can still be picked, and the role order is enforced.' },
+      { t: 'The timer', d: 'From one minute to four hours. At zero the most expensive free player in the needed role goes to the team, and the draft moves on.' },
+      { t: 'The end', d: 'Most expensive pick, best bargain, a card per team with the spend by role. Copy it, send it by email, export the rosters.' },
+    ],
+    summaryAlt: 'The end of a draft in Drafta: highlights and one card per team, ranked by roster value',
+    privacyTitle: 'What it stores',
+    privacy: 'Your Google name, the rooms you\'re in, the chat, and a token so your phone can be notified. All in Firebase, readable only by the people in your room. No ads, no analytics, nothing sold. Delete a room and it\'s gone.',
+    firstTitle: 'Draft night',
+    first: 'Everyone opens drafta-dm.github.io on the phone, adds it to the Home screen, signs in with Google and allows notifications. The host creates the room, sends the link, assigns the teams and starts. That\'s it.',
+    coffeeTitle: ['Did it save draft night', 'from a spreadsheet?'],
+    coffeeText: 'Drafta is free and stays free. If your league ran on it, a coffee on Ko-fi is how the next app gets written.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: "Drafta fa l'asta del fantacalcio a turni e in diretta: apri una stanza, gli amici entrano dal telefono, ognuno sceglie quando tocca a lui. Gratis, open source, nel browser.",
+    kicker: 'Web app · open source · gratis',
+    tagline: ["L'asta del fantacalcio,", 'a turni e in diretta.'],
+    open: 'Apri Drafta',
+    source: 'Codice sorgente',
+    meta: 'Browser e telefono · accesso con Google · gratis, licenza MIT · interfaccia in italiano',
+    shotAlt: 'Drafta durante un draft: il giocatore scelto, i giocatori liberi del ruolo che serve, otto rose con la squadra di turno per prima',
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Fa il draft del fantacalcio da 4 a 20 squadre, in diretta: ogni scelta compare subito sullo schermo di tutti.',
+      'Un codice e una password, o un link solo per il gruppo. L\'host dà a ogni amico una squadra e un colore.',
+      'Turni in ordine: il primo giro lo mescola l\'host, poi sceglie prima chi ha speso meno.',
+      'Ordine dei ruoli a scelta (3 portieri, 8 difensori, 8 centrocampisti, 6 attaccanti) e blocco portieri.',
+      'Un timer per ogni scelta, con la scelta d\'ufficio allo scadere. Pausa, annulla, chat, la cronologia di tutte le scelte.',
+      'Giocatori e quotazioni da Fantacalcio.it, aggiornati ogni giorno. Esporta in CSV, e importa per l\'asta di riparazione.',
+    ],
+    doesntList: [
+      'Non è un\'asta a rilanci. Nessuno offre: ogni giocatore costa la sua quotazione, e a bilanciare ci pensa l\'ordine dei turni.',
+      'Non gestisce la lega. Niente formazioni, giornate, punteggi: finisce quando le rose sono piene.',
+      'Non parla inglese: l\'app è in italiano, come il gioco per cui è fatta.',
+      'Non funziona offline, né senza un account Google.',
+      'Niente pubblicità né statistiche. Stanze, nomi e chat restano su Firebase, leggibili solo da chi è nella stanza.',
+      'Non avvisa un iPhone che non l\'ha aggiunta alla Home. La regola è di Apple, non mia.',
+    ],
+    lobbyKicker: "La sala d'attesa",
+    lobbyTitle: ['Tutti dentro,', 'una squadra a testa.'],
+    lobbyLead: "L'host manda un link nel gruppo: chi lo apre è già nella stanza. Poi un tocco su un amico, un tocco su uno slot, e quella squadra ha il suo allenatore. La matita cambia nome e colore. Un pallino verde dice chi ha Drafta aperta in quel momento.",
+    lobbyAlt: "La sala d'attesa di Drafta: i partecipanti con il pallino di presenza, otto slot con nome della squadra e allenatore",
+    phoneKicker: 'Sul telefono',
+    phoneTitle: ['Mettila sulla Home,', 'ti dà un colpetto sulla spalla.'],
+    phoneLead: "Drafta si installa come un'app, e quando tocca a te arriva una notifica anche col telefono in tasca. Chi si addormenta su una scelta riceve un sollecito dagli altri. Un pannello alla volta: giocatori, squadre, chat, cronologia.",
+    phoneAlt: 'Drafta su tre telefoni: la lista dei giocatori liberi, le rose delle squadre, la chat',
+    howKicker: 'Come funziona',
+    howTitle: ['Una stanza,', 'tutti sulla stessa pagina.'],
+    howLead: "Ogni asta è un solo documento su Firestore che tutti i telefoni ascoltano. Una scelta è una scrittura, e in un attimo è su tutti gli schermi.",
+    steps: [
+      { t: 'La stanza', d: "La crea l'host, la legge solo chi è entrato con la password giusta. Le regole le controlla Firebase, non la pagina." },
+      { t: 'I turni', d: 'La squadra di turno sempre per prima. Le squadre complete si saltano, la lista mostra solo chi si può ancora prendere, e l\'ordine dei ruoli si rispetta.' },
+      { t: 'Il timer', d: 'Da un minuto a quattro ore. A zero il giocatore libero più caro nel ruolo che serve va alla squadra, e si va avanti.' },
+      { t: 'La fine', d: 'La chiamata più cara, l\'affare, una scheda per squadra con la spesa per ruolo. Si copia, si manda per email, si esportano le rose.' },
+    ],
+    summaryAlt: 'La fine di un\'asta in Drafta: i momenti salienti e una scheda per squadra, in ordine di valore della rosa',
+    privacyTitle: 'Cosa salva',
+    privacy: 'Il tuo nome di Google, le stanze in cui sei, la chat, e un token perché il telefono possa ricevere le notifiche. Tutto su Firebase, leggibile solo da chi è nella tua stanza. Niente pubblicità, niente statistiche, niente venduto. Elimini la stanza e sparisce.',
+    firstTitle: "La sera dell'asta",
+    first: "Ognuno apre drafta-dm.github.io sul telefono, la aggiunge alla Home, accede con Google e consente le notifiche. L'host crea la stanza, manda il link, assegna le squadre e avvia. Fine.",
+    coffeeTitle: ["Ti ha salvato la sera dell'asta", 'da un foglio Excel?'],
+    coffeeText: 'Drafta è gratis e resta gratis. Se la tua lega ci ha fatto l\'asta, un caffè su Ko-fi è il modo in cui nasce la prossima app.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const stepIcons = [Users, ListOrdered, Timer, Trophy];
+const frame = 'w-full rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+---
+<Layout lang={lang} title="Drafta" description={c.description} path="/apps/drafta/" image="/og-drafta.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#15803d]/25 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Drafta<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={APP} target="_blank" rel="noopener" class="btn btn-primary"><Shirt />{c.open}<ArrowUpRight /></a>
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4 invert" />{c.source}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#15803d] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/drafta.svg" alt="Drafta icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE APP -->
+  <section class="wrap pb-12">
+    <img src={img('draft')} alt={c.shotAlt} width="1600" height="1000" class={`reveal ${frame}`} />
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- LOBBY -->
+  <section class="wrap py-24">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <p class="kicker reveal">{c.lobbyKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.lobbyTitle[0]} <span class="serif grad">{c.lobbyTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.lobbyLead}</p>
+      </div>
+      <img src={img('lobby')} alt={c.lobbyAlt} width="1600" height="1188" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+  </section>
+
+  <!-- PHONE -->
+  <section class="wrap py-12">
+    <p class="kicker reveal">{c.phoneKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.phoneTitle[0]} <span class="serif grad">{c.phoneTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.phoneLead}</p>
+    <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><BellRing class="size-3.5 text-accent" />push</span><span class="chip"><Smartphone class="size-3.5 text-accent" />iOS · Android</span></div>
+    <img src={img('phones')} alt={c.phoneAlt} width="1600" height="1098" loading="lazy" class={`reveal mt-14 ${frame}`} />
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.howKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.howLead}</p>
+    <ol class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+    <img src={img('summary')} alt={c.summaryAlt} width="1600" height="1000" loading="lazy" class={`reveal mt-14 ${frame}`} />
+  </section>
+
+  <!-- PRIVACY + DRAFT NIGHT -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><Lock /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.privacyTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.privacy}</p></div>
+    </div>
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start" style="--d:90ms">
+      <div class="icon-tile shrink-0"><Smartphone /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.firstTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.first}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

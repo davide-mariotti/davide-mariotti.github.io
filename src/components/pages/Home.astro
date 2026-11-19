@@ -26,6 +26,7 @@ const c = {
     vigil: { title: 'Vigil', text: 'Temperatures, fans and power draw of your PC, from the tray. And the fans do what you say: Auto, Fixed, or a curve you drag.', cta: 'Discover Vigil' },
     sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. Lunch break, battery alerts, zero internet.', cta: 'Discover Sentinel' },
     money: { title: 'Money', text: 'Bank statements, bills and payslips read on your own PC: every expense sorted, and charts that show where the money goes.', cta: 'Discover Money', dev: 'in development' },
+    drafta: { title: 'Drafta', text: 'Your fantasy football draft, live and in turns, from everyone\'s phone. A notification when it\'s your pick.', cta: 'Discover Drafta' },
     hush: { title: 'Hush', text: 'One key switches your microphone off in every app, and it tells you who is listening and who is watching.', cta: 'Discover Hush' },
     hoard: { title: 'Hoard', text: 'What fills your disk, on a map: every folder a tile as big as the space it takes, coloured by kind of file. And a tray icon that speaks up when a drive runs low.', cta: 'Discover Hoard' },
     tools: { title: `${TOOLS.length} browser tools`, text: 'Passwords, colours, contrast, images, SEO, JSON, regex, weather. Small things that save five minutes a day.', cta: 'Open the toolbox' },
@@ -61,6 +62,7 @@ const c = {
     vigil: { title: 'Vigil', text: 'Temperature, ventole e consumi del tuo PC, dalla tray. E le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini.', cta: 'Scopri Vigil' },
     sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, zero internet.', cta: 'Scopri Sentinel' },
     money: { title: 'Money', text: 'Estratti conto, bollette e buste paga letti sul tuo PC: ogni spesa al suo posto, e grafici che ti fanno vedere dove vanno i soldi.', cta: 'Scopri Money', dev: 'in sviluppo' },
+    drafta: { title: 'Drafta', text: "L'asta del fantacalcio a turni e in diretta, dal telefono di tutti. Una notifica quando tocca a te.", cta: 'Scopri Drafta' },
     hush: { title: 'Hush', text: 'Un tasto spegne il microfono in tutte le app, e ti dice chi ti sta ascoltando e chi ti sta guardando.', cta: 'Scopri Hush' },
     hoard: { title: 'Hoard', text: 'Cosa riempie il disco, su una mappa: ogni cartella un riquadro grande quanto lo spazio che occupa, colorato per tipo di file. E un\'icona nella tray che ti avvisa quando un disco si riempie.', cta: 'Scopri Hoard' },
     tools: { title: `${TOOLS.length} strumenti nel browser`, text: 'Password, colori, contrasti, immagini, SEO, JSON, regex, meteo. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
@@ -204,11 +206,20 @@ const name = ['Davide', 'Mariotti'];
         </div>
       </a>
 
-      <a href="#top" class="spot reveal group flex flex-col p-8" style="--d:80ms">
+      <a href={L('/apps/drafta/')} class="spot reveal group flex flex-col p-8" style="--d:80ms">
+        <img src="/assets/icons/apps/drafta.svg" alt="" width="56" height="56" class="size-14 drop-shadow-[0_14px_30px_rgb(21_128_61/0.5)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.drafta.title}</h3>
+        <p class="mt-2 text-muted">{c.drafta.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.drafta.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href="#top" class="spot reveal group flex flex-col p-8 md:col-span-3 md:flex-row md:items-center md:gap-8">
         <div class="icon-tile"><CodeXml /></div>
-        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.site.title}</h3>
-        <p class="mt-2 text-muted">{c.site.text}</p>
-        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.site.cta}<ArrowUpRight class="size-4 -rotate-45 transition-transform group-hover:-translate-y-0.5" /></p>
+        <div class="mt-6 md:mt-0">
+          <h3 class="text-2xl font-semibold tracking-tight">{c.site.title}</h3>
+          <p class="mt-2 text-muted">{c.site.text}</p>
+        </div>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent md:ml-auto md:mt-0 md:pt-0">{c.site.cta}<ArrowUpRight class="size-4 -rotate-45 transition-transform group-hover:-translate-y-0.5" /></p>
       </a>
     </div>
   </section>
