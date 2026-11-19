@@ -1,0 +1,10 @@
+---
+// Copies the value (or text) of `target`; the click handler lives in ToolPage.astro.
+import { Copy, Check } from '@lucide/astro';
+
+interface Props { target: string; label: string; iconOnly?: boolean; class?: string }
+const { target, label, iconOnly = false, class: cls = '' } = Astro.props;
+---
+<button type="button" class:list={['btn btn-ghost', iconOnly ? '!p-3' : '!py-2.5', cls]} data-copy={target} aria-label={iconOnly ? label : undefined} title={iconOnly ? label : undefined}>
+  <Copy class="i-copy" /><Check class="i-done" />{!iconOnly && label}
+</button>

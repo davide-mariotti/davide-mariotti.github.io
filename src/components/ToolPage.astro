@@ -1,0 +1,90 @@
+---
+// Shared frame of every tool page: hero, the tool itself (slot), what it does / doesn't, a coffee.
+import * as Icons from '@lucide/astro';
+import { ArrowLeft, Check, X, Coffee, ArrowUpRight } from '@lucide/astro';
+import Layout from '../layouts/Layout.astro';
+import { TOOLS } from '../tools';
+import { localize, SOCIAL, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+  title: [string, string];   // plain words + the serif accent
+  description: string;
+  lead: string;
+  kicker: string;            // says where the data goes
+  does: string[];
+  doesnt: string[];
+}
+const { lang, slug, title, description, lead, kicker, does, doesnt } = Astro.props;
+const tool = TOOLS.find((t) => t.slug === slug)!;
+const Icon = (Icons as any)[tool.icon];
+const t = {
+  en: { back: 'All tools', does: 'What it does', doesnt: "What it doesn't", coffee: 'Saved you five minutes?', coffeeText: 'The tools are free and stay free. A coffee on Ko-fi pays for the next one.', coffeeBtn: 'Buy me a coffee', copied: 'Copied', copyFail: 'Copy blocked by the browser: the text is selected, press Ctrl+C.' },
+  it: { back: 'Tutti gli strumenti', does: 'Cosa fa', doesnt: 'Cosa non fa', coffee: 'Ti ha fatto risparmiare cinque minuti?', coffeeText: 'Gli strumenti sono gratis e restano gratis. Un caffè su Ko-fi paga il prossimo.', coffeeBtn: 'Offrimi un caffè', copied: 'Copiato', copyFail: 'Il browser ha bloccato la copia: il testo è selezionato, premi Ctrl+C.' },
+}[lang];
+---
+<Layout lang={lang} title={tool.name[lang]} description={description} path={`/tools/${slug}/`}>
+  <div data-copied={t.copied} data-copy-fail={t.copyFail}>
+    <section class="wrap pb-10 pt-32 md:pt-40">
+      <a href={localize(lang, '/tools/')} class="kicker blur-word inline-flex items-center gap-2 py-2 transition-colors hover:text-ink"><ArrowLeft class="size-4" />{t.back}</a>
+      <div class="mt-8 flex items-center gap-4">
+        <div class="icon-tile blur-word" style="--i:1"><Icon /></div>
+        <p class="kicker blur-word" style="--i:2">{kicker}</p>
+      </div>
+      <h1 class="h-display mt-6 !text-[clamp(2.4rem,7vw,5.5rem)]"><span class="blur-word" style="--i:2">{title[0]}</span> <span class="blur-word serif grad" style="--i:3">{title[1]}</span></h1>
+      <p class="lead blur-word mt-6 max-w-2xl" style="--i:4">{lead}</p>
+    </section>
+
+    <section class="wrap">
+      <slot />
+    </section>
+
+    <section class="wrap grid gap-4 pt-16 lg:grid-cols-2">
+      <div class="spot reveal p-6 sm:p-8">
+        <h2 class="text-2xl font-semibold tracking-tight">{t.does}</h2>
+        <ul class="mt-6 space-y-4">{does.map((s) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{s}</li>)}</ul>
+      </div>
+      <div class="spot reveal p-6 sm:p-8" style="--d:90ms">
+        <h2 class="text-2xl font-semibold tracking-tight">{t.doesnt}</h2>
+        <ul class="mt-6 space-y-4">{doesnt.map((s) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{s}</li>)}</ul>
+      </div>
+    </section>
+
+    <section class="wrap pt-4">
+      <div class="spot reveal flex flex-col gap-5 p-6 sm:p-8 md:flex-row md:items-center">
+        <div class="icon-tile shrink-0"><Coffee /></div>
+        <div class="flex-1"><h2 class="text-xl font-semibold tracking-tight">{t.coffee}</h2><p class="mt-1 text-muted">{t.coffeeText}</p></div>
+        <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-ghost self-start md:self-auto"><Coffee class="text-accent" />{t.coffeeBtn}<ArrowUpRight /></a>
+      </div>
+    </section>
+    <p role="status" data-copy-status class="fixed bottom-5 left-1/2 z-50 w-max max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-full border border-line-strong bg-surface-2 px-4 py-2 text-center text-sm shadow-2xl empty:hidden"></p>
+  </div>
+</Layout>
+
+<script>
+  // Every [data-copy] button copies the value or text of the element it points to.
+  const status = document.querySelector<HTMLElement>('[data-copy-status]')!;
+  const root = status.parentElement!;
+  let timer = 0;
+  const say = (msg: string) => {
+    status.textContent = msg;
+    clearTimeout(timer);
+    timer = window.setTimeout(() => (status.textContent = ''), 2500);
+  };
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as Element).closest<HTMLElement>('[data-copy]');
+    const src = btn && document.querySelector<HTMLInputElement>(btn.dataset.copy!);
+    const text = src && (src.value ?? src.textContent);
+    if (!btn || !text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.classList.add('is-copied');
+      setTimeout(() => btn.classList.remove('is-copied'), 1500);
+      say(root.dataset.copied!);
+    } catch {
+      src.select?.();
+      say(root.dataset.copyFail!);
+    }
+  });
+</script>

@@ -1,0 +1,117 @@
+---
+import { RefreshCw } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Password', 'generator.'],
+    description: 'Strong random passwords in your browser: 4 to 64 characters, the character sets you choose, strength in bits. Nothing is sent or saved.',
+    kicker: 'Runs on your device',
+    lead: 'Random passwords from the cryptographic generator built into your browser. Choose length and characters, copy, done.',
+    result: 'Your password', again: 'New password', copy: 'Copy password', length: 'Length', chars: 'Characters',
+    sets: { upper: 'Uppercase (A-Z)', lower: 'Lowercase (a-z)', digits: 'Numbers (0-9)', symbols: 'Symbols (!@#…)' },
+    levels: ['Weak', 'Medium', 'Strong'],
+    does: [
+      'Builds passwords from 4 to 64 characters with crypto.getRandomValues, the same source browsers use for encryption keys.',
+      'Puts at least one character from every set you tick, then shuffles the lot.',
+      'Shows the strength in bits of entropy, which is what an attacker actually has to guess.',
+      'Makes a new one every time you change a setting.',
+    ],
+    doesnt: [
+      'Send the password anywhere or save it, not even in your browser.',
+      "Remember your passwords. That's a password manager's job, and you should have one.",
+      'Check passwords you made up yourself.',
+      'Make "password123" acceptable. Nothing can.',
+    ],
+  },
+  it: {
+    title: ['Generatore di', 'password.'],
+    description: 'Password casuali e robuste nel browser: da 4 a 64 caratteri, i caratteri che scegli, la forza in bit. Niente viene inviato o salvato.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Password casuali dal generatore crittografico del tuo browser. Scegli lunghezza e caratteri, copia, fatto.',
+    result: 'La tua password', again: 'Nuova password', copy: 'Copia la password', length: 'Lunghezza', chars: 'Caratteri',
+    sets: { upper: 'Maiuscole (A-Z)', lower: 'Minuscole (a-z)', digits: 'Numeri (0-9)', symbols: 'Simboli (!@#…)' },
+    levels: ['Debole', 'Media', 'Robusta'],
+    does: [
+      'Crea password da 4 a 64 caratteri con crypto.getRandomValues, la stessa fonte che i browser usano per le chiavi di cifratura.',
+      'Mette almeno un carattere per ogni gruppo che spunti, poi mescola tutto.',
+      'Mostra la forza in bit di entropia, cioè quanto deve indovinare chi prova a forzarla.',
+      'Ne crea una nuova ogni volta che cambi un\'impostazione.',
+    ],
+    doesnt: [
+      'Non invia la password da nessuna parte e non la salva, nemmeno nel browser.',
+      'Non ricorda le tue password. Quello è il lavoro di un password manager, e dovresti averne uno.',
+      'Non controlla le password che ti sei inventato tu.',
+      'Non rende accettabile "password123". Niente può.',
+    ],
+  },
+}[lang];
+---
+<ToolPage lang={lang} slug="psw-generator" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <form id="pw-tool" class="spot grid gap-8 p-6 sm:p-8" data-levels={JSON.stringify(c.levels)} onsubmit="return false">
+    <div>
+      <label class="label" for="pw">{c.result}</label>
+      <div class="flex gap-2">
+        <input id="pw" class="field font-mono text-lg tracking-wide sm:text-xl" readonly autocomplete="off" spellcheck="false" />
+        <button type="button" id="pw-again" class="btn btn-ghost !p-3" aria-label={c.again} title={c.again}><RefreshCw /></button>
+        <CopyButton target="#pw" label={c.copy} iconOnly />
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+        <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10"><div id="pw-bar" class="h-full rounded-full transition-[width,background-color] duration-300"></div></div>
+        <p id="pw-strength" class="kicker w-40 text-right" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-baseline justify-between"><label class="label" for="pw-len">{c.length}</label><output id="pw-len-out" for="pw-len" class="font-mono text-lg">16</output></div>
+      <input id="pw-len" type="range" min="4" max="64" value="16" />
+    </div>
+
+    <fieldset class="grid gap-3 sm:grid-cols-2">
+      <legend class="label">{c.chars}</legend>
+      {Object.entries(c.sets).map(([k, label]) => (
+        <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-line px-4 py-3 transition-colors hover:border-accent/40">
+          <input type="checkbox" name="set" value={k} checked />{label}
+        </label>
+      ))}
+    </fieldset>
+  </form>
+</ToolPage>
+
+<script>
+  import { SETS, generate, entropy, strength } from '../../../scripts/tools/password';
+
+  const form = document.getElementById('pw-tool') as HTMLFormElement;
+  const levels: string[] = JSON.parse(form.dataset.levels!);
+  const pw = document.getElementById('pw') as HTMLInputElement;
+  const len = document.getElementById('pw-len') as HTMLInputElement;
+  const bar = document.getElementById('pw-bar')!;
+  const boxes = [...form.querySelectorAll<HTMLInputElement>('input[name=set]')];
+  const COLORS = ['#f87171', '#fbbf24', 'var(--color-accent)'];
+
+  function run() {
+    const sets = boxes.filter((b) => b.checked).map((b) => SETS[b.value as keyof typeof SETS]);
+    const n = +len.value;
+    pw.value = generate(n, sets);
+    (document.getElementById('pw-len-out') as HTMLOutputElement).value = String(n);
+    const bits = entropy(n, sets.join('').length);
+    const level = strength(bits);
+    bar.style.width = `${Math.min(100, (bits / 128) * 100)}%`;
+    bar.style.backgroundColor = COLORS[level];
+    document.getElementById('pw-strength')!.textContent = `${levels[level]} · ${bits} bit`;
+  }
+
+  // the last ticked set can't be unticked: a password needs at least one
+  form.addEventListener('change', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.name === 'set' && !boxes.some((b) => b.checked)) t.checked = true;
+    run();
+  });
+  len.addEventListener('input', run);
+  document.getElementById('pw-again')!.addEventListener('click', run);
+  run();
+</script>
