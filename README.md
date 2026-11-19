@@ -52,7 +52,7 @@ src/scripts/tools/      the tools' logic, plus `npm test` to check it
 public/assets/          app icons and screenshots
 ```
 
-The eight tools share one frame (`ToolPage.astro`: what it does, what it doesn't, a coffee) and are listed in `src/tools.ts`. They run in the browser with no libraries; only Weather talks to a server (Open-Meteo), and its page says so. A new tool is a component in `src/components/pages/tools/`, named after its slug in PascalCase, plus a line in `src/tools.ts`.
+The tools share one frame (`ToolPage.astro`: what it does, what it doesn't, a coffee) and are listed in `src/tools.ts`. They run in the browser with no libraries; only Weather talks to a server (Open-Meteo), and its page says so. A new tool is a component in `src/components/pages/tools/`, named after its slug in PascalCase, plus a line in `src/tools.ts`.
 
 ### Credits
 
@@ -107,7 +107,7 @@ src/scripts/tools/      la logica degli strumenti, più `npm test` per controlla
 public/assets/          icone e schermate delle app
 ```
 
-Gli otto strumenti condividono la stessa cornice (`ToolPage.astro`: cosa fa, cosa non fa, un caffè) e sono elencati in `src/tools.ts`. Girano nel browser senza librerie; solo il Meteo parla con un server (Open-Meteo), e la sua pagina lo dice. Uno strumento nuovo è un componente in `src/components/pages/tools/`, con il nome dello slug in PascalCase, più una riga in `src/tools.ts`.
+Gli strumenti condividono la stessa cornice (`ToolPage.astro`: cosa fa, cosa non fa, un caffè) e sono elencati in `src/tools.ts`. Girano nel browser senza librerie; solo il Meteo parla con un server (Open-Meteo), e la sua pagina lo dice. Uno strumento nuovo è un componente in `src/components/pages/tools/`, con il nome dello slug in PascalCase, più una riga in `src/tools.ts`.
 
 ### Riconoscimenti
 

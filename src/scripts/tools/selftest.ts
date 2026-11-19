@@ -6,6 +6,10 @@ import { CASES } from './case.ts';
 import { formatHtml } from './html.ts';
 import { fitSize, outName } from './image.ts';
 import { srcsetUrls, cssUrls, extOf } from './extract.ts';
+import { lengthKey, headingSkips, robotsTokens } from './seo.ts';
+import { formatJson, errorAt } from './json.ts';
+import { b64encode, b64decode, decodeJwt } from './encode.ts';
+import { findMatches } from './regex.ts';
 
 // password: length, one of every set, nothing outside the pool
 for (const n of [4, 16, 64]) {
@@ -75,5 +79,37 @@ assert.deepEqual(srcsetUrls('a.jpg, b.jpg'), ['a.jpg', 'b.jpg']);
 assert.deepEqual(cssUrls(`background: url("a.png"), url(b.svg); x: url( 'c.webp' )`), ['a.png', 'b.svg', 'c.webp']);
 assert.equal(extOf('https://x.io/p/IMG.JPEG?w=3'), 'jpg');
 assert.equal(extOf('https://x.io/image?id=3'), 'other');
+
+// seo helpers
+assert.equal(lengthKey(10, 30, 60), 'short');
+assert.equal(lengthKey(45, 30, 60), 'ok');
+assert.equal(lengthKey(61, 30, 60), 'long');
+assert.equal(headingSkips([1, 2, 3, 2, 4, 2]), 1);
+assert.equal(headingSkips([2, 4, 6]), 2);
+assert.ok(robotsTokens('index, max-image-preview:none', '').has('index'));
+assert.ok(!robotsTokens('max-image-preview:none').has('none'));
+
+// json
+assert.equal(formatJson('{"b":1,"a":[1,{"d":2,"c":3}]}', '', true), '{"a":[1,{"c":3,"d":2}],"b":1}');
+assert.equal(formatJson('{"a":1}', '  '), '{\n  "a": 1\n}');
+assert.equal(formatJson('{"id":12345678901234567890}', ''), '{"id":12345678901234567890}'); // no rounding
+assert.deepEqual(errorAt('{"a": 1,\n}'), { line: 2, col: 1, offset: 9 });
+assert.deepEqual(errorAt('{"a": 1,\n  "b": [1, 2,]\n}'), { line: 2, col: 14, offset: 22 }); // trailing comma: Chrome gives no position
+assert.equal(errorAt(String.raw`{"a": "xé\n", "b": [true, null, -1.5e3, {}, []]}`), null);
+for (const bad of ['{"a" 1}', '[01]', String.raw`"\q"`, '{"a":1}x', '', '{"a":', '"abc']) assert.ok(errorAt(bad)!.offset >= 0, bad);
+
+// encode
+assert.equal(b64encode('Perché ☕'), 'UGVyY2jDqSDimJU=');
+assert.equal(b64decode('UGVyY2jDqSDimJU'), 'Perché ☕'); // missing padding
+assert.equal(b64decode('data:text/plain;base64,aGk='), 'hi');
+assert.throws(() => b64decode('/w=='));                   // 0xff is not UTF-8 text
+const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+assert.deepEqual(decodeJwt(jwt).payload, { sub: '1234567890', name: 'John Doe', iat: 1516239022 });
+
+// regex
+assert.deepEqual(findMatches(String.raw`(\d+)-(?<b>\d+)`, 'g', 'a 1-2 b 33-44').map((m) => [m.index, m.text, m.named?.b]), [[2, '1-2', '2'], [8, '33-44', '44']]);
+assert.equal(findMatches(String.raw`\d`, '', 'a1b2').length, 1); // no g: first match only
+assert.equal(findMatches('x*', 'g', 'abc').length, 4);  // empty matches don't loop forever
+assert.throws(() => findMatches('(', 'g', 'x'));
 
 console.log('tools: all checks passed');
