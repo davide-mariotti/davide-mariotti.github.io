@@ -1,0 +1,80 @@
+---
+import ToolPage from '../../ToolPage.astro';
+import CopyButton from '../../CopyButton.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['HTML', 'beautifier.'],
+    description: 'Format and indent minified or messy HTML in your browser: one block per line, inline tags kept together, scripts and pre left alone.',
+    kicker: 'Runs on your device',
+    lead: 'Paste minified or messy HTML and read it like a person again. It formats as you type.',
+    input: 'Messy HTML', output: 'Formatted', indent: 'Indent', copy: 'Copy result', placeholder: '<div><p>Paste your HTML here</p></div>',
+    indents: [['  ', '2 spaces'], ['    ', '4 spaces'], ['\t', 'Tab']],
+    does: [
+      'Puts every block element on its own line, indented by nesting level.',
+      'Keeps inline tags (a, b, span, img…) on the same line as their text, so no space disappears.',
+      'Leaves the content of script, style, pre and textarea exactly as it was.',
+      'Indents with 2 or 4 spaces, or tabs if that\'s your religion.',
+    ],
+    doesnt: [
+      'Send your code anywhere.',
+      'Validate or fix broken HTML: unclosed p and li tags push the indent to the right until their parent closes.',
+      'Format the JavaScript and CSS inside the page. Different tool, different day.',
+    ],
+  },
+  it: {
+    title: ['Formatta', 'HTML.'],
+    description: 'Formatta e indenta HTML minificato o disordinato nel browser: un blocco per riga, tag inline uniti al testo, script e pre lasciati come sono.',
+    kicker: 'Gira sul tuo dispositivo',
+    lead: 'Incolla HTML minificato o disordinato e torna a leggerlo come una persona. Formatta mentre scrivi.',
+    input: 'HTML disordinato', output: 'Formattato', indent: 'Rientro', copy: 'Copia il risultato', placeholder: '<div><p>Incolla qui il tuo HTML</p></div>',
+    indents: [['  ', '2 spazi'], ['    ', '4 spazi'], ['\t', 'Tab']],
+    does: [
+      'Mette ogni elemento di blocco su una riga, con il rientro del suo livello.',
+      'Tiene i tag inline (a, b, span, img…) sulla stessa riga del loro testo, così non sparisce nessuno spazio.',
+      'Lascia esattamente com\'è il contenuto di script, style, pre e textarea.',
+      'Rientra con 2 o 4 spazi, o con le tabulazioni se è la tua religione.',
+    ],
+    doesnt: [
+      'Non invia il tuo codice da nessuna parte.',
+      'Non valida e non ripara l\'HTML rotto: i p e li non chiusi spostano il rientro a destra finché non si chiude il genitore.',
+      'Non formatta JavaScript e CSS dentro la pagina. Altro strumento, altro giorno.',
+    ],
+  },
+}[lang];
+---
+<ToolPage lang={lang} slug="html-beautify" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div class="spot grid gap-6 p-6 sm:p-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <label class="label" for="hb-indent">{c.indent}</label>
+        <select id="hb-indent" class="field !w-auto">{c.indents.map(([v, l]) => <option value={v}>{l}</option>)}</select>
+      </div>
+      <CopyButton target="#hb-out" label={c.copy} />
+    </div>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div>
+        <label class="label" for="hb-in">{c.input}</label>
+        <textarea id="hb-in" class="field" rows="18" spellcheck="false" placeholder={c.placeholder}></textarea>
+      </div>
+      <div>
+        <label class="label" for="hb-out">{c.output}</label>
+        <textarea id="hb-out" class="field whitespace-pre" rows="18" readonly spellcheck="false" wrap="off"></textarea>
+      </div>
+    </div>
+  </div>
+</ToolPage>
+
+<script>
+  import { formatHtml } from '../../../scripts/tools/html';
+
+  const input = document.getElementById('hb-in') as HTMLTextAreaElement;
+  const indent = document.getElementById('hb-indent') as HTMLSelectElement;
+  const run = () => ((document.getElementById('hb-out') as HTMLTextAreaElement).value = formatHtml(input.value, indent.value));
+  input.addEventListener('input', run);
+  indent.addEventListener('change', run);
+  run();
+</script>
