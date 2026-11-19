@@ -8,9 +8,10 @@ const { lang } = Astro.props;
 const c = {
   en: {
     title: 'Apps',
-    description: 'Apps by Davide Mariotti: Sentinel, a tiny Windows utility, and AscendKeep, an Android game in development.',
+    description: 'Apps by Davide Mariotti: Vigil and Sentinel for Windows, and AscendKeep, an Android game in development.',
     h: ['Apps I made', 'because I needed them, or wanted to play them.'],
-    lead: 'Sentinel runs on Windows and asks for nothing. AscendKeep is a game for Android, still in the oven.',
+    lead: 'Vigil and Sentinel run on Windows and ask for nothing. AscendKeep is a game for Android, still in the oven.',
+    vigil: 'Temperatures, fans and power draw of your PC, and the fans do what you say: Auto, Fixed, or a curve you drag. It works out what\'s inside on its own.',
     sentinel: 'Keeps your Windows PC awake. Lunch break, battery alerts, an eye in the tray that tells you what it\'s doing.',
     discover: 'Discover',
     ascendkeep: 'A tower defense where losing is part of the plan: waves of Voidborn, 100 tiers, bosses, a skill tree.',
@@ -18,9 +19,10 @@ const c = {
   },
   it: {
     title: 'App',
-    description: 'Le app di Davide Mariotti: Sentinel, una piccola utility per Windows, e AscendKeep, un gioco Android in sviluppo.',
+    description: 'Le app di Davide Mariotti: Vigil e Sentinel per Windows, e AscendKeep, un gioco Android in sviluppo.',
     h: ['App che ho fatto', 'perché mi servivano, o perché volevo giocarci.'],
-    lead: 'Sentinel gira su Windows e non chiede niente. AscendKeep è un gioco per Android, ancora in forno.',
+    lead: 'Vigil e Sentinel girano su Windows e non chiedono niente. AscendKeep è un gioco per Android, ancora in forno.',
+    vigil: 'Temperature, ventole e consumi del tuo PC, e le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini. Capisce da solo cosa c\'è dentro.',
     sentinel: "Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, un occhio nella tray che ti dice cosa sta facendo.",
     discover: 'Scopri',
     ascendkeep: 'Un tower defense dove perdere fa parte del piano: ondate di Voidborn, 100 tier, boss, un albero delle skill.',
@@ -36,10 +38,19 @@ const c = {
   </section>
 
   <section class="wrap grid gap-4 pb-12 md:grid-cols-2">
+    <a href={localize(lang, '/apps/vigil/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center md:col-span-2">
+      <img src="/assets/icons/apps/vigil.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(194_65_12/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+      <div>
+        <div class="flex flex-wrap gap-2"><span class="chip">Windows</span><span class="chip">v0.2.0</span><span class="chip">4 MB</span></div>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight">Vigil</h2>
+        <p class="mt-2 max-w-2xl text-muted">{c.vigil}</p>
+        <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+    </a>
     <a href={localize(lang, '/apps/sentinel/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center">
       <img src="/assets/icons/apps/sentinel.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(14_116_144/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
       <div>
-        <div class="flex flex-wrap gap-2"><span class="chip">Windows</span><span class="chip">v2.5.0</span><span class="chip">75 KB</span></div>
+        <div class="flex flex-wrap gap-2"><span class="chip">Windows</span><span class="chip">v3.0.0</span><span class="chip">1.4 MB</span></div>
         <h2 class="mt-4 text-3xl font-semibold tracking-tight">Sentinel</h2>
         <p class="mt-2 text-muted">{c.sentinel}</p>
         <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>

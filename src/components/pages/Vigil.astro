@@ -1,0 +1,265 @@
+---
+import { Download, Check, X, Cpu, Thermometer, Fan, ShieldCheck, ShieldExclamationPoint, Coffee, ArrowUpRight, Usb, EyeOff, Gauge, Spline, RotateCcw, Lock, Layers } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const EXE = 'https://github.com/davide-mariotti/Vigil/raw/main/Vigil.exe';
+const ZIP = 'https://github.com/davide-mariotti/Vigil/raw/main/Vigil-portable.zip';
+const REPO = 'https://github.com/davide-mariotti/Vigil';
+const img = (name: string) => `/assets/img/vigil/${name}-${lang}.webp`;
+
+const c = {
+  en: {
+    description: 'Vigil watches your Windows PC\'s temperatures, fans and power draw from the tray, and drives the fans with curves you drag. Free, no install, no internet.',
+    kicker: 'Windows app · v0.2.0',
+    tagline: ['Temperatures, fans and power draw of your PC.', 'And the fans do what you say.'],
+    download: 'Download (4 MB)',
+    portable: 'Portable (zip)',
+    source: 'Source code',
+    meta: 'Windows 10 and 11, 64-bit · nothing to install · free, MIT license',
+    shotAlt: 'Vigil\'s window: CPU, graphics card, memory and power draw, each with its last 10 minutes',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Works out what\'s inside the PC by itself: CPU, graphics card, RAM sticks and slots, motherboard, disks.',
+      'Puts the hottest temperature in the tray, as a number: dark when all is well, amber near your limit, red over it.',
+      'One card per component, sensors grouped by kind, the 32 cores of a big CPU as a heat map instead of 32 rows.',
+      'Click any sensor and its last 10 minutes open right under it, with minimum, average and maximum.',
+      'Drives the fans: Auto, Fixed, or a Curve that follows the temperature you pick.',
+      'Warns you when CPU or GPU stay over your limit for a minute. Once, not every second.',
+    ],
+    doesntList: [
+      'Take risks with the fans: never under 20%, 100% over your limit, back to the BIOS when it closes or crashes.',
+      'Install drivers behind your back. Full mode needs PawnIO, and you install it from its official site.',
+      'Connect to the internet. No telemetry, no auto-updates, no account.',
+      'Make up numbers. A sensor that answers 0 without the driver is hidden, not shown as 0 °C.',
+      'Eat memory in the tray: the window\'s engine only lives while the window is open.',
+      'Cool your PC. A can of compressed air still does that better.',
+    ],
+    modesKicker: 'Two modes, one exe',
+    modesTitle: ['Normal for everyone,', 'complete as administrator.'],
+    modesLead: 'Windows lets anyone read the graphics card and the load. CPU temperature, power draw and the motherboard chips sit behind a kernel driver, and only an administrator may talk to drivers. Vigil asks for nothing: it tells you what\'s missing and why.',
+    base: ['Base mode', 'Double-click and go. CPU load, graphics card (temperature, power, fan, and you can drive its fan), RAM, network.'],
+    full: ['Full mode', 'Restart as administrator, with the free PawnIO driver installed. Adds CPU temperature and power, motherboard sensors and fans, disks, and motherboard fan control.'],
+    fullNote: 'PawnIO is the signed driver LibreHardwareMonitor and FanControl moved to after Windows Defender started flagging the old WinRing0. Turn on "Start with Windows" as administrator and Vigil uses a scheduled task: full mode at every logon, no UAC prompt every morning.',
+    howKicker: 'How it works',
+    howTitle: ['Once a second,', 'four things.'],
+    steps: [
+      { t: 'Ask every chip', d: 'Sensors come from LibreHardwareMonitorLib, the library behind LibreHardwareMonitor and FanControl. Hundreds of chips, nothing to configure.' },
+      { t: 'Hide what isn\'t real', d: 'Sensors stuck at 0 since the start, probes reading 127 °C, a resolution passed off as a temperature, a Ryzen swearing every core runs at 1.55 V. Gone.' },
+      { t: 'One number in the tray', d: 'The main temperature of each chip, the package for the CPU and the core for the GPU. Hot spots run 10-20 degrees higher and would ring the alarm in every game.' },
+      { t: 'Set the fans', d: 'The curve\'s value for the current temperature, sent again every second, because after sleep the BIOS may have taken the fan back.' },
+    ],
+    fansKicker: 'Fans',
+    fansTitle: ['You decide how fast', 'they spin.'],
+    fansLead: 'Auto leaves a fan to the BIOS. Fixed holds one speed. Curve follows a temperature of your choice, with four points you drag, and a dashed line showing where you are right now. Give each fan a name too: "Fan #2" tells nobody anything.',
+    fansAlt: 'Vigil\'s fan cards: one on Auto, one on a curve that follows the CPU, one fixed at 45%',
+    rules: [
+      'Never under 20%, whatever the curve says.',
+      'CPU or GPU over your limit: every fan you command goes to 100% until it\'s 5 degrees under.',
+      'Speeding up is immediate, slowing down goes 2% a second: no fan that hunts up and down with every spike.',
+      'The probe a curve follows disappears: that fan goes back to the BIOS.',
+      'Vigil closes, or crashes: every fan goes back to the BIOS.',
+    ],
+    sensorsKicker: 'Sensors',
+    sensorsTitle: ['Everything your PC tells you,', 'in order.'],
+    sensorsLead: 'A big CPU has hundreds of sensors. Vigil groups them by component and by kind, each group with its icon, folds away the ones that never change (RAM timings, multipliers) and turns the cores into a heat map you read at a glance.',
+    sensorsAlt: 'The CPU card: temperatures, power, load and clocks of 16 cores and 32 threads as heat maps',
+    firstTitle: 'First run',
+    first: 'Put Vigil.exe in a folder that stays put and double-click it. SmartScreen may complain because the exe isn\'t signed: More info, then Run anyway. It opens in base mode; for everything else, Restart as administrator, and if it says PawnIO is missing, Get PawnIO opens the official site. Rather leave no trace? The portable zip keeps its settings in Vigil.ini next to the exe and never touches the registry.',
+    coffeeTitle: ['Did it catch a dying fan', 'before your CPU did?'],
+    coffeeText: 'Vigil is free and stays free. If it made your PC quieter, or warned you in time, a coffee on Ko-fi is how the next app gets written.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: 'Vigil tiene d\'occhio temperature, ventole e consumi del tuo PC Windows dalla tray, e comanda le ventole con curve che trascini. Gratis, senza installazione, senza internet.',
+    kicker: 'App per Windows · v0.2.0',
+    tagline: ['Temperature, ventole e consumi del tuo PC.', 'E le ventole fanno quello che dici tu.'],
+    download: 'Scarica (4 MB)',
+    portable: 'Portable (zip)',
+    source: 'Codice sorgente',
+    meta: 'Windows 10 e 11 a 64 bit · niente da installare · gratis, licenza MIT',
+    shotAlt: 'La finestra di Vigil: CPU, scheda video, memoria e consumo, ognuno con i suoi ultimi 10 minuti',
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Capisce da solo cosa c\'è nel PC: processore, scheda video, banchi di RAM e slot, scheda madre, dischi.',
+      'Mette nella tray la temperatura più alta, come numero: scuro se va tutto bene, arancione vicino al limite, rosso oltre.',
+      'Una scheda per componente, sensori divisi per tipo, i 32 core di una CPU grossa come mappa di calore invece che 32 righe.',
+      'Clicchi un sensore e i suoi ultimi 10 minuti si aprono lì sotto, con minimo, media e massimo.',
+      'Comanda le ventole: Auto, Fisso, o una Curva che segue la temperatura che scegli.',
+      'Ti avvisa se CPU o GPU restano sopra il limite per un minuto. Una volta, non ogni secondo.',
+    ],
+    doesntList: [
+      'Non fa scommesse con le ventole: mai sotto il 20%, al 100% oltre il limite, al BIOS quando si chiude o va in crash.',
+      'Non installa driver di nascosto. La modalità completa vuole PawnIO, e lo installi tu dal sito ufficiale.',
+      'Non si collega a internet. Niente telemetria, niente aggiornamenti automatici, niente account.',
+      'Non si inventa i numeri. Un sensore che senza driver risponde 0 non compare, invece di segnare 0 °C.',
+      'Nella tray non si mangia la memoria: il motore della finestra vive solo finché la finestra è aperta.',
+      'Non raffredda il PC. Per quello una bomboletta d\'aria compressa resta imbattibile.',
+    ],
+    modesKicker: 'Due modalità, un solo exe',
+    modesTitle: ['Normale per tutti,', 'completa da amministratore.'],
+    modesLead: 'Windows fa leggere a chiunque la scheda video e il carico. Temperatura e consumo della CPU e i chip della scheda madre stanno dietro un driver di sistema, e con i driver parla solo l\'amministratore. Vigil non chiede niente: ti dice cosa manca e perché.',
+    base: ['Modalità base', 'Doppio clic e via. Carico della CPU, scheda video (temperatura, consumo, ventola, e la sua ventola la comandi), RAM, rete.'],
+    full: ['Modalità completa', 'Riavvia come amministratore, con il driver gratuito PawnIO installato. Aggiunge temperatura e consumo della CPU, sensori e ventole della scheda madre, dischi, e il comando delle ventole della scheda madre.'],
+    fullNote: 'PawnIO è il driver firmato su cui sono passati LibreHardwareMonitor e FanControl da quando Windows Defender blocca il vecchio WinRing0. Attiva "Avvia con Windows" da amministratore e Vigil usa un\'attività pianificata: modalità completa a ogni accensione, senza la conferma UAC ogni mattina.',
+    howKicker: 'Come funziona',
+    howTitle: ['Una volta al secondo,', 'quattro cose.'],
+    steps: [
+      { t: 'Chiede a ogni chip', d: 'I sensori arrivano da LibreHardwareMonitorLib, la libreria che c\'è dietro LibreHardwareMonitor e FanControl. Centinaia di chip, niente da configurare.' },
+      { t: 'Nasconde il finto', d: 'Sensori fermi a 0 dall\'avvio, sonde che segnano 127 °C, una risoluzione spacciata per temperatura, un Ryzen convinto che ogni core giri a 1,55 V. Spariti.' },
+      { t: 'Un numero nella tray', d: 'La temperatura principale di ogni chip, il package per la CPU e il core per la GPU. Gli hot spot stanno 10-20 gradi sopra e farebbero suonare l\'allarme a ogni partita.' },
+      { t: 'Imposta le ventole', d: 'Il valore della curva per la temperatura di adesso, rimandato ogni secondo, perché dopo lo standby il BIOS può essersi ripreso la ventola.' },
+    ],
+    fansKicker: 'Ventole',
+    fansTitle: ['Decidi tu quanto', 'girano.'],
+    fansLead: 'Auto lascia la ventola al BIOS. Fisso tiene una velocità. Curva segue una temperatura a tua scelta, con quattro punti da trascinare e una linea tratteggiata che ti dice dove sei adesso. E dai un nome a ogni ventola: "Fan #2" non dice niente a nessuno.',
+    fansAlt: 'Le schede delle ventole di Vigil: una su Auto, una su una curva che segue la CPU, una fissa al 45%',
+    rules: [
+      'Mai sotto il 20%, qualunque cosa dica la curva.',
+      'CPU o GPU oltre il tuo limite: tutte le ventole che comandi vanno al 100% finché non scendono di 5 gradi.',
+      'Accelerare è immediato, rallentare va di 2% al secondo: niente ventole che vanno su e giù a ogni picco.',
+      'Sparisce la sonda che una curva segue: quella ventola torna al BIOS.',
+      'Vigil si chiude, o va in crash: tutte le ventole tornano al BIOS.',
+    ],
+    sensorsKicker: 'Sensori',
+    sensorsTitle: ['Tutto quello che il PC racconta,', 'in ordine.'],
+    sensorsLead: 'Una CPU grossa ha centinaia di sensori. Vigil li divide per componente e per tipo, ogni gruppo con la sua icona, chiude quelli che non cambiano mai (timing della RAM, moltiplicatori) e trasforma i core in una mappa di calore che leggi a colpo d\'occhio.',
+    sensorsAlt: 'La scheda della CPU: temperature, consumi, carico e frequenze di 16 core e 32 thread come mappe di calore',
+    firstTitle: 'Primo avvio',
+    first: 'Metti Vigil.exe in una cartella che non sposti e fai doppio clic. SmartScreen potrebbe lamentarsi perché l\'exe non è firmato: Ulteriori informazioni, poi Esegui comunque. Parte in modalità base; per tutto il resto, Riavvia come amministratore, e se ti dice che manca PawnIO, Scarica PawnIO apre il sito ufficiale. Non vuoi lasciare tracce? Lo zip portable tiene le impostazioni in Vigil.ini accanto all\'exe e non tocca mai il registro.',
+    coffeeTitle: ['Ti ha fatto notare una ventola', 'prima che lo facesse la CPU?'],
+    coffeeText: 'Vigil è gratis e resta gratis. Se ti ha reso il PC più silenzioso, o ti ha avvisato in tempo, un caffè su Ko-fi è il modo in cui nasce la prossima app.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const stepIcons = [Cpu, EyeOff, Thermometer, Fan];
+const ruleIcons = [Gauge, Thermometer, Spline, RotateCcw, ShieldCheck];
+const frame = 'w-full rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+---
+<Layout lang={lang} title="Vigil" description={c.description} path="/apps/vigil/" image="/og-vigil.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#c2410c]/25 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Vigil<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={EXE} class="btn btn-primary"><Download />{c.download}</a>
+          <a href={ZIP} class="btn btn-ghost"><Usb />{c.portable}</a>
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#c2410c] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/vigil.svg" alt="Vigil icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE WINDOW -->
+  <section class="wrap pb-12">
+    <img src={img('dashboard')} alt={c.shotAlt} width="1600" height="1112" class={`reveal ${frame}`} />
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- TWO MODES -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.modesKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.modesTitle[0]} <span class="serif grad">{c.modesTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.modesLead}</p>
+    <div class="mt-14 grid gap-4 md:grid-cols-2">
+      <div class="spot reveal p-8">
+        <div class="icon-tile"><Gauge /></div>
+        <h3 class="mt-6 text-xl font-semibold tracking-tight">{c.base[0]}</h3>
+        <p class="mt-3 leading-relaxed text-muted">{c.base[1]}</p>
+      </div>
+      <div class="spot reveal p-8" style="--d:100ms">
+        <div class="icon-tile"><Lock /></div>
+        <h3 class="mt-6 text-xl font-semibold tracking-tight">{c.full[0]}</h3>
+        <p class="mt-3 leading-relaxed text-muted">{c.full[1]}</p>
+      </div>
+    </div>
+    <p class="reveal mt-6 max-w-3xl text-sm leading-relaxed text-faint">{c.fullNote}</p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-12">
+    <p class="kicker reveal">{c.howKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+    <ol class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- FANS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.fansKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.fansTitle[0]} <span class="serif grad">{c.fansTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.fansLead}</p>
+    <div class="mt-14 grid items-start gap-8 lg:grid-cols-[1.5fr_1fr]">
+      <img src={img('fans')} alt={c.fansAlt} width="1600" height="1250" loading="lazy" class={`reveal ${frame}`} />
+      <ul class="space-y-4">
+        {c.rules.map((t, i) => { const Icon = ruleIcons[i]; return <li class="spot reveal flex gap-4 p-5 text-muted" style={`--d:${i * 70}ms`}><Icon class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>; })}
+      </ul>
+    </div>
+  </section>
+
+  <!-- SENSORS -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.5fr]">
+      <div>
+        <p class="kicker reveal">{c.sensorsKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.sensorsTitle[0]} <span class="serif grad">{c.sensorsTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.sensorsLead}</p>
+        <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><Cpu class="size-3.5 text-accent" />LibreHardwareMonitorLib</span><span class="chip"><ShieldCheck class="size-3.5 text-accent" />PawnIO</span><span class="chip"><Layers class="size-3.5 text-accent" />WebView2</span></div>
+      </div>
+      <img src={img('cpu')} alt={c.sensorsAlt} width="1600" height="1344" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+  </section>
+
+  <!-- FIRST RUN -->
+  <section class="wrap py-12">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><ShieldExclamationPoint /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.firstTitle}</h2><p class="mt-3 max-w-3xl leading-relaxed text-muted">{c.first}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

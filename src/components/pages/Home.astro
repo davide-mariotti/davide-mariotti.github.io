@@ -23,7 +23,8 @@ const c = {
     stack: 'Tools of the trade',
     workKicker: 'Selected work',
     workTitle: ['Things I made', 'because I needed them'],
-    sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. A 75 KB tray app with a lunch break, battery alerts and zero internet.', cta: 'Discover Sentinel' },
+    vigil: { title: 'Vigil', text: 'Temperatures, fans and power draw of your PC, from the tray. And the fans do what you say: Auto, Fixed, or a curve you drag.', cta: 'Discover Vigil' },
+    sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. Lunch break, battery alerts, zero internet.', cta: 'Discover Sentinel' },
     tools: { title: `${TOOLS.length} browser tools`, text: 'Passwords, colours, contrast, images, SEO, JSON, regex, weather. Small things that save five minutes a day.', cta: 'Open the toolbox' },
     games: { title: 'The arcade', text: 'Snake, Maze, Jump, War Run, a Wordle in Italian and a few party games.', cta: 'Play' },
     lupo: { title: 'Lupo Solitario', text: 'Gamebooks, playable in the browser: dice, inventory and saves included.', cta: 'Start the adventure' },
@@ -54,7 +55,8 @@ const c = {
     stack: 'Gli attrezzi del mestiere',
     workKicker: 'Lavori scelti',
     workTitle: ['Cose che ho fatto', 'perché mi servivano'],
-    sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, con pausa pranzo, avvisi batteria e zero internet.', cta: 'Scopri Sentinel' },
+    vigil: { title: 'Vigil', text: 'Temperature, ventole e consumi del tuo PC, dalla tray. E le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini.', cta: 'Scopri Vigil' },
+    sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, zero internet.', cta: 'Scopri Sentinel' },
     tools: { title: `${TOOLS.length} strumenti nel browser`, text: 'Password, colori, contrasti, immagini, SEO, JSON, regex, meteo. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
     games: { title: 'La sala giochi', text: 'Snake, Maze, Jump, War Run, un Wordle in italiano e qualche gioco da serata.', cta: 'Gioca' },
     lupo: { title: 'Lupo Solitario', text: 'I librogame, giocabili nel browser: dadi, inventario e salvataggi compresi.', cta: "Inizia l'avventura" },
@@ -129,31 +131,38 @@ const name = ['Davide', 'Mariotti'];
     <h2 class="h-section reveal mt-4" style="--d:80ms">{c.workTitle[0]}<br /><span class="serif text-muted">{c.workTitle[1]}</span></h2>
 
     <div class="mt-14 grid gap-4 md:grid-cols-3">
-      <a href={L('/apps/sentinel/')} class="spot reveal group flex flex-col p-8 md:col-span-2 md:flex-row md:items-center md:gap-10">
-        <img src="/assets/icons/apps/sentinel.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(14_116_144/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
+      <a href={L('/apps/vigil/')} class="spot reveal group flex flex-col p-8 md:col-span-2 md:flex-row md:items-center md:gap-10">
+        <img src="/assets/icons/apps/vigil.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(194_65_12/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
         <div class="mt-6 md:mt-0">
-          <div class="flex flex-wrap gap-2"><span class="chip">C#</span><span class="chip">.NET</span><span class="chip">Windows</span></div>
-          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.sentinel.title}</h3>
-          <p class="mt-2 max-w-md text-muted">{c.sentinel.text}</p>
-          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.sentinel.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+          <div class="flex flex-wrap gap-2"><span class="chip">C#</span><span class="chip">WebView2</span><span class="chip">Windows</span></div>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.vigil.title}</h3>
+          <p class="mt-2 max-w-md text-muted">{c.vigil.text}</p>
+          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.vigil.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
         </div>
       </a>
 
-      <a href={L('/tools/')} class="spot reveal group flex flex-col p-8" style="--d:80ms">
+      <a href={L('/apps/sentinel/')} class="spot reveal group flex flex-col p-8" style="--d:80ms">
+        <img src="/assets/icons/apps/sentinel.svg" alt="" width="56" height="56" class="size-14 drop-shadow-[0_14px_30px_rgb(14_116_144/0.45)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+        <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.sentinel.title}</h3>
+        <p class="mt-2 text-muted">{c.sentinel.text}</p>
+        <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.sentinel.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href={L('/tools/')} class="spot reveal group flex flex-col p-8">
         <div class="icon-tile"><Wrench /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.tools.title}</h3>
         <p class="mt-2 text-muted">{c.tools.text}</p>
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.tools.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </a>
 
-      <a href="/games/" class="spot reveal group flex flex-col p-8">
+      <a href="/games/" class="spot reveal group flex flex-col p-8" style="--d:80ms">
         <div class="icon-tile"><Gamepad2 /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.games.title}</h3>
         <p class="mt-2 text-muted">{c.games.text}</p>
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.games.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </a>
 
-      <a href="/games/LupoSolitario/" class="spot reveal group relative flex flex-col overflow-hidden p-8" style="--d:80ms">
+      <a href="/games/LupoSolitario/" class="spot reveal group relative flex flex-col overflow-hidden p-8" style="--d:160ms">
         <span aria-hidden="true" class="serif pointer-events-none absolute -right-4 -top-10 text-[9rem] leading-none text-white/[0.04] transition-colors group-hover:text-accent/10">LS</span>
         <div class="icon-tile"><Swords /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.lupo.title}</h3>
@@ -161,7 +170,7 @@ const name = ['Davide', 'Mariotti'];
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.lupo.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </a>
 
-      <a href="#top" class="spot reveal group flex flex-col p-8" style="--d:160ms">
+      <a href="#top" class="spot reveal group flex flex-col p-8 md:col-span-3">
         <div class="icon-tile"><CodeXml /></div>
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.site.title}</h3>
         <p class="mt-2 text-muted">{c.site.text}</p>

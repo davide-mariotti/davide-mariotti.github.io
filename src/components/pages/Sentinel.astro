@@ -11,10 +11,10 @@ const REPO = 'https://github.com/davide-mariotti/Sentinel';
 
 const c = {
   en: {
-    description: 'Sentinel keeps your Windows PC awake. A 75 KB tray app, no install, no internet. What it does, what it doesn\'t, how it works.',
-    kicker: 'Windows app · v2.5.0',
+    description: 'Sentinel keeps your Windows PC awake. A small tray app, no install, no internet. What it does, what it doesn\'t, how it works.',
+    kicker: 'Windows app · v3.0.0',
     tagline: ['Keeps your Windows PC awake.', 'That\'s it, that\'s the app.'],
-    download: 'Download (75 KB)',
+    download: 'Download (1.4 MB)',
     portable: 'Portable (zip)',
     source: 'Source code',
     meta: 'Windows 10 and 11 · nothing to install · free, MIT license',
@@ -48,8 +48,9 @@ const c = {
     off: ['Eye crossed out', 'it\'s off, or on its lunch break.'],
     trayNote: 'Hover the icon for the state and, on laptops, the battery level. Double-click for the settings, right-click to exit.',
     settingsTitle: 'The whole settings window',
+    shotAlt: 'Sentinel\'s settings window: the main switch, how long the PC has been still, lunch break and battery alerts',
     settings: [
-      ['Active', 'the main switch.'],
+      ['Active', 'the main switch, with what Sentinel is doing right now: how long mouse and keyboard have been still and when the next nudge comes.'],
       ['Start with Windows', 'at login it goes straight to the tray, no window.'],
       ['Scheduled pause', 'from/to, across midnight too. 13:00-14:00 out of the box, for obvious reasons.'],
       ['Battery alerts', 'high and low threshold, and how long the "unplug me" alert keeps nagging.'],
@@ -62,10 +63,10 @@ const c = {
     coffeeBtn: 'Buy me a coffee',
   },
   it: {
-    description: 'Sentinel tiene sveglio il tuo PC Windows. Un\'app da 75 KB nella tray, senza installazione, senza internet. Cosa fa, cosa non fa, come funziona.',
-    kicker: 'App per Windows · v2.5.0',
+    description: 'Sentinel tiene sveglio il tuo PC Windows. Una piccola app nella tray, senza installazione, senza internet. Cosa fa, cosa non fa, come funziona.',
+    kicker: 'App per Windows · v3.0.0',
     tagline: ['Tiene sveglio il tuo PC Windows.', 'Tutto qui, questa è l\'app.'],
-    download: 'Scarica (75 KB)',
+    download: 'Scarica (1,4 MB)',
     portable: 'Portable (zip)',
     source: 'Codice sorgente',
     meta: 'Windows 10 e 11 · niente da installare · gratis, licenza MIT',
@@ -99,8 +100,9 @@ const c = {
     off: ['Occhio barrato', 'è spento, o in pausa pranzo.'],
     trayNote: "Passa sopra l'icona per vedere lo stato e, sui portatili, la batteria. Doppio clic per le impostazioni, tasto destro per uscire.",
     settingsTitle: 'Tutta la finestra delle impostazioni',
+    shotAlt: 'La finestra delle impostazioni di Sentinel: l\'interruttore principale, da quanto il PC è fermo, pausa pranzo e avvisi batteria',
     settings: [
-      ['Attivo', "l'interruttore principale."],
+      ['Attivo', "l'interruttore principale, con quello che Sentinel sta facendo in quel momento: da quanto mouse e tastiera sono fermi e quando arriva la prossima spinta."],
       ['Avvia con Windows', 'al login va dritto nella tray, senza finestre.'],
       ['Pausa programmata', 'da/a, anche a cavallo della mezzanotte. 13:00-14:00 di base, per ovvi motivi.'],
       ['Avvisi batteria', 'soglia alta e bassa, e quanto insiste l\'avviso "staccami".'],
@@ -172,8 +174,9 @@ const settingIcons = [Eye, Power, Moon, BatteryExclamationPoint];
     </ol>
   </section>
 
-  <!-- TRAY + SETTINGS -->
-  <section class="wrap grid gap-4 py-12 lg:grid-cols-[1fr_1.4fr]">
+  <!-- TRAY + SETTINGS, next to the window itself -->
+  <section class="wrap grid items-start gap-8 py-12 lg:grid-cols-[1fr_minmax(0,400px)]">
+    <div class="grid gap-4">
     <div class="spot reveal p-8">
       <h2 class="text-2xl font-semibold tracking-tight">{c.trayTitle}</h2>
       <div class="mt-6 flex items-center gap-4"><img src="/assets/icons/apps/sentinel.svg" alt="" width="52" height="52" /><p class="text-muted"><strong class="text-ink">{c.on[0]}</strong>: {c.on[1]}</p></div>
@@ -187,6 +190,8 @@ const settingIcons = [Eye, Power, Moon, BatteryExclamationPoint];
       </ul>
       <p class="mt-6 text-sm text-faint">{c.settingsNote}</p>
     </div>
+    </div>
+    <img src={`/assets/img/sentinel/window-${lang}.webp`} alt={c.shotAlt} width="900" height="1671" loading="lazy" class="reveal mx-auto w-full max-w-[400px] rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]" style="--d:120ms" />
   </section>
 
   <!-- FIRST RUN -->
