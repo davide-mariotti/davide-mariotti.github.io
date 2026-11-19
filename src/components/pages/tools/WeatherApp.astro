@@ -1,0 +1,199 @@
+---
+import { Search, LocateFixed, Sun, Moon, CloudSun, CloudMoon, Cloud, CloudFog, CloudDrizzle, CloudRain, CloudSnow, CloudLightning, Droplets, Wind, Thermometer, Umbrella } from '@lucide/astro';
+import ToolPage from '../../ToolPage.astro';
+import type { Lang } from '../../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = {
+  en: {
+    title: ['Weather,', 'no strings.'],
+    description: 'Current weather, next 24 hours and 7-day forecast for any city, with data from Open-Meteo. No API key, no account, no cookies.',
+    kicker: 'Weather data from Open-Meteo',
+    lead: 'The weather now, the next 24 hours and the week ahead, for any city. No account, no API key, no ads.',
+    city: 'City', search: 'Search', locate: 'Use my location', here: 'Your location',
+    loading: 'Checking the sky…', notFound: 'No city called "{q}". Check the spelling, or try a bigger town nearby.',
+    offline: "Open-Meteo didn't answer. Try again in a moment.", geoDenied: "Location not available: the browser said no, or doesn't know.",
+    feels: 'Feels like', humidity: 'Humidity', wind: 'Wind', hours: 'Next 24 hours', days: 'Next 7 days', today: 'Today', rain: 'chance of rain',
+    groups: { clear: 'Clear sky', partly: 'Partly cloudy', cloudy: 'Overcast', fog: 'Fog', drizzle: 'Drizzle', rain: 'Rain', snow: 'Snow', storm: 'Thunderstorm' },
+    credit: 'Weather data by',
+    does: [
+      'Finds the city and shows the weather now: temperature, feels like, humidity and wind.',
+      'Shows the next 24 hours hour by hour, and 7 days with highs, lows and chance of rain.',
+      'Uses your position when you press the button, and only then.',
+      'Gives the times in the city\'s own time zone, not yours.',
+    ],
+    doesnt: [
+      'Stay in your browser: the city you search, or your coordinates, go to Open-Meteo, which sends back the forecast. Fucecchio goes when the page opens.',
+      'Use cookies, or ask for an account or an API key.',
+      'Do Fahrenheit or miles. Celsius and km/h only.',
+      'Promise sunshine. It reads the forecast, it doesn\'t write it.',
+    ],
+  },
+  it: {
+    title: ['Meteo,', 'senza fronzoli.'],
+    description: 'Meteo attuale, prossime 24 ore e previsioni a 7 giorni per ogni città, con i dati di Open-Meteo. Senza chiavi API, account o cookie.',
+    kicker: 'Dati meteo di Open-Meteo',
+    lead: 'Il meteo di adesso, le prossime 24 ore e la settimana, per qualsiasi città. Senza account, senza chiavi API, senza pubblicità.',
+    city: 'Città', search: 'Cerca', locate: 'Usa la mia posizione', here: 'La tua posizione',
+    loading: 'Guardo il cielo…', notFound: 'Nessuna città chiamata "{q}". Controlla come l\'hai scritta, o prova un centro più grande lì vicino.',
+    offline: 'Open-Meteo non ha risposto. Riprova tra un momento.', geoDenied: 'Posizione non disponibile: il browser ha detto di no, o non la conosce.',
+    feels: 'Percepita', humidity: 'Umidità', wind: 'Vento', hours: 'Prossime 24 ore', days: 'Prossimi 7 giorni', today: 'Oggi', rain: 'probabilità di pioggia',
+    groups: { clear: 'Sereno', partly: 'Poco nuvoloso', cloudy: 'Coperto', fog: 'Nebbia', drizzle: 'Pioviggine', rain: 'Pioggia', snow: 'Neve', storm: 'Temporale' },
+    credit: 'Dati meteo di',
+    does: [
+      'Trova la città e mostra il meteo di adesso: temperatura, percepita, umidità e vento.',
+      'Mostra le prossime 24 ore, ora per ora, e 7 giorni con minime, massime e probabilità di pioggia.',
+      'Usa la tua posizione quando premi il pulsante, e solo allora.',
+      'Dà gli orari nel fuso della città, non nel tuo.',
+    ],
+    doesnt: [
+      'Non resta nel browser: la città che cerchi, o le tue coordinate, vanno a Open-Meteo, che rimanda le previsioni. All\'apertura della pagina parte Fucecchio.',
+      'Non usa cookie e non chiede account o chiavi API.',
+      'Non fa Fahrenheit né miglia. Solo gradi Celsius e km/h.',
+      'Non promette il sole. Legge le previsioni, non le scrive.',
+    ],
+  },
+}[lang];
+const icons = { 'clear-day': Sun, 'clear-night': Moon, 'partly-day': CloudSun, 'partly-night': CloudMoon, cloudy: Cloud, fog: CloudFog, drizzle: CloudDrizzle, rain: CloudRain, snow: CloudSnow, storm: CloudLightning };
+const t = { here: c.here, loading: c.loading, notFound: c.notFound, offline: c.offline, geoDenied: c.geoDenied, today: c.today, rain: c.rain, groups: c.groups };
+---
+<ToolPage lang={lang} slug="weather-app" title={c.title as [string, string]} description={c.description} lead={c.lead} kicker={c.kicker} does={c.does} doesnt={c.doesnt}>
+  <div id="wx" class="grid gap-4" data-t={JSON.stringify(t)}>
+    <form id="wx-form" class="spot grid gap-3 p-6 sm:p-8">
+      <label class="label !mb-0" for="wx-city">{c.city}</label>
+      <div class="flex flex-wrap gap-2">
+        <input id="wx-city" class="field min-w-48 flex-1" value="Fucecchio" autocomplete="address-level2" enterkeyhint="search" />
+        <button class="btn btn-primary"><Search />{c.search}</button>
+        <button type="button" id="wx-locate" class="btn btn-ghost"><LocateFixed />{c.locate}</button>
+      </div>
+      <p id="wx-msg" class="text-sm text-muted empty:hidden" aria-live="polite"></p>
+    </form>
+
+    <div id="wx-out" class="grid gap-4" hidden>
+      <section class="spot grid gap-6 p-6 sm:p-8 md:grid-cols-[1.2fr_1fr] md:items-center" aria-labelledby="wx-place">
+        <div>
+          <h2 id="wx-place" class="text-xl font-semibold tracking-tight"></h2>
+          <div class="mt-4 flex items-center gap-5">
+            <span id="wx-icon" class="text-accent [&_svg]:size-16 sm:[&_svg]:size-20"></span>
+            <p><span id="wx-temp" class="block text-6xl font-semibold tracking-tighter sm:text-7xl"></span><span id="wx-desc" class="text-muted"></span></p>
+          </div>
+        </div>
+        <dl class="grid gap-2">
+          {[[Thermometer, c.feels, 'wx-feels'], [Droplets, c.humidity, 'wx-hum'], [Wind, c.wind, 'wx-wind']].map(([Icon, label, id]) => (
+            <div class="flex items-center gap-3 rounded-2xl border border-line px-4 py-3"><Icon class="size-5 shrink-0 text-accent" /><dt class="flex-1 text-sm text-muted">{label}</dt><dd id={id} class="whitespace-nowrap font-mono"></dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="spot p-6 sm:p-8" aria-labelledby="wx-h-hours">
+        <h2 id="wx-h-hours" class="kicker">{c.hours}</h2>
+        <ol id="wx-hours" class="mt-5 flex gap-2 overflow-x-auto pb-2" tabindex="0"></ol>
+      </section>
+
+      <section class="spot p-6 sm:p-8" aria-labelledby="wx-h-days">
+        <h2 id="wx-h-days" class="kicker">{c.days}</h2>
+        <ol id="wx-days" class="mt-4 divide-y divide-line"></ol>
+      </section>
+
+      <p class="text-sm text-muted">{c.credit} <a href="https://open-meteo.com/" target="_blank" rel="noopener" class="text-accent underline underline-offset-4">Open-Meteo.com</a> (CC BY 4.0)</p>
+    </div>
+  </div>
+  {Object.entries(icons).map(([k, Icon]) => <template data-icon={k}><Icon /></template>)}
+  <template id="wx-umbrella"><Umbrella class="size-3.5" /></template>
+</ToolPage>
+
+<script>
+  const root = document.getElementById('wx')!;
+  const t = JSON.parse(root.dataset.t!);
+  const lang = document.documentElement.lang;
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const msg = $('wx-msg'), out = $('wx-out'), city = $('wx-city');
+
+  // WMO weather codes -> one of our groups
+  const group = (code: number) =>
+    code === 0 ? 'clear' : code <= 2 ? 'partly' : code === 3 ? 'cloudy' : code <= 48 ? 'fog' : code <= 57 ? 'drizzle'
+    : code <= 67 || (code >= 80 && code <= 82) ? 'rain' : code <= 77 || code === 85 || code === 86 ? 'snow' : 'storm';
+  const icon = (code: number, day = 1) => {
+    const g = group(code);
+    const key = g === 'clear' || g === 'partly' ? `${g}-${day ? 'day' : 'night'}` : g;
+    const svg = document.querySelector<HTMLTemplateElement>(`template[data-icon="${key}"]`)!.content.firstElementChild!.cloneNode(true) as SVGElement;
+    svg.setAttribute('aria-hidden', 'true');
+    return svg;
+  };
+  const el = (tag: string, cls: string, text = '') => Object.assign(document.createElement(tag), { className: cls, textContent: text });
+  const deg = (n: number) => `${Math.round(n)}°`;
+
+  async function forecast(lat: number, lon: number, place: string) {
+    const q = new URLSearchParams({
+      latitude: String(lat), longitude: String(lon), timezone: 'auto', forecast_hours: '24', forecast_days: '7',
+      current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code,is_day',
+      hourly: 'temperature_2m,weather_code,is_day,precipitation_probability',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+    });
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`);
+    if (!res.ok) throw new Error(t.offline);
+    const { current: now, hourly: h, daily: d } = await res.json();
+
+    $('wx-place').textContent = place;
+    $('wx-icon').replaceChildren(icon(now.weather_code, now.is_day));
+    $('wx-temp').textContent = deg(now.temperature_2m);
+    $('wx-desc').textContent = t.groups[group(now.weather_code)];
+    $('wx-feels').textContent = deg(now.apparent_temperature);
+    $('wx-hum').textContent = `${now.relative_humidity_2m}%`;
+    $('wx-wind').textContent = `${Math.round(now.wind_speed_10m)} km/h`;
+
+    $('wx-hours').replaceChildren(...h.time.map((time: string, i: number) => {
+      const li = el('li', 'grid min-w-[4.5rem] shrink-0 justify-items-center gap-2 rounded-2xl border border-line px-2 py-3 text-center');
+      li.title = t.groups[group(h.weather_code[i])];
+      const rain = el('span', 'inline-flex items-center gap-0.5 text-xs text-muted', `${h.precipitation_probability[i] ?? 0}%`);
+      rain.prepend(($('wx-umbrella') as unknown as HTMLTemplateElement).content.firstElementChild!.cloneNode(true));
+      rain.title = t.rain;
+      li.append(el('span', 'font-mono text-xs text-muted', time.slice(11, 16)), el('span', 'text-accent'), el('span', 'font-semibold', deg(h.temperature_2m[i])), rain);
+      li.children[1].append(icon(h.weather_code[i], h.is_day[i]));
+      return li;
+    }));
+
+    const dayName = new Intl.DateTimeFormat(lang, { weekday: 'long' });
+    $('wx-days').replaceChildren(...d.time.map((day: string, i: number) => {
+      const li = el('li', 'grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3 sm:grid-cols-[10rem_auto_1fr_auto]');
+      const name = el('span', 'capitalize', i ? dayName.format(new Date(day + 'T12:00')) : t.today);
+      const ic = el('span', 'text-accent');
+      ic.append(icon(d.weather_code[i]));
+      const desc = el('span', 'hidden text-sm text-muted sm:block', `${t.groups[group(d.weather_code[i])]} · ${d.precipitation_probability_max[i] ?? 0}% ${t.rain}`);
+      const temps = el('span', 'font-mono text-right');
+      temps.append(el('span', 'text-muted', deg(d.temperature_2m_min[i])), ' / ', el('span', 'font-semibold', deg(d.temperature_2m_max[i])));
+      li.append(name, ic, desc, temps);
+      return li;
+    }));
+    out.hidden = false;
+  }
+
+  async function run(job: () => Promise<void>) {
+    msg.textContent = t.loading;
+    try { await job(); msg.textContent = ''; }
+    catch (e) { msg.textContent = e instanceof TypeError ? t.offline : (e as Error).message; } // fetch fails with TypeError
+  }
+
+  async function byCity(name: string) {
+    const q = name.split(',')[0].trim();
+    if (!q) return;
+    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=${lang}&format=json`);
+    if (!res.ok) throw new Error(t.offline);
+    const place = (await res.json()).results?.[0];
+    if (!place) throw new Error(t.notFound.replace('{q}', q));
+    await forecast(place.latitude, place.longitude, [...new Set([place.name, place.admin1, place.country])].filter(Boolean).join(', '));
+  }
+
+  $('wx-form').addEventListener('submit', (e) => { e.preventDefault(); run(() => byCity(city.value)); });
+  $('wx-locate').addEventListener('click', () => {
+    if (!navigator.geolocation) { msg.textContent = t.geoDenied; return; }
+    msg.textContent = t.loading;
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude: la, longitude: lo } }) => run(() => forecast(la, lo, `${t.here} (${la.toFixed(2)}, ${lo.toFixed(2)})`)),
+      () => (msg.textContent = t.geoDenied),
+      { timeout: 10000 },
+    );
+  });
+  run(() => byCity(city.value));
+</script>
