@@ -1,0 +1,349 @@
+---
+import { Check, X, Dices, Route, Flame, Cloud, Lock, Wand, Coffee, ArrowUpRight, Swords, Smartphone, Keyboard, Layers, AudioLines, Bot } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const GAME = 'https://dungeon101.github.io';
+const REPO = 'https://github.com/Dungeon101/Dungeon101.github.io';
+const img = (name: string) => `/assets/img/dungeon101/${name}-${lang}.webp`;
+const token = (name: string) => `/assets/img/dungeon101/${name}.webp`;
+
+const c = {
+  en: {
+    description: 'Dungeon101 is a turn-based roguelite you play in the browser: nine procedural floors, three bosses, permadeath and a sanctuary that keeps your progress. Free, nothing to install, open source.',
+    kicker: 'Browser game · open source · free',
+    tagline: ['Nine floors. Three tyrants.', 'One torch.'],
+    play: 'Play now',
+    source: 'Source code',
+    meta: 'Desktop and phone · nothing to install · free, MIT license · English and Italian',
+    shotAlt: 'The mage throws a firebolt at a goblin archer in the Fungal Caves, lit by her torch, glowing mushrooms and a shallow pool',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      'Nine floors in three acts, the Crypt, the Fungal Caves and the Abyss, generated anew every run.',
+      'Turn-based fights on a grid: d20 rolls against armor, critical hits, elites with a purple aura.',
+      'Three heroes with three skills each, and a talent tree with three branches per hero.',
+      'Three bosses whose worst attacks glow on the floor one turn before they land.',
+      'Permadeath, then the Sanctuary: the embers you earn by dying buy permanent upgrades, and bosses leave relics.',
+      'Saves after every turn. Keyboard or touch, English or Italian.',
+    ],
+    doesntList: [
+      'Ask for an account. Google sign-in is optional, only for cloud progress and the Hall of Fame.',
+      'Track you. No analytics, no ads, no cookies of its own.',
+      'Publish your name or email. The Hall of Fame shows the name you give your hero.',
+      'Sell anything. Embers are earned by dying, the only currency the dungeon accepts.',
+      'Need a download, an engine or a plugin. It is a web page and a canvas.',
+      'Go easy on you. The bot that tests it wins about one run in three.',
+    ],
+    heroKicker: 'Three heroes',
+    heroTitle: ['Pick a hero,', 'then pick a fight.'],
+    heroLead: 'Each hero starts with one skill and learns the other two from the talent tree. Every level is a talent point, and some health back.',
+    heroes: [
+      { art: 'hero-warrior', color: '#f0a03c', name: 'Warrior', blurb: 'Heavy armor, a long sword and no plan B.', skills: ['Cleave', 'Shield Bash', 'Charge'] },
+      { art: 'hero-mage', color: '#5cc8ff', name: 'Mage', blurb: 'Fragile, far away and very much on fire.', skills: ['Firebolt', 'Frost Nova', 'Blink'] },
+      { art: 'hero-rogue', color: '#5ee08a', name: 'Rogue', blurb: 'Strikes first, strikes twice, is gone before the third.', skills: ['Shadowstep', 'Poison Blade', 'Smoke Bomb'] },
+    ],
+    fightKicker: 'Turn by turn',
+    fightTitle: ['You move,', 'everything moves.'],
+    fightLead: 'Every attack is a d20 plus your bonus against the enemy\'s armor. A natural 20 doubles the damage; the Rogue crits earlier and, with Assassin, triples it. Enemies notice you when you see them, archers keep their distance, rats come in packs and slimes split in two.',
+    cryptAlt: 'The warrior surrounded by skeletons, a ghoul and plague rats in the Crypt, with damage numbers and misses in the air',
+    actKicker: 'Three acts',
+    actTitle: ['Nine floors,', 'three ways to build a dungeon.'],
+    actLead: 'Every floor is generated when you reach it, checked so that every tile can be reached, and the stairs go to the farthest point. The look changes with the act, and so does the generator.',
+    abyssAlt: 'The rogue lands a 60-damage critical next to a lava pool in the Abyss',
+    acts: [
+      { t: 'The Crypt', f: 'Floors 1-3', d: 'Rooms and corridors with pillars and torches on the walls. Rats, skeletons, ghouls, cultists.' },
+      { t: 'The Fungal Caves', f: 'Floors 4-6', d: 'Grown with cellular automata: no straight walls, shallow pools, glowing mushrooms. Bats, goblin archers, spiders, slimes.' },
+      { t: 'The Abyss', f: 'Floors 7-9', d: 'Large rooms around lava pools that light up the dark. Imps, wraiths, obsidian golems.' },
+    ],
+    bossKicker: 'Bosses',
+    bossTitle: ['Three tyrants,', 'one rule: watch the floor.'],
+    bossLead: 'Every third floor the stairs stay sealed until the guardian falls. Their worst attacks are announced: the tiles glow one turn before, so a careful hero never takes them. Kill one for the first time and its relic is yours for good.',
+    bosses: [
+      { art: 'boss-bone-king', name: 'The Bone King', d: 'Raises skeletons and drives bone spikes around you. Hits harder at half health.' },
+      { art: 'boss-broodmother', name: 'The Broodmother', d: 'Calls spiderlings, pins you with webs and, at half health, rains acid.' },
+      { art: 'boss-lich', name: 'The Ashen Lich', d: 'Teleports away when you get close, throws bolts and sets three by three tiles on fire.' },
+    ],
+    bossAlt: 'The Ashen Lich appears with its name card, at the end of the Abyss',
+    fireAlt: 'Glowing tiles around the warrior: the Lich\'s hellfire lands next turn',
+    phoneKicker: 'On the phone',
+    phoneTitle: ['Tap where you want to go,', 'the hero walks there.'],
+    phoneLead: 'On a touch screen the hero finds the way and stops as soon as something shows up. Skills, potion and wait sit under your thumb, the talent tree and the bag one tap away.',
+    phoneAlt: 'Dungeon101 on a phone: the title screen, a fight in the Crypt, the Rogue\'s talent tree',
+    sanctKicker: 'Between runs',
+    sanctTitle: ['Death is permanent,', 'progress isn\'t.'],
+    sanctLead: 'Every run ends in embers: more the deeper you went and the more you killed. The Sanctuary turns them into health, damage, armor, potions, a talent point, a better torch. With the Family Vault, the best item of your last hero waits for the next one.',
+    sanctAlt: 'The Sanctuary: permanent upgrades bought with embers, two relics unlocked, the lifetime record',
+    howKicker: 'How it works',
+    howTitle: ['No engine,', 'just the browser.'],
+    howLead: 'JavaScript modules, a canvas and Web Audio, with no libraries and no build step: the repository is the game.',
+    steps: [
+      { t: 'The rules', d: 'A turn engine with no DOM: every action resolves the whole turn and returns events (attack, hit, death) that the screen plays back. The same code runs in Node, where a bot plays hundreds of runs to check the balance.' },
+      { t: 'The floors', d: 'Three generators, each checked for connectivity. Field of view by recursive shadowcasting, distance maps for the monsters and for tap-to-walk.' },
+      { t: 'The light', d: 'Floors are painted once. Every frame adds soft fog from a one-pixel-per-tile mask, flickering torchlight, colored light, particles and screen shake. Every sound is synthesized.' },
+      { t: 'The saves', d: 'Run and Sanctuary in localStorage, after every turn. With Google, Firebase keeps a copy: the one with more embers wins, relics add up. Your progress only you can read, runs can be added and never edited.' },
+    ],
+    privacyTitle: 'Privacy',
+    privacy: 'Without signing in, everything stays in your browser and the game contacts Google only to show the Hall of Fame. With Google, Firebase keeps your account ID, your progress and the runs you send. Name and email are never published.',
+    artTitle: 'The art',
+    art: 'Heroes, monsters and bosses were painted for this game with Gemini, then cut into round tokens. Floors, light and effects are drawn by code. Icons from Lucide, fonts Cinzel and Geist.',
+    coffeeTitle: ['Did "one more run"', 'turn into five?'],
+    coffeeText: 'Dungeon101 is free and stays free. If it kept you up past midnight, a coffee on Ko-fi is how the next floor gets built.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: 'Dungeon101 è un roguelite a turni che si gioca nel browser: nove piani generati a caso, tre boss, morte permanente e un santuario che tiene i progressi. Gratis, niente da installare, open source.',
+    kicker: 'Gioco nel browser · open source · gratis',
+    tagline: ['Nove piani. Tre tiranni.', 'Una torcia.'],
+    play: 'Gioca ora',
+    source: 'Codice sorgente',
+    meta: 'Computer e telefono · niente da installare · gratis, licenza MIT · italiano e inglese',
+    shotAlt: 'La maga lancia un dardo di fuoco contro un arciere goblin nelle Grotte Fungine, tra la luce della torcia, i funghi luminosi e una pozza d\'acqua',
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      'Nove piani in tre atti, la Cripta, le Grotte Fungine e l\'Abisso, generati da capo a ogni partita.',
+      'Combattimenti a turni su griglia: tiri di d20 contro l\'armatura, colpi critici, nemici élite con l\'aura viola.',
+      'Tre eroi con tre abilità ciascuno, e un albero dei talenti a tre rami per ogni eroe.',
+      'Tre boss i cui attacchi peggiori si illuminano a terra un turno prima di arrivare.',
+      'Morte permanente, poi il Santuario: le braci guadagnate morendo comprano potenziamenti permanenti, e i boss lasciano reliquie.',
+      'Si salva a ogni turno. Tastiera o touch, italiano o inglese.',
+    ],
+    doesntList: [
+      'Non chiede un account. L\'accesso con Google è facoltativo, solo per i progressi nel cloud e l\'Albo d\'onore.',
+      'Non ti traccia. Niente statistiche, niente pubblicità, nessun cookie suo.',
+      'Non pubblica nome ed email. Nell\'Albo d\'onore compare il nome che dai all\'eroe.',
+      'Non vende niente. Le braci si guadagnano morendo, l\'unica moneta che il dungeon accetta.',
+      'Non serve scaricare niente, né un motore, né un plugin. È una pagina web con un canvas.',
+      'Non è clemente. Il bot che lo collauda vince più o meno una partita su tre.',
+    ],
+    heroKicker: 'Tre eroi',
+    heroTitle: ['Scegli l\'eroe,', 'poi scegli la rissa.'],
+    heroLead: 'Ogni eroe parte con un\'abilità e impara le altre due dall\'albero dei talenti. Ogni livello vale un punto talento, e un po\' di vita.',
+    heroes: [
+      { art: 'hero-warrior', color: '#f0a03c', name: 'Guerriero', blurb: 'Armatura pesante, spada lunga e nessun piano B.', skills: ['Fendente', 'Colpo di scudo', 'Carica'] },
+      { art: 'hero-mage', color: '#5cc8ff', name: 'Maga', blurb: 'Fragile, lontana e decisamente in fiamme.', skills: ['Dardo di fuoco', 'Nova di gelo', 'Traslazione'] },
+      { art: 'hero-rogue', color: '#5ee08a', name: 'Ladro', blurb: 'Colpisce per primo, colpisce due volte, al terzo è già sparito.', skills: ['Passo d\'ombra', 'Lama avvelenata', 'Bomba fumogena'] },
+    ],
+    fightKicker: 'Un turno alla volta',
+    fightTitle: ['Ti muovi tu,', 'si muove tutto.'],
+    fightLead: 'Ogni attacco è un d20 più il tuo bonus contro l\'armatura del nemico. Il 20 naturale raddoppia i danni; il Ladro va a segno in pieno prima degli altri e, con Assassino, li triplica. I nemici si accorgono di te quando tu vedi loro, gli arcieri tengono le distanze, i ratti arrivano in branco e le melme si dividono in due.',
+    cryptAlt: 'Il guerriero circondato da scheletri, un ghoul e ratti della peste nella Cripta, con i danni e i colpi mancati a mezz\'aria',
+    actKicker: 'Tre atti',
+    actTitle: ['Nove piani,', 'tre modi di costruire un dungeon.'],
+    actLead: 'Ogni piano viene generato quando ci arrivi, controllato perché ogni casella sia raggiungibile, e le scale finiscono nel punto più lontano. Con l\'atto cambia l\'aspetto, e cambia anche il generatore.',
+    abyssAlt: 'Il ladro mette a segno un critico da 60 accanto a una pozza di lava nell\'Abisso',
+    acts: [
+      { t: 'La Cripta', f: 'Piani 1-3', d: 'Stanze e corridoi con colonne e torce alle pareti. Ratti, scheletri, ghoul, cultisti.' },
+      { t: 'Le Grotte Fungine', f: 'Piani 4-6', d: 'Cresciute con gli automi cellulari: niente muri dritti, pozze d\'acqua, funghi luminosi. Pipistrelli, arcieri goblin, ragni, melme.' },
+      { t: 'L\'Abisso', f: 'Piani 7-9', d: 'Grandi stanze intorno a pozze di lava che illuminano il buio. Diavoletti, spettri, golem d\'ossidiana.' },
+    ],
+    bossKicker: 'I boss',
+    bossTitle: ['Tre tiranni,', 'una regola: guarda per terra.'],
+    bossLead: 'Ogni tre piani le scale restano sigillate finché il guardiano non cade. Gli attacchi peggiori si annunciano: le caselle si illuminano un turno prima, così un eroe attento non li prende mai. Uccidine uno per la prima volta e la sua reliquia è tua per sempre.',
+    bosses: [
+      { art: 'boss-bone-king', name: 'Il Re d\'Ossa', d: 'Rialza gli scheletri e ti pianta spuntoni d\'osso intorno. A metà vita picchia più forte.' },
+      { art: 'boss-broodmother', name: 'La Madre della Covata', d: 'Chiama i ragnetti, ti inchioda con la ragnatela e, a metà vita, fa piovere acido.' },
+      { art: 'boss-lich', name: 'Il Lich di Cenere', d: 'Si teletrasporta via quando ti avvicini, lancia dardi e incendia caselle tre per tre.' },
+    ],
+    bossAlt: 'Il Lich di Cenere si presenta con il suo nome, in fondo all\'Abisso',
+    fireAlt: 'Caselle illuminate intorno al guerriero: il fuoco infernale del Lich arriva al turno dopo',
+    phoneKicker: 'Sul telefono',
+    phoneTitle: ['Tocca dove vuoi andare,', 'l\'eroe ci va.'],
+    phoneLead: 'Sul touch l\'eroe trova la strada da solo e si ferma appena spunta qualcosa. Abilità, pozione e attesa stanno sotto il pollice, l\'albero dei talenti e lo zaino a un tocco.',
+    phoneAlt: 'Dungeon101 sul telefono: la schermata iniziale, un combattimento nella Cripta, l\'albero dei talenti del Ladro',
+    sanctKicker: 'Tra una partita e l\'altra',
+    sanctTitle: ['La morte è per sempre,', 'i progressi pure.'],
+    sanctLead: 'Ogni partita finisce in braci: tante più quanto sei sceso in fondo e quanti ne hai fatti fuori. Il Santuario le trasforma in vita, danni, armatura, pozioni, un punto talento, una torcia migliore. Con la Cripta di famiglia, l\'oggetto migliore dell\'ultimo eroe aspetta il prossimo.',
+    sanctAlt: 'Il Santuario: potenziamenti permanenti comprati con le braci, due reliquie sbloccate, i record di tutte le partite',
+    howKicker: 'Come funziona',
+    howTitle: ['Nessun motore,', 'solo il browser.'],
+    howLead: 'Moduli JavaScript, un canvas e Web Audio, senza librerie e senza build: la repository è il gioco.',
+    steps: [
+      { t: 'Le regole', d: 'Un motore a turni senza DOM: ogni azione risolve tutto il turno e restituisce eventi (attacco, colpo, morte) che lo schermo poi mette in scena. Lo stesso codice gira in Node, dove un bot gioca centinaia di partite per controllare il bilanciamento.' },
+      { t: 'I piani', d: 'Tre generatori, ognuno controllato perché sia tutto raggiungibile. Campo visivo con shadowcasting ricorsivo, mappe delle distanze per i mostri e per il tocca-e-cammina.' },
+      { t: 'La luce', d: 'Il piano si dipinge una volta. Ogni fotogramma aggiunge la nebbia morbida da una maschera di un pixel per casella, la torcia che tremola, luci colorate, particelle e scossoni. Ogni suono è sintetizzato.' },
+      { t: 'I salvataggi', d: 'Partita e Santuario in localStorage, a ogni turno. Con Google, Firebase ne tiene una copia: vince quella con più braci, le reliquie si sommano. I tuoi progressi li leggi solo tu, le partite si aggiungono e non si modificano.' },
+    ],
+    privacyTitle: 'Privacy',
+    privacy: 'Senza accesso tutto resta nel tuo browser e il gioco contatta Google solo per mostrare l\'Albo d\'onore. Con Google, Firebase conserva l\'ID dell\'account, i progressi e le partite che mandi. Nome ed email non vengono mai pubblicati.',
+    artTitle: 'La grafica',
+    art: 'Eroi, mostri e boss sono stati dipinti apposta con Gemini, poi ritagliati in segnalini tondi. Piani, luci ed effetti li disegna il codice. Icone di Lucide, font Cinzel e Geist.',
+    coffeeTitle: ['"Un\'ultima partita"', 'è diventata cinque?'],
+    coffeeText: 'Dungeon101 è gratis e resta gratis. Se ti ha tenuto sveglio oltre mezzanotte, un caffè su Ko-fi è il modo in cui si scava il prossimo piano.',
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const stepIcons = [Dices, Route, Flame, Cloud];
+const frame = 'w-full rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+---
+<Layout lang={lang} title="Dungeon101" description={c.description} path="/apps/dungeon101/" image="/og-dungeon101.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#991b1b]/30 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Dungeon101<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={GAME} target="_blank" rel="noopener" class="btn btn-primary"><Swords />{c.play}<ArrowUpRight /></a>
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4 invert" />{c.source}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#991b1b] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/dungeon101.svg" alt="Dungeon101 icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE GAME -->
+  <section class="wrap pb-12">
+    <img src={img('caves')} alt={c.shotAlt} width="1600" height="1000" class={`reveal ${frame}`} />
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- HEROES -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.heroKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.heroTitle[0]} <span class="serif grad">{c.heroTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.heroLead}</p>
+    <div class="mt-14 grid gap-4 md:grid-cols-3">
+      {c.heroes.map((h, i) => (
+        <div class="spot reveal flex flex-col items-center p-8 text-center" style={`--d:${i * 90}ms`}>
+          <img src={token(h.art)} alt="" width="160" height="160" loading="lazy" class="size-36 rounded-full" style={`box-shadow: 0 0 0 3px ${h.color}, 0 20px 50px -10px ${h.color}88`} />
+          <h3 class="mt-6 text-2xl font-semibold tracking-tight" style={`color:${h.color}`}>{h.name}</h3>
+          <p class="mt-2 text-muted">{h.blurb}</p>
+          <div class="mt-5 flex flex-wrap justify-center gap-2">{h.skills.map((s) => <span class="chip">{s}</span>)}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- TURN BY TURN -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <p class="kicker reveal">{c.fightKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.fightTitle[0]} <span class="serif grad">{c.fightTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.fightLead}</p>
+      </div>
+      <img src={img('crypt')} alt={c.cryptAlt} width="1600" height="1000" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+  </section>
+
+  <!-- THREE ACTS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.actKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.actTitle[0]} <span class="serif grad">{c.actTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.actLead}</p>
+    <img src={img('abyss')} alt={c.abyssAlt} width="1600" height="1000" loading="lazy" class={`reveal mt-14 ${frame}`} />
+    <ol class="mt-4 grid gap-4 md:grid-cols-3">
+      {c.acts.map((a, i) => (
+        <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+          <span class="kicker text-faint">{a.f}</span>
+          <h3 class="mt-3 text-xl font-semibold tracking-tight">{a.t}</h3>
+          <p class="mt-3 leading-relaxed text-muted">{a.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- BOSSES -->
+  <section class="wrap py-12">
+    <p class="kicker reveal">{c.bossKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.bossTitle[0]} <span class="serif grad">{c.bossTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.bossLead}</p>
+    <div class="mt-14 grid gap-4 md:grid-cols-3">
+      {c.bosses.map((b, i) => (
+        <div class="spot reveal flex items-center gap-5 p-6" style={`--d:${i * 90}ms`}>
+          <img src={token(b.art)} alt="" width="96" height="96" loading="lazy" class="size-20 shrink-0 rounded-full shadow-[0_0_0_3px_#ff5a3c,0_14px_40px_-8px_rgb(255_90_60/0.6)]" />
+          <div><h3 class="text-lg font-semibold tracking-tight">{b.name}</h3><p class="mt-1 text-sm leading-relaxed text-muted">{b.d}</p></div>
+        </div>
+      ))}
+    </div>
+    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+      <img src={img('boss')} alt={c.bossAlt} width="1600" height="1000" loading="lazy" class={`reveal ${frame}`} />
+      <img src={img('hellfire')} alt={c.fireAlt} width="1600" height="1000" loading="lazy" class={`reveal ${frame}`} style="--d:90ms" />
+    </div>
+  </section>
+
+  <!-- PHONE -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.phoneKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.phoneTitle[0]} <span class="serif grad">{c.phoneTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.phoneLead}</p>
+    <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><Smartphone class="size-3.5 text-accent" />touch</span><span class="chip"><Keyboard class="size-3.5 text-accent" />WASD · 1 2 3</span></div>
+    <img src={img('phones')} alt={c.phoneAlt} width="1600" height="1098" loading="lazy" class={`reveal mt-14 ${frame}`} />
+  </section>
+
+  <!-- SANCTUARY -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <p class="kicker reveal">{c.sanctKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.sanctTitle[0]} <span class="serif grad">{c.sanctTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.sanctLead}</p>
+      </div>
+      <img src={img('sanctuary')} alt={c.sanctAlt} width="1600" height="1000" loading="lazy" class={`reveal ${frame}`} />
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.howKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.howLead}</p>
+    <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><Layers class="size-3.5 text-accent" />Canvas 2D</span><span class="chip"><AudioLines class="size-3.5 text-accent" />Web Audio</span><span class="chip"><Cloud class="size-3.5 text-accent" />Firebase</span><span class="chip"><Bot class="size-3.5 text-accent" />Node self-test</span></div>
+    <ol class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- PRIVACY + ART -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><Lock /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.privacyTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.privacy}</p></div>
+    </div>
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start" style="--d:90ms">
+      <div class="icon-tile shrink-0"><Wand /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.artTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.art}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

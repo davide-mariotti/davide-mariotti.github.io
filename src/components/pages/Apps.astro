@@ -8,9 +8,11 @@ const { lang } = Astro.props;
 const c = {
   en: {
     title: 'Apps',
-    description: 'Apps by Davide Mariotti: Vigil, Hoard, Hush, Sentinel and Money for Windows, Drafta for the fantasy football draft, and AscendKeep, an Android game in development.',
+    description: 'Apps by Davide Mariotti: Vigil, Hoard, Hush, Sentinel and Money for Windows, Drafta for the fantasy football draft, Dungeon101, a roguelite in the browser, and AscendKeep, an Android game in development.',
     h: ['Apps I made', 'because I needed them, or wanted to play them.'],
-    lead: 'Vigil, Hoard, Hush and Sentinel run on Windows and ask for nothing. Drafta runs in the browser, on draft night. Money and AscendKeep are still in the oven.',
+    lead: 'Vigil, Hoard, Hush and Sentinel run on Windows and ask for nothing. Drafta and Dungeon101 run in the browser, one on draft night, the other well past midnight. Money and AscendKeep are still in the oven.',
+    dungeon101: 'A turn-based roguelite in the browser: nine floors, three bosses, three heroes, permadeath and a sanctuary that keeps your progress.',
+    game: 'Browser game',
     money: 'Reads your bank statements, bills and payslips on your own PC, sorts every expense and shows where the money goes.',
     hush: 'One key switches your microphone off in every app, and Hush tells you who is listening and who is watching.',
     hoard: 'What fills your disks, on a map coloured by kind of file. It points at what can go, deletes nothing, and warns you from the tray when a drive runs low.',
@@ -24,9 +26,11 @@ const c = {
   },
   it: {
     title: 'App',
-    description: "Le app di Davide Mariotti: Vigil, Hoard, Hush, Sentinel e Money per Windows, Drafta per l'asta del fantacalcio, e AscendKeep, un gioco Android in sviluppo.",
+    description: "Le app di Davide Mariotti: Vigil, Hoard, Hush, Sentinel e Money per Windows, Drafta per l'asta del fantacalcio, Dungeon101, un roguelite nel browser, e AscendKeep, un gioco Android in sviluppo.",
     h: ['App che ho fatto', 'perché mi servivano, o perché volevo giocarci.'],
-    lead: "Vigil, Hoard, Hush e Sentinel girano su Windows e non chiedono niente. Drafta gira nel browser, la sera dell'asta. Money e AscendKeep sono ancora in forno.",
+    lead: "Vigil, Hoard, Hush e Sentinel girano su Windows e non chiedono niente. Drafta e Dungeon101 girano nel browser, uno la sera dell'asta, l'altro ben oltre mezzanotte. Money e AscendKeep sono ancora in forno.",
+    dungeon101: 'Un roguelite a turni nel browser: nove piani, tre boss, tre eroi, morte permanente e un santuario che tiene i progressi.',
+    game: 'Gioco nel browser',
     money: 'Legge estratti conto, bollette e buste paga sul tuo PC, smista ogni spesa e ti fa vedere dove vanno i soldi.',
     hush: 'Un tasto spegne il microfono in tutte le app, e Hush ti dice chi ti sta ascoltando e chi ti sta guardando.',
     hoard: 'Cosa riempie i tuoi dischi, su una mappa colorata per tipo di file. Ti indica cosa si può togliere, non cancella niente, e dalla tray ti avvisa quando un disco si riempie.',
@@ -110,6 +114,16 @@ const c = {
         <p class="mt-2 text-muted">{c.ascendkeep}</p>
         <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
       </div>
+    </a>
+    <a href={localize(lang, '/apps/dungeon101/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center md:col-span-2">
+      <img src="/assets/icons/apps/dungeon101.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(153_27_27/0.55)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap gap-2"><span class="chip">{c.game}</span><span class="chip">Canvas</span><span class="chip">Firebase</span></div>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight">Dungeon101</h2>
+        <p class="mt-2 max-w-2xl text-muted">{c.dungeon101}</p>
+        <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+      <img src={`/assets/img/dungeon101/caves-${lang}.webp`} alt="" width="1600" height="1000" loading="lazy" class="hidden w-72 shrink-0 rounded-2xl border border-line lg:block" />
     </a>
   </section>
 </Layout>

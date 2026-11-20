@@ -27,6 +27,7 @@ const c = {
     sentinel: { title: 'Sentinel', text: 'Keeps your Windows PC awake. Lunch break, battery alerts, zero internet.', cta: 'Discover Sentinel' },
     money: { title: 'Money', text: 'Bank statements, bills and payslips read on your own PC: every expense sorted, and charts that show where the money goes.', cta: 'Discover Money', dev: 'in development' },
     drafta: { title: 'Drafta', text: 'Your fantasy football draft, live and in turns, from everyone\'s phone. A notification when it\'s your pick.', cta: 'Discover Drafta' },
+    dungeon101: { title: 'Dungeon101', text: 'A turn-based roguelite in the browser. Nine floors, three bosses, permadeath, and a torch that never feels big enough.', cta: 'Discover Dungeon101', chip: 'Browser game' },
     hush: { title: 'Hush', text: 'One key switches your microphone off in every app, and it tells you who is listening and who is watching.', cta: 'Discover Hush' },
     hoard: { title: 'Hoard', text: 'What fills your disk, on a map: every folder a tile as big as the space it takes, coloured by kind of file. And a tray icon that speaks up when a drive runs low.', cta: 'Discover Hoard' },
     tools: { title: `${TOOLS.length} browser tools`, text: 'Passwords, colours, contrast, images, SEO, JSON, regex, weather. Small things that save five minutes a day.', cta: 'Open the toolbox' },
@@ -63,6 +64,7 @@ const c = {
     sentinel: { title: 'Sentinel', text: 'Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, zero internet.', cta: 'Scopri Sentinel' },
     money: { title: 'Money', text: 'Estratti conto, bollette e buste paga letti sul tuo PC: ogni spesa al suo posto, e grafici che ti fanno vedere dove vanno i soldi.', cta: 'Scopri Money', dev: 'in sviluppo' },
     drafta: { title: 'Drafta', text: "L'asta del fantacalcio a turni e in diretta, dal telefono di tutti. Una notifica quando tocca a te.", cta: 'Scopri Drafta' },
+    dungeon101: { title: 'Dungeon101', text: 'Un roguelite a turni nel browser. Nove piani, tre boss, morte permanente, e una torcia che non sembra mai abbastanza grande.', cta: 'Scopri Dungeon101', chip: 'Gioco nel browser' },
     hush: { title: 'Hush', text: 'Un tasto spegne il microfono in tutte le app, e ti dice chi ti sta ascoltando e chi ti sta guardando.', cta: 'Scopri Hush' },
     hoard: { title: 'Hoard', text: 'Cosa riempie il disco, su una mappa: ogni cartella un riquadro grande quanto lo spazio che occupa, colorato per tipo di file. E un\'icona nella tray che ti avvisa quando un disco si riempie.', cta: 'Scopri Hoard' },
     tools: { title: `${TOOLS.length} strumenti nel browser`, text: 'Password, colori, contrasti, immagini, SEO, JSON, regex, meteo. Piccole cose che fanno risparmiare cinque minuti al giorno.', cta: 'Apri la cassetta' },
@@ -211,6 +213,17 @@ const name = ['Davide', 'Mariotti'];
         <h3 class="mt-6 text-2xl font-semibold tracking-tight">{c.drafta.title}</h3>
         <p class="mt-2 text-muted">{c.drafta.text}</p>
         <p class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm text-accent">{c.drafta.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </a>
+
+      <a href={L('/apps/dungeon101/')} class="spot reveal group flex flex-col p-8 md:col-span-3 md:flex-row md:items-center md:gap-10">
+        <img src="/assets/icons/apps/dungeon101.svg" alt="" width="132" height="132" class="size-24 shrink-0 drop-shadow-[0_20px_40px_rgb(153_27_27/0.55)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:size-32" />
+        <div class="mt-6 md:mt-0">
+          <div class="flex flex-wrap gap-2"><span class="chip">JavaScript</span><span class="chip">Canvas</span><span class="chip">{c.dungeon101.chip}</span></div>
+          <h3 class="mt-4 text-3xl font-semibold tracking-tight">{c.dungeon101.title}</h3>
+          <p class="mt-2 max-w-md text-muted">{c.dungeon101.text}</p>
+          <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.dungeon101.cta}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+        </div>
+        <img src={`/assets/img/dungeon101/caves-${lang}.webp`} alt="" width="1600" height="1000" loading="lazy" class="mt-8 w-full rounded-2xl border border-line md:ml-auto md:mt-0 md:w-[44%]" />
       </a>
 
       <a href="#top" class="spot reveal group flex flex-col p-8 md:col-span-3 md:flex-row md:items-center md:gap-8">
