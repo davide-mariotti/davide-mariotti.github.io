@@ -1,0 +1,235 @@
+---
+import { Check, X, Users, Camera, ThumbsUp, Trophy, Lock, Smartphone, Coffee, ArrowUpRight, IdCardLanyard, ScanFace } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { SOCIAL, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const APP = 'https://davide-mariotti.github.io/fantaufficio/';
+const REPO = 'https://github.com/davide-mariotti/fantaufficio';
+const img = (name: string) => `/assets/img/fantaufficio/${name}.webp`;
+
+const c = {
+  en: {
+    description: 'Fanta Ufficio is a photo card game for the office: 47 office creatures to capture with a photo, the group votes, scores add up by themselves. Faces are covered on the phone before sending. Free, open source, in the browser.',
+    kicker: 'Web app · open source · free',
+    tagline: ['Photograph the legends of your office.', 'The group votes.'],
+    open: 'Open Fanta Ufficio',
+    source: 'Source code',
+    meta: 'Phone and browser · Google sign-in · free, MIT license · interface in Italian',
+    shotAlt: 'Fanta Ufficio on four phones: the album of cards, a capture waiting for votes in the chat, a photo with faces covered, the standings',
+    does: 'What it does', doesnt: "What it doesn't",
+    doesList: [
+      '47 office creatures to collect, from the Developer in Crisis to the Supreme Boss. Each has a challenge: the photo you bring as proof.',
+      'Faces are found and covered on your phone before the photo leaves it. A tap covers whatever the detector missed.',
+      'The photo goes to the group chat and the others vote: enough yes and the card is yours, as many no and it goes back to the deck.',
+      'Groups with a code or a link. Each one has its chat, its votes and its standings; the creator picks the quorum and moderates.',
+      'Standings, everyone\'s album with the date of each capture, a badge on the chat when a photo waits for your vote.',
+      'Runs in the browser and installs on the Home screen.',
+    ],
+    doesntList: [
+      'Speak English: cards and app are in Italian.',
+      'Notify you with the app closed. That takes a server, and this game doesn\'t have one.',
+      'Promise to find every face. The detector is good, not perfect: look before you send.',
+      'Let anyone vote on their own photo, vote twice, or hand themselves points. Firebase checks, not the page.',
+      'Show ads or count you. Names, photos and messages are readable only by your group.',
+      'Work without a Google account.',
+    ],
+    photoKicker: 'The photo',
+    photoTitle: ['Faces covered', 'before anything leaves the phone.'],
+    photoLead: 'Pick a card, read the challenge, take the photo or pick a screenshot. A face detector runs in the browser and turns every face into a mosaic; you tap the photo to cover badges, names on screens, the colleague it missed. Only then is the photo sent, shrunk and covered.',
+    photoAlt: 'The capture screen: the challenge, a photo of the coffee queue with nine faces covered, the button to send it to the chat',
+    albumAlt: 'The album: cards you own in colour, the ones still to capture in grey, filters by rarity',
+    voteKicker: 'The vote',
+    voteTitle: ['Nobody votes for themselves,', 'nobody votes twice.'],
+    voteLead: 'The photo lands in the chat with the card and its challenge, and the others decide if it\'s worth it. The quorum is set by the group: in a small office two yes may be enough. Scores aren\'t stored anywhere: the app adds up the approved captures, so there\'s nothing to tamper with.',
+    chatAlt: 'The chat: a capture waiting for votes, with the photo, the challenge and the yes and no buttons',
+    standingsAlt: 'The standings: six colleagues ranked by points, with the number of cards each',
+    howKicker: 'How it works',
+    howTitle: ['One group per office,', 'four rules.'],
+    howLead: 'Each group lives in Firestore and is readable only by its members. The rules that decide what a vote may write are checked by Firebase, not by the page.',
+    steps: [
+      { t: 'The group', d: 'One person creates it and shares the code or the link. Groups can\'t be listed: without the code you don\'t even see the name.' },
+      { t: 'The photo', d: 'Shrunk to 960 px, faces covered in the browser, saved apart from the capture so scores never download images.' },
+      { t: 'The vote', d: 'One vote each, never on your own photo, never changed. When the yes or the no reach the quorum, the capture closes.' },
+      { t: 'The score', d: 'Each card counts once, rarer cards are worth more. Whoever has the most wins. The prize is glory, which costs little and doesn\'t expire.' },
+    ],
+    privacyTitle: 'What it stores',
+    privacy: 'Your Google name and photo, the groups you\'re in, the chat, and the photos of the captures with faces already covered. All in Firebase, readable only by your group. Leave a group and your photos and messages go with you; delete it and everything is gone. No ads, no analytics, nothing sold.',
+    firstTitle: 'First morning',
+    first: 'Someone creates the group and posts the link in the office chat. Everyone opens it on the phone, adds it to the Home screen and signs in with Google. Then the coffee queue is never the same.',
+    coffeeTitle: ['Did it make the coffee queue', 'more interesting?'],
+    coffeeText: 'Fanta Ufficio is free and stays free. If your office plays it, a coffee on Ko-fi is how the next app gets written. I\'ll drink it in the queue.',
+    coffeeBtn: 'Buy me a coffee',
+  },
+  it: {
+    description: "Fanta Ufficio è un gioco di carte fotografiche per l'ufficio: 47 creature da catturare con una foto, il gruppo vota, i punti si contano da soli. I volti si coprono sul telefono prima dell'invio. Gratis, open source, nel browser.",
+    kicker: 'Web app · open source · gratis',
+    tagline: ["Fotografa le leggende dell'ufficio.", 'Il gruppo vota.'],
+    open: 'Apri Fanta Ufficio',
+    source: 'Codice sorgente',
+    meta: 'Telefono e browser · accesso con Google · gratis, licenza MIT',
+    shotAlt: "Fanta Ufficio su quattro telefoni: l'album delle carte, una cattura da votare in chat, una foto coi volti coperti, la classifica",
+    does: 'Cosa fa', doesnt: 'Cosa non fa',
+    doesList: [
+      "47 creature d'ufficio da collezionare, dal Dev in Crisi al Boss Supremo. Ognuna ha una sfida: la foto da portare come prova.",
+      'I volti vengono trovati e coperti sul telefono prima che la foto parta. Quello che sfugge lo copri tu con un tocco.',
+      'La foto va nella chat del gruppo e gli altri votano: con abbastanza sì la carta è tua, con altrettanti no torna nel mazzo.',
+      'Gruppi con un codice o un link. Ognuno ha la sua chat, i suoi voti e la sua classifica; chi lo crea sceglie il quorum e modera.',
+      "Classifica, l'album di ciascuno con la data di ogni cattura, un contatore sulla chat quando una foto aspetta il tuo voto.",
+      'Gira nel browser e si installa sulla schermata Home.',
+    ],
+    doesntList: [
+      'Notifiche ad app chiusa. Servirebbe un server, e questo gioco non ce l\'ha.',
+      'Garantire di trovare tutti i volti. Il riconoscimento è bravo, non infallibile: guarda prima di mandare.',
+      'Votarsi da soli, votare due volte o regalarsi punti. Controlla Firebase, non la pagina.',
+      'Pubblicità o statistiche. Nomi, foto e messaggi li legge solo il tuo gruppo.',
+      'Funzionare senza un account Google.',
+      'Tradurre le carte: sono in italiano, come il nome.',
+    ],
+    photoKicker: 'La foto',
+    photoTitle: ['Volti coperti', 'prima che la foto lasci il telefono.'],
+    photoLead: "Scegli una carta, leggi la sfida, scatta o scegli uno screenshot. Un riconoscimento dei volti gira nel browser e li trasforma in un mosaico; tu tocchi la foto per coprire badge, nomi sugli schermi, il collega che gli è sfuggito. Solo allora la foto parte, ridotta e coperta.",
+    photoAlt: 'La schermata di cattura: la sfida, una foto della coda al caffè con nove volti coperti, il pulsante per mandarla in chat',
+    albumAlt: "L'album: le carte tue a colori, quelle da catturare in grigio, i filtri per rarità",
+    voteKicker: 'Il voto',
+    voteTitle: ['Nessuno si vota da solo,', 'nessuno vota due volte.'],
+    voteLead: "La foto arriva in chat con la carta e la sua sfida, e gli altri decidono se vale. Il quorum lo sceglie il gruppo: in un ufficio piccolo possono bastare due sì. I punteggi non sono salvati da nessuna parte: l'app somma le catture approvate, quindi non c'è niente da ritoccare.",
+    chatAlt: 'La chat: una cattura da votare, con la foto, la sfida e i pulsanti per il sì e il no',
+    standingsAlt: 'La classifica: sei colleghi in ordine di punti, con il numero di carte di ciascuno',
+    howKicker: 'Come funziona',
+    howTitle: ['Un gruppo per ufficio,', 'quattro regole.'],
+    howLead: 'Ogni gruppo sta su Firestore e lo leggono solo i suoi membri. Le regole che decidono cosa può scrivere un voto le controlla Firebase, non la pagina.',
+    steps: [
+      { t: 'Il gruppo', d: 'Uno lo crea e gira il codice o il link. I gruppi non si possono elencare: senza codice non vedi nemmeno il nome.' },
+      { t: 'La foto', d: 'Ridotta a 960 px, volti coperti nel browser, salvata a parte rispetto alla cattura, così i punteggi non scaricano mai immagini.' },
+      { t: 'Il voto', d: 'Un voto a testa, mai sulla propria foto, mai cambiato. Quando i sì o i no arrivano al quorum, la cattura si chiude.' },
+      { t: 'Il punteggio', d: 'Ogni carta conta una volta, le più rare valgono di più. Vince chi ne ha di più. Il premio è la gloria, che costa poco e non scade.' },
+    ],
+    privacyTitle: 'Cosa salva',
+    privacy: "Il tuo nome e la foto di Google, i gruppi in cui sei, la chat, e le foto delle catture con i volti già coperti. Tutto su Firebase, leggibile solo dal tuo gruppo. Se esci da un gruppo le tue foto e i tuoi messaggi escono con te; se lo elimini sparisce tutto. Niente pubblicità, niente statistiche, niente venduto.",
+    firstTitle: 'La prima mattina',
+    first: "Uno crea il gruppo e mette il link nella chat dell'ufficio. Ognuno lo apre sul telefono, lo aggiunge alla Home e accede con Google. Da lì la coda al caffè non è più la stessa.",
+    coffeeTitle: ['Ti ha reso più interessante', 'la coda al caffè?'],
+    coffeeText: "Fanta Ufficio è gratis e resta gratis. Se il tuo ufficio ci gioca, un caffè su Ko-fi è il modo in cui nasce la prossima app. Lo bevo in coda.",
+    coffeeBtn: 'Offrimi un caffè',
+  },
+}[lang];
+const stepIcons = [Users, Camera, ThumbsUp, Trophy];
+const frame = 'w-full rounded-3xl border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+const phone = 'w-full rounded-[2rem] border border-line shadow-[0_40px_90px_-30px_rgb(0_0_0/0.9)]';
+---
+<Layout lang={lang} title="Fanta Ufficio" description={c.description} path="/apps/fantaufficio/" image="/og-fantaufficio.png">
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[40rem] w-[40rem] rounded-full bg-[#a21caf]/25 blur-[150px]"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-40 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <p class="kicker blur-word">{c.kicker}</p>
+        <h1 class="h-display mt-6"><span class="blur-word" style="--i:1">Fanta</span> <span class="blur-word" style="--i:2">Ufficio<span class="text-accent">.</span></span></h1>
+        <p class="mt-6 max-w-xl text-[clamp(1.25rem,2.4vw,1.9rem)] leading-snug tracking-tight text-muted">
+          <span class="blur-word" style="--i:3">{c.tagline[0]}</span> <span class="blur-word serif text-ink" style="--i:4">{c.tagline[1]}</span>
+        </p>
+        <div class="blur-word mt-10 flex flex-wrap gap-3" style="--i:5">
+          <a href={APP} target="_blank" rel="noopener" class="btn btn-primary"><IdCardLanyard />{c.open}<ArrowUpRight /></a>
+          <a href={REPO} target="_blank" rel="noopener" class="btn btn-ghost"><img src="/logos/github.svg" alt="" width="16" height="16" class="size-4" />{c.source}</a>
+        </div>
+        <p class="blur-word mt-5 text-sm text-faint" style="--i:6">{c.meta}</p>
+      </div>
+      <div class="blur-word relative mx-auto" style="--i:3">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[30%] bg-[#a21caf] opacity-60 blur-3xl"></div>
+        <img src="/assets/icons/apps/fantaufficio.svg" alt="Fanta Ufficio icon" width="320" height="320" class="relative w-[min(320px,70vw)] drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE APP -->
+  <section class="wrap pb-12">
+    <img src={img('phones')} alt={c.shotAlt} width="1560" height="844" class={`reveal ${frame}`} />
+  </section>
+
+  <!-- DOES / DOESN'T -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal p-8">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.does}</h2>
+      <ul class="mt-6 space-y-4">{c.doesList.map((t) => <li class="flex gap-3 text-muted"><Check class="mt-0.5 size-5 shrink-0 text-accent" />{t}</li>)}</ul>
+    </div>
+    <div class="spot reveal p-8" style="--d:90ms">
+      <h2 class="text-2xl font-semibold tracking-tight">{c.doesnt}</h2>
+      <ul class="mt-6 space-y-4">{c.doesntList.map((t) => <li class="flex gap-3 text-muted"><X class="mt-0.5 size-5 shrink-0 text-faint" />{t}</li>)}</ul>
+    </div>
+  </section>
+
+  <!-- THE PHOTO -->
+  <section class="wrap py-24">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <p class="kicker reveal">{c.photoKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.photoTitle[0]} <span class="serif grad">{c.photoTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.photoLead}</p>
+        <div class="reveal mt-8 flex flex-wrap gap-2" style="--d:160ms"><span class="chip"><ScanFace class="size-3.5 text-accent" />face-api</span><span class="chip"><Lock class="size-3.5 text-accent" />{lang === 'it' ? 'nel browser' : 'in the browser'}</span></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <img src={img('capture')} alt={c.photoAlt} width="390" height="844" loading="lazy" class={`reveal ${phone}`} />
+        <img src={img('album')} alt={c.albumAlt} width="390" height="844" loading="lazy" class={`reveal mt-12 ${phone}`} style="--d:90ms" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE VOTE -->
+  <section class="wrap py-12">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+      <div class="order-2 grid grid-cols-2 gap-4 lg:order-1">
+        <img src={img('chat')} alt={c.chatAlt} width="390" height="844" loading="lazy" class={`reveal ${phone}`} />
+        <img src={img('standings')} alt={c.standingsAlt} width="390" height="844" loading="lazy" class={`reveal mt-12 ${phone}`} style="--d:90ms" />
+      </div>
+      <div class="order-1 lg:order-2">
+        <p class="kicker reveal">{c.voteKicker}</p>
+        <h2 class="h-section reveal mt-4" style="--d:80ms">{c.voteTitle[0]} <span class="serif grad">{c.voteTitle[1]}</span></h2>
+        <p class="lead reveal mt-6" style="--d:120ms">{c.voteLead}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap py-24">
+    <p class="kicker reveal">{c.howKicker}</p>
+    <h2 class="h-section reveal mt-4" style="--d:80ms">{c.howTitle[0]} <span class="serif grad">{c.howTitle[1]}</span></h2>
+    <p class="lead reveal mt-6 max-w-2xl" style="--d:120ms">{c.howLead}</p>
+    <ol class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {c.steps.map((s, i) => {
+        const Icon = stepIcons[i];
+        return (
+          <li class="spot reveal p-8" style={`--d:${i * 90}ms`}>
+            <div class="flex items-center justify-between"><div class="icon-tile"><Icon /></div><span class="kicker text-faint">0{i + 1}</span></div>
+            <h3 class="mt-6 text-xl font-semibold tracking-tight">{s.t}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{s.d}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- PRIVACY + FIRST MORNING -->
+  <section class="wrap grid gap-4 py-12 lg:grid-cols-2">
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start">
+      <div class="icon-tile shrink-0"><Lock /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.privacyTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.privacy}</p></div>
+    </div>
+    <div class="spot reveal flex flex-col gap-5 p-8 md:flex-row md:items-start" style="--d:90ms">
+      <div class="icon-tile shrink-0"><Smartphone /></div>
+      <div><h2 class="text-2xl font-semibold tracking-tight">{c.firstTitle}</h2><p class="mt-3 leading-relaxed text-muted">{c.first}</p></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="wrap py-24">
+    <div class="spot reveal relative overflow-hidden px-6 py-20 text-center md:px-16">
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"></div>
+      <div class="icon-tile mx-auto"><Coffee /></div>
+      <h2 class="h-section mx-auto mt-6 max-w-2xl">{c.coffeeTitle[0]} <span class="serif grad">{c.coffeeTitle[1]}</span></h2>
+      <p class="lead mx-auto mt-6 max-w-xl">{c.coffeeText}</p>
+      <a href={SOCIAL.kofi} target="_blank" rel="noopener" class="btn btn-primary mt-8"><Coffee />{c.coffeeBtn}<ArrowUpRight /></a>
+    </div>
+  </section>
+</Layout>

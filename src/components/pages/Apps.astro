@@ -8,9 +8,9 @@ const { lang } = Astro.props;
 const c = {
   en: {
     title: 'Apps',
-    description: 'Apps by Davide Mariotti: Vigil, Hoard, Hush, Sentinel and Money for Windows, Drafta for the fantasy football draft, Dungeon101, a roguelite in the browser, and AscendKeep, an Android game in development.',
+    description: 'Apps by Davide Mariotti: Vigil, Hoard, Hush, Sentinel and Money for Windows, Drafta for the fantasy football draft, Fanta Ufficio, a photo card game for the office, Dungeon101, a roguelite in the browser, and AscendKeep, an Android game in development.',
     h: ['Apps I made', 'because I needed them, or wanted to play them.'],
-    lead: 'Vigil, Hoard, Hush and Sentinel run on Windows and ask for nothing. Drafta and Dungeon101 run in the browser, one on draft night, the other well past midnight. Money and AscendKeep are still in the oven.',
+    lead: 'Vigil, Hoard, Hush and Sentinel run on Windows and ask for nothing. Drafta, Fanta Ufficio and Dungeon101 run in the browser: on draft night, at the coffee machine, well past midnight. Money and AscendKeep are still in the oven.',
     dungeon101: 'A turn-based roguelite in the browser: nine floors, three bosses, three heroes, permadeath and a sanctuary that keeps your progress.',
     game: 'Browser game',
     money: 'Reads your bank statements, bills and payslips on your own PC, sorts every expense and shows where the money goes.',
@@ -19,6 +19,7 @@ const c = {
     vigil: 'Temperatures, fans and power draw of your PC, and the fans do what you say: Auto, Fixed, or a curve you drag. It works out what\'s inside on its own.',
     sentinel: 'Keeps your Windows PC awake. Lunch break, battery alerts, an eye in the tray that tells you what it\'s doing.',
     drafta: "Your fantasy football draft, live and in turns: a room, a link for the group chat, a notification when it's your pick.",
+    fantaufficio: 'A photo card game for the office: 47 creatures to capture, the group votes on every photo, faces are covered before it leaves the phone.',
     web: 'Web app',
     discover: 'Discover',
     ascendkeep: 'A tower defense where losing is part of the plan: waves of Voidborn, 100 tiers, bosses, a skill tree.',
@@ -26,9 +27,9 @@ const c = {
   },
   it: {
     title: 'App',
-    description: "Le app di Davide Mariotti: Vigil, Hoard, Hush, Sentinel e Money per Windows, Drafta per l'asta del fantacalcio, Dungeon101, un roguelite nel browser, e AscendKeep, un gioco Android in sviluppo.",
+    description: "Le app di Davide Mariotti: Vigil, Hoard, Hush, Sentinel e Money per Windows, Drafta per l'asta del fantacalcio, Fanta Ufficio, un gioco di carte fotografiche per l'ufficio, Dungeon101, un roguelite nel browser, e AscendKeep, un gioco Android in sviluppo.",
     h: ['App che ho fatto', 'perché mi servivano, o perché volevo giocarci.'],
-    lead: "Vigil, Hoard, Hush e Sentinel girano su Windows e non chiedono niente. Drafta e Dungeon101 girano nel browser, uno la sera dell'asta, l'altro ben oltre mezzanotte. Money e AscendKeep sono ancora in forno.",
+    lead: "Vigil, Hoard, Hush e Sentinel girano su Windows e non chiedono niente. Drafta, Fanta Ufficio e Dungeon101 girano nel browser: la sera dell'asta, alla macchinetta del caffè, ben oltre mezzanotte. Money e AscendKeep sono ancora in forno.",
     dungeon101: 'Un roguelite a turni nel browser: nove piani, tre boss, tre eroi, morte permanente e un santuario che tiene i progressi.',
     game: 'Gioco nel browser',
     money: 'Legge estratti conto, bollette e buste paga sul tuo PC, smista ogni spesa e ti fa vedere dove vanno i soldi.',
@@ -37,6 +38,7 @@ const c = {
     vigil: 'Temperature, ventole e consumi del tuo PC, e le ventole fanno quello che dici tu: Auto, Fisso, o una curva che trascini. Capisce da solo cosa c\'è dentro.',
     sentinel: "Tiene sveglio il tuo PC Windows. Pausa pranzo, avvisi batteria, un occhio nella tray che ti dice cosa sta facendo.",
     drafta: "L'asta del fantacalcio a turni e in diretta: una stanza, un link per il gruppo, una notifica quando tocca a te.",
+    fantaufficio: "Un gioco di carte fotografiche per l'ufficio: 47 creature da catturare, il gruppo vota ogni foto, i volti si coprono prima che lasci il telefono.",
     web: 'Web app',
     discover: 'Scopri',
     ascendkeep: 'Un tower defense dove perdere fa parte del piano: ondate di Voidborn, 100 tier, boss, un albero delle skill.',
@@ -113,6 +115,19 @@ const c = {
         <h2 class="mt-4 text-3xl font-semibold tracking-tight">AscendKeep</h2>
         <p class="mt-2 text-muted">{c.ascendkeep}</p>
         <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+    </a>
+    <a href={localize(lang, '/apps/fantaufficio/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center md:col-span-2">
+      <img src="/assets/icons/apps/fantaufficio.svg" alt="" width="112" height="112" class="size-28 shrink-0 drop-shadow-[0_20px_40px_rgb(162_28_175/0.5)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105" />
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap gap-2"><span class="chip">{c.web}</span><span class="chip">v2.0.0</span><span class="chip">Firebase</span></div>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight">Fanta Ufficio</h2>
+        <p class="mt-2 max-w-2xl text-muted">{c.fantaufficio}</p>
+        <p class="mt-5 inline-flex items-center gap-1.5 text-sm text-accent">{c.discover}<ArrowUpRight class="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></p>
+      </div>
+      <div class="hidden shrink-0 gap-3 lg:flex">
+        <img src="/assets/img/fantaufficio/album.webp" alt="" width="390" height="844" loading="lazy" class="w-32 rounded-2xl border border-line" />
+        <img src="/assets/img/fantaufficio/chat.webp" alt="" width="390" height="844" loading="lazy" class="w-32 rounded-2xl border border-line" />
       </div>
     </a>
     <a href={localize(lang, '/apps/dungeon101/')} class="spot reveal group flex flex-col gap-8 p-8 sm:flex-row sm:items-center md:col-span-2">
